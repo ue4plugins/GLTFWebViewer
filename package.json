@@ -3,21 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^9.4.0",
-    "@testing-library/user-event": "^7.2.1",
+    "@testing-library/user-event": "^10.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.3.1"
+    "react-scripts": "3.4.0",
+    "typescript": "^3.7.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject",
+    "lint": "yarn eslint -c .eslintrc.js \"**/*.{js,jsx,json,ts,tsx}\"",
+    "fix": "yarn lint -- --fix"
   },
   "browserslist": {
     "production": [
@@ -30,5 +30,58 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@material-ui/core": "^4.9.3",
+    "@material-ui/icons": "^4.9.1",
+    "@swc/cli": "^0.1.23",
+    "@swc/core": "^1.1.25",
+    "@testing-library/dom": "^6.12.2",
+    "@types/debug": "4.1.5",
+    "@types/jest": "^25.1.2",
+    "@types/node": "^13.7.1",
+    "@types/react": "^16.9.20",
+    "@types/react-dom": "^16.9.5",
+    "@types/testing-library__react": "^9.1.2",
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
+    "@yarnpkg/pnpify": "^2.0.0-rc.18",
+    "clsx": "^1.1.0",
+    "cross-env": "^7.0.0",
+    "customize-cra": "^0.9.1",
+    "customize-cra-react-refresh": "^1.0.1",
+    "debug": "^4.1.1",
+    "deep-object-diff": "^1.1.0",
+    "deepmerge": "^4.2.2",
+    "draco3dgltf": "^1.3.4",
+    "dynamic-cdn-webpack-plugin": "^5.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-import-resolver-node": "^0.3.3",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-autofix": "^1.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.7.0",
+    "eslint-plugin-json": "^2.0.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react-hooks": "^2.4.0",
+    "glob": "^7.1.6",
+    "husky": "^4.2.3",
+    "jest": "^25.1.0",
+    "mobx": "^5.15.4",
+    "mobx-react-lite": "^1.5.2",
+    "module-to-cdn": "^3.1.5",
+    "playcanvas": "^1.24.7",
+    "prettier": "^1.19.1",
+    "react-app-rewired": "^2.1.5",
+    "react-refresh": "^0.7.2",
+    "webpack": "^4.41.6",
+    "webpack-merge": "^4.2.2"
+  },
+  "resolutions": {
+    "chokidar": "^3",
+    "fsevents": "^2"
   }
 }
