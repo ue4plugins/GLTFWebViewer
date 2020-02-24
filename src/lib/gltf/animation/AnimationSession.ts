@@ -45,7 +45,10 @@ export class AnimationSession {
   public fadeDir = 0; // 1 is in, -1 is out
   public fadeSpeed = 1;
 
-  constructor(public playable?: Playable, targets?: AnimationTargetsMap) {
+  public constructor(
+    public playable?: Playable,
+    targets?: AnimationTargetsMap,
+  ) {
     this.allocateCache();
     this.animTargets = targets ?? this.playable?.getAnimTargets() ?? {};
   }
@@ -110,7 +113,7 @@ export class AnimationSession {
     this.invokeByTime(this.curTime);
   }
 
-  static _allocatePlayableCache(playable: Playable) {
+  public static _allocatePlayableCache(playable: Playable) {
     if (!playable) {
       return null;
     }
@@ -287,7 +290,7 @@ export class AnimationSession {
     }
   }
 
-  off(name: string, time: number, fnCallback: AnimationEventCallback) {
+  public off(name: string, time: number, fnCallback: AnimationEventCallback) {
     let pos = 0;
     for (; pos < this.animEvents.length; pos += 1) {
       const event = this.animEvents[pos];
@@ -613,7 +616,7 @@ export class AnimationSession {
       return this;
     }
 
-    app.on("update", this.onTimer);
+    app.on("update", this.onTimer.bind(this));
     this.showAt(
       this.curTime,
       this.fadeDir,

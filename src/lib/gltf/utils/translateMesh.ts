@@ -25,10 +25,10 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
   const gltfAccessors = gltf.accessors!;
   const gltfBufferViews = gltf.bufferViews!;
 
-  // if (!gltfAccessors || !gltfBufferViews) {
-  //   console.warn("Missing accessors and/or buffer views");
-  //   return;
-  // }
+  if (!gltfAccessors || !gltfBufferViews) {
+    console.warn("Missing accessors and/or buffer views");
+    return;
+  }
 
   data.primitives.forEach(primitive => {
     const attributes = primitive.attributes;

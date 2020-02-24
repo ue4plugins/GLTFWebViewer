@@ -52,6 +52,7 @@ export function createModel({
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const morphInstance = new (pc as any).MorphInstance(mesh.morph);
           (meshInstance as any).morphInstance = morphInstance;
+
           // HACK: need to force calculation of the morph's AABB due to a bug
           // in the engine. This is a private function and will be removed!
           morphInstance.updateBounds(meshInstance.mesh);

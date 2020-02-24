@@ -1,4 +1,5 @@
 import pc from "playcanvas";
+import createDebug from "debug";
 import { AnimationClip } from "../animation/AnimationClip";
 import {
   AnimationCurve,
@@ -12,6 +13,8 @@ import { Animation } from "../types";
 import { GlTfParser } from "../GlTfParser";
 import { ensureKeyType } from "./ensureKeyType";
 import { getAccessorData } from "./getAccessorData";
+
+const debug = createDebug("translateAnimation");
 
 // Specification:
 //   https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#animation
@@ -34,22 +37,30 @@ export function translateAnimation(
     const sampler = data.samplers[channel.sampler];
     const times = getAccessorData(gltf, accessors[sampler.input], buffers);
     const values = getAccessorData(gltf, accessors[sampler.output], buffers);
+
     if (!values || !times) {
       return;
     }
+
     let numCurves = values.length / times.length;
     let time, value, inTangent, outTangent;
     const target = channel.target;
-    if (!target || !target.node) {
+
+    debug("target", target);
+    debug("numCurves", numCurves);
+
+    if (!target || typeof target.node === "undefined") {
       return;
     }
+
     const path = target.path;
-    let curve, keyType;
-    let i, j;
+    let curve: AnimationCurve;
+    let keyType: AnimationKeyableType;
     // Animation for the same root, organized in one AnimationComponent
     const entity = nodes[target.node];
+
     if (path === "weights") {
-      for (i = 0; i < numCurves; i += 1) {
+      for (let i = 0; i < numCurves; i += 1) {
         curve = new AnimationCurve();
         keyType = AnimationKeyableType.NUM;
         curve.keyableType = keyType;
@@ -59,11 +70,12 @@ export function translateAnimation(
         } else if (sampler.interpolation === "STEP") {
           curve.type = AnimationCurveType.STEP;
         }
-        for (j = 0; j < times.length; j += 1) {
+        for (let j = 0; j < times.length; j += 1) {
           time = times[j];
           value = values[numCurves * j + i];
           curve.insertKey(keyType, time, value);
         }
+        debug("curve", curve);
         clip.addCurve(curve);
       }
     } else {
@@ -72,6 +84,7 @@ export function translateAnimation(
       if (valuesContainTangents) {
         numCurves /= 3;
       }
+
       switch (Math.round(numCurves)) {
         case 1:
           keyType = AnimationKeyableType.NUM;
@@ -88,6 +101,7 @@ export function translateAnimation(
           );
           keyType = AnimationKeyableType.NUM;
       }
+
       let targetPath = path;
       switch (path) {
         case "translation":
@@ -103,6 +117,7 @@ export function translateAnimation(
           targetPath = "localRotation";
           break;
       }
+
       curve = new AnimationCurve();
       curve.keyableType = keyType;
       curve.setTarget(entity, targetPath);
@@ -113,13 +128,14 @@ export function translateAnimation(
       } else if (sampler.interpolation === "CUBICSPLINE") {
         curve.type = AnimationCurveType.CUBICSPLINE_GLTF;
       }
+
       // glTF animation keys can be assumed to be serialized in time
       // order so no need to use AnimationCurve#insertKey (which does
       // extra work to insert a key at the correct index).
       let keyable: AnimationKeyable;
       const keyables: AnimationKeyable[] = [];
       if (valuesContainTangents) {
-        for (i = 0; i < times.length; i += 1) {
+        for (let i = 0; i < times.length; i += 1) {
           time = times[i];
           switch (keyType) {
             case AnimationKeyableType.VEC:
@@ -168,10 +184,11 @@ export function translateAnimation(
           keyable = new AnimationKeyable(keyType, time, value);
           keyable.inTangent = inTangent;
           keyable.outTangent = outTangent;
+          debug("keyable", keyable);
           keyables.push(keyable);
         }
       } else {
-        for (i = 0; i < times.length; i += 1) {
+        for (let i = 0; i < times.length; i += 1) {
           time = times[i];
           switch (keyType) {
             case AnimationKeyableType.VEC:
@@ -201,9 +218,13 @@ export function translateAnimation(
       if (time !== undefined) {
         curve.duration = time;
       }
+      debug("addCurve", curve);
       clip.addCurve(curve);
     }
   });
+
+  debug("clip", clip);
+
   // if (data.extras && processAnimationExtras) {
   //   processAnimationExtras(clip, data.extras);
   // }

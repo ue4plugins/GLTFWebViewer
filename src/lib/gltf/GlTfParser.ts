@@ -11,6 +11,8 @@ import { buildHierarchy } from "./utils/buildHierarchy";
 import { createModel } from "./utils/createModel";
 import { translateNode } from "./utils/translateNode";
 import { translateSkin } from "./utils/translateSkin";
+import { translateAnimation } from "./utils/translateAnimation";
+import { AnimationClip } from "./animation/AnimationClip";
 
 const debug = createDebug("GlTfParser");
 
@@ -31,13 +33,13 @@ export class GlTfParser {
   public buffers: ArrayBuffer[] = [];
   public images: Array<HTMLImageElement> = [];
   public textures: pc.Texture[] = [];
-  public animations: pc.Animation[] = [];
+  public animations: AnimationClip[] = [];
   public meshes: Array<pc.Mesh[]> = [];
   public nodes: pc.GraphNode[] = [];
   public materials: pc.Material[] = [];
   public skins: pc.Skin[] = [];
 
-  constructor(
+  public constructor(
     public gltf: GlTf,
     public device: pc.GraphicsDevice,
     public options: Options = {},
@@ -46,19 +48,19 @@ export class GlTfParser {
     this.defaultMaterial = translateMaterial({}, this);
   }
 
-  get imagesLoaded() {
+  public get imagesLoaded() {
     return this.images.filter(img => img && img.complete).length;
   }
 
-  get basePath() {
+  public get basePath() {
     return this.options.basePath ?? "";
   }
 
-  get decoderModule() {
+  public get decoderModule() {
     return this.options.decoderModule ?? "";
   }
 
-  async load() {
+  public async load() {
     const { gltf } = this;
 
     const useDecoderModule = !!gltf.extensionsUsed?.includes(
@@ -97,6 +99,12 @@ export class GlTfParser {
       gltf.skins
         ?.map(node => translateSkin(node, this))
         .filter((skin): skin is pc.Skin => !!skin) || [];
+
+    debug("Parse animations");
+    this.animations =
+      gltf.animations
+        ?.map(anim => translateAnimation(anim, this))
+        .filter((anim): anim is AnimationClip => !!anim) || [];
 
     debug("Generate model");
     const model = createModel(this);

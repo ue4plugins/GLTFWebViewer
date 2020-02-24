@@ -2,9 +2,11 @@
 import { createDecoderModule } from "draco3dgltf";
 import pc from "playcanvas";
 import Debug from "debug";
-import { createCameraScripts } from "./OrbitCamera";
 import { GlTf } from "./gltf/types";
 import { GlTfParser } from "./gltf/GlTfParser";
+import { AnimationClip } from "./gltf/animation/AnimationClip";
+import { createCameraScripts } from "./createCameraScripts";
+import { AnimationComponent } from "./gltf/animation/AnimationComponent";
 
 declare const loadGltf: any;
 
@@ -13,21 +15,20 @@ const debug = Debug("viewer");
 interface Resources {
   model?: pc.Model;
   textures: pc.Texture[];
-  animations: pc.Animation[];
+  animations: AnimationClip[];
 }
-
-const useOwnParser = true;
 
 export class Viewer {
   private decoderModule = createDecoderModule({});
   public app: pc.Application;
   public camera: pc.Entity;
   public playing = true;
-  public gltf?: pc.Entity;
+  public gltf?: pc.Entity & { animComponent?: AnimationComponent };
   public asset?: pc.Asset;
   public textures: pc.Texture[] = [];
+  public animations: AnimationClip[] = [];
 
-  constructor(public canvas: HTMLCanvasElement) {
+  public constructor(public canvas: HTMLCanvasElement) {
     if (!canvas) {
       throw new Error("Missing canvas");
     }
@@ -88,6 +89,7 @@ export class Viewer {
       } else if (this.gltf) {
         (camera.script as any).orbitCamera.focusEntity = this.gltf;
       }
+      // (camera.script as any).orbitCamera.frameOnStart = true;
     }
 
     // Create directional light entity
@@ -199,8 +201,138 @@ export class Viewer {
       shadowType: pc.SHADOW_VSM32,
     });
     this.gltf.addComponent("script");
-    this.gltf.script?.create("rotate");
+    // this.gltf.script?.create("rotate");
     this.app.root.addChild(this.gltf);
+
+    // Now that the model is created, after translateAnimation, we have to hook here
+    if (this.animations) {
+      for (let i = 0; i < this.animations.length; i += 1) {
+        for (let c = 0; c < this.animations[i].animCurves.length; c += 1) {
+          const curve = this.animations[i].animCurves[c];
+          if (curve.animTargets[0].targetNode === "model") {
+            curve.animTargets[0].targetNode = this.gltf;
+          }
+        }
+      }
+    }
+
+    debug("Animations", this.animations);
+
+    // Load any animations
+    if (this.animations && this.animations.length > 0) {
+      // If we don't already have an animation component, create one.
+      // Note that this isn't really a 'true' component like those
+      // found in the engine...
+      if (!this.gltf.animComponent) {
+        this.gltf.animComponent = new AnimationComponent();
+      }
+
+      // Add all animations to the model's animation component
+      for (let i = 0; i < this.animations.length; i += 1) {
+        this.animations[i].transferToRoot(this.gltf);
+        this.gltf.animComponent.addClip(this.animations[i]);
+      }
+      this.gltf.animComponent.curClip = this.animations[0].name;
+      this.pauseAnimationClips();
+      this.playCurrentAnimationClip();
+
+      debug("AnimationComponent", this.gltf.animComponent);
+
+      // select_remove_options(this.anim_select);
+      // for (i = 0; i < animationClips.length; i += 1) {
+      //   select_add_option(this.anim_select, this.animations[i].name);
+      // }
+      // this.anim_info.innerHTML =
+      //   this.animations.length + " animation clips loaded";
+    }
+
+    // Focus the camera on the newly loaded scene
+    if ((this.camera.script as any).orbitCamera) {
+      if (this.cameraPosition) {
+        (this.camera
+          .script as any).orbitCamera.distance = this.cameraPosition.length();
+      } else {
+        (this.camera.script as any).orbitCamera.frameOnStart = true;
+        (this.camera.script as any).orbitCamera.focusEntity = this.gltf;
+      }
+    }
+  }
+
+  public pauseAnimationClips() {
+    if (!this.gltf || !this.gltf.animComponent) {
+      return;
+    }
+    this.gltf.animComponent.pauseAll();
+    this.playing = false;
+    // this.anim_pause.value = ">";
+  }
+
+  public playCurrentAnimationClip() {
+    if (!this.gltf || !this.gltf.animComponent) {
+      return;
+    }
+    //this.gltf.animComponent.getCurrentClip().resume(); // resume doesn't work yet
+    const clip = this.gltf.animComponent.getCurrentClip();
+    clip.play(); // just play it again, until resume() works
+    // this.anim_slider.max = clip.duration;
+    this.playing = true;
+    // this.anim_pause.value = "||";
+    // this.clip = clip; // quick access for f12 devtools
+    // this.timeline.resize();
+  }
+
+  public resumeCurrentAnimationClip() {
+    if (!this.gltf || !this.gltf.animComponent) {
+      return;
+    }
+    const clip = this.gltf.animComponent.getCurrentClip();
+    clip.resume();
+    // this.anim_slider.max = clip.duration;
+    this.playing = true;
+    // this.anim_pause.value = "||";
+    // this.clip = clip; // quick access for f12 devtools
+    // this.timeline.resize();
+  }
+
+  public pauseAnimationsAndSeekToTime(curTime: number) {
+    if (!this.gltf || !this.gltf.animComponent) {
+      return;
+    }
+
+    // once we seek into the animation, stop the default playing
+    this.pauseAnimationClips();
+    // now set the seeked time for the last played clip
+    const clip = this.gltf.animComponent.getCurrentClip();
+    const session = clip.session;
+    const self = session;
+    session.curTime = curTime;
+    self.showAt(
+      self.curTime,
+      self.fadeDir,
+      self.fadeBegTime,
+      self.fadeEndTime,
+      self.fadeTime,
+    );
+    self.invokeByTime(self.curTime);
+  }
+
+  public switchToClipByName(clipName: string) {
+    if (!this.gltf || !this.gltf.animComponent) {
+      return;
+    }
+
+    // const clip = this.gltf.animComponent.animClipsMap[clipName];
+    this.gltf.animComponent.curClip = clipName;
+    this.pauseAnimationClips();
+    this.playCurrentAnimationClip();
+  }
+
+  public togglePlayPauseAnimation() {
+    if (this.playing) {
+      this.pauseAnimationClips();
+    } else {
+      this.resumeCurrentAnimationClip();
+    }
   }
 
   private registerResources(res: Resources) {
@@ -217,50 +349,16 @@ export class Viewer {
 
     this.asset = asset;
     this.textures = res.textures || [];
+    this.animations = res.animations || [];
   }
 
   private async parseGltf(gltf: GlTf, basePath: string) {
     const { app } = this;
-
-    if (useOwnParser) {
-      const parser = new GlTfParser(gltf, app.graphicsDevice, {
-        basePath,
-      });
-      const res = await parser.load();
-      this.registerResources(res);
-      return;
-    }
-
-    return new Promise((resolve, reject) => {
-      (loadGltf as any)(
-        gltf,
-        app.graphicsDevice,
-        (err: Error, res: Resources) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-
-          // Wrap the model as an asset and add to the asset registry
-          const asset = new pc.Asset("gltf", "model", {
-            url: "",
-          });
-          asset.resource = res.model;
-          asset.loaded = true;
-          debug("Add model to asset library");
-          app.assets.add(asset);
-
-          this.asset = asset;
-          this.textures = res.textures || [];
-          // this.animations = res.animations;
-          resolve();
-        },
-        {
-          decoderModule: this.decoderModule,
-          basePath,
-        },
-      );
+    const parser = new GlTfParser(gltf, app.graphicsDevice, {
+      basePath,
     });
+    const res = await parser.load();
+    this.registerResources(res);
   }
 
   public async loadModel(url: string) {

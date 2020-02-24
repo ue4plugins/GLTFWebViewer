@@ -9,10 +9,13 @@ import { getWrap } from "./getWrap";
 export function translateTexture(data: Texture, { gltf, device }: GlTfParser) {
   const texture = new pc.Texture(device, {
     flipY: false,
+    anisotropy: device?.maxAnisotropy,
   });
+
   if (data.name) {
     texture.name = data.name;
   }
+
   if (data.sampler && gltf.samplers) {
     const sampler = gltf.samplers[data.sampler];
     if (sampler.minFilter) {
