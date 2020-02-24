@@ -4279,6 +4279,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"color-convert@npm:~0.5.0":
+  version: 0.5.3
+  resolution: "color-convert@npm:0.5.3"
+  checksum: 2/8170311e6c630b6f95f28b52f69c8ec4da2fced6ac0ad3d59bdc6657d8f871553a14cba5cbb1e6a405f06839556dd0b1f76391de76a314708bf94b0f51c19ff6
+  languageName: node
+  linkType: hard
+
 "color-name@npm:1.1.3":
   version: 1.1.3
   resolution: "color-name@npm:1.1.3"
@@ -4878,6 +4885,13 @@ __metadata:
   bin:
     cssesc: bin/cssesc
   checksum: 2/673783eda1f89af3faefc0e4b833f40621f484ce102a23396e7a65cc4c42798bd91ee3656c8b04a0a5ca38d40ada5bc8663e4541c380a7a81af2de5b2322e443
+  languageName: node
+  linkType: hard
+
+"cssfontparser@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "cssfontparser@npm:1.2.1"
+  checksum: 2/ee7bef1622227795bfd31a55838fa4c0ae091914433295bbf7d680eea8623cb90279dd8eec20e2cc97092b000a71468c803149f55bff5e443596ddef29250151
   languageName: node
   linkType: hard
 
@@ -9236,6 +9250,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-webgl-canvas-mock@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "jest-webgl-canvas-mock@npm:0.2.3"
+  dependencies:
+    cssfontparser: ^1.2.1
+    parse-color: ^1.0.0
+  checksum: 2/8c9cdb1483df50c0b442f7584cb5ea910336ff2baf6ac37ffdfab6444c23461e467f9ab227445583ca51d04c102177b8b31563b0674908a7e7090f5949ac27fe
+  languageName: node
+  linkType: hard
+
 "jest-worker@npm:^24.6.0, jest-worker@npm:^24.9.0":
   version: 24.9.0
   resolution: "jest-worker@npm:24.9.0"
@@ -11271,6 +11295,15 @@ __metadata:
     pbkdf2: ^3.0.3
     safe-buffer: ^5.1.1
   checksum: 2/7c76cbaf48cc8d7ebf1ef4b9811630822eee2832a704aa4153b6935178d055604c90f21efdb5797acdd25c5da781d526fc811acf56d5370633d55e27d4648658
+  languageName: node
+  linkType: hard
+
+"parse-color@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "parse-color@npm:1.0.0"
+  dependencies:
+    color-convert: ~0.5.0
+  checksum: 2/b8784c7c462bc9db24f7b0a7823dd26f7fc51d5c15485e73b263db0016111969c6b89dd135a25233d3f611e15264be5efbb9034ae1d1c1b70690d24559298381
   languageName: node
   linkType: hard
 
@@ -15299,6 +15332,7 @@ typescript@^3.7.5:
     glob: ^7.1.6
     husky: ^4.2.3
     jest: ^25.1.0
+    jest-webgl-canvas-mock: ^0.2.3
     mobx: ^5.15.4
     mobx-react-lite: ^1.5.2
     module-to-cdn: ^3.1.5

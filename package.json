@@ -70,6 +70,7 @@
     "glob": "^7.1.6",
     "husky": "^4.2.3",
     "jest": "^25.1.0",
+    "jest-webgl-canvas-mock": "^0.2.3",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
     "module-to-cdn": "^3.1.5",
