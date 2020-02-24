@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { Viewer } from "../lib/Viewer";
 
 interface Props {
-  modelName?: string;
+  model?: GLTF_MODEL;
 }
 
-export const PlayCanvas: React.FC<Props> = ({ modelName }) => {
+export const PlayCanvas: React.FC<Props> = ({ model }) => {
   const canvasEl = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<Viewer>();
 
@@ -21,14 +21,14 @@ export const PlayCanvas: React.FC<Props> = ({ modelName }) => {
   }, []);
 
   useEffect(() => {
-    if (!viewer || !modelName) {
+    if (!viewer || !model) {
       return;
     }
-    viewer.loadModel(`./assets/models/${modelName}/glTF/${modelName}.gltf`);
+    viewer.loadModel(`${model.path}/${model.name}.gltf`);
     return () => {
       viewer.destroyScene();
     };
-  }, [viewer, modelName]);
+  }, [viewer, model]);
 
   return <canvas ref={canvasEl} />;
 };

@@ -8,8 +8,6 @@ import { AnimationClip } from "./gltf/animation/AnimationClip";
 import { createCameraScripts } from "./createCameraScripts";
 import { AnimationComponent } from "./gltf/animation/AnimationComponent";
 
-declare const loadGltf: any;
-
 const debug = Debug("viewer");
 
 interface Resources {

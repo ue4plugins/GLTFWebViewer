@@ -4,19 +4,19 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
 interface Props {
-  onSelect?: (item: string) => void;
+  onSelect?: (model: GLTF_MODEL) => void;
 }
 
 export const ModelList: React.FC<Props> = ({ onSelect }) => {
   return (
     <List>
-      {GLTF_MODELS.map(text => (
+      {GLTF_MODELS.map(model => (
         <ListItem
-          onClick={onSelect && (() => onSelect(text))}
+          onClick={onSelect && (() => onSelect(model))}
           button
-          key={text}
+          key={model.path + model.name}
         >
-          <ListItemText primary={text} />
+          <ListItemText primary={`${model.name} (${model.type})`} />
         </ListItem>
       ))}
     </List>

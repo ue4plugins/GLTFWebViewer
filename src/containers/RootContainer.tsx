@@ -44,9 +44,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const DAMAGED_HELMET = GLTF_MODELS.find(
+  val => val.name === "DamagedHelmet",
+) as GLTF_MODEL;
+
 export const RootContainer: React.FC = () => {
   const classes = useStyles();
-  const [model, setModel] = useState<string>("DamagedHelmet");
+  const [model, setModel] = useState<GLTF_MODEL>(DAMAGED_HELMET);
 
   return (
     <ThemeProvider theme={theme}>
@@ -54,7 +58,7 @@ export const RootContainer: React.FC = () => {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <main className={classes.content}>
-          <PlayCanvas modelName={model}></PlayCanvas>
+          <PlayCanvas model={model}></PlayCanvas>
         </main>
         <Drawer
           className={classes.drawer}

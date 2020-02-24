@@ -12,7 +12,13 @@ declare namespace pc {
   type MorphInstance = any;
 }
 
-declare const GLTF_MODELS: string[];
+type GLTF_MODEL = {
+  type: string;
+  name: string;
+  path: string;
+};
+
+declare const GLTF_MODELS: GLTF_MODEL[];
 
 declare module "draco3dgltf" {
   type DracoEncoderModule = any;

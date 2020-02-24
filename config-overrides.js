@@ -3,18 +3,10 @@ const { addReactRefresh } = require("customize-cra-react-refresh");
 const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
-const path = require("path");
-const glob = require("glob");
+const gltfFiles = require("./scripts/gltfFiles");
 
 module.exports = override(config => {
   const refresh = addReactRefresh({ disableRefreshCheck: true })(config);
-
-  const gltfFiles = glob
-    .sync("./public/assets/models/**/glTF/*.gltf")
-    .map(fp => {
-      return path.basename(fp, ".gltf");
-    });
-
   return merge(refresh, {
     // externals: {
     //   playcanvas: "playcanvas",
