@@ -6,9 +6,8 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "incremental": true,
     "jsx": "react",
-    "lib": ["es2018", "dom"],
+    "lib": ["es2020", "dom"],
     "module": "esnext",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
@@ -27,8 +26,8 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "isolatedModules": true,
-    "noEmit": true,
-    "checkJs": false
+    "checkJs": false,
+    "noEmit": true
   },
   "exclude": ["node_modules", "dist"],
   "include": ["src"]

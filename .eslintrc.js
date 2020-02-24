@@ -6,7 +6,7 @@ const all = {
   rules: {
     "prettier/prettier": "error",
     "autofix/no-debugger": "error",
-    // "autofix/no-console": "error",
+    "autofix/no-console": ["error", { allow: ["warn", "error"] }],
     "autofix/no-plusplus": "error",
     "autofix/yoda": "warn",
     "autofix/unicode-bom": ["error", "never"],
@@ -21,7 +21,7 @@ const all = {
 
 const js = {
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     sourceType: "module",
     // project: "./tsconfig.json"
   },
@@ -39,7 +39,7 @@ const ts = {
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     sourceType: "module",
     // project: "./tsconfig.json"
   },
@@ -60,6 +60,7 @@ const ts = {
   rules: {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/explicit-member-accessibility": ["error"],
     "import/default": "off",
     "import/first": "error",
     "import/exports-last": "warn",
