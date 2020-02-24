@@ -6,7 +6,7 @@ const all = {
   rules: {
     "prettier/prettier": "error",
     "autofix/no-debugger": "error",
-    "autofix/no-console": ["error", { allow: ["warn", "error"] }],
+    "autofix/no-console": "off",
     "autofix/no-plusplus": "error",
     "autofix/yoda": "warn",
     "autofix/unicode-bom": ["error", "never"],
@@ -93,6 +93,7 @@ const ts = {
         ],
       },
     ],
+    "autofix/no-console": ["error", { allow: ["warn", "error"] }],
   },
 };
 
