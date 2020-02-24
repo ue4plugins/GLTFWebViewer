@@ -1,7 +1,8 @@
 {
-  "name": "unreal2web",
-  "version": "0.1.0",
   "private": true,
+  "name": "@epic/pc-viewer",
+  "description": "Playcanvas Viewer",
+  "version": "0.1.0",
   "dependencies": {
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^9.4.1",
