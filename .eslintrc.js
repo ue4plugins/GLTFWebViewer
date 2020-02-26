@@ -93,7 +93,7 @@ const ts = {
         ],
       },
     ],
-    "autofix/no-console": ["error", { allow: ["warn", "error"] }],
+    // "autofix/no-console": ["error", { allow: ["warn", "error"] }],
   },
 };
 
