@@ -70,7 +70,7 @@ export const createCameraScripts = (_app: pc.Application) => {
 
   MouseInput.attributes.add("distanceSensitivity", {
     type: "number",
-    default: 0.15,
+    default: 0.5,
     title: "Distance Sensitivity",
     description: "How fast the camera moves in and out. Higher is faster",
   });
@@ -193,6 +193,12 @@ export const createCameraScripts = (_app: pc.Application) => {
     this.lastPoint.set(event.x, event.y);
   };
 
+  let animFrame = 0;
+
+  function easeInQuad(t: number, b: number, c: number, d: number) {
+    return c * (t /= d) * t + b;
+  }
+
   MouseInput.prototype.onMouseWheel = function(event: {
     event: Event & { isOverlayEvent: boolean; preventDefault: () => void };
     wheel: number;
@@ -200,11 +206,39 @@ export const createCameraScripts = (_app: pc.Application) => {
     if (event.event.isOverlayEvent === true) {
       return;
     }
-    this.orbitCamera.distance -=
-      event.wheel *
-      this.distanceSensitivity *
-      (this.orbitCamera.distance * 0.1);
-    // event.event.preventDefault();
+
+    if (animFrame) {
+      cancelAnimationFrame(animFrame);
+      animFrame = 0;
+    }
+
+    const curValue = this.orbitCamera.distance;
+    const targetValue =
+      this.distanceSensitivity * (this.orbitCamera.distance * 0.1);
+
+    const start = Date.now();
+    const duration = 200;
+    const smoothZoom = () => {
+      const elapsed = Date.now() - start;
+      const nextValue =
+        easeInQuad(
+          elapsed,
+          curValue,
+          targetValue > curValue
+            ? targetValue - curValue
+            : curValue - targetValue,
+          duration,
+        ) * 0.01;
+      this.orbitCamera.distance -= event.wheel * nextValue;
+      if (elapsed >= duration) {
+        return;
+      }
+      animFrame = requestAnimationFrame(smoothZoom);
+    };
+    animFrame = requestAnimationFrame(smoothZoom);
+
+    // this.orbitCamera.distance -= targetValue;
+    event.event.preventDefault();
   };
 
   MouseInput.prototype.onMouseOut = function(_e: any) {
