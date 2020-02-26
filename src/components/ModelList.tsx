@@ -4,11 +4,15 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
+import { makeStyles } from "@material-ui/core/styles";
 import { SearchField } from "./SearchField";
 
-interface Props {
-  onSelect?: (model: GLTF_MODEL) => void;
-}
+const useStyles = makeStyles(() => ({
+  scrollableList: {
+    maxHeight: "100%",
+    overflow: "auto",
+  },
+}));
 
 const fuseOptions = {
   shouldSort: true,
@@ -21,7 +25,12 @@ const fuseOptions = {
   keys: ["name"],
 };
 
+interface Props {
+  onSelect?: (model: GLTF_MODEL) => void;
+}
+
 export const ModelList: React.FC<Props> = ({ onSelect }) => {
+  const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
   const [fuse] = useState(new Fuse(GLTF_MODELS, fuseOptions));
   const [list, setList] = useState(GLTF_MODELS);
@@ -35,18 +44,20 @@ export const ModelList: React.FC<Props> = ({ onSelect }) => {
   }, [fuse, searchTerm]);
 
   return (
-    <List>
+    <>
       <SearchField term={searchTerm} onChange={setSearchTerm} />
       <Divider />
-      {list.map(model => (
-        <ListItem
-          onClick={onSelect && (() => onSelect(model))}
-          button
-          key={model.path + model.name}
-        >
-          <ListItemText primary={model.name} secondary={model.type} />
-        </ListItem>
-      ))}
-    </List>
+      <List className={classes.scrollableList}>
+        {list.map(model => (
+          <ListItem
+            onClick={onSelect && (() => onSelect(model))}
+            button
+            key={model.path + model.name}
+          >
+            <ListItemText primary={model.name} secondary={model.type} />
+          </ListItem>
+        ))}
+      </List>
+    </>
   );
 };

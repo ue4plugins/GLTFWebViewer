@@ -7,10 +7,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: "2px 4px",
+    padding: theme.spacing(1),
     display: "flex",
     alignItems: "center",
-    width: 400,
   },
   input: {
     marginLeft: theme.spacing(1),
@@ -34,11 +33,11 @@ export const SearchField: React.FC<Props> = ({ term, onChange }) => {
   const [debounce, setDebounce] = useState<NodeJS.Timeout>();
   const classes = useStyles();
   return (
-    <ListItem>
+    <ListItem className={classes.root}>
       <InputBase
         className={classes.input}
         placeholder="Search models"
-        inputProps={{ "aria-label": "search models" }}
+        inputProps={{ "aria-label": "search models", spellCheck: "false" }}
         value={term}
         onChange={e => {
           const { value } = e.target;
