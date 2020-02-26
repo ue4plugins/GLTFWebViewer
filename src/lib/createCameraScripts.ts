@@ -183,7 +183,6 @@ export const createCameraScripts = (_app: pc.Application) => {
     x: any;
     y: any;
   }) {
-    const mouse = (pc as any).app.mouse;
     if (this.lookButtonDown) {
       this.orbitCamera.pitch -= event.dy * this.orbitSensitivity;
       this.orbitCamera.yaw -= event.dx * this.orbitSensitivity;

@@ -10,7 +10,7 @@ export class AnimationClipSnapshot {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public value: any; // SingleDOF | undefined;
 
-  copy(shot: AnimationClipSnapshot) {
+  public copy(shot: AnimationClipSnapshot) {
     if (!shot) {
       return this;
     }
@@ -27,12 +27,12 @@ export class AnimationClipSnapshot {
     return this;
   }
 
-  clone() {
+  public clone() {
     const cloned = new AnimationClipSnapshot().copy(this);
     return cloned;
   }
 
-  static linearBlend(
+  public static linearBlend(
     shot1: AnimationClipSnapshot,
     shot2: AnimationClipSnapshot,
     p: number,
@@ -66,7 +66,7 @@ export class AnimationClipSnapshot {
     return resShot;
   }
 
-  static linearBlendExceptStep(
+  public static linearBlendExceptStep(
     shot1: AnimationClipSnapshot,
     shot2: AnimationClipSnapshot,
     p: number,

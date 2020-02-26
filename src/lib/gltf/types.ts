@@ -5,6 +5,15 @@ import { AnimationCurve } from "./animation/AnimationCurve";
 import { AnimationClip } from "./animation/AnimationClip";
 import { AnimationClipSnapshot } from "./animation/AnimationClipSnapshot";
 
+export enum ComponentType {
+  BYTE = 5120,
+  UNSIGNED_BYTE = 5121,
+  SHORT = 5122,
+  UNSIGNED_SHORT = 5123,
+  UNSIGNED_INT = 5125,
+  FLOAT = 5126,
+}
+
 export type SingleDOF = number | pc.Vec2 | pc.Vec3 | pc.Vec4 | pc.Quat;
 export type BlendValue = SingleDOF | Playable;
 export type Blendable = AnimationKeyable | BlendValue;

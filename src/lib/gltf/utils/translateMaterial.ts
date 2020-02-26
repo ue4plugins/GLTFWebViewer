@@ -1,6 +1,9 @@
 import pc from "playcanvas";
+import createDebug from "debug";
 import { Material } from "../types";
 import { GlTfParser } from "../GlTfParser";
+
+const debug = createDebug("translateMaterial");
 
 // Specification:
 //   https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#material
@@ -62,10 +65,11 @@ void getSpecularity() {
 }`;
 
 export function translateMaterial(data: Material, { textures }: GlTfParser) {
+  debug("begin");
   const material = new pc.StandardMaterial();
 
   // glTF dooesn't define how to occlude specular
-  material.occludeSpecular = 1.0;
+  material.occludeSpecular = 1;
 
   material.diffuseTint = true;
   material.diffuseVertexColor = true;
@@ -77,50 +81,45 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
     material.name = data.name;
   }
 
-  if (data.extensions && data.extensions["KHR_materials_unlit"]) {
-    material.useLighting = false;
-  }
+  material.useLighting = data.extensions?.["KHR_materials_unlit"] ?? false;
 
-  let color: number[] = [];
-  if (
-    data.extensions &&
-    data.extensions["KHR_materials_pbrSpecularGlossiness"]
-  ) {
+  let color: number[];
+  let texture: pc.Texture;
+
+  if (data.extensions?.KHR_materials_pbrSpecularGlossiness) {
     const specData = data.extensions.KHR_materials_pbrSpecularGlossiness;
 
-    if (specData.diffuseFactor) {
-      color = specData.diffuseFactor;
+    if (typeof specData.diffuseFactor !== "undefined") {
+      const [r, g, b, a] = specData.diffuseFactor;
       // Convert from linear space to sRGB space
       material.diffuse.set(
-        Math.pow(color[0], 1 / 2.2),
-        Math.pow(color[1], 1 / 2.2),
-        Math.pow(color[2], 1 / 2.2),
+        Math.pow(r, 1 / 2.2),
+        Math.pow(g, 1 / 2.2),
+        Math.pow(b, 1 / 2.2),
       );
-      material.opacity = color[3] ?? 1;
+      material.opacity = a !== null ? a : 1;
     } else {
       material.diffuse.set(1, 1, 1);
       material.opacity = 1;
     }
-
-    if (specData.diffuseTexture) {
+    if (typeof specData.diffuseTexture !== "undefined") {
       const diffuseTexture = specData.diffuseTexture;
-      const texture = textures[diffuseTexture.index];
+      texture = textures[diffuseTexture.index];
 
       material.diffuseMap = texture;
       material.diffuseMapChannel = "rgb";
       material.opacityMap = texture;
       material.opacityMapChannel = "a";
-      if (diffuseTexture.texCoord) {
+
+      if (typeof diffuseTexture.texCoord !== "undefined") {
         material.diffuseMapUv = diffuseTexture.texCoord;
         material.opacityMapUv = diffuseTexture.texCoord;
       }
-      if (
-        diffuseTexture.extensions &&
-        diffuseTexture.extensions["KHR_texture_transform"]
-      ) {
+
+      if (diffuseTexture.extensions?.KHR_texture_transform) {
         const diffuseTransformData =
           diffuseTexture.extensions.KHR_texture_transform;
-        if (diffuseTransformData.scale) {
+        if (typeof diffuseTransformData.scale !== "undefined") {
           material.diffuseMapTiling = new pc.Vec2(
             diffuseTransformData.scale[0],
             diffuseTransformData.scale[1],
@@ -130,7 +129,7 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
             diffuseTransformData.scale[1],
           );
         }
-        if (diffuseTransformData.offset) {
+        if (typeof diffuseTransformData.offset !== "undefined") {
           material.diffuseMapOffset = new pc.Vec2(
             diffuseTransformData.offset[0],
             diffuseTransformData.offset[1],
@@ -142,9 +141,8 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
         }
       }
     }
-
     material.useMetalness = false;
-    if (specData.specularFactor) {
+    if (typeof specData.specularFactor !== "undefined") {
       color = specData.specularFactor;
       // Convert from linear space to sRGB space
       material.specular.set(
@@ -156,31 +154,29 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
       material.specular.set(1, 1, 1);
     }
 
-    if (specData.glossinessFactor) {
+    if (typeof specData.glossinessFactor !== "undefined") {
       material.shininess = 100 * specData.glossinessFactor;
     } else {
       material.shininess = 100;
     }
 
-    if (specData.specularGlossinessTexture) {
+    if (typeof specData.specularGlossinessTexture !== "undefined") {
       const specularGlossinessTexture = specData.specularGlossinessTexture;
       material.specularMap = textures[specularGlossinessTexture.index];
       material.specularMapChannel = "rgb";
       material.glossMap = textures[specularGlossinessTexture.index];
       material.glossMapChannel = "a";
-
-      if (specularGlossinessTexture.texCoord) {
+      if (typeof specularGlossinessTexture.texCoord !== "undefined") {
         material.glossMapUv = specularGlossinessTexture.texCoord;
         material.metalnessMapUv = specularGlossinessTexture.texCoord;
       }
-
       if (
-        specularGlossinessTexture.extensions &&
-        specularGlossinessTexture.extensions["KHR_texture_transform"]
+        typeof specularGlossinessTexture.extensions?.KHR_texture_transform !==
+        "undefined"
       ) {
         const specGlossTransformData =
           specularGlossinessTexture.extensions.KHR_texture_transform;
-        if (specGlossTransformData.scale) {
+        if (typeof specGlossTransformData.scale !== "undefined") {
           material.glossMapTiling = new pc.Vec2(
             specGlossTransformData.scale[0],
             specGlossTransformData.scale[1],
@@ -190,7 +186,7 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
             specGlossTransformData.scale[1],
           );
         }
-        if (specGlossTransformData.offset) {
+        if (typeof specGlossTransformData.offset !== "undefined") {
           material.glossMapOffset = new pc.Vec2(
             specGlossTransformData.offset[0],
             specGlossTransformData.offset[1],
@@ -207,7 +203,7 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
   } else if (data.pbrMetallicRoughness) {
     const pbrData = data.pbrMetallicRoughness;
 
-    if (pbrData.baseColorFactor) {
+    if (typeof pbrData.baseColorFactor !== "undefined") {
       color = pbrData.baseColorFactor;
       // Convert from linear space to sRGB space
       material.diffuse.set(
@@ -222,19 +218,17 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
     }
     if (pbrData.baseColorTexture) {
       const baseColorTexture = pbrData.baseColorTexture;
-      const texture = textures[baseColorTexture.index];
+      texture = textures[baseColorTexture.index];
+
       material.diffuseMap = texture;
       material.diffuseMapChannel = "rgb";
       material.opacityMap = texture;
       material.opacityMapChannel = "a";
-      if (baseColorTexture.texCoord) {
+      if (typeof baseColorTexture.texCoord === "number") {
         material.diffuseMapUv = baseColorTexture.texCoord;
         material.opacityMapUv = baseColorTexture.texCoord;
       }
-      if (
-        baseColorTexture.extensions &&
-        baseColorTexture.extensions["KHR_texture_transform"]
-      ) {
+      if (baseColorTexture.extensions?.["KHR_texture_transform"]) {
         const baseColorTransformData =
           baseColorTexture.extensions.KHR_texture_transform;
         if (baseColorTransformData.scale) {
@@ -259,15 +253,10 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
         }
       }
     }
-
     material.useMetalness = true;
-    if (pbrData.metallicFactor) {
-      material.metalness = pbrData.metallicFactor;
-    } else {
-      material.metalness = 1;
-    }
+    material.metalness = pbrData.metallicFactor ?? 1;
 
-    if (pbrData.roughnessFactor) {
+    if (typeof pbrData.roughnessFactor === "number") {
       material.shininess = 100 * pbrData.roughnessFactor;
     } else {
       material.shininess = 100;
@@ -280,15 +269,11 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
       material.glossMap = textures[metallicRoughnessTexture.index];
       material.glossMapChannel = "g";
 
-      if (metallicRoughnessTexture.texCoord) {
+      if (typeof metallicRoughnessTexture.texCoord === "number") {
         material.glossMapUv = metallicRoughnessTexture.texCoord;
         material.metalnessMapUv = metallicRoughnessTexture.texCoord;
       }
-
-      if (
-        metallicRoughnessTexture.extensions &&
-        metallicRoughnessTexture.extensions["KHR_texture_transform"]
-      ) {
+      if (metallicRoughnessTexture.extensions?.["KHR_texture_transform"]) {
         const metallicTransformData =
           metallicRoughnessTexture.extensions.KHR_texture_transform;
         if (metallicTransformData.scale) {
@@ -301,6 +286,7 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
             metallicTransformData.scale[1],
           );
         }
+
         if (metallicTransformData.offset) {
           material.glossMapOffset = new pc.Vec2(
             metallicTransformData.offset[0],
@@ -320,13 +306,10 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
   if (data.normalTexture) {
     const normalTexture = data.normalTexture;
     material.normalMap = textures[normalTexture.index];
-    if (normalTexture.texCoord) {
+    if (typeof normalTexture.texCoord === "number") {
       material.normalMapUv = normalTexture.texCoord;
     }
-    if (
-      normalTexture.extensions &&
-      normalTexture.extensions["KHR_texture_transform"]
-    ) {
+    if (normalTexture.extensions?.["KHR_texture_transform"]) {
       const normalTransformData =
         normalTexture.extensions.KHR_texture_transform;
       if (normalTransformData.scale) {
@@ -346,17 +329,17 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
       material.bumpiness = normalTexture.scale;
     }
   }
+
   if (data.occlusionTexture) {
     const occlusionTexture = data.occlusionTexture;
     material.aoMap = textures[occlusionTexture.index];
     material.aoMapChannel = "r";
-    if (occlusionTexture.texCoord) {
+
+    if (typeof occlusionTexture.texCoord === "number") {
       material.aoMapUv = occlusionTexture.texCoord;
     }
-    if (
-      occlusionTexture.extensions &&
-      occlusionTexture.extensions["KHR_texture_transform"]
-    ) {
+
+    if (occlusionTexture.extensions?.["KHR_texture_transform"]) {
       const occlusionTransformData =
         occlusionTexture.extensions.KHR_texture_transform;
       if (occlusionTransformData.scale) {
@@ -387,24 +370,26 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
     material.emissive.set(0, 0, 0);
     material.emissiveTint = false;
   }
+
   if (data.emissiveTexture) {
     const emissiveTexture = data.emissiveTexture;
     material.emissiveMap = textures[emissiveTexture.index];
-    if (emissiveTexture.texCoord) {
+
+    if (typeof emissiveTexture.texCoord === "number") {
       material.emissiveMapUv = emissiveTexture.texCoord;
     }
-    if (
-      emissiveTexture.extensions &&
-      emissiveTexture.extensions["KHR_texture_transform"]
-    ) {
+
+    if (emissiveTexture.extensions?.["KHR_texture_transform"]) {
       const emissiveTransformData =
         emissiveTexture.extensions.KHR_texture_transform;
+
       if (emissiveTransformData.scale) {
         material.emissiveMapTiling = new pc.Vec2(
           emissiveTransformData.scale[0],
           emissiveTransformData.scale[1],
         );
       }
+
       if (emissiveTransformData.offset) {
         material.emissiveMapOffset = new pc.Vec2(
           emissiveTransformData.offset[0],
@@ -413,27 +398,24 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
       }
     }
   }
-  if (data.alphaMode) {
-    switch (data.alphaMode) {
-      case "MASK":
-        material.blendType = pc.BLEND_NONE;
-        if (data.alphaCutoff) {
-          material.alphaTest = data.alphaCutoff;
-        } else {
-          material.alphaTest = 0.5;
-        }
-        break;
-      case "BLEND":
-        material.blendType = pc.BLEND_NORMAL;
-        break;
-      default:
-      case "OPAQUE":
-        material.blendType = pc.BLEND_NONE;
-        break;
-    }
-  } else {
-    material.blendType = pc.BLEND_NONE;
+  switch (data.alphaMode) {
+    case "MASK":
+      material.blendType = pc.BLEND_NONE;
+      if (typeof data.alphaCutoff === "number") {
+        material.alphaTest = data.alphaCutoff;
+      } else {
+        material.alphaTest = 0.5;
+      }
+      break;
+    case "BLEND":
+      material.blendType = pc.BLEND_NORMAL;
+      break;
+    default:
+    case "OPAQUE":
+      material.blendType = pc.BLEND_NONE;
+      break;
   }
+
   if (data.doubleSided) {
     material.twoSidedLighting = data.doubleSided;
     material.cull = data.doubleSided ? pc.CULLFACE_NONE : pc.CULLFACE_BACK;
@@ -442,7 +424,7 @@ export function translateMaterial(data: Material, { textures }: GlTfParser) {
     material.cull = pc.CULLFACE_BACK;
   }
 
-  // if (data.extras && processMaterialExtras) {
+  // if (data.hasOwnProperty("extras") && processMaterialExtras) {
   //   processMaterialExtras(material, data.extras);
   // }
 

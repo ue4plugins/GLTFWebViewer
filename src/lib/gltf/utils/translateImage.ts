@@ -1,12 +1,12 @@
 import pc from "playcanvas";
-// import createDebug from "debug";
+import createDebug from "debug";
 import { Image as GlTfImage } from "../types";
 import { GlTfParser } from "../GlTfParser";
 import { resampleImage } from "./resampleImage";
 import { isPowerOf2 } from "./isPowerOf2";
 import { isDataURI } from "./isDataURI";
 
-// const debug = createDebug("GlTfParser:translateImage");
+const debug = createDebug("translateImage");
 
 export function translateImage(
   data: GlTfImage,
@@ -32,7 +32,9 @@ export function translateImage(
     const glTextureIdx = gltfTextures.indexOf(gltfTexture);
     const texture = textures[glTextureIdx];
 
-    if (!texture) {
+    // Prevent race condition
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (!texture || !(texture as any)._levels) {
       return;
     }
 
@@ -60,8 +62,10 @@ export function translateImage(
       potImage.addEventListener("load", function() {
         texture.setSource(potImage);
       });
+      debug("Set resampled source");
       potImage.src = resampleImage(image);
-    } else {
+    } else if (image) {
+      debug("Set source");
       texture.setSource(image);
     }
   };

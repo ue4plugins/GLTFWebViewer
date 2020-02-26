@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import pc from "playcanvas";
 import { SingleDOF } from "../types";
 import { AnimationKeyable } from "./AnimationKeyable";
@@ -6,25 +7,28 @@ export class AnimationTarget {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public vScale?: any; // pc.Vec3
 
-  constructor(
+  public constructor(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public targetNode: any, // pc.GraphNode,
+    public targetNode: pc.Entity | pc.GraphNode,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public targetPath?: any,
+    public targetPath?: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public targetProp?: any,
   ) {}
 
   public toString() {
-    let str = "";
-    if (this.targetNode) {
-      str += this.targetNode.name;
+    if (typeof this.targetNode === "string") {
+      return this.targetNode;
     }
+    let str =
+      typeof this.targetNode === "string"
+        ? this.targetNode
+        : this.targetNode?.name ?? "";
     if (this.targetPath) {
-      str += "_" + this.targetPath;
+      str += `_${this.targetPath}`;
     }
     if (this.targetProp) {
-      str += "_" + this.targetProp;
+      str += `_${this.targetProp}`;
     }
     return str;
   }
@@ -74,30 +78,27 @@ export class AnimationTarget {
       return;
     }
 
+    const targetNode = this.targetNode as any;
+    const targetPath = this.targetPath as any;
+    const targetProp = this.targetProp as any;
+
     // p*cur + (1-p)*prev
-    if (
-      this.targetNode &&
-      this.targetPath &&
-      this.targetNode[this.targetPath] !== undefined
-    ) {
+    if (targetNode && targetPath && targetNode[targetPath] !== undefined) {
       let blendValue: SingleDOF;
-      if (
-        this.targetProp &&
-        this.targetProp in this.targetNode[this.targetPath]
-      ) {
+      if (targetProp && targetProp in targetNode[targetPath]) {
         blendValue = AnimationKeyable.linearBlendValue(
-          this.targetNode[this.targetPath][this.targetProp],
+          targetNode[targetPath][targetProp],
           value,
           p,
         ) as typeof value;
-        this.targetNode[this.targetPath][this.targetProp] = blendValue;
+        targetNode[targetPath][targetProp] = blendValue;
       } else {
         blendValue = AnimationKeyable.linearBlendValue(
-          this.targetNode[this.targetPath],
+          targetNode[targetPath],
           value,
           p,
         ) as typeof value;
-        this.targetNode[this.targetPath] = blendValue;
+        targetNode[targetPath] = blendValue;
       }
 
       // special wrapping for eulerangles
@@ -151,44 +152,45 @@ export class AnimationTarget {
       }
     }
 
-    if (this.targetNode && this.targetNode[this.targetPath] !== undefined) {
-      if (this.targetProp in this.targetNode[this.targetPath]) {
-        this.targetNode[this.targetPath][this.targetProp] = value;
+    const targetNode = this.targetNode as any;
+    const targetPath = this.targetPath as any;
+    const targetProp = this.targetProp as any;
+
+    if (targetNode && targetNode[targetPath] !== undefined) {
+      if (targetProp in targetNode[targetPath]) {
+        targetNode[targetPath][targetProp] = value;
       } else {
-        this.targetNode[this.targetPath] = value;
+        targetNode[targetPath] = value;
       }
 
       // special wrapping for eulerangles
-      if (this.targetPath === "localEulerAngles") {
+      if (targetPath === "localEulerAngles") {
         let vec3 = new pc.Vec3();
-        if (["x", "y", "z"].includes(this.targetProp)) {
+        if (["x", "y", "z"].includes(targetProp)) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (vec3 as any)[this.targetProp] = value;
+          (vec3 as any)[targetProp] = value;
         } else {
           vec3 = value as pc.Vec3;
         }
-        this.targetNode.setLocalEulerAngles(vec3);
+        targetNode.setLocalEulerAngles(vec3);
       }
 
       // execute update target
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (typeof this.targetNode._dirtifyLocal === "function") {
-        this.targetNode._dirtifyLocal();
+      if (typeof targetNode._dirtifyLocal === "function") {
+        targetNode._dirtifyLocal();
       }
     }
 
     // special wrapping for morph weights
-    if (
-      this.targetNode &&
-      this.targetPath === "weights" &&
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (this.targetNode as any).model
-    ) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { model } = this.targetNode as any;
+    if (targetNode && targetPath === "weights" && targetNode.model) {
+      const { model } = targetNode as pc.Entity;
+      if (!model) {
+        return;
+      }
       const meshInstances = model.meshInstances;
       for (let m = 0; m < meshInstances.length; m += 1) {
-        const morphInstance = meshInstances[m].morphInstance;
+        const morphInstance = (meshInstances[m] as any).morphInstance;
         if (!morphInstance) {
           continue;
         }
@@ -197,7 +199,7 @@ export class AnimationTarget {
     }
   }
 
-  static constructTargetNodes(
+  public static constructTargetNodes(
     root: pc.GraphNode,
     vec3Scale: pc.Vec3 | null | undefined,
     output: Record<string, AnimationTarget>,
@@ -225,7 +227,8 @@ export class AnimationTarget {
       );
     }
   }
-  static getLocalScale(node: pc.GraphNode, localScale: pc.Vec3) {
+
+  public static getLocalScale(node: pc.GraphNode, localScale: pc.Vec3) {
     localScale.set(1, 1, 1);
     if (!node) {
       return;

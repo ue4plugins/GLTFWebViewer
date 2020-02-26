@@ -16,7 +16,7 @@ export class AnimationClip implements Playable {
   public animCurves: AnimationCurve[] = [];
   public session: AnimationSession;
 
-  constructor(public root?: pc.GraphNode) {
+  public constructor(public root?: pc.GraphNode) {
     this.name = "clip" + AnimationClip.count.toString();
     this.duration = 0;
     this.animCurvesMap = {}; // a map for easy query
@@ -27,29 +27,29 @@ export class AnimationClip implements Playable {
     this.session = new AnimationSession(this);
   }
 
-  static count = 0;
+  public static count = 0;
 
-  get isPlaying() {
+  public get isPlaying() {
     return this.session.isPlaying;
   }
 
-  set isPlaying(isPlaying: boolean) {
+  public set isPlaying(isPlaying: boolean) {
     this.session.isPlaying = isPlaying;
   }
 
-  get loop() {
+  public get loop() {
     return this.session.loop;
   }
 
-  set loop(loop) {
+  public set loop(loop) {
     this.session.loop = loop;
   }
 
-  get bySpeed() {
+  public get bySpeed() {
     return this.session.bySpeed;
   }
 
-  set bySpeed(bySpeed) {
+  public set bySpeed(bySpeed) {
     this.session.bySpeed = bySpeed;
   }
 
@@ -286,21 +286,21 @@ export class AnimationClip implements Playable {
     const curveScale = new AnimationCurve();
     curveScale.keyableType = AnimationKeyableType.VEC;
     curveScale.name = root.name + ".localScale";
-    curveScale.setTarget(root, "localScale");
+    curveScale.setTarget(root as pc.Entity, "localScale");
     this.addCurve(curveScale);
 
     // translate
     const curvePos = new AnimationCurve();
     curvePos.keyableType = AnimationKeyableType.VEC;
     curvePos.name = root.name + ".localPosition";
-    curvePos.setTarget(root, "localPosition");
+    curvePos.setTarget(root as pc.Entity, "localPosition");
     this.addCurve(curvePos);
 
     // rotate
     const curveRotQuat = new AnimationCurve();
     curveRotQuat.name = root.name + ".localRotation.quat";
     curveRotQuat.keyableType = AnimationKeyableType.QUAT;
-    curveRotQuat.setTarget(root, "localRotation");
+    curveRotQuat.setTarget(root as pc.Entity, "localRotation");
     this.addCurve(curveRotQuat);
 
     // children

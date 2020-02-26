@@ -11,18 +11,26 @@ export class AnimationKeyable {
   public type: AnimationKeyableType | undefined;
   public time = -1;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public value: any; // SingleDOF | undefined;
+  public value!: any; // SingleDOF | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public inTangent: any; // SingleDOF | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public outTangent: any; // SingleDOF | undefined;
   public _cacheKeyIdx: number | undefined;
 
-  constructor(type?: AnimationKeyableType, time?: number, value?: BlendValue) {
+  public constructor(
+    type?: AnimationKeyableType,
+    time?: number,
+    value?: BlendValue,
+  ) {
     return this.init(type, time, value);
   }
 
-  init(type = AnimationKeyableType.NUM, time = 0, value: BlendValue = 0) {
+  public init(
+    type = AnimationKeyableType.NUM,
+    time = 0,
+    value: BlendValue = 0,
+  ) {
     this.type = type || AnimationKeyableType.NUM;
     this.time = time || 0;
     if (value) {
@@ -43,7 +51,7 @@ export class AnimationKeyable {
     return this;
   }
 
-  copy(keyable: AnimationKeyable): AnimationKeyable {
+  public copy(keyable: AnimationKeyable): AnimationKeyable {
     if (!keyable) {
       return this;
     }
@@ -59,7 +67,7 @@ export class AnimationKeyable {
     return this;
   }
 
-  clone() {
+  public clone() {
     const value = AnimationKeyable._cloneValue(this.value);
     const cloned = new AnimationKeyable(this.type, this.time, value);
     if (this.inTangent || this.inTangent === 0) {
@@ -71,7 +79,7 @@ export class AnimationKeyable {
     return cloned;
   }
 
-  static _cloneValue<T>(value?: T): T {
+  public static _cloneValue<T>(value?: T): T {
     if (
       value instanceof pc.Vec3 ||
       value instanceof pc.Quat ||
@@ -85,7 +93,7 @@ export class AnimationKeyable {
     return value as T;
   }
 
-  static sum(
+  public static sum(
     keyable1: AnimationKeyable,
     keyable2: AnimationKeyable,
   ): AnimationKeyable | undefined {
@@ -119,7 +127,7 @@ export class AnimationKeyable {
     return resKeyable;
   }
 
-  static minus(
+  public static minus(
     keyable1: AnimationKeyable,
     keyable2: AnimationKeyable,
   ): AnimationKeyable | undefined {
@@ -153,7 +161,7 @@ export class AnimationKeyable {
     return resKeyable;
   }
 
-  static mul(
+  public static mul(
     keyable: AnimationKeyable,
     coeff: number,
   ): AnimationKeyable | undefined {
@@ -182,7 +190,7 @@ export class AnimationKeyable {
     return resKeyable;
   }
 
-  static div(
+  public static div(
     keyable: AnimationKeyable,
     coeff: number,
   ): AnimationKeyable | undefined {
@@ -193,7 +201,7 @@ export class AnimationKeyable {
     return AnimationKeyable.mul(keyable, 1 / coeff);
   }
 
-  static linearBlend(
+  public static linearBlend(
     keyable1: AnimationKeyable,
     keyable2: AnimationKeyable,
     p: number,
@@ -244,7 +252,7 @@ export class AnimationKeyable {
     return resKeyable;
   }
 
-  static linearBlendValue<T1, T2>(value1: T1, value2: T2, p: number) {
+  public static linearBlendValue<T1, T2>(value1: T1, value2: T2, p: number) {
     if (typeof value1 === "number" && typeof value2 === "number") {
       return (1 - p) * value1 + p * value2;
     }

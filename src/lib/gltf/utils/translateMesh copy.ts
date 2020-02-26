@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import pc from "playcanvas";
 import createDebug from "debug";
-import { Mesh, Accessor } from "../types";
+import { Mesh } from "../types";
 import { GlTfParser } from "../GlTfParser";
 import { getAccessorData } from "./getAccessorData";
 import { getPrimitiveType } from "./getPrimitiveType";
@@ -17,6 +17,15 @@ type pcMesh = pc.Mesh & {
   morph?: typeof pcMorph;
 };
 
+type KeyNum =
+  | Int8Array
+  | Uint8Array
+  | Int16Array
+  | Uint16Array
+  | Uint32Array
+  | Float32Array
+  | number[];
+
 const debug = createDebug("translateMesh");
 
 const calculateIndices = (numVertices: number) => {
@@ -25,6 +34,15 @@ const calculateIndices = (numVertices: number) => {
     dummyIndices[i] = i;
   }
   return dummyIndices;
+};
+
+const getAttribute = (elements: any[], semantic: string) => {
+  for (let i = 0; i < elements.length; i += 1) {
+    if (elements[i].name === semantic) {
+      return elements[i];
+    }
+  }
+  return null;
 };
 
 // Specification:
@@ -41,21 +59,13 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
     return;
   }
 
-  // const isQuantized =
-  //   gltf.extensionsRequired?.includes("KHR_mesh_quantization") ?? false;
+  debug("gltf", gltf);
 
   data.primitives.forEach(primitive => {
     const { attributes } = primitive;
 
-    let positions = null;
-    let normals = null;
-    let tangents = null;
-    let texCoord0 = null;
-    let texCoord1 = null;
-    let colors = null;
-    let joints = null;
-    let weights = null;
     let indices = null;
+    const data: Record<string, KeyNum> = {};
 
     debug("primitive extensions", primitive.extensions);
 
@@ -132,38 +142,16 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
             return values;
           };
 
-          const dracoAttribs = extDraco.attributes;
-          if (typeof dracoAttribs.POSITION !== "undefined") {
-            positions = extractAttribute(dracoAttribs.POSITION);
-          }
-
-          if (typeof dracoAttribs.NORMAL !== "undefined") {
-            normals = extractAttribute(dracoAttribs.NORMAL);
-          }
-
-          if (typeof dracoAttribs.TANGENT !== "undefined") {
-            tangents = extractAttribute(dracoAttribs.TANGENT);
-          }
-
-          if (typeof dracoAttribs.TEXCOORD_0 !== "undefined") {
-            texCoord0 = extractAttribute(dracoAttribs.TEXCOORD_0);
-          }
-
-          if (typeof dracoAttribs.TEXCOORD_1 !== "undefined") {
-            texCoord1 = extractAttribute(dracoAttribs.TEXCOORD_1);
-          }
-
-          if (typeof dracoAttribs.COLOR_0 !== "undefined") {
-            colors = extractAttribute(dracoAttribs.COLOR_0);
-          }
-
-          if (typeof dracoAttribs.JOINTS_0 !== "undefined") {
-            joints = extractAttribute(dracoAttribs.JOINTS_0);
-          }
-
-          if (typeof dracoAttribs.WEIGHTS_0 !== "undefined") {
-            weights = extractAttribute(dracoAttribs.WEIGHTS_0);
-          }
+          const dracoAttribs: Record<string, string> = extDraco.attributes;
+          Object.entries(dracoAttribs).forEach(([key, val]) => {
+            if (data[key]) {
+              return;
+            }
+            const d = extractAttribute(val);
+            if (d) {
+              data[key] = d;
+            }
+          });
         }
 
         if (geometryType === decoderModule.TRIANGULAR_MESH) {
@@ -188,64 +176,36 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
     }
 
     // Grab typed arrays for all vertex data
-    let accessor: Accessor;
-    if (typeof attributes.POSITION !== "undefined" && positions === null) {
-      accessor = gltfAccessors[primitive.attributes.POSITION];
-      positions = getAccessorData(gltf, accessor, resources.buffers);
-    }
 
-    if (typeof attributes.NORMAL !== "undefined" && normals === null) {
-      accessor = gltfAccessors[primitive.attributes.NORMAL];
-      normals = getAccessorData(gltf, accessor, resources.buffers);
-    }
-
-    if (typeof attributes.TANGENT !== "undefined" && tangents === null) {
-      accessor = gltfAccessors[primitive.attributes.TANGENT];
-      tangents = getAccessorData(gltf, accessor, resources.buffers);
-    }
-
-    if (typeof attributes.TEXCOORD_0 !== "undefined" && texCoord0 === null) {
-      accessor = gltfAccessors[primitive.attributes.TEXCOORD_0];
-      texCoord0 = getAccessorData(gltf, accessor, resources.buffers);
-    }
-
-    if (typeof attributes.TEXCOORD_1 !== "undefined" && texCoord1 === null) {
-      accessor = gltfAccessors[primitive.attributes.TEXCOORD_1];
-      texCoord1 = getAccessorData(gltf, accessor, resources.buffers);
-    }
-
-    if (typeof attributes.COLOR_0 !== "undefined" && colors === null) {
-      accessor = gltfAccessors[primitive.attributes.COLOR_0];
-      colors = getAccessorData(gltf, accessor, resources.buffers);
-    }
-
-    if (typeof attributes.JOINTS_0 !== "undefined" && joints === null) {
-      accessor = gltfAccessors[primitive.attributes.JOINTS_0];
-      joints = getAccessorData(gltf, accessor, resources.buffers);
-    }
-
-    if (typeof attributes.WEIGHTS_0 !== "undefined" && weights === null) {
-      accessor = gltfAccessors[primitive.attributes.WEIGHTS_0];
-      weights = getAccessorData(gltf, accessor, resources.buffers);
-    }
+    Object.entries(attributes).forEach(([key, val]) => {
+      if (data[key]) {
+        return;
+      }
+      const accessor = gltfAccessors[val];
+      const d = getAccessorData(gltf, accessor, resources.buffers);
+      if (d) {
+        data[key] = d;
+      }
+    });
 
     if (typeof primitive.indices !== "undefined" && indices === null) {
-      accessor = gltfAccessors[primitive.indices];
+      const accessor = gltfAccessors[primitive.indices];
       indices = getAccessorData(gltf, accessor, resources.buffers);
     }
 
-    const numVertices = positions ? positions.length / 3 : 0;
-
-    if (positions !== null && normals === null) {
+    const numVertices = data["POSITION"] ? data["POSITION"].length / 3 : 0;
+    if (data["POSITION"] && data["NORMALS"]) {
       // pc.calculateNormals needs indices so generate some if none are present
-      normals = pc.calculateNormals(
-        positions as any,
+      data["NORMALS"] = pc.calculateNormals(
+        data["POSITION"] as any,
         (indices === null ? calculateIndices(numVertices) : indices) as any,
       );
     }
+    debug("data", data);
+    debug("numVertices", numVertices);
 
     const vertexDesc = [];
-    if (positions !== null) {
+    if ("POSITION" in data) {
       vertexDesc.push({
         semantic: pc.SEMANTIC_POSITION,
         components: 3,
@@ -253,7 +213,7 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
       });
     }
 
-    if (normals !== null) {
+    if ("NORMALS" in data) {
       vertexDesc.push({
         semantic: pc.SEMANTIC_NORMAL,
         components: 3,
@@ -261,7 +221,7 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
       });
     }
 
-    if (tangents !== null) {
+    if ("TANGENTS" in data) {
       vertexDesc.push({
         semantic: pc.SEMANTIC_TANGENT,
         components: 4,
@@ -269,7 +229,7 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
       });
     }
 
-    if (texCoord0 !== null) {
+    if ("TEXCOORD_0" in data) {
       vertexDesc.push({
         semantic: pc.SEMANTIC_TEXCOORD0,
         components: 2,
@@ -277,7 +237,7 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
       });
     }
 
-    if (texCoord1 !== null) {
+    if ("TEXTCOORD_1" in data) {
       vertexDesc.push({
         semantic: pc.SEMANTIC_TEXCOORD1,
         components: 2,
@@ -285,7 +245,7 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
       });
     }
 
-    if (colors !== null) {
+    if ("COLORS" in data) {
       vertexDesc.push({
         semantic: pc.SEMANTIC_COLOR,
         components: 4,
@@ -294,7 +254,7 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
       });
     }
 
-    if (joints !== null) {
+    if ("JOINTS" in data) {
       vertexDesc.push({
         semantic: pc.SEMANTIC_BLENDINDICES,
         components: 4,
@@ -302,13 +262,15 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
       });
     }
 
-    if (weights !== null) {
+    if ("WEIGHTS" in data) {
       vertexDesc.push({
         semantic: pc.SEMANTIC_BLENDWEIGHT,
         components: 4,
         type: pc.TYPE_FLOAT32,
       });
     }
+
+    debug("vertexDesc", vertexDesc);
 
     const vertexFormat = new pc.VertexFormat(resources.device, vertexDesc);
     const vertexBuffer = new pc.VertexBuffer(
@@ -317,146 +279,140 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
       numVertices,
       pc.BUFFER_STATIC,
     );
-    const vertexData = vertexBuffer.lock();
 
+    const vertexData = vertexBuffer.lock();
+    const { elements } = vertexFormat as any;
     const vertexDataF32 = new Float32Array(vertexData);
     const vertexDataU8 = new Uint8Array(vertexData);
 
-    const getAttribute = (semantic: string) => {
-      const elements = (vertexFormat as any).elements;
-      for (let i = 0; i < elements.length; i += 1) {
-        if (elements[i].name === semantic) {
-          return elements[i];
+    Object.entries(data).forEach(([key, val]) => {
+      switch (key) {
+        case "POSITION": {
+          const attr = getAttribute(elements, pc.SEMANTIC_POSITION);
+          const dstOffset = attr.offset / 4;
+          const dstStride = attr.stride / 4;
+          for (let i = 0; i < numVertices; i += 1) {
+            const dstIndex = dstOffset + i * dstStride;
+            const srcIndex = i * 3;
+            vertexDataF32[dstIndex] = val[srcIndex];
+            vertexDataF32[dstIndex + 1] = val[srcIndex + 1];
+            vertexDataF32[dstIndex + 2] = val[srcIndex + 2];
+          }
+          break;
+        }
+
+        case "NORMALS": {
+          const attr = getAttribute(elements, pc.SEMANTIC_NORMAL);
+          const dstOffset = attr.offset / 4;
+          const dstStride = attr.stride / 4;
+          for (let i = 0; i < numVertices; i += 1) {
+            const dstIndex = dstOffset + i * dstStride;
+            const srcIndex = i * 3;
+            vertexDataF32[dstIndex] = val[srcIndex];
+            vertexDataF32[dstIndex + 1] = val[srcIndex + 1];
+            vertexDataF32[dstIndex + 2] = val[srcIndex + 2];
+          }
+          break;
+        }
+
+        case "TANGENTS": {
+          const attr = getAttribute(elements, pc.SEMANTIC_TANGENT);
+          const dstOffset = attr.offset / 4;
+          const dstStride = attr.stride / 4;
+          for (let i = 0; i < numVertices; i += 1) {
+            const dstIndex = dstOffset + i * dstStride;
+            const srcIndex = i * 4;
+            vertexDataF32[dstIndex] = val[srcIndex];
+            vertexDataF32[dstIndex + 1] = val[srcIndex + 1];
+            vertexDataF32[dstIndex + 2] = val[srcIndex + 2];
+            vertexDataF32[dstIndex + 3] = val[srcIndex + 3];
+          }
+          break;
+        }
+
+        case "TEXCOORD_0": {
+          const attr = getAttribute(elements, pc.SEMANTIC_TEXCOORD0);
+          const dstOffset = attr.offset / 4;
+          const dstStride = attr.stride / 4;
+          for (let i = 0; i < numVertices; i += 1) {
+            const dstIndex = dstOffset + i * dstStride;
+            const srcIndex = i * 2;
+            vertexDataF32[dstIndex] = val[srcIndex];
+            vertexDataF32[dstIndex + 1] = val[srcIndex + 1];
+          }
+          break;
+        }
+
+        case "TEXCOORD_1": {
+          const attr = getAttribute(elements, pc.SEMANTIC_TEXCOORD1);
+          const dstOffset = attr.offset / 4;
+          const dstStride = attr.stride / 4;
+          for (let i = 0; i < numVertices; i += 1) {
+            const dstIndex = dstOffset + i * dstStride;
+            const srcIndex = i * 2;
+            vertexDataF32[dstIndex] = val[srcIndex];
+            vertexDataF32[dstIndex + 1] = val[srcIndex + 1];
+          }
+          break;
+        }
+
+        case "COLORS": {
+          const attr = getAttribute(elements, pc.SEMANTIC_COLOR);
+          const dstOffset = attr.offset;
+          const dstStride = attr.stride;
+          const accessor = gltfAccessors[attributes.COLOR_0];
+          for (let i = 0; i < numVertices; i += 1) {
+            const dstIndex = dstOffset + i * dstStride;
+            const srcIndex = accessor.type === "VEC4" ? i * 4 : i * 3;
+            const [r, g, b, a] = val.slice(srcIndex);
+            vertexDataU8[dstIndex] = Math.round(pc.math.clamp(r, 0, 1) * 255);
+            vertexDataU8[dstIndex + 1] = Math.round(
+              pc.math.clamp(g, 0, 1) * 255,
+            );
+            vertexDataU8[dstIndex + 2] = Math.round(
+              pc.math.clamp(b, 0, 1) * 255,
+            );
+            vertexDataU8[dstIndex + 3] =
+              accessor.type === "VEC4"
+                ? Math.round(pc.math.clamp(a, 0, 1) * 255)
+                : 255;
+          }
+          break;
+        }
+        case "JOINTS": {
+          const attr = getAttribute(elements, pc.SEMANTIC_BLENDINDICES);
+          const dstOffset = attr.offset;
+          const dstStride = attr.stride;
+          for (let i = 0; i < numVertices; i += 1) {
+            const dstIndex = dstOffset + i * dstStride;
+            const srcIndex = i * 4;
+            vertexDataU8[dstIndex] = val[srcIndex];
+            vertexDataU8[dstIndex + 1] = val[srcIndex + 1];
+            vertexDataU8[dstIndex + 2] = val[srcIndex + 2];
+            vertexDataU8[dstIndex + 3] = val[srcIndex + 3];
+          }
+          break;
+        }
+
+        case "WEIGHTS": {
+          const attr = getAttribute(elements, pc.SEMANTIC_BLENDWEIGHT);
+          const dstOffset = attr.offset / 4;
+          const dstStride = attr.stride / 4;
+
+          for (let i = 0; i < numVertices; i += 1) {
+            const dstIndex = dstOffset + i * dstStride;
+            const srcIndex = i * 4;
+            vertexDataF32[dstIndex] = val[srcIndex];
+            vertexDataF32[dstIndex + 1] = val[srcIndex + 1];
+            vertexDataF32[dstIndex + 2] = val[srcIndex + 2];
+            vertexDataF32[dstIndex + 3] = val[srcIndex + 3];
+          }
+          break;
         }
       }
-      return null;
-    };
+    });
 
-    let dstIndex, srcIndex;
-    let attr, dstOffset, dstStride;
-
-    if (positions !== null) {
-      attr = getAttribute(pc.SEMANTIC_POSITION);
-      dstOffset = attr.offset / 4;
-      dstStride = attr.stride / 4;
-
-      for (let i = 0; i < numVertices; i += 1) {
-        dstIndex = dstOffset + i * dstStride;
-        srcIndex = i * 3;
-        vertexDataF32[dstIndex] = positions[srcIndex];
-        vertexDataF32[dstIndex + 1] = positions[srcIndex + 1];
-        vertexDataF32[dstIndex + 2] = positions[srcIndex + 2];
-      }
-    }
-
-    if (normals !== null) {
-      attr = getAttribute(pc.SEMANTIC_NORMAL);
-      dstOffset = attr.offset / 4;
-      dstStride = attr.stride / 4;
-
-      for (let i = 0; i < numVertices; i += 1) {
-        dstIndex = dstOffset + i * dstStride;
-        srcIndex = i * 3;
-        vertexDataF32[dstIndex] = normals[srcIndex];
-        vertexDataF32[dstIndex + 1] = normals[srcIndex + 1];
-        vertexDataF32[dstIndex + 2] = normals[srcIndex + 2];
-      }
-    }
-
-    if (tangents !== null) {
-      attr = getAttribute(pc.SEMANTIC_TANGENT);
-      dstOffset = attr.offset / 4;
-      dstStride = attr.stride / 4;
-
-      for (let i = 0; i < numVertices; i += 1) {
-        dstIndex = dstOffset + i * dstStride;
-        srcIndex = i * 4;
-        vertexDataF32[dstIndex] = tangents[srcIndex];
-        vertexDataF32[dstIndex + 1] = tangents[srcIndex + 1];
-        vertexDataF32[dstIndex + 2] = tangents[srcIndex + 2];
-        vertexDataF32[dstIndex + 3] = tangents[srcIndex + 3];
-      }
-    }
-
-    if (texCoord0 !== null) {
-      attr = getAttribute(pc.SEMANTIC_TEXCOORD0);
-      dstOffset = attr.offset / 4;
-      dstStride = attr.stride / 4;
-
-      for (let i = 0; i < numVertices; i += 1) {
-        dstIndex = dstOffset + i * dstStride;
-        srcIndex = i * 2;
-        vertexDataF32[dstIndex] = texCoord0[srcIndex];
-        vertexDataF32[dstIndex + 1] = texCoord0[srcIndex + 1];
-      }
-    }
-
-    if (texCoord1 !== null) {
-      attr = getAttribute(pc.SEMANTIC_TEXCOORD1);
-      dstOffset = attr.offset / 4;
-      dstStride = attr.stride / 4;
-
-      for (let i = 0; i < numVertices; i += 1) {
-        dstIndex = dstOffset + i * dstStride;
-        srcIndex = i * 2;
-        vertexDataF32[dstIndex] = texCoord1[srcIndex];
-        vertexDataF32[dstIndex + 1] = texCoord1[srcIndex + 1];
-      }
-    }
-
-    if (colors !== null) {
-      attr = getAttribute(pc.SEMANTIC_COLOR);
-      dstOffset = attr.offset;
-      dstStride = attr.stride;
-
-      accessor = gltfAccessors[primitive.attributes.COLOR_0];
-
-      for (let i = 0; i < numVertices; i += 1) {
-        dstIndex = dstOffset + i * dstStride;
-        srcIndex = accessor.type === "VEC4" ? i * 4 : i * 3;
-        const r = colors[srcIndex];
-        const g = colors[srcIndex + 1];
-        const b = colors[srcIndex + 2];
-        const a = colors[srcIndex + 3];
-        vertexDataU8[dstIndex] = Math.round(pc.math.clamp(r, 0, 1) * 255);
-        vertexDataU8[dstIndex + 1] = Math.round(pc.math.clamp(g, 0, 1) * 255);
-        vertexDataU8[dstIndex + 2] = Math.round(pc.math.clamp(b, 0, 1) * 255);
-        vertexDataU8[dstIndex + 3] =
-          accessor.type === "VEC4"
-            ? Math.round(pc.math.clamp(a, 0, 1) * 255)
-            : 255;
-      }
-    }
-
-    if (joints !== null) {
-      attr = getAttribute(pc.SEMANTIC_BLENDINDICES);
-      dstOffset = attr.offset;
-      dstStride = attr.stride;
-
-      for (let i = 0; i < numVertices; i += 1) {
-        dstIndex = dstOffset + i * dstStride;
-        srcIndex = i * 4;
-        vertexDataU8[dstIndex] = joints[srcIndex];
-        vertexDataU8[dstIndex + 1] = joints[srcIndex + 1];
-        vertexDataU8[dstIndex + 2] = joints[srcIndex + 2];
-        vertexDataU8[dstIndex + 3] = joints[srcIndex + 3];
-      }
-    }
-
-    if (weights !== null) {
-      attr = getAttribute(pc.SEMANTIC_BLENDWEIGHT);
-      dstOffset = attr.offset / 4;
-      dstStride = attr.stride / 4;
-
-      for (let i = 0; i < numVertices; i += 1) {
-        dstIndex = dstOffset + i * dstStride;
-        srcIndex = i * 4;
-        vertexDataF32[dstIndex] = weights[srcIndex];
-        vertexDataF32[dstIndex + 1] = weights[srcIndex + 1];
-        vertexDataF32[dstIndex + 2] = weights[srcIndex + 2];
-        vertexDataF32[dstIndex + 3] = weights[srcIndex + 3];
-      }
-    }
+    debug("vertexDataF32", vertexDataF32);
 
     vertexBuffer.unlock();
 
@@ -494,7 +450,7 @@ export function translateMesh(data: Mesh, resources: GlTfParser) {
 
     mesh.materialIndex = primitive.material;
 
-    accessor = gltfAccessors[primitive.attributes.POSITION];
+    const accessor = gltfAccessors[attributes.POSITION];
     const min = accessor.min ?? [0, 0, 0];
     const max = accessor.max ?? [0, 0, 0];
     const aabb = new pc.BoundingBox(

@@ -20,6 +20,7 @@ export enum AnimationCurveType {
 }
 
 export class AnimationCurve implements Playable {
+  public static count = 0;
   public name = "curve" + AnimationCurve.count.toString();
   public type = AnimationCurveType.LINEAR;
   public keyableType = AnimationKeyableType.NUM;
@@ -31,47 +32,45 @@ export class AnimationCurve implements Playable {
   public animKeys: AnimationKeyable[] = [];
   public session: AnimationSession;
 
-  constructor() {
+  public constructor() {
     AnimationCurve.count += 1;
     this.session = new AnimationSession(this);
   }
 
-  static count = 0;
-
-  get isPlaying() {
+  public get isPlaying() {
     if (this.session) {
       return this.session.isPlaying;
     }
     return false;
   }
 
-  set isPlaying(isPlaying: boolean) {
+  public set isPlaying(isPlaying: boolean) {
     if (this.session) {
       this.session.isPlaying = isPlaying;
     }
   }
 
-  get loop() {
+  public get loop() {
     if (this.session) {
       return this.session.loop;
     }
     return false;
   }
 
-  set loop(loop: boolean) {
+  public set loop(loop: boolean) {
     if (this.session) {
       this.session.loop = loop;
     }
   }
 
-  get bySpeed() {
+  public get bySpeed() {
     if (this.session) {
       return this.session.bySpeed;
     }
     return 0;
   }
 
-  set bySpeed(bySpeed: number) {
+  public set bySpeed(bySpeed: number) {
     if (this.session) {
       this.session.bySpeed = bySpeed;
     }
@@ -103,16 +102,24 @@ export class AnimationCurve implements Playable {
   }
 
   public addTarget(
-    targetNode: string,
+    targetNode: string | pc.Entity | pc.GraphNode,
     targetPath: string,
     targetProp?: string | number,
   ) {
-    const target = new AnimationTarget(targetNode, targetPath, targetProp);
+    const target = new AnimationTarget(
+      targetNode as pc.Entity,
+      targetPath,
+      targetProp,
+    );
     this.animTargets.push(target);
   }
 
   // eslint-disable-next-line
-  public setTarget(targetNode: any, targetPath: string, targetProp?: string) {
+  public setTarget(
+    targetNode: pc.Entity | pc.GraphNode,
+    targetPath: string,
+    targetProp?: string | number,
+  ) {
     this.animTargets = [];
     this.addTarget(targetNode, targetPath, targetProp);
   }
@@ -995,7 +1002,7 @@ export class AnimationCurve implements Playable {
     }
   }
 
-  static cubicHermite(
+  public static cubicHermite(
     t1: number,
     v1: number,
     t2: number,
@@ -1014,7 +1021,7 @@ export class AnimationCurve implements Playable {
     return v1 * h0 + v2 * h1 + t1 * h2 + t2 * h3;
   }
 
-  static cubicCardinal(
+  public static cubicCardinal(
     key0: AnimationKeyable | undefined,
     key1: AnimationKeyable | undefined,
     key2: AnimationKeyable | undefined,
@@ -1094,7 +1101,7 @@ export class AnimationCurve implements Playable {
             (key3.time - key1.time);
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (resKey.value as any)[pr] = AnimationCurve.cubicHermite(
+        resKey.value[pr] = AnimationCurve.cubicHermite(
           m1,
           v1[pr] as number,
           m2,

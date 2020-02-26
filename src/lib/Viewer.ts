@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createDecoderModule } from "draco3dgltf";
 import pc from "playcanvas";
 import Debug from "debug";
 import { GlTf } from "./gltf/types";
@@ -7,6 +6,9 @@ import { GlTfParser } from "./gltf/GlTfParser";
 import { AnimationClip } from "./gltf/animation/AnimationClip";
 import { createCameraScripts } from "./createCameraScripts";
 import { AnimationComponent } from "./gltf/animation/AnimationComponent";
+// import "./post-effects/BloomEffect";
+// import "./post-effects/BokehEffect";
+// import "./post-effects/FxaaEffect";
 
 const debug = Debug("viewer");
 
@@ -17,9 +19,8 @@ interface Resources {
 }
 
 export class Viewer {
-  private decoderModule = createDecoderModule({});
   public app: pc.Application;
-  public camera: pc.Entity;
+  public camera!: pc.Entity;
   public playing = true;
   public gltf?: pc.Entity & { animComponent?: AnimationComponent };
   public asset?: pc.Asset;
@@ -31,13 +32,37 @@ export class Viewer {
       throw new Error("Missing canvas");
     }
     this.windowResizeHandler = this.windowResizeHandler.bind(this);
+    this.app = this.createPlaycanvasApp();
+  }
 
-    debug("Creating viewer", canvas);
+  private windowResizeHandler() {
+    this.app.resizeCanvas(
+      this.canvas.parentElement?.clientWidth,
+      this.canvas.parentElement?.clientHeight,
+    );
+  }
+
+  public get cameraPosition() {
+    return this.camera.getPosition();
+  }
+
+  private createPlaycanvasApp() {
+    const existingApp = pc.Application.getApplication();
+    if (existingApp) {
+      debug("Destroying existing Playcanvas app");
+      existingApp.destroy();
+    }
+
+    if (!this.canvas) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.canvas = document.querySelector("canvas")!;
+    }
+
+    debug("Creating Playcanvas for target:", this.canvas);
     const app = new pc.Application(this.canvas, {
       mouse: new pc.Mouse(document.body),
       keyboard: new pc.Keyboard(window),
     });
-    this.app = app;
 
     createCameraScripts(app);
 
@@ -78,28 +103,38 @@ export class Viewer {
     this.camera = camera;
     app.root.addChild(camera);
 
+    // const bloom = new (pc as any).BloomEffect(app.graphicsDevice);
+    // bloom.bloomThreshold = 0.1;
+
+    // const bokeh = new (pc as any).BokehEffect(app.graphicsDevice);
+    // bokeh.focus = 0.4;
+
+    // if (camera.camera) {
+    //   camera.camera.postEffects.addEffect(bloom);
+    // }
+
     if (camera.script) {
       camera.script.create("orbitCamera");
       camera.script.create("keyboardInput");
       camera.script.create("mouseInput");
-      if (this.cameraPosition) {
-        (camera.script as any).orbitCamera.distance = this.cameraPosition.length();
-      } else if (this.gltf) {
-        (camera.script as any).orbitCamera.focusEntity = this.gltf;
-      }
-      // (camera.script as any).orbitCamera.frameOnStart = true;
+      this.focusCameraOnEntity();
     }
 
     // Create directional light entity
     debug("Creating light");
     const light = new pc.Entity("light");
     light.addComponent("light", {
-      type: "point",
-      color: new pc.Color(0.15, 0.1, 0.1),
+      type: "spot",
+      color: new pc.Color(1, 1, 1),
+      outerConeAngle: 60,
+      innerConeAngle: 40,
+      range: 100,
+      intensity: 1,
       castShadows: true,
+      shadowBias: 0.005,
+      normalOffsetBias: 0.01,
+      shadowResolution: 2048,
       shadowType: pc.SHADOW_VSM32,
-      range: 200,
-      intensity: 10,
     });
     light.setLocalPosition(4, 5, 10);
     light.setEulerAngles(45, 0, 0);
@@ -138,47 +173,45 @@ export class Viewer {
       app.scene.skyboxMip = 2;
       (app.scene as any).setSkybox(cubemapAsset.resources);
     });
-  }
 
-  private windowResizeHandler() {
-    this.app.resizeCanvas(
-      this.canvas.parentElement?.clientWidth,
-      this.canvas.parentElement?.clientHeight,
-    );
-  }
-
-  public get cameraPosition() {
-    return this.camera.getPosition();
+    return app;
   }
 
   public destroy() {
-    this.destroyScene();
-    window.removeEventListener("resize", this.windowResizeHandler);
-    this.app.destroy();
+    try {
+      this.destroyScene();
+      window.removeEventListener("resize", this.windowResizeHandler);
+      this.app.destroy();
+    } catch (e) {
+      // Ignore any errors
+    }
   }
 
   public destroyScene() {
-    this.textures.forEach(texture => {
-      texture.destroy();
-    });
+    try {
+      this.textures.forEach(texture => {
+        texture.destroy();
+      });
 
-    if (this.gltf) {
-      // if (this.gltf.animComponent) {
-      //   this.gltf.animComponent.stopClip();
-      // }
-      if ((this.camera.script as any).orbitCamera.focusEntity) {
-        (this.camera.script as any).orbitCamera.focusEntity = null;
+      if (this.gltf) {
+        if (this.gltf.animComponent) {
+          this.gltf.animComponent.stopClip();
+        }
+        if ((this.camera.script as any).orbitCamera.focusEntity) {
+          (this.camera.script as any).orbitCamera.focusEntity = null;
+        }
+        this.gltf.destroy();
       }
-      this.gltf.destroy();
-    }
 
-    if (this.asset) {
-      // If not done in this order,
-      // the entity will be retained by the JS engine.
-      this.app.assets.remove(this.asset);
-      this.asset.unload();
+      if (this.asset) {
+        // If not done in this order,
+        // the entity will be retained by the JS engine.
+        this.app.assets.remove(this.asset);
+        this.asset.unload();
+      }
+    } catch (e) {
+      // Ignore any errors
     }
-
     // Reset props
     this.asset = undefined;
     this.gltf = undefined;
@@ -207,7 +240,7 @@ export class Viewer {
       for (let i = 0; i < this.animations.length; i += 1) {
         for (let c = 0; c < this.animations[i].animCurves.length; c += 1) {
           const curve = this.animations[i].animCurves[c];
-          if (curve.animTargets[0].targetNode === "model") {
+          if ((curve.animTargets[0].targetNode as any) === "model") {
             curve.animTargets[0].targetNode = this.gltf;
           }
         }
@@ -234,8 +267,6 @@ export class Viewer {
       this.pauseAnimationClips();
       this.playCurrentAnimationClip();
 
-      debug("AnimationComponent", this.gltf.animComponent);
-
       // select_remove_options(this.anim_select);
       // for (i = 0; i < animationClips.length; i += 1) {
       //   select_add_option(this.anim_select, this.animations[i].name);
@@ -244,15 +275,14 @@ export class Viewer {
       //   this.animations.length + " animation clips loaded";
     }
 
-    // Focus the camera on the newly loaded scene
+    this.focusCameraOnEntity();
+  }
+
+  public focusCameraOnEntity() {
     if ((this.camera.script as any).orbitCamera) {
-      if (this.cameraPosition) {
-        (this.camera
-          .script as any).orbitCamera.distance = this.cameraPosition.length();
-      } else {
-        (this.camera.script as any).orbitCamera.frameOnStart = true;
-        (this.camera.script as any).orbitCamera.focusEntity = this.gltf;
-      }
+      debug("Focus on entity", this.gltf);
+      (this.camera.script as any).orbitCamera.frameOnStart = true;
+      (this.camera.script as any).orbitCamera.focusEntity = this.gltf;
     }
   }
 
@@ -350,9 +380,27 @@ export class Viewer {
     this.animations = res.animations || [];
   }
 
+  private waitForGraphicsDevice(count = 0) {
+    if (this.app.graphicsDevice) {
+      return Promise.resolve();
+    }
+    if (count === 5) {
+      this.app = this.createPlaycanvasApp();
+    }
+    return new Promise(resolve => {
+      debug("Waiting for graphics device");
+      setTimeout(() => {
+        resolve(this.waitForGraphicsDevice(count + 1));
+      }, 500);
+    });
+  }
+
   private async parseGltf(gltf: GlTf, basePath: string) {
-    const { app } = this;
-    const parser = new GlTfParser(gltf, app.graphicsDevice, {
+    if (!this.app.graphicsDevice) {
+      this.app = this.createPlaycanvasApp();
+      await this.waitForGraphicsDevice();
+    }
+    const parser = new GlTfParser(gltf, this.app.graphicsDevice, {
       basePath,
     });
     const res = await parser.load();

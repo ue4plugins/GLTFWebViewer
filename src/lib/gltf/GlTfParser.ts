@@ -1,6 +1,6 @@
 import pc from "playcanvas";
 import createDebug from "debug";
-import { DracoDecoderModule } from "draco3dgltf";
+import { createDecoderModule } from "draco3dgltf";
 import { GlTf, Material, Animation } from "./types";
 import { translateMaterial } from "./utils/translateMaterial";
 import { loadBuffers } from "./utils/loadBuffers";
@@ -24,7 +24,7 @@ export interface Options {
   processMaterialExtras?: (extras: Material["extras"]) => void;
   processGlobalExtras?: (extras: GlTf["extras"]) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  decoderModule?: DracoDecoderModule;
+  decoderModule?: any;
 }
 
 export class GlTfParser {
@@ -57,7 +57,7 @@ export class GlTfParser {
   }
 
   public get decoderModule() {
-    return this.options.decoderModule ?? "";
+    return this.options.decoderModule ?? createDecoderModule();
   }
 
   public async load() {
@@ -67,22 +67,24 @@ export class GlTfParser {
       "KHR_draco_mesh_compression",
     );
 
-    debug("useDecoderModule", useDecoderModule);
+    debug("useDecoderModule", useDecoderModule, this.decoderModule);
 
     debug("Load buffers");
-    this.buffers = await loadBuffers(this.basePath, gltf.buffers);
+    this.buffers = await loadBuffers(this);
 
-    debug("Parse textures");
+    debug(this.buffers);
+
+    debug("Parse textures", gltf.textures);
     this.textures =
       gltf.textures?.map(texture => translateTexture(texture, this)) || [];
 
-    debug("Parse images");
+    debug("Parse images", gltf.images);
     this.images =
       gltf.images
         ?.map(image => translateImage(image, this))
         .filter((i): i is HTMLImageElement => !!i) || [];
 
-    debug("Parse materials");
+    debug("Parse materials", gltf.materials);
     this.materials =
       gltf.materials?.map(material => translateMaterial(material, this)) || [];
 

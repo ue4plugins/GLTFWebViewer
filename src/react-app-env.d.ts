@@ -21,8 +21,6 @@ type GLTF_MODEL = {
 declare const GLTF_MODELS: GLTF_MODEL[];
 
 declare module "draco3dgltf" {
-  type DracoEncoderModule = any;
-  type DracoDecoderModule = any;
-  function createEncoderModule(encoderModule: DracoEncoderModule): any;
-  function createDecoderModule(decoderModule: DracoDecoderModule): any;
+  function createDecoderModule(): any;
+  function createEncoderModule(): any;
 }

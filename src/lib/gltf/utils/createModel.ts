@@ -4,7 +4,7 @@ import createDebug from "debug";
 import { GlTfParser } from "../GlTfParser";
 import { getRoots } from "./getRoots";
 
-const debug = createDebug("GlTfParser:createModel");
+const debug = createDebug("createModel");
 
 export function createModel({
   gltf,
@@ -24,15 +24,16 @@ export function createModel({
   const morphInstances: pc.MorphInstance[] = [];
 
   gltf.nodes.forEach((node, nodeIndex) => {
-    if (node.mesh !== undefined) {
+    if (typeof node.mesh !== "undefined") {
       const meshGroup = meshes[node.mesh] as Array<
         pc.Mesh & { morph: any; materialIndex: number }
       >;
+
       meshGroup.forEach(mesh => {
-        let material;
+        let material: pc.Material;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { materialIndex } = mesh;
-        if (materialIndex === undefined) {
+        if (typeof materialIndex === "undefined") {
           material = defaultMaterial;
         } else {
           material = materials[materialIndex];
@@ -66,7 +67,7 @@ export function createModel({
           morphInstances.push(morphInstance);
         }
 
-        if (node.skin) {
+        if (typeof node.skin !== "undefined") {
           const skin = skins[node.skin];
           (mesh as any).skin = skin;
           const skinInstance = new pc.SkinInstance(skin);
