@@ -259,7 +259,7 @@ export const createCameraScripts = (_app: pc.Application) => {
 
   TouchInput.attributes.add("orbitSensitivity", {
     type: "number",
-    default: 0.4,
+    default: 1.0,
     title: "Orbit Sensitivity",
     description: "How fast the camera moves around the orbit. Higher is faster",
   });
