@@ -1,0 +1,17 @@
+{
+  "textures": [
+    "Milkyway_posx.png",
+    "Milkyway_negx.png",
+    "Milkyway_posy.png",
+    "Milkyway_negy.png",
+    "Milkyway_posz.png",
+    "Milkyway_negz.png"
+  ],
+  "preload": true,
+  "magFilter": 1,
+  "minFilter": 5,
+  "anisotropy": 1,
+  "name": "Milky Way",
+  "rgbm": true,
+  "prefiltered": "Milkyway.dds"
+}

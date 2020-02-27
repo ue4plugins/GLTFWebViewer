@@ -1,0 +1,17 @@
+{
+  "textures": [
+    "winterforest_posx.png",
+    "winterforest_negx.png",
+    "winterforest_posy.png",
+    "winterforest_negy.png",
+    "winterforest_posz.png",
+    "winterforest_negz.png"
+  ],
+  "preload": true,
+  "magFilter": 1,
+  "minFilter": 5,
+  "anisotropy": 1,
+  "name": "Winter Forest",
+  "rgbm": true,
+  "prefiltered": "winterforest.dds"
+}

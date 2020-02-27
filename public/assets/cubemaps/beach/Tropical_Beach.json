@@ -1,0 +1,16 @@
+{
+  "textures": [
+    "Tropical_Beach_posx.png",
+    "Tropical_Beach_negx.png",
+    "Tropical_Beach_posy.png",
+    "Tropical_Beach_negy.png",
+    "Tropical_Beach_posz.png",
+    "Tropical_Beach_negz.png"
+  ],
+  "magFilter": 1,
+  "minFilter": 5,
+  "anisotropy": 1,
+  "name": "Tropical Beach",
+  "rgbm": true,
+  "prefiltered": "Tropical_Beach.dds"
+}
