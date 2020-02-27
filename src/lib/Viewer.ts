@@ -6,9 +6,6 @@ import { GlTfParser } from "./gltf/GlTfParser";
 import { AnimationClip } from "./gltf/animation/AnimationClip";
 import { createCameraScripts } from "./createCameraScripts";
 import { AnimationComponent } from "./gltf/animation/AnimationComponent";
-// import "./post-effects/BloomEffect";
-// import "./post-effects/BokehEffect";
-// import "./post-effects/FxaaEffect";
 
 const debug = Debug("viewer");
 
@@ -62,6 +59,13 @@ export class Viewer {
     const app = new pc.Application(this.canvas, {
       mouse: new pc.Mouse(document.body),
       keyboard: new pc.Keyboard(window),
+      graphicsDeviceOptions: {
+        preserveDrawingBuffer: false,
+        antialias: true,
+        alpha: true,
+        preferWebGl2: true,
+        use3dPhysics: false,
+      },
     });
 
     createCameraScripts(app);
@@ -72,9 +76,6 @@ export class Viewer {
     Rotate.prototype.update = function(deltaTime: number) {
       this.entity.rotate(0, deltaTime * 20, 0);
     };
-
-    debug("Starting app");
-    app.start();
 
     // Fill the available space at full resolution
     app.setCanvasFillMode(pc.FILLMODE_NONE);
@@ -97,6 +98,7 @@ export class Viewer {
     const camera = new pc.Entity("camera");
     camera.addComponent("camera", {
       fov: 45.8366,
+      clearColor: new pc.Color(0, 0, 0),
     });
     camera.addComponent("script");
     camera.setPosition(0, 0, 8);
@@ -121,58 +123,76 @@ export class Viewer {
     }
 
     // Create directional light entity
-    debug("Creating light");
-    const light = new pc.Entity("light");
-    light.addComponent("light", {
-      type: "spot",
-      color: new pc.Color(1, 1, 1),
-      outerConeAngle: 60,
-      innerConeAngle: 40,
-      range: 100,
-      intensity: 1,
-      castShadows: true,
-      shadowBias: 0.005,
-      normalOffsetBias: 0.01,
-      shadowResolution: 2048,
-      shadowType: pc.SHADOW_VSM32,
-    });
-    light.setLocalPosition(4, 5, 10);
-    light.setEulerAngles(45, 0, 0);
-    app.root.addChild(light);
+    // debug("Creating light");
+    // const light = new pc.Entity("light");
+    // light.addComponent("light", {
+    //   type: "spot",
+    //   color: new pc.Color(1, 1, 1),
+    //   outerConeAngle: 60,
+    //   innerConeAngle: 40,
+    //   range: 100,
+    //   intensity: 1,
+    //   castShadows: true,
+    //   shadowBias: 0.005,
+    //   normalOffsetBias: 0.01,
+    //   shadowResolution: 2048,
+    //   shadowType: pc.SHADOW_VSM32,
+    // });
+    // light.setLocalPosition(4, 5, 10);
+    // light.setEulerAngles(45, 0, 0);
+    // light.enabled = true;
+    // app.root.addChild(light);
 
     // Set a prefiltered cubemap as the skybox
-    const cubemapBasePath = "./assets/cubemaps/helipad";
-    const cubemapAsset = new pc.Asset(
+    // const cubemap = milkywayCubemap;
+    // app.assets.add(cubemap);
+    // app.assets.load(cubemap);
+
+    const cubemapBasePath = "assets/cubemaps/helipad";
+    const cubemapTextures = [
+      "Helipad_posx.png",
+      "Helipad_negx.png",
+      "Helipad_posy.png",
+      "Helipad_negy.png",
+      "Helipad_posz.png",
+      "Helipad_negz.png",
+    ].map(name => {
+      const asset = new pc.Asset(name, "texture", {
+        url: `${cubemapBasePath}/${name}`,
+      });
+
+      app.assets.add(asset);
+      app.assets.load(asset);
+      return asset;
+    });
+
+    const cubemap = new pc.Asset(
       "helipad",
       "cubemap",
+      { url: `${cubemapBasePath}/Helipad.dds` },
       {
-        url: `${cubemapBasePath}/Helipad.dds`,
-      },
-      {
-        textures: [
-          `${cubemapBasePath}/Helipad_posx.png`,
-          `${cubemapBasePath}/Helipad_negx.png`,
-          `${cubemapBasePath}/Helipad_posy.png`,
-          `${cubemapBasePath}/Helipad_negy.png`,
-          `${cubemapBasePath}/Helipad_posz.png`,
-          `${cubemapBasePath}/Helipad_negz.png`,
-        ],
+        preload: true,
+        anisotropy: 1,
         magFilter: 1,
         minFilter: 5,
-        anisotropy: 1,
-        name: "Helipad",
         rgbm: true,
-        prefiltered: "Helipad.dds",
+        loadFaces: true,
+        textures: cubemapTextures,
       },
     );
-    app.assets.add(cubemapAsset);
-    app.assets.load(cubemapAsset);
 
-    cubemapAsset.ready(() => {
+    app.assets.add(cubemap);
+    app.assets.load(cubemap);
+
+    cubemap.ready(() => {
       debug("Cubemap ready");
       app.scene.skyboxMip = 2;
-      (app.scene as any).setSkybox(cubemapAsset.resources);
+      app.scene.skyboxIntensity = 1;
+      (app.scene as any).setSkybox(cubemap.resources);
     });
+
+    debug("Starting app");
+    app.start();
 
     return app;
   }
@@ -396,7 +416,7 @@ export class Viewer {
   }
 
   private async parseGltf(gltf: GlTf, basePath: string) {
-    if (!this.app.graphicsDevice) {
+    if (!this.app.graphicsDevice || !(this.app.graphicsDevice as any).gl) {
       this.app = this.createPlaycanvasApp();
       await this.waitForGraphicsDevice();
     }

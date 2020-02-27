@@ -19,8 +19,6 @@ export function loadBuffers({
     gltf.buffers
       .filter((buf): buf is BufferWithUri => typeof buf.uri !== "undefined")
       .map(async buffer => {
-        // eslint-disable-next-line
-        console.log(buffer);
         if (isDataURI(buffer.uri)) {
           // convert base64 to raw binary data held in a string
           // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
