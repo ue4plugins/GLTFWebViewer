@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider, makeStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
 import { theme } from "../theme";
-import { ModelList } from "../components/ModelList";
+import { Sidebar } from "../components/Sidebar";
 import { PlayCanvas } from "./PlayCanvas";
 
 const drawerWidth = 300;
@@ -29,15 +28,7 @@ const useStyles = makeStyles(() => ({
     width: `calc(100% - ${drawerWidth}px)`,
     marginRight: drawerWidth,
   },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  toolbar: theme.mixins.toolbar,
-  content: {
+  viewport: {
     width: `calc(100% - ${drawerWidth}px)`,
     height: "100%",
     backgroundColor: theme.palette.background.default,
@@ -57,21 +48,10 @@ export const RootContainer: React.FC = () => {
       <div className={classes.root}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <main className={classes.content}>
+        <main className={classes.viewport}>
           <PlayCanvas model={model}></PlayCanvas>
         </main>
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="right"
-          open={true}
-          onWheel={e => e.nativeEvent.stopPropagation()}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <ModelList onSelect={setModel} />
-        </Drawer>
+        <Sidebar setModel={setModel}></Sidebar>
       </div>
     </ThemeProvider>
   );

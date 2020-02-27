@@ -3,6 +3,7 @@ import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import ListItem from "@material-ui/core/ListItem";
 import IconButton from "@material-ui/core/IconButton";
+import ClearIcon from "@material-ui/icons/Clear";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
@@ -53,8 +54,13 @@ export const SearchField: React.FC<Props> = ({ term, onChange }) => {
         type="submit"
         className={classes.iconButton}
         aria-label="search"
+        onClick={() => {
+          if (term) {
+            onChange("");
+          }
+        }}
       >
-        <SearchIcon />
+        {term ? <ClearIcon /> : <SearchIcon />}
       </IconButton>
     </ListItem>
   );
