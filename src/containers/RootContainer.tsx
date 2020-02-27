@@ -53,7 +53,7 @@ export const RootContainer: React.FC = () => {
           <PlayCanvas model={model}></PlayCanvas>
         </main>
         <Sidebar setModel={setModel}></Sidebar>
-        <FpsMonitor />
+        <FpsMonitor bottom="8px" left="8px" />
       </div>
     </ThemeProvider>
   );
