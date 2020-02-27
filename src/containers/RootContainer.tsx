@@ -3,6 +3,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider, makeStyles } from "@material-ui/core/styles";
 import { theme } from "../theme";
 import { Sidebar } from "../components/Sidebar";
+import { FpsMonitor } from "../components/FpsMonitor";
 import { PlayCanvas } from "./PlayCanvas";
 
 const drawerWidth = 300;
@@ -52,6 +53,7 @@ export const RootContainer: React.FC = () => {
           <PlayCanvas model={model}></PlayCanvas>
         </main>
         <Sidebar setModel={setModel}></Sidebar>
+        <FpsMonitor />
       </div>
     </ThemeProvider>
   );
