@@ -1313,7 +1313,7 @@ __metadata:
     eslint-plugin-json: ^2.1.0
     eslint-plugin-prettier: ^3.1.2
     eslint-plugin-react: ^7.18.3
-    eslint-plugin-react-hooks: ^2.4.0
+    eslint-plugin-react-hooks: ^2.5.0
     fuse.js: ^3.4.6
     glob: ^7.1.6
     husky: ^4.2.3
@@ -1324,10 +1324,10 @@ __metadata:
     module-to-cdn: ^3.1.5
     playcanvas: ^1.25.1
     prettier: ^1.19.1
-    react: ^16.12.0
+    react: ^16.13.0
     react-app-rewired: ^2.1.5
-    react-dom: ^16.12.0
-    react-refresh: ^0.7.2
+    react-dom: ^16.13.0
+    react-refresh: ^0.8.0
     react-scripts: 3.4.0
     typescript: ^3.8.2
     webpack: ^4.41.6
@@ -5937,12 +5937,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-hooks@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "eslint-plugin-react-hooks@npm:2.4.0"
+"eslint-plugin-react-hooks@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "eslint-plugin-react-hooks@npm:2.5.0"
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
-  checksum: 2/3230a778c34daf905b7ea955ae2bbb009d66f22c85e26c85dd73279702d3e369d3d1728daadcf02d4f09687ffb23ce9db2a277d3386e136e83a946538002e1c1
+  checksum: 2/fa40ca7982e9c203b545c7f5794090a2ff93f4043da7c7149dc832df34c8a80cf92c21bd320d8fa1ea6495fa8e8cf4eb3a6ef38b2f735f9820ce33e36496d038
   languageName: node
   linkType: hard
 
@@ -12726,17 +12726,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^16.12.0":
-  version: 16.12.0
-  resolution: "react-dom@npm:16.12.0"
+"react-dom@npm:^16.13.0":
+  version: 16.13.0
+  resolution: "react-dom@npm:16.13.0"
   dependencies:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
     prop-types: ^15.6.2
-    scheduler: ^0.18.0
+    scheduler: ^0.19.0
   peerDependencies:
     react: ^16.0.0
-  checksum: 2/2c7d68c0900fab0b0b9aebe5b231e16b0ea98ae1f7cb26d8d3b6aebe1d20969cc370afce87013c734728e249ed756742070239a9c882c66ab98ba849fa4d0cdb
+  checksum: 2/fbb80029738cc3149f88a49960e27acc92f1ce5605a6ad454ed3b4ad58c8501a8ab4048e7ff88730f44d5e0e9f3a4fad564c7e54449175be036d6a724fc0ae98
   languageName: node
   linkType: hard
 
@@ -12761,10 +12761,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-refresh@npm:^0.7.1, react-refresh@npm:^0.7.2":
+"react-refresh@npm:^0.7.1":
   version: 0.7.2
   resolution: "react-refresh@npm:0.7.2"
   checksum: 2/dc316baf35317aef118572c281f562f91d4fd72f5615649f70d5480cb75227972f7d30bb47b2ea4d2e66d693875d74bcd970ed8575dc16853bf20ed8c9e564d9
+  languageName: node
+  linkType: hard
+
+"react-refresh@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "react-refresh@npm:0.8.0"
+  checksum: 2/dd51c2419140002b73d734deca4f5887597c734038066c57ba9b870285c253df3ab05e3efdaaef19f0217ff642c9b14fb04bfc8e8303835b5f849c4c0ab2f162
   languageName: node
   linkType: hard
 
@@ -12854,14 +12861,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^16.12.0":
-  version: 16.12.0
-  resolution: "react@npm:16.12.0"
+"react@npm:^16.13.0":
+  version: 16.13.0
+  resolution: "react@npm:16.13.0"
   dependencies:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
     prop-types: ^15.6.2
-  checksum: 2/b6feaa411a4280e0da177df18095da85508fd0285cfbd389109365a818cec10631dbed63123a5137734f84321bab0d35d508bf7f1fc4f9011ea822f6c1508be8
+  checksum: 2/a0513b3303ebbbcc4e44d404215d94165b821e01db26d5000a7b37f6e74cace142b516e21cba30a5e5b1923ed41d877995c4e665bf130ee8ec34527e671234b2
   languageName: node
   linkType: hard
 
@@ -13547,13 +13554,13 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.18.0":
-  version: 0.18.0
-  resolution: "scheduler@npm:0.18.0"
+"scheduler@npm:^0.19.0":
+  version: 0.19.0
+  resolution: "scheduler@npm:0.19.0"
   dependencies:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
-  checksum: 2/007678c559669029a5f8a029022548c2f39258b8087d1da0a3f5c5360abf3aa2794a87f56998151432f48910eca53331206cd712b751188623ca3d1bcab38b9f
+  checksum: 2/2d74649be33a1e825e0d4b0a05d1bd0675cb0980768fc9b0d5fa6e258450d6dff7a520ccb02595124420738a8f8669afedf4351773b3cc8c5b84d52fa781155a
   languageName: node
   linkType: hard
 
