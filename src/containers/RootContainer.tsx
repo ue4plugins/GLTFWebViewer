@@ -40,8 +40,13 @@ const DAMAGED_HELMET = GLTF_MODELS.find(
   val => val.name === "DamagedHelmet",
 ) as GLTF_MODEL;
 
+const HELIPAD_SKYBOX = SKYBOX_CUBEMAPS.find(
+  val => val.name === "helipad",
+) as SKYBOX_CUBEMAP;
+
 export const RootContainer: React.FC = () => {
   const classes = useStyles();
+  const [skybox, setSkybox] = useState<SKYBOX_CUBEMAP>(HELIPAD_SKYBOX);
   const [model, setModel] = useState<GLTF_MODEL>(DAMAGED_HELMET);
 
   return (
@@ -50,9 +55,9 @@ export const RootContainer: React.FC = () => {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <main className={classes.viewport}>
-          <PlayCanvas model={model}></PlayCanvas>
+          <PlayCanvas model={model} skybox={skybox}></PlayCanvas>
         </main>
-        <Sidebar setModel={setModel}></Sidebar>
+        <Sidebar setModel={setModel} setSkybox={setSkybox}></Sidebar>
         <FpsMonitor bottom="8px" left="8px" />
       </div>
     </ThemeProvider>

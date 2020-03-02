@@ -4,6 +4,7 @@ const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const gltfFiles = require("./scripts/gltfFiles");
+const cubemapFiles = require("./scripts/cubemapFiles");
 
 module.exports = override(config => {
   const refresh = addReactRefresh({ disableRefreshCheck: true })(config);
@@ -14,6 +15,7 @@ module.exports = override(config => {
     plugins: [
       new webpack.DefinePlugin({
         GLTF_MODELS: JSON.stringify(gltfFiles),
+        SKYBOX_CUBEMAPS: JSON.stringify(cubemapFiles),
         "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
       }),
       new DynamicCdnWebpackPlugin(),

@@ -12,13 +12,20 @@ declare namespace pc {
   type MorphInstance = any;
 }
 
-type GLTF_MODEL = {
+declare type GLTF_MODEL = {
   type: string;
   name: string;
   path: string;
 };
 
 declare const GLTF_MODELS: GLTF_MODEL[];
+
+declare type SKYBOX_CUBEMAP = {
+  name: string;
+  path: string;
+};
+
+declare const SKYBOX_CUBEMAPS: SKYBOX_CUBEMAP[];
 
 declare module "draco3dgltf" {
   function createDecoderModule(): any;

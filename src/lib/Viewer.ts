@@ -148,49 +148,6 @@ export class Viewer {
     // app.assets.add(cubemap);
     // app.assets.load(cubemap);
 
-    const cubemapBasePath = "assets/cubemaps/helipad";
-    const cubemapTextures = [
-      "Helipad_posx.png",
-      "Helipad_negx.png",
-      "Helipad_posy.png",
-      "Helipad_negy.png",
-      "Helipad_posz.png",
-      "Helipad_negz.png",
-    ].map(name => {
-      const asset = new pc.Asset(name, "texture", {
-        url: `${cubemapBasePath}/${name}`,
-      });
-
-      app.assets.add(asset);
-      app.assets.load(asset);
-      return asset;
-    });
-
-    const cubemap = new pc.Asset(
-      "helipad",
-      "cubemap",
-      { url: `${cubemapBasePath}/Helipad.dds` },
-      {
-        preload: true,
-        anisotropy: 1,
-        magFilter: 1,
-        minFilter: 5,
-        rgbm: true,
-        loadFaces: true,
-        textures: cubemapTextures,
-      },
-    );
-
-    app.assets.add(cubemap);
-    app.assets.load(cubemap);
-
-    cubemap.ready(() => {
-      debug("Cubemap ready");
-      app.scene.skyboxMip = 2;
-      app.scene.skyboxIntensity = 1;
-      (app.scene as any).setSkybox(cubemap.resources);
-    });
-
     debug("Starting app");
     app.start();
 
@@ -205,6 +162,33 @@ export class Viewer {
     } catch (e) {
       // Ignore any errors
     }
+  }
+
+  public setSkybox(name: string, path: string) {
+    console.log(name, path);
+    const cubemap = new pc.Asset(
+      "skybox-" + name,
+      "cubemap",
+      {
+        url: `${path}/${name}.dds`,
+      },
+      {
+        anisotropy: 1,
+        magFilter: 1,
+        minFilter: 5,
+        rgbm: true,
+      },
+    );
+
+    this.app.assets.add(cubemap);
+    this.app.assets.load(cubemap);
+
+    cubemap.ready(() => {
+      debug("Cubemap ready");
+      this.app.scene.skyboxMip = 2;
+      this.app.scene.skyboxIntensity = 1;
+      (this.app.scene as any).setSkybox(cubemap.resources);
+    });
   }
 
   public destroyScene() {

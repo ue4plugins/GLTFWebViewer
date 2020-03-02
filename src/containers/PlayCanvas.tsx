@@ -3,9 +3,10 @@ import { Viewer } from "../lib/Viewer";
 
 interface Props {
   model?: GLTF_MODEL;
+  skybox?: SKYBOX_CUBEMAP;
 }
 
-export const PlayCanvas: React.FC<Props> = ({ model }) => {
+export const PlayCanvas: React.FC<Props> = ({ model, skybox }) => {
   const canvasEl = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<Viewer>();
 
@@ -29,6 +30,13 @@ export const PlayCanvas: React.FC<Props> = ({ model }) => {
       viewer.destroyScene();
     };
   }, [viewer, model]);
+
+  useEffect(() => {
+    if (!viewer || !skybox) {
+      return;
+    }
+    viewer.setSkybox(skybox.name, skybox.path);
+  }, [viewer, skybox]);
 
   return <canvas ref={canvasEl} />;
 };
