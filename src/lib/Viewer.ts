@@ -165,7 +165,6 @@ export class Viewer {
   }
 
   public setSkybox(name: string, path: string) {
-    console.log(name, path);
     const cubemap = new pc.Asset(
       "skybox-" + name,
       "cubemap",

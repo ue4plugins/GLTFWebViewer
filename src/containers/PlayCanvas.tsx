@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import { observer } from "mobx-react-lite";
 import { Viewer } from "../lib/Viewer";
+import { useStores } from "../stores";
 
-interface Props {
-  model?: GLTF_MODEL;
-  skybox?: SKYBOX_CUBEMAP;
-}
-
-export const PlayCanvas: React.FC<Props> = ({ model, skybox }) => {
+export const PlayCanvas: React.FC<{}> = observer(() => {
+  const { modelStore, skyboxStore } = useStores();
+  const { model } = modelStore;
+  const { skybox } = skyboxStore;
   const canvasEl = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<Viewer>();
 
@@ -22,7 +22,7 @@ export const PlayCanvas: React.FC<Props> = ({ model, skybox }) => {
   }, []);
 
   useEffect(() => {
-    if (!viewer || !model) {
+    if (!viewer) {
       return;
     }
     viewer.loadModel(`${model.path}/${model.name}.gltf`);
@@ -39,4 +39,4 @@ export const PlayCanvas: React.FC<Props> = ({ model, skybox }) => {
   }, [viewer, skybox]);
 
   return <canvas ref={canvasEl} />;
-};
+});

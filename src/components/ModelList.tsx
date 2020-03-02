@@ -5,6 +5,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
+import { useStores } from "../stores";
 import { SearchField } from "./SearchField";
 
 const useStyles = makeStyles(() => ({
@@ -25,12 +26,10 @@ const fuseOptions = {
   keys: ["name"],
 };
 
-interface Props {
-  onSelect?: (model: GLTF_MODEL) => void;
-}
-
-export const ModelList: React.FC<Props> = ({ onSelect }) => {
+export const ModelList: React.FC<{}> = () => {
   const classes = useStyles();
+  const { modelStore } = useStores();
+  const { models, setModel } = modelStore;
   const [searchTerm, setSearchTerm] = useState("");
   const [fuse] = useState(new Fuse(GLTF_MODELS, fuseOptions));
   const [list, setList] = useState(GLTF_MODELS);
@@ -38,10 +37,10 @@ export const ModelList: React.FC<Props> = ({ onSelect }) => {
   useEffect(() => {
     setList(
       searchTerm.length === 0
-        ? GLTF_MODELS
+        ? models
         : (fuse.search(searchTerm) as GLTF_MODEL[]),
     );
-  }, [fuse, searchTerm]);
+  }, [fuse, searchTerm, models]);
 
   return (
     <>
@@ -50,7 +49,7 @@ export const ModelList: React.FC<Props> = ({ onSelect }) => {
       <List className={classes.scrollableList}>
         {list.map(model => (
           <ListItem
-            onClick={onSelect && (() => onSelect(model))}
+            onClick={() => setModel(model)}
             button
             key={model.path + model.name}
           >

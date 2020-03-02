@@ -4,11 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { ModelList } from "./ModelList";
 import { SkyboxSelector } from "./SkyboxSelector";
 
-interface Props {
-  setModel: (model: GLTF_MODEL) => void;
-  setSkybox: (skybox: SKYBOX_CUBEMAP) => void;
-}
-
 const drawerWidth = 300;
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -25,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const Sidebar: React.FC<Props> = ({ setModel, setSkybox }) => {
+export const Sidebar: React.FC<{}> = () => {
   const classes = useStyles();
   return (
     <Drawer
@@ -41,8 +36,8 @@ export const Sidebar: React.FC<Props> = ({ setModel, setSkybox }) => {
         e.stopPropagation();
       }}
     >
-      <SkyboxSelector onSelect={setSkybox} />
-      <ModelList onSelect={setModel} />
+      <SkyboxSelector />
+      <ModelList />
     </Drawer>
   );
 };
