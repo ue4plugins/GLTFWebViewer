@@ -82,6 +82,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["playcanvas", "npm:1.25.2"],
             ["prettier", "npm:1.19.1"],
             ["react", "npm:16.13.0"],
+            ["react-app-rewire-alias", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:0.1.3"],
             ["react-app-rewired", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:2.1.5"],
             ["react-dom", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:16.13.0"],
             ["react-refresh", "npm:0.8.0"],
@@ -2453,6 +2454,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["playcanvas", "npm:1.25.2"],
             ["prettier", "npm:1.19.1"],
             ["react", "npm:16.13.0"],
+            ["react-app-rewire-alias", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:0.1.3"],
             ["react-app-rewired", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:2.1.5"],
             ["react-dom", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:16.13.0"],
             ["react-refresh", "npm:0.8.0"],
@@ -15058,6 +15060,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["raf", "npm:3.4.1"],
             ["regenerator-runtime", "npm:0.13.3"],
             ["whatwg-fetch", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["react-app-rewire-alias", [
+        ["virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:0.1.3", {
+          "packageLocation": "./.yarn/$$virtual/react-app-rewire-alias-virtual-6b6f19ac2d/0/cache/react-app-rewire-alias-npm-0.1.3-d0ed75793d-2.zip/node_modules/react-app-rewire-alias/",
+          "packageDependencies": [
+            ["react-app-rewire-alias", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:0.1.3"],
+            ["react-app-rewired", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:2.1.5"]
+          ],
+          "packagePeers": [
+            "react-app-rewired"
           ],
           "linkType": "HARD",
         }]

@@ -1,5 +1,6 @@
 const { override } = require("customize-cra");
 const { addReactRefresh } = require("customize-cra-react-refresh");
+// const { alias } = require("react-app-rewire-alias");
 const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
@@ -8,6 +9,11 @@ const cubemapFiles = require("./scripts/cubemapFiles");
 
 module.exports = override(config => {
   const refresh = addReactRefresh({ disableRefreshCheck: true })(config);
+
+  // alias({
+  //   playcanvas: "../../playcanvas/engine",
+  // })(config);
+
   return merge(refresh, {
     // externals: {
     //   playcanvas: "playcanvas",
