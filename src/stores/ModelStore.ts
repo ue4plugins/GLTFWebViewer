@@ -1,4 +1,3 @@
-import { throws } from "assert";
 import { observable, action } from "mobx";
 
 export class ModelStore {
