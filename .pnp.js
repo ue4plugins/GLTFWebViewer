@@ -42,6 +42,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:9.4.1"],
             ["@testing-library/user-event", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:10.0.0"],
             ["@types/debug", "npm:4.1.5"],
+            ["@types/fs-extra", "npm:8.1.0"],
             ["@types/jest", "npm:25.1.3"],
             ["@types/node", "npm:13.7.7"],
             ["@types/react", "npm:16.9.24"],
@@ -71,6 +72,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:3.1.2"],
             ["eslint-plugin-react", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:7.18.3"],
             ["eslint-plugin-react-hooks", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:2.5.0"],
+            ["fs-extra", "npm:8.1.0"],
             ["fuse.js", "npm:3.4.6"],
             ["glob", "npm:7.1.6"],
             ["husky", "npm:4.2.3"],
@@ -2414,6 +2416,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/react", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:9.4.1"],
             ["@testing-library/user-event", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:10.0.0"],
             ["@types/debug", "npm:4.1.5"],
+            ["@types/fs-extra", "npm:8.1.0"],
             ["@types/jest", "npm:25.1.3"],
             ["@types/node", "npm:13.7.7"],
             ["@types/react", "npm:16.9.24"],
@@ -2443,6 +2446,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:3.1.2"],
             ["eslint-plugin-react", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:7.18.3"],
             ["eslint-plugin-react-hooks", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:2.5.0"],
+            ["fs-extra", "npm:8.1.0"],
             ["fuse.js", "npm:3.4.6"],
             ["glob", "npm:7.1.6"],
             ["husky", "npm:4.2.3"],
@@ -3379,6 +3383,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-events-npm-3.0.0-2eee0ea973-2.zip/node_modules/@types/events/",
           "packageDependencies": [
             ["@types/events", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/fs-extra", [
+        ["npm:8.1.0", {
+          "packageLocation": "./.yarn/cache/@types-fs-extra-npm-8.1.0-f40b532d8a-2.zip/node_modules/@types/fs-extra/",
+          "packageDependencies": [
+            ["@types/fs-extra", "npm:8.1.0"],
+            ["@types/node", "npm:13.7.1"]
           ],
           "linkType": "HARD",
         }]
