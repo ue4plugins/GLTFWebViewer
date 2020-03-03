@@ -1,4 +1,5 @@
 import "jest";
+import pc from "playcanvas";
 import { getWrap } from "../getWrap";
 
 describe("getWrap", () => {
