@@ -1,12 +1,11 @@
 import pc from "playcanvas";
+
+const typeMap: Record<number, number> = {
+  33071: pc.ADDRESS_CLAMP_TO_EDGE,
+  33648: pc.ADDRESS_MIRRORED_REPEAT,
+  10497: pc.ADDRESS_REPEAT,
+};
+
 export function getWrap(wrap: number) {
-  switch (wrap) {
-    case 33071:
-      return pc.ADDRESS_CLAMP_TO_EDGE;
-    case 33648:
-      return pc.ADDRESS_MIRRORED_REPEAT;
-    case 10497:
-    default:
-      return pc.ADDRESS_REPEAT;
-  }
+  return typeMap[wrap] ?? pc.ADDRESS_REPEAT;
 }
