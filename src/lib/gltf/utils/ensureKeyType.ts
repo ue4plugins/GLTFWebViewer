@@ -10,4 +10,5 @@ export function ensureKeyType(
     );
     keyType = expectedKeyType;
   }
+  return keyType;
 }
