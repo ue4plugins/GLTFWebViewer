@@ -9,6 +9,7 @@ export function getAccessorData(
   accessor: Accessor,
   buffers: ArrayBuffer[],
 ) {
+  /* istanbul ignore next */
   if (
     typeof gltf.bufferViews === "undefined" ||
     typeof accessor.bufferView === "undefined"
@@ -51,6 +52,7 @@ export function getAccessorData(
     case ComponentType.FLOAT:
       return new Float32Array(arrayBuffer, byteOffset, length);
 
+    /* istanbul ignore next */
     default:
       return null;
   }

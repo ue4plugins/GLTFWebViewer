@@ -1,4 +1,5 @@
 export function decodeBinaryUtf8(array: Uint8Array) {
+  /* istanbul ignore next */
   if (typeof TextDecoder !== "undefined") {
     return new TextDecoder().decode(array);
   }
