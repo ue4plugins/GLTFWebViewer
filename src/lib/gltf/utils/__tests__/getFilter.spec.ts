@@ -9,7 +9,7 @@ describe("getFilter", () => {
   });
 
   it("should return pc.FILTER_NEAREST from MipMapType.NEAREST", () => {
-    expect(getFilter(MipMapType.LINEAR)).toBe(pc.FILTER_NEAREST);
+    expect(getFilter(MipMapType.NEAREST)).toBe(pc.FILTER_NEAREST);
   });
 
   it("should return pc.FILTER_LINEAR from MipMapType.LINEAR", () => {

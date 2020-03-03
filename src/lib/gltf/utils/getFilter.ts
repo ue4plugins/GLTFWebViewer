@@ -11,5 +11,5 @@ const typeMap = {
 };
 
 export function getFilter(filter: MipMapType) {
-  return typeMap[filter] || pc.FILTER_LINEAR;
+  return typeMap[filter] ?? pc.FILTER_LINEAR;
 }
