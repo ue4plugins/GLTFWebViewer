@@ -1,10 +1,11 @@
+import pc from "playcanvas";
 import { GlTf } from "../types";
 
 export function getRoots(gltf: GlTf, nodes: pc.GraphNode[]) {
   const rootNodes: pc.GraphNode[] = [];
   if (gltf.scenes) {
     let sceneIndex = 0;
-    if (gltf.scene) {
+    if (typeof gltf.scene !== "undefined") {
       sceneIndex = gltf.scene;
     }
     const gltfNodes = gltf.scenes[sceneIndex].nodes;
