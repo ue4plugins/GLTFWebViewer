@@ -11,7 +11,8 @@ export function buildHierarchy({ gltf, nodes }: GlTfParser) {
     if (node.children) {
       node.children.forEach(childIdx => {
         const child = nodes[childIdx];
-        // If this triggers, a node in the glTF has more than one parent which is wrong
+        // If this triggers, a node in the glTF
+        // has more than one parent which is wrong
         if (child.parent) {
           child.parent.removeChild(child);
         }

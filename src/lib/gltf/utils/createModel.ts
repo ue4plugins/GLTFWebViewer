@@ -63,6 +63,7 @@ export function createModel({
               morphInstance.setWeight(weightIndex, weight);
             });
           }
+
           debug("morphInstance", morphInstance);
           morphInstances.push(morphInstance);
         }
