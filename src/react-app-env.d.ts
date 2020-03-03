@@ -23,6 +23,8 @@ declare const GLTF_MODELS: GLTF_MODEL[];
 declare type SKYBOX_CUBEMAP = {
   name: string;
   path: string;
+  prefiltered: string;
+  faces: string[];
 };
 
 declare const SKYBOX_CUBEMAPS: SKYBOX_CUBEMAP[];

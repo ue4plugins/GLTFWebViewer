@@ -21,6 +21,7 @@ export class Viewer {
   public playing = true;
   public gltf?: pc.Entity & { animComponent?: AnimationComponent };
   public asset?: pc.Asset;
+  public skybox?: pc.Asset;
   public textures: pc.Texture[] = [];
   public animations: AnimationClip[] = [];
 
@@ -143,13 +144,16 @@ export class Viewer {
     // light.enabled = true;
     // app.root.addChild(light);
 
-    // Set a prefiltered cubemap as the skybox
-    // const cubemap = milkywayCubemap;
-    // app.assets.add(cubemap);
-    // app.assets.load(cubemap);
-
     debug("Starting app");
     app.start();
+
+    if (this.skybox) {
+      app.assets.add(this.skybox);
+      app.assets.load(this.skybox);
+      this.skybox.ready(cubemap => {
+        app.setSkybox(cubemap);
+      });
+    }
 
     return app;
   }
@@ -164,30 +168,51 @@ export class Viewer {
     }
   }
 
-  public setSkybox(name: string, path: string) {
+  public loadSkybox(skybox: SKYBOX_CUBEMAP) {
+    debug("Loading skybox", skybox);
+    const { name, path, faces, prefiltered } = skybox;
+
+    const data = {
+      name,
+      prefiltered: `${path}/${prefiltered}`,
+      anisotropy: this.app.graphicsDevice?.maxAnisotropy || 1,
+      magFilter: 1,
+      minFilter: 5,
+      rgbm: true,
+      textures: faces.map(face => `${path}/${face}`),
+    };
+
     const cubemap = new pc.Asset(
       "skybox-" + name,
       "cubemap",
       {
-        url: `${path}/${name}.dds`,
+        url: `${path}/${prefiltered}`,
       },
-      {
-        anisotropy: 1,
-        magFilter: 1,
-        minFilter: 5,
-        rgbm: true,
-      },
+      data,
     );
 
+    debug("Skybox data", data);
+
+    cubemap.preload = true;
     this.app.assets.add(cubemap);
     this.app.assets.load(cubemap);
+    this.skybox = cubemap;
+  }
 
-    cubemap.ready(() => {
-      debug("Cubemap ready");
-      this.app.scene.skyboxMip = 2;
-      this.app.scene.skyboxIntensity = 1;
-      (this.app.scene as any).setSkybox(cubemap.resources);
-    });
+  public async setSkybox(skybox: SKYBOX_CUBEMAP) {
+    if (!this.app.scene) {
+      await this.waitForGraphicsDevice();
+    }
+    this.app.scene.skyboxMip = 2;
+    this.app.scene.skyboxIntensity = 1;
+
+    this.loadSkybox(skybox);
+
+    if (this.skybox) {
+      await new Promise(resolve => this.skybox?.ready(resolve));
+      debug("Applying skybox");
+      this.app.setSkybox(this.skybox);
+    }
   }
 
   public destroyScene() {
@@ -218,6 +243,7 @@ export class Viewer {
     // Reset props
     this.asset = undefined;
     this.gltf = undefined;
+    this.skybox = undefined;
     this.textures = [];
   }
 

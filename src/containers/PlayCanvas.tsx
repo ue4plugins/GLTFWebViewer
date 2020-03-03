@@ -35,7 +35,7 @@ export const PlayCanvas: React.FC<{}> = observer(() => {
     if (!viewer || !skybox) {
       return;
     }
-    viewer.setSkybox(skybox.name, skybox.path);
+    viewer.setSkybox(skybox);
   }, [viewer, skybox]);
 
   return <canvas ref={canvasEl} />;
