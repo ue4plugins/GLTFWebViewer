@@ -14,6 +14,15 @@ export enum ComponentType {
   FLOAT = 5126,
 }
 
+export enum MipMapType {
+  NEAREST = 9728,
+  LINEAR = 9729,
+  NEAREST_MIPMAP_NEAREST = 9984,
+  LINEAR_MIPMAP_NEAREST = 9985,
+  NEAREST_MIPMAP_LINEAR = 9986,
+  LINEAR_MIPMAP_LINEAR = 9987,
+}
+
 export type SingleDOF = number | pc.Vec2 | pc.Vec3 | pc.Vec4 | pc.Quat;
 export type BlendValue = SingleDOF | Playable;
 export type Blendable = AnimationKeyable | BlendValue;

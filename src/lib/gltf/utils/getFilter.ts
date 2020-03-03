@@ -1,18 +1,15 @@
 import pc from "playcanvas";
-export function getFilter(filter: number) {
-  switch (filter) {
-    case 9728:
-      return pc.FILTER_NEAREST;
-    case 9729:
-    default:
-      return pc.FILTER_LINEAR;
-    case 9984:
-      return pc.FILTER_NEAREST_MIPMAP_NEAREST;
-    case 9985:
-      return pc.FILTER_LINEAR_MIPMAP_NEAREST;
-    case 9986:
-      return pc.FILTER_NEAREST_MIPMAP_LINEAR;
-    case 9987:
-      return pc.FILTER_LINEAR_MIPMAP_LINEAR;
-  }
+import { MipMapType } from "../types";
+
+const typeMap = {
+  [MipMapType.NEAREST]: pc.FILTER_NEAREST,
+  [MipMapType.LINEAR]: pc.FILTER_LINEAR,
+  [MipMapType.NEAREST_MIPMAP_NEAREST]: pc.FILTER_NEAREST_MIPMAP_NEAREST,
+  [MipMapType.LINEAR_MIPMAP_NEAREST]: pc.FILTER_LINEAR_MIPMAP_NEAREST,
+  [MipMapType.NEAREST_MIPMAP_LINEAR]: pc.FILTER_NEAREST_MIPMAP_LINEAR,
+  [MipMapType.LINEAR_MIPMAP_LINEAR]: pc.FILTER_LINEAR_MIPMAP_LINEAR,
+};
+
+export function getFilter(filter: MipMapType) {
+  return typeMap[filter] || pc.FILTER_LINEAR;
 }
