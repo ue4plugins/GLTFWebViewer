@@ -1,4 +1,5 @@
 import pc from "playcanvas";
+import { observable, action } from "mobx";
 import createDebug from "debug";
 import { createDecoderModule } from "draco3dgltf";
 import { GlTf, Material, Animation } from "./types";
@@ -27,6 +28,19 @@ export interface Options {
   decoderModule?: any;
 }
 
+export enum GlTfParseState {
+  PENDING,
+  BUFFERS,
+  IMAGES,
+  TEXTURES,
+  ANIMATIONS,
+  MESHES,
+  NODES,
+  MATERIALS,
+  SKINS,
+  READY,
+}
+
 export class GlTfParser {
   public nodeCounter = 0;
   public defaultMaterial: pc.StandardMaterial;
@@ -38,6 +52,9 @@ export class GlTfParser {
   public nodes: pc.GraphNode[] = [];
   public materials: pc.Material[] = [];
   public skins: pc.Skin[] = [];
+
+  @observable
+  public state = GlTfParseState.PENDING;
 
   public constructor(
     public gltf: GlTf,
@@ -60,7 +77,26 @@ export class GlTfParser {
     return this.options.decoderModule ?? createDecoderModule();
   }
 
+  @action
+  public setState(state: GlTfParseState) {
+    this.state = state;
+  }
+
+  public reset() {
+    this.setState(GlTfParseState.PENDING);
+    this.nodeCounter = 0;
+    this.buffers = [];
+    this.images = [];
+    this.textures = [];
+    this.animations = [];
+    this.meshes = [];
+    this.nodes = [];
+    this.materials = [];
+    this.skins = [];
+  }
+
   public async load() {
+    this.reset();
     const { gltf } = this;
 
     const useDecoderModule = !!gltf.extensionsUsed?.includes(
@@ -70,39 +106,47 @@ export class GlTfParser {
     debug("useDecoderModule", useDecoderModule, this.decoderModule);
 
     debug("Load buffers");
+    this.setState(GlTfParseState.BUFFERS);
     this.buffers = await loadBuffers(this);
 
     debug(this.buffers);
 
     debug("Parse textures", gltf.textures);
+    this.setState(GlTfParseState.TEXTURES);
     this.textures =
       gltf.textures?.map(texture => translateTexture(texture, this)) || [];
 
     debug("Parse images", gltf.images);
+    this.setState(GlTfParseState.IMAGES);
     this.images =
       gltf.images
         ?.map(image => translateImage(image, this))
         .filter((i): i is HTMLImageElement => !!i) || [];
 
     debug("Parse materials", gltf.materials);
+    this.setState(GlTfParseState.MATERIALS);
     this.materials =
       gltf.materials?.map(material => translateMaterial(material, this)) || [];
 
     debug("Parse meshes");
+    this.setState(GlTfParseState.MESHES);
     this.meshes = (gltf.meshes || [])
       .map(mesh => translateMesh(mesh, this))
       .filter((mesh): mesh is pc.Mesh[] => !!mesh);
 
     debug("Parse nodes");
-    this.nodes = gltf.nodes?.map(node => translateNode(node, this)) || [];
+    this.setState(GlTfParseState.NODES);
+    this.nodes = gltf.nodes?.map(translateNode) || [];
 
     debug("Parse skins");
+    this.setState(GlTfParseState.SKINS);
     this.skins =
       gltf.skins
         ?.map(node => translateSkin(node, this))
         .filter((skin): skin is pc.Skin => !!skin) || [];
 
     debug("Parse animations");
+    this.setState(GlTfParseState.ANIMATIONS);
     this.animations =
       gltf.animations
         ?.map(anim => translateAnimation(anim, this))
@@ -113,6 +157,8 @@ export class GlTfParser {
 
     debug("Build hierarchy");
     buildHierarchy(this);
+
+    this.setState(GlTfParseState.READY);
 
     return {
       model,

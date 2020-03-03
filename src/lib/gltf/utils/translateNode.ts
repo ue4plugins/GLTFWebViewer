@@ -1,6 +1,5 @@
 import pc from "playcanvas";
 import { Node as GlTfNode } from "../types";
-import { GlTfParser } from "../GlTfParser";
 
 // Specification:
 //   https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#node
@@ -9,7 +8,7 @@ const tempVec = new pc.Vec3();
 
 let nodeCounter = 0;
 
-export function translateNode(data: GlTfNode, _res: GlTfParser) {
+export function translateNode(data: GlTfNode) {
   const entity = new pc.GraphNode();
 
   if (typeof data.name === "string") {
