@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function decodeBinaryUtf8(array: any) {
+export function decodeBinaryUtf8(array: Uint8Array) {
   if (typeof TextDecoder !== "undefined") {
     return new TextDecoder().decode(array);
   }
