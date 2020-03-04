@@ -37,7 +37,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@material-ui/core", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:4.9.5"],
             ["@material-ui/icons", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:4.9.1"],
-            ["@testing-library/dom", "npm:6.12.2"],
+            ["@testing-library/dom", "npm:6.13.0"],
             ["@testing-library/jest-dom", "npm:5.1.1"],
             ["@testing-library/react", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:9.4.1"],
             ["@testing-library/user-event", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:10.0.0"],
@@ -52,13 +52,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:2.22.0"],
             ["@yarnpkg/pnpify", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:2.0.0-rc.18"],
             ["clsx", "npm:1.1.0"],
-            ["cross-env", "npm:7.0.0"],
+            ["cross-env", "npm:7.0.1"],
             ["customize-cra", "npm:0.9.1"],
             ["customize-cra-react-refresh", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:1.0.1"],
             ["debug", "virtual:d27045f313cae7cbc212b229738d5843f6d2265eba3ea36069f78075a79d301bc17e702a21a7b811ca9aa59de4cb7943fb27cda91a0e7d8a8ad547668124b185#npm:4.1.1"],
             ["deep-object-diff", "npm:1.1.0"],
             ["deepmerge", "npm:4.2.2"],
-            ["draco3dgltf", "npm:1.3.4"],
+            ["draco3dgltf", "npm:1.3.6"],
             ["dynamic-cdn-webpack-plugin", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:5.0.0"],
             ["eslint", "npm:6.8.0"],
             ["eslint-config-prettier", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:6.10.0"],
@@ -81,7 +81,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mobx", "npm:5.15.4"],
             ["mobx-react-lite", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:1.5.2"],
             ["module-to-cdn", "npm:3.1.5"],
-            ["playcanvas", "npm:1.25.2"],
+            ["playcanvas", "npm:1.25.3"],
             ["prettier", "npm:1.19.1"],
             ["react", "npm:16.13.0"],
             ["react-app-rewire-alias", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:0.1.3"],
@@ -2411,7 +2411,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@epic/pc-viewer", "workspace:."],
             ["@material-ui/core", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:4.9.5"],
             ["@material-ui/icons", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:4.9.1"],
-            ["@testing-library/dom", "npm:6.12.2"],
+            ["@testing-library/dom", "npm:6.13.0"],
             ["@testing-library/jest-dom", "npm:5.1.1"],
             ["@testing-library/react", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:9.4.1"],
             ["@testing-library/user-event", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:10.0.0"],
@@ -2426,13 +2426,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:2.22.0"],
             ["@yarnpkg/pnpify", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:2.0.0-rc.18"],
             ["clsx", "npm:1.1.0"],
-            ["cross-env", "npm:7.0.0"],
+            ["cross-env", "npm:7.0.1"],
             ["customize-cra", "npm:0.9.1"],
             ["customize-cra-react-refresh", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:1.0.1"],
             ["debug", "virtual:d27045f313cae7cbc212b229738d5843f6d2265eba3ea36069f78075a79d301bc17e702a21a7b811ca9aa59de4cb7943fb27cda91a0e7d8a8ad547668124b185#npm:4.1.1"],
             ["deep-object-diff", "npm:1.1.0"],
             ["deepmerge", "npm:4.2.2"],
-            ["draco3dgltf", "npm:1.3.4"],
+            ["draco3dgltf", "npm:1.3.6"],
             ["dynamic-cdn-webpack-plugin", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:5.0.0"],
             ["eslint", "npm:6.8.0"],
             ["eslint-config-prettier", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:6.10.0"],
@@ -2455,7 +2455,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mobx", "npm:5.15.4"],
             ["mobx-react-lite", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:1.5.2"],
             ["module-to-cdn", "npm:3.1.5"],
-            ["playcanvas", "npm:1.25.2"],
+            ["playcanvas", "npm:1.25.3"],
             ["prettier", "npm:1.19.1"],
             ["react", "npm:16.13.0"],
             ["react-app-rewire-alias", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:0.1.3"],
@@ -3245,6 +3245,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["wait-for-expect", "npm:3.0.2"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:6.13.0", {
+          "packageLocation": "./.yarn/cache/@testing-library-dom-npm-6.13.0-b573236464-2.zip/node_modules/@testing-library/dom/",
+          "packageDependencies": [
+            ["@testing-library/dom", "npm:6.13.0"],
+            ["@babel/runtime", "npm:7.8.4"],
+            ["@sheerun/mutationobserver-shim", "npm:0.3.2"],
+            ["@types/testing-library__dom", "npm:6.12.1"],
+            ["aria-query", "npm:3.0.0"],
+            ["pretty-format", "npm:24.9.0"],
+            ["wait-for-expect", "npm:3.0.2"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@testing-library/jest-dom", [
@@ -3289,7 +3302,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/$$virtual/@testing-library-user-event-virtual-e2c9057e3c/0/cache/@testing-library-user-event-npm-10.0.0-a31670af25-2.zip/node_modules/@testing-library/user-event/",
           "packageDependencies": [
             ["@testing-library/user-event", "virtual:f40c8cc3919b52ef757c2df1f477f06f441e503516854fbdf84432905dfe370e0f8bbac7503650364cbefcf20e42b42f766384c40de68b45ef589d73d41b086b#npm:10.0.0"],
-            ["@testing-library/dom", "npm:6.12.2"]
+            ["@testing-library/dom", "npm:6.13.0"]
           ],
           "packagePeers": [
             "@testing-library/dom"
@@ -6196,10 +6209,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["cross-env", [
-        ["npm:7.0.0", {
-          "packageLocation": "./.yarn/cache/cross-env-npm-7.0.0-cac15d7da6-2.zip/node_modules/cross-env/",
+        ["npm:7.0.1", {
+          "packageLocation": "./.yarn/cache/cross-env-npm-7.0.1-ad664a0a1d-2.zip/node_modules/cross-env/",
           "packageDependencies": [
-            ["cross-env", "npm:7.0.0"],
+            ["cross-env", "npm:7.0.1"],
             ["cross-spawn", "npm:7.0.1"]
           ],
           "linkType": "HARD",
@@ -7158,10 +7171,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["draco3dgltf", [
-        ["npm:1.3.4", {
-          "packageLocation": "./.yarn/cache/draco3dgltf-npm-1.3.4-b63dd7b7ae-2.zip/node_modules/draco3dgltf/",
+        ["npm:1.3.6", {
+          "packageLocation": "./.yarn/cache/draco3dgltf-npm-1.3.6-6fec389f99-2.zip/node_modules/draco3dgltf/",
           "packageDependencies": [
-            ["draco3dgltf", "npm:1.3.4"]
+            ["draco3dgltf", "npm:1.3.6"]
           ],
           "linkType": "HARD",
         }]
@@ -13725,10 +13738,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["playcanvas", [
-        ["npm:1.25.2", {
-          "packageLocation": "./.yarn/cache/playcanvas-npm-1.25.2-123a2ac454-2.zip/node_modules/playcanvas/",
+        ["npm:1.25.3", {
+          "packageLocation": "./.yarn/cache/playcanvas-npm-1.25.3-ce6787684f-2.zip/node_modules/playcanvas/",
           "packageDependencies": [
-            ["playcanvas", "npm:1.25.2"]
+            ["playcanvas", "npm:1.25.3"]
           ],
           "linkType": "HARD",
         }]

@@ -1280,7 +1280,7 @@ __metadata:
   dependencies:
     "@material-ui/core": ^4.9.5
     "@material-ui/icons": ^4.9.1
-    "@testing-library/dom": ^6.12.2
+    "@testing-library/dom": ^6.13.0
     "@testing-library/jest-dom": ^5.1.1
     "@testing-library/react": ^9.4.1
     "@testing-library/user-event": ^10.0.0
@@ -1288,20 +1288,20 @@ __metadata:
     "@types/fs-extra": 8.1.0
     "@types/jest": ^25.1.3
     "@types/node": ^13.7.7
-    "@types/react": ^16.9.24
+    "@types/react": ^16.9.23
     "@types/react-dom": ^16.9.5
     "@types/testing-library__react": ^9.1.2
     "@typescript-eslint/eslint-plugin": ^2.22.0
     "@typescript-eslint/parser": ^2.22.0
     "@yarnpkg/pnpify": ^2.0.0-rc.18
     clsx: ^1.1.0
-    cross-env: ^7.0.0
+    cross-env: ^7.0.1
     customize-cra: ^0.9.1
     customize-cra-react-refresh: ^1.0.1
     debug: ^4.1.1
     deep-object-diff: ^1.1.0
     deepmerge: ^4.2.2
-    draco3dgltf: ^1.3.4
+    draco3dgltf: ^1.3.6
     dynamic-cdn-webpack-plugin: ^5.0.0
     eslint: ^6.8.0
     eslint-config-prettier: ^6.10.0
@@ -1324,7 +1324,7 @@ __metadata:
     mobx: ^5.15.4
     mobx-react-lite: ^1.5.2
     module-to-cdn: ^3.1.5
-    playcanvas: ^1.25.2
+    playcanvas: ^1.25.3
     prettier: ^1.19.1
     react: ^16.13.0
     react-app-rewire-alias: ^0.1.3
@@ -2047,7 +2047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^6.11.0, @testing-library/dom@npm:^6.12.2":
+"@testing-library/dom@npm:^6.11.0":
   version: 6.12.2
   resolution: "@testing-library/dom@npm:6.12.2"
   dependencies:
@@ -2058,6 +2058,20 @@ __metadata:
     pretty-format: ^24.9.0
     wait-for-expect: ^3.0.0
   checksum: 2/da3cafdb5ddb12051ebd55ade8fc412044beaea514b10035d215f4d734808bbb1d2187378e0f2267a926eb00bfd36583edf375ea270dd9d3e30f3f5c7c28a6ef
+  languageName: node
+  linkType: hard
+
+"@testing-library/dom@npm:^6.13.0":
+  version: 6.13.0
+  resolution: "@testing-library/dom@npm:6.13.0"
+  dependencies:
+    "@babel/runtime": ^7.6.2
+    "@sheerun/mutationobserver-shim": ^0.3.2
+    "@types/testing-library__dom": ^6.0.0
+    aria-query: 3.0.0
+    pretty-format: ^24.9.0
+    wait-for-expect: ^3.0.0
+  checksum: 2/ca3e29c8cb3d64818c768bf09a82f6a599f346246966155a9201a8f2103c9cbfcd7ef0703c308fd4fdb52d439191f6be4638521c063a7069733c75a612b451b4
   languageName: node
   linkType: hard
 
@@ -2328,7 +2342,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^16.9.24":
+"@types/react@npm:^16.9.23":
   version: 16.9.24
   resolution: "@types/react@npm:16.9.24"
   dependencies:
@@ -4594,15 +4608,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-env@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "cross-env@npm:7.0.0"
+"cross-env@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "cross-env@npm:7.0.1"
   dependencies:
     cross-spawn: ^7.0.1
   bin:
     cross-env: src/bin/cross-env.js
     cross-env-shell: src/bin/cross-env-shell.js
-  checksum: 2/2c638649830df34f69bf06f2969ce2679c86cd4e1d0422e96e40576addfbdde3a03553914b3cbfd47b9430b8cf9d9999b2c7adb99bd3b8fadd51e20e63cfd17b
+  checksum: 2/fcd74ddc25c35808d738db73d9b35d87420002dcb7989251a99d0cb801473713504ff9a5c4598c3a73f78d37d6e7dedc589ded3735b9c9dba5c28f6c08785ce2
   languageName: node
   linkType: hard
 
@@ -5448,10 +5462,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"draco3dgltf@npm:^1.3.4":
-  version: 1.3.4
-  resolution: "draco3dgltf@npm:1.3.4"
-  checksum: 2/bdacd1d9a635de70c79a3d0b61637ab04887b8497301371611f8c1142e56a3268363dfaa4cdbae296f2636eeffec578d7b0a295ec5cecb845e5f27191bc1e8ee
+"draco3dgltf@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "draco3dgltf@npm:1.3.6"
+  checksum: 2/5360ff230e3cdddc6097a72a95b8019ccac9ecd3453176422a73d995467197d78ce78738dec65a29e7b3174614426c37874f0a10cda4688065ba5dd14fa079c6
   languageName: node
   linkType: hard
 
@@ -11448,10 +11462,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playcanvas@npm:^1.25.2":
-  version: 1.25.2
-  resolution: "playcanvas@npm:1.25.2"
-  checksum: 2/78ebd21a2fe611711dc503d9fac6467770676b5064dc4655b6a3b208bb0ba8ecebcfbde0df8289247737510bf5f1a3c0d95aefbcb63b552ba8f66e1dce3e4bc3
+"playcanvas@npm:^1.25.3":
+  version: 1.25.3
+  resolution: "playcanvas@npm:1.25.3"
+  checksum: 2/43719269c1b91af3b59af0089ff993e0c3e766433bf8f178cecece69e287464bb96b92cb0911cb2bede47f9c692c2ba7a88b44a48af8ab7438e993d01d2b7ac5
   languageName: node
   linkType: hard
 
