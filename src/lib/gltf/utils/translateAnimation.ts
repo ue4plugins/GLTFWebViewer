@@ -9,18 +9,24 @@ import {
   AnimationKeyableType,
   AnimationKeyable,
 } from "../animation/AnimationKeyable";
-import { Animation } from "../types";
-import { GlTfParser } from "../GlTfParser";
+import { Animation, GlTf } from "../types";
 import { ensureKeyType } from "./ensureKeyType";
 import { getAccessorData } from "./getAccessorData";
+import { getAnimationKeyType } from "./getAnimationKeyType";
 
 const debug = createDebug("translateAnimation");
+
+interface Arguments {
+  gltf: GlTf;
+  nodes: pc.GraphNode[];
+  buffers: ArrayBuffer[];
+}
 
 // Specification:
 //   https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#animation
 export function translateAnimation(
   data: Animation,
-  { gltf, nodes, buffers }: GlTfParser,
+  { gltf, nodes, buffers }: Arguments,
 ) {
   const clip = new AnimationClip();
   clip.loop = true;
@@ -29,6 +35,7 @@ export function translateAnimation(
   }
 
   const { accessors } = gltf;
+  // istanbul ignore if
   if (!accessors) {
     throw new Error("Missing glTF accessors");
   }
@@ -38,6 +45,7 @@ export function translateAnimation(
     const times = getAccessorData(gltf, accessors[sampler.input], buffers);
     const values = getAccessorData(gltf, accessors[sampler.output], buffers);
 
+    // istanbul ignore if
     if (!values || !times) {
       return;
     }
@@ -49,6 +57,7 @@ export function translateAnimation(
     debug("target", target);
     debug("numCurves", numCurves);
 
+    // istanbul ignore if
     if (!target || typeof target.node === "undefined") {
       return;
     }
@@ -85,23 +94,7 @@ export function translateAnimation(
         numCurves /= 3;
       }
 
-      switch (Math.round(numCurves)) {
-        case 1:
-          keyType = AnimationKeyableType.NUM;
-          break;
-        case 3:
-          keyType = AnimationKeyableType.VEC;
-          break;
-        case 4:
-          keyType = AnimationKeyableType.QUAT;
-          break;
-        default:
-          console.warn(
-            "Unexpected amount of curves per keyframe: " + numCurves,
-          );
-          keyType = AnimationKeyableType.NUM;
-      }
-
+      keyType = getAnimationKeyType(numCurves);
       let targetPath = path;
       switch (path) {
         case "translation":
