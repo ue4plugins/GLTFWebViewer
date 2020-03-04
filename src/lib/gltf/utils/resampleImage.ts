@@ -9,6 +9,9 @@ export function resampleImage(image: CanvasImageSource) {
   srcH = typeof srcH === "number" ? srcH : srcH.baseVal.value;
   const dstW = nearestPow2(srcW);
   const dstH = nearestPow2(srcH);
+  if (dstW === srcW && dstH === srcH) {
+    return image;
+  }
   const canvas = document.createElement("canvas");
   canvas.width = dstW;
   canvas.height = dstH;
