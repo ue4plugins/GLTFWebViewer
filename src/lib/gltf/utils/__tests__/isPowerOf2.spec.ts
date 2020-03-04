@@ -17,4 +17,11 @@ describe("isPowerOf2", () => {
     expect(isPowerOf2(7)).toBe(false);
     expect(isPowerOf2(9)).toBe(false);
   });
+
+  it("should throw error if argument is not a number", () => {
+    // eslint-disable-next-line
+    expect(() => isPowerOf2("foo" as any)).toThrowError(
+      "Argument is not a number",
+    );
+  });
 });
