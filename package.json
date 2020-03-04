@@ -6,7 +6,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
+    "test": "react-app-rewired test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "lint": "yarn eslint -c .eslintrc.js \"**/*.{js,jsx,json,ts,tsx}\"",
     "fix": "yarn lint -- --fix"
@@ -48,6 +48,7 @@
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
     "@yarnpkg/pnpify": "^2.0.0-rc.18",
+    "canvas": "^2.6.1",
     "clsx": "^1.1.0",
     "cross-env": "^7.0.1",
     "customize-cra": "^0.9.1",
@@ -74,6 +75,7 @@
     "glob": "^7.1.6",
     "husky": "^4.2.3",
     "jest": "^25.1.0",
+    "jest-environment-jsdom-sixteen": "^1.0.2",
     "jest-webgl-canvas-mock": "^0.2.3",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
@@ -101,6 +103,9 @@
     "yargs": "latest",
     "yargs-parser": "latest",
     "whatwg-url": "latest",
-    "webpack": "latest"
+    "webpack": "latest",
+    "jest": "latest",
+    "jest-config": "latest",
+    "jest-environment-jsdom": "latest"
   }
 }
