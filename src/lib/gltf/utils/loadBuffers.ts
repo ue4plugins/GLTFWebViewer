@@ -1,19 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Buffer } from "../types";
-import { GlTfParser } from "../GlTfParser";
+import { Buffer, GlTf } from "../types";
 import { isDataURI } from "./isDataURI";
 
-export function loadBuffers({
-  basePath,
-  buffers,
-  gltf,
-}: GlTfParser): Promise<ArrayBuffer[]> {
+export function loadBuffers(gltf: GlTf, basePath = ""): Promise<ArrayBuffer[]> {
   if (!gltf.buffers) {
     return Promise.resolve([]);
   }
-  if (buffers.length === gltf.buffers.length) {
-    return Promise.resolve(buffers);
-  }
+
   type BufferWithUri = Buffer & { uri: string };
   return Promise.all(
     gltf.buffers

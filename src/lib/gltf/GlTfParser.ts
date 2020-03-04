@@ -107,9 +107,7 @@ export class GlTfParser {
 
     debug("Load buffers");
     this.setState(GlTfParseState.BUFFERS);
-    this.buffers = await loadBuffers(this);
-
-    debug(this.buffers);
+    this.buffers = await loadBuffers(this.gltf, this.basePath);
 
     debug("Parse textures", gltf.textures);
     this.setState(GlTfParseState.TEXTURES);
