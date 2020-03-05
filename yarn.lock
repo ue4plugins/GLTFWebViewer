@@ -1274,9 +1274,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@epic/pc-viewer@workspace:.":
+"@epic/web-viewer@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@epic/pc-viewer@workspace:."
+  resolution: "@epic/web-viewer@workspace:."
   dependencies:
     "@material-ui/core": ^4.9.5
     "@material-ui/icons": ^4.9.1
