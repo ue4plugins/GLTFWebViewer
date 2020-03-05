@@ -1,0 +1,53 @@
+image: node:lts
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+install_dependencies:
+  stage: install_dependencies
+  tags:
+    - docker-executor
+  script:
+    - npm install -g yarn
+
+stages:
+  - install_dependencies
+  - test
+  - build
+  # - release
+
+lint:
+  tags:
+    - docker-executor
+  stage: test
+  script:
+    - yarn lint
+
+test:
+  tags:
+    - docker-executor
+  stage: test
+  script:
+    - yarn test
+
+build:
+  tags:
+    - docker-executor
+  stage: build
+  artifacts:
+    paths:
+      - ./build
+    expire_in: 1 day
+  script:
+    - yarn build
+
+# release:
+#   tags:
+#     - docker-executor
+#   stage: release
+#   script:
+#     - npx semantic-release --branch master
+#   only:
+#     - master
