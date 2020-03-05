@@ -10,7 +10,7 @@ install_dependencies:
   tags:
     - docker-executor
   script:
-    - npm install -g yarn
+    - npm install -g yarn@berry --force
 
 stages:
   - install_dependencies
@@ -42,7 +42,6 @@ build:
     expire_in: 1 day
   script:
     - yarn build
-
 # release:
 #   tags:
 #     - docker-executor
