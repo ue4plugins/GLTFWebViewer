@@ -3,4 +3,17 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect";
+import "jest";
 // import "jest-webgl-canvas-mock";
+
+const orgWarn = console.warn;
+// eslint-disable-next-line
+console.warn = (...args: any[]) => {
+  if (args[0] === "TextDecoder not supported - pc.Untar module will not work") {
+    return;
+  }
+  if (args[0] === 'Unexpected key type: "2" (expected "1")') {
+    return;
+  }
+  orgWarn(...args);
+};
