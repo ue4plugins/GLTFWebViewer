@@ -1,45 +1,9 @@
 import "jest";
-import path from "path";
-import { readFile } from "fs-extra";
 import { loadBuffers } from "../loadBuffers";
 import { GlTf } from "../../types";
-import { toArrayBuffer } from "../toArrayBuffer";
+import { loadGltf, loadBin, arrayBuffersAreEqual } from "../../helpers";
 
 const basePath = "./public/assets/models/Duck";
-
-async function loadGltf(): Promise<GlTf> {
-  return JSON.parse(
-    (await readFile(path.join(basePath, "./glTF/Duck.gltf"))).toString(),
-  );
-}
-
-async function loadBin(): Promise<ArrayBuffer> {
-  return toArrayBuffer(await readFile(path.join(basePath, "./glTF/Duck0.bin")));
-}
-
-async function loadEmbeddedGltf(): Promise<GlTf> {
-  return JSON.parse(
-    (
-      await readFile(path.join(basePath, "./glTF-Embedded/Duck.gltf"))
-    ).toString(),
-  );
-}
-
-function dataViewsAreEqual(a: DataView, b: DataView) {
-  if (a.byteLength !== b.byteLength) {
-    return false;
-  }
-  for (let i = 0; i < a.byteLength; i += 1) {
-    if (a.getUint8(i) !== b.getUint8(i)) {
-      return false;
-    }
-  }
-  return true;
-}
-
-function arrayBuffersAreEqual(a: ArrayBuffer, b: ArrayBuffer) {
-  return dataViewsAreEqual(new DataView(a), new DataView(b));
-}
 
 describe("loadBuffers", () => {
   it("should resolve to empty array if buffers are missing", () => {
@@ -48,7 +12,7 @@ describe("loadBuffers", () => {
   });
 
   it("should load buffers from external source", async () => {
-    const orgBuffers = await loadBin();
+    const orgBuffers = await loadBin("Duck", "Duck0.bin");
     const spy = jest.spyOn(window, "fetch").mockImplementation(
       () =>
         Promise.resolve({
@@ -56,7 +20,7 @@ describe("loadBuffers", () => {
         }) as any, // eslint-disable-line
     );
 
-    const gltf = await loadGltf();
+    const gltf = await loadGltf("Duck");
     const loadedBuffers = await loadBuffers(gltf, basePath + "/glTF/");
     expect(loadedBuffers.length).toBe(1);
     expect(arrayBuffersAreEqual(loadedBuffers[0], orgBuffers)).toBe(true);
@@ -66,8 +30,8 @@ describe("loadBuffers", () => {
   });
 
   it("should load buffers from embedded source", async () => {
-    const orgBuffers = await loadBin();
-    const gltf = await loadEmbeddedGltf();
+    const orgBuffers = await loadBin("Duck", "Duck0.bin");
+    const gltf = await loadGltf("Duck", "Duck.gltf", "Embedded");
     const loadedBuffers = await loadBuffers(gltf, basePath + "/glTF-Embedded/");
     expect(loadedBuffers.length).toBe(1);
     expect(arrayBuffersAreEqual(loadedBuffers[0], orgBuffers)).toBe(true);
@@ -77,7 +41,7 @@ describe("loadBuffers", () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(
       () => Promise.reject(new Error("Test")) as any, // eslint-disable-line
     );
-    const gltf = await loadGltf();
+    const gltf = await loadGltf("Duck");
     const loadedBuffers = await loadBuffers(gltf, basePath + "/glTF/");
     expect(loadedBuffers.length).toBe(1);
     expect(arrayBuffersAreEqual(loadedBuffers[0], new ArrayBuffer(0))).toBe(
