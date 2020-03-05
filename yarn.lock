@@ -1186,12 +1186,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime-corejs3@npm:^7.7.4":
+  version: 7.8.7
+  resolution: "@babel/runtime-corejs3@npm:7.8.7"
+  dependencies:
+    core-js-pure: ^3.0.0
+    regenerator-runtime: ^0.13.4
+  checksum: 2/071241602450036d016a47c1ccfe45ab06c456941b14ba3b16d772a362b88903266541d0d7cb9fc66e858e4fa235c538a28d0be0d63c7e67c160be4e0ad549a7
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:7.8.4, @babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.3.4, @babel/runtime@npm:^7.4.4, @babel/runtime@npm:^7.4.5, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.8.3":
   version: 7.8.4
   resolution: "@babel/runtime@npm:7.8.4"
   dependencies:
     regenerator-runtime: ^0.13.2
   checksum: 2/e81c601fd206a3909bacd5b41bc2044dc9e0a4dfd9b7cc3479b920b2e3bc5a3cefbd4dc9543218b659735ce771a9bc9bf77e3fcf814bfced26829403daaa096e
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.7.4, @babel/runtime@npm:^7.8.4":
+  version: 7.8.7
+  resolution: "@babel/runtime@npm:7.8.7"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: 2/f7990173bfcbdfd9e00c63c27c887615e6c24dbf03540f8564b25001af838db6cdc5a7fbdcf8eea562a56daff4430177081a7355ebc2d162a9f7456f904bf17e
   languageName: node
   linkType: hard
 
@@ -1280,15 +1299,15 @@ __metadata:
   dependencies:
     "@material-ui/core": ^4.9.5
     "@material-ui/icons": ^4.9.1
-    "@testing-library/dom": ^6.13.0
+    "@testing-library/dom": ^6.15.0
     "@testing-library/jest-dom": ^5.1.1
-    "@testing-library/react": ^9.4.1
+    "@testing-library/react": ^9.5.0
     "@testing-library/user-event": ^10.0.0
     "@types/debug": 4.1.5
     "@types/fs-extra": 8.1.0
     "@types/jest": ^25.1.3
     "@types/node": ^13.7.7
-    "@types/react": ^16.9.23
+    "@types/react": ^16.9.24
     "@types/react-dom": ^16.9.5
     "@types/testing-library__react": ^9.1.2
     "@typescript-eslint/eslint-plugin": ^2.22.0
@@ -1960,31 +1979,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^6.11.0":
-  version: 6.12.2
-  resolution: "@testing-library/dom@npm:6.12.2"
+"@testing-library/dom@npm:^6.15.0":
+  version: 6.16.0
+  resolution: "@testing-library/dom@npm:6.16.0"
   dependencies:
-    "@babel/runtime": ^7.6.2
+    "@babel/runtime": ^7.8.4
     "@sheerun/mutationobserver-shim": ^0.3.2
-    "@types/testing-library__dom": ^6.0.0
-    aria-query: 3.0.0
-    pretty-format: ^24.9.0
-    wait-for-expect: ^3.0.0
-  checksum: 2/da3cafdb5ddb12051ebd55ade8fc412044beaea514b10035d215f4d734808bbb1d2187378e0f2267a926eb00bfd36583edf375ea270dd9d3e30f3f5c7c28a6ef
-  languageName: node
-  linkType: hard
-
-"@testing-library/dom@npm:^6.13.0":
-  version: 6.13.0
-  resolution: "@testing-library/dom@npm:6.13.0"
-  dependencies:
-    "@babel/runtime": ^7.6.2
-    "@sheerun/mutationobserver-shim": ^0.3.2
-    "@types/testing-library__dom": ^6.0.0
-    aria-query: 3.0.0
-    pretty-format: ^24.9.0
-    wait-for-expect: ^3.0.0
-  checksum: 2/ca3e29c8cb3d64818c768bf09a82f6a599f346246966155a9201a8f2103c9cbfcd7ef0703c308fd4fdb52d439191f6be4638521c063a7069733c75a612b451b4
+    "@types/testing-library__dom": ^6.12.1
+    aria-query: ^4.0.2
+    dom-accessibility-api: ^0.3.0
+    pretty-format: ^25.1.0
+    wait-for-expect: ^3.0.2
+  checksum: 2/b5cd7af424709b6d243d560ed0c65bafc568ae88e1b12fea31502cd5c398374cfb9d7c880a158d3ab7010bc12e39f0c1bcf33d7deafd86db4da2967b29491503
   languageName: node
   linkType: hard
 
@@ -2006,17 +2012,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^9.4.1":
-  version: 9.4.1
-  resolution: "@testing-library/react@npm:9.4.1"
+"@testing-library/react@npm:^9.5.0":
+  version: 9.5.0
+  resolution: "@testing-library/react@npm:9.5.0"
   dependencies:
-    "@babel/runtime": ^7.8.3
-    "@testing-library/dom": ^6.11.0
+    "@babel/runtime": ^7.8.4
+    "@testing-library/dom": ^6.15.0
     "@types/testing-library__react": ^9.1.2
   peerDependencies:
     react: "*"
     react-dom: "*"
-  checksum: 2/cf86b075eff764102fe6139ecf8b5cb386db5baea019ab69dde099e4000fa023b5d33db8f41c2d5196fe90c1ca8b027bee5f769c87459617f7286cb7037ddbe4
+  checksum: 2/b9682ca22c1c78537c1aa884a053b0ee3a4e11ac39b3f8f590d5159dcc2d2ddb1f36a9196c9d280522b99af63d8a89f8ccc0ca9c6a68708f3961ab8b0c94b319
   languageName: node
   linkType: hard
 
@@ -2255,7 +2261,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^16.9.23":
+"@types/react@npm:^16.9.24":
   version: 16.9.24
   resolution: "@types/react@npm:16.9.24"
   dependencies:
@@ -2272,7 +2278,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/testing-library__dom@npm:*, @types/testing-library__dom@npm:^6.0.0":
+"@types/testing-library__dom@npm:*, @types/testing-library__dom@npm:^6.12.1":
   version: 6.12.1
   resolution: "@types/testing-library__dom@npm:6.12.1"
   dependencies:
@@ -2918,13 +2924,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aria-query@npm:3.0.0, aria-query@npm:^3.0.0":
+"aria-query@npm:^3.0.0":
   version: 3.0.0
   resolution: "aria-query@npm:3.0.0"
   dependencies:
     ast-types-flow: 0.0.7
     commander: ^2.11.0
   checksum: 2/4603ead43ae64ef3920268b42c612adfc977941f72de1c1b1fcee99041388f7d6dd7cd4fb51957bc160f574b6c4748f478d9f366922bac77eb8e43f4002311bc
+  languageName: node
+  linkType: hard
+
+"aria-query@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "aria-query@npm:4.0.2"
+  dependencies:
+    "@babel/runtime": ^7.7.4
+    "@babel/runtime-corejs3": ^7.7.4
+  checksum: 2/d26256cea7b8b2ce926d7621c7e48d0a990283020846aa930900327f2db78d462039b25ddb37d61dc35f3a842e967b4eb4fa1f0e6dc73d50d6266610cd4f5361
   languageName: node
   linkType: hard
 
@@ -4448,6 +4464,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js-pure@npm:^3.0.0":
+  version: 3.6.4
+  resolution: "core-js-pure@npm:3.6.4"
+  checksum: 2/23273f04eaa0dae33c9b9f07856c9b01a5dd00d4ef16d5e048eb403bf3a055f06c8a891ddaf0df4cacebaf0b398c958605ea294f47eb24d988a735656a4b11a0
+  languageName: node
+  linkType: hard
+
 "core-js@npm:latest":
   version: 3.6.4
   resolution: "core-js@npm:3.6.4"
@@ -5284,6 +5307,13 @@ __metadata:
   dependencies:
     esutils: ^2.0.2
   checksum: 2/2eae469bd2889ceee9892083a67340b3622568fe5290edce620e5d5ddab23d644b2a780e9a7c68ad9c8a62716a70c5e484402ac93a398fa78b54b7505592aa7f
+  languageName: node
+  linkType: hard
+
+"dom-accessibility-api@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "dom-accessibility-api@npm:0.3.0"
+  checksum: 2/d6b40ffc70e03bc4878ba354fa590772665b9c948ad81f1fd8f47748280d6e4b3e91f1acc2e5b82f600da95833d31311c2b2a80720ed23d2c5c94e657b35bfd2
   languageName: node
   linkType: hard
 
@@ -12036,7 +12066,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-format@npm:^24.3.0, pretty-format@npm:^24.9.0":
+"pretty-format@npm:^24.3.0":
   version: 24.9.0
   resolution: "pretty-format@npm:24.9.0"
   dependencies:
@@ -12706,6 +12736,13 @@ __metadata:
   version: 0.13.3
   resolution: "regenerator-runtime@npm:0.13.3"
   checksum: 2/fc026f997801876927d8b11bd94b1d445c01fb1b112dcc35b1c4e83490b87954d26d8164c50098cdebaa8edc3cbfaa0e474758a57e28efc25930972148274b7a
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.13.4":
+  version: 0.13.4
+  resolution: "regenerator-runtime@npm:0.13.4"
+  checksum: 2/d6165e7ba67f28f813a28fc07aa0c771ae8df913a3277c0aa837957d72debc4f1df4f53a6e98636c1cc87c6ba643ce8c522eb36542bbc4234c645af9d992c7c2
   languageName: node
   linkType: hard
 
@@ -15101,7 +15138,7 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
-"wait-for-expect@npm:^3.0.0":
+"wait-for-expect@npm:^3.0.2":
   version: 3.0.2
   resolution: "wait-for-expect@npm:3.0.2"
   checksum: 2/487de701ccb29f9edc2fb2d77b3212c29266266156cd13f51b34556faa1061151f078b7200763c684553fcd67823084cd5f871a965d2b6cce97e3b9224b63bdb
