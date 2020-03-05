@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "@epic/pc-viewer",
+  "name": "@epic/web-viewer",
   "description": "Playcanvas Viewer",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
