@@ -5,7 +5,7 @@ export class AnimationEvent {
   public triggered = false;
   public triggerTime = -1;
 
-  constructor(
+  public constructor(
     public name: string,
     public time: number,
     public fnCallback: AnimationEventCallback,

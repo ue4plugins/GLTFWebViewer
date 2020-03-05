@@ -1,6 +1,5 @@
 import pc from "playcanvas";
 import createDebug from "debug";
-import { GlTfParser } from "../GlTfParser";
 import { Texture, GlTf } from "../types";
 import { getFilter } from "./getFilter";
 import { getWrap } from "./getWrap";
