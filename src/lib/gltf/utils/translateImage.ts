@@ -1,19 +1,26 @@
 import pc from "playcanvas";
 import createDebug from "debug";
-import { Image as GlTfImage } from "../types";
-import { GlTfParser } from "../GlTfParser";
+import { Image as GlTfImage, GlTf } from "../types";
 import { resampleImage } from "./resampleImage";
 import { isPowerOf2 } from "./isPowerOf2";
 import { isDataURI } from "./isDataURI";
 
 const debug = createDebug("translateImage");
 
+interface Arguments {
+  basePath: string;
+  textures: pc.Texture[];
+  buffers: ArrayBuffer[];
+  gltf: GlTf;
+}
+
 export function translateImage(
   data: GlTfImage,
-  { basePath, textures, buffers, gltf }: GlTfParser,
+  { basePath, textures, buffers, gltf }: Arguments,
 ) {
   const gltfTextures = gltf.textures;
   const gltfImages = gltf.images;
+
   if (!gltfTextures || !gltfImages) {
     return;
   }
