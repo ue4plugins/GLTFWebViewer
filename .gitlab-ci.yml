@@ -12,7 +12,7 @@ install_dependencies:
     - docker-executor
   script:
     - npm install -g yarn@berry rimraf --force
-    - rimraf .yarn/unplugged .yarn/build-state.yml
+    - rimraf .yarn/unplugged .yarn/build-state.yml .yarn/install-state.gz
     - yarn --immutable
 
 stages:
@@ -35,7 +35,7 @@ test:
   script:
     # For some reason canvas isn't included in the
     # cache properly so we need to install it again
-    - yarn add -D canvas
+    # - yarn add -D canvas
     - yarn test
 
 build:
