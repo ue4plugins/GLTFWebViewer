@@ -12,7 +12,8 @@ install_dependencies:
     - docker-executor
   script:
     - npm install -g yarn@berry --force
-    - yarn --immutable --immutable-cache
+    - yarn --immutable
+    - yarn rebuild
 
 stages:
   - install_dependencies
