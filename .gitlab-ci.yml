@@ -3,6 +3,7 @@ image: node:13.10.1
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
+    - .yarn/
     - node_modules/
 
 install_dependencies:
@@ -11,6 +12,7 @@ install_dependencies:
     - docker-executor
   script:
     - npm install -g yarn@berry --force
+    - yarn --immutable --immutable-cache
 
 stages:
   - install_dependencies
