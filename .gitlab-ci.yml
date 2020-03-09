@@ -1,4 +1,4 @@
-image: node:13.10.1
+image: node:13.9.0
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
