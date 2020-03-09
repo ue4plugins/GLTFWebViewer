@@ -1186,7 +1186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:^7.7.4":
+"@babel/runtime-corejs3@npm:^7.7.4, @babel/runtime-corejs3@npm:^7.8.3":
   version: 7.8.7
   resolution: "@babel/runtime-corejs3@npm:7.8.7"
   dependencies:
@@ -1299,23 +1299,23 @@ __metadata:
   dependencies:
     "@material-ui/core": ^4.9.5
     "@material-ui/icons": ^4.9.1
-    "@testing-library/dom": ^6.15.0
+    "@testing-library/dom": ^6.16.0
     "@testing-library/jest-dom": ^5.1.1
     "@testing-library/react": ^9.5.0
     "@testing-library/user-event": ^10.0.0
     "@types/debug": 4.1.5
     "@types/fs-extra": 8.1.0
-    "@types/jest": ^25.1.3
-    "@types/node": ^13.7.7
-    "@types/react": ^16.9.24
+    "@types/jest": ^25.1.4
+    "@types/node": ^13.9.0
+    "@types/react": ^16.9.23
     "@types/react-dom": ^16.9.5
-    "@types/testing-library__react": ^9.1.2
+    "@types/testing-library__react": ^9.1.3
     "@typescript-eslint/eslint-plugin": ^2.22.0
     "@typescript-eslint/parser": ^2.22.0
     "@yarnpkg/pnpify": ^2.0.0-rc.18
     canvas: ^2.6.1
     clsx: ^1.1.0
-    cross-env: ^7.0.1
+    cross-env: ^7.0.2
     customize-cra: ^0.9.1
     customize-cra-react-refresh: ^1.0.1
     debug: ^4.1.1
@@ -1330,13 +1330,13 @@ __metadata:
     eslint-import-resolver-typescript: ^2.0.0
     eslint-plugin-autofix: ^1.0.0
     eslint-plugin-import: ^2.20.1
-    eslint-plugin-jest: ^23.8.1
+    eslint-plugin-jest: ^23.8.2
     eslint-plugin-json: ^2.1.0
     eslint-plugin-prettier: ^3.1.2
-    eslint-plugin-react: ^7.18.3
+    eslint-plugin-react: ^7.19.0
     eslint-plugin-react-hooks: ^2.5.0
     fs-extra: ^8.1.0
-    fuse.js: ^3.4.6
+    fuse.js: ^3.6.1
     glob: ^7.1.6
     husky: ^4.2.3
     jest: ^25.1.0
@@ -1979,7 +1979,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^6.15.0":
+"@testing-library/dom@npm:^6.15.0, @testing-library/dom@npm:^6.16.0":
   version: 6.16.0
   resolution: "@testing-library/dom@npm:6.16.0"
   dependencies:
@@ -2167,13 +2167,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^25.1.3":
-  version: 25.1.3
-  resolution: "@types/jest@npm:25.1.3"
+"@types/jest@npm:^25.1.4":
+  version: 25.1.4
+  resolution: "@types/jest@npm:25.1.4"
   dependencies:
     jest-diff: ^25.1.0
     pretty-format: ^25.1.0
-  checksum: 2/3332df7e45a28cb388d0f143d02bb2e64744c2333904582bd8759e880c9fb9dd907895fa234bb6a4d96bf9c79ba71721dc4fd9dfb2f7b731d7ea36232f90885b
+  checksum: 2/1a60d1c9a3a964f08732bd46735fda513a4b4743554fbd3b7aa63f39e47a80353d0967cd138db412b3008cca6c4fe82e60f90f2bb272c0750069966d694f3177
   languageName: node
   linkType: hard
 
@@ -2205,10 +2205,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^13.7.7":
-  version: 13.7.7
-  resolution: "@types/node@npm:13.7.7"
-  checksum: 2/7a4a7c5060f86b6f4010d10b0de9831f98f303513a7403e8bfb3ad3f1d6a9533d023e1b6e2331959525156b84c0daf98ad1569407309da1f798498301f227a37
+"@types/node@npm:^13.9.0":
+  version: 13.9.0
+  resolution: "@types/node@npm:13.9.0"
+  checksum: 2/54c040abe4765c9be0e50e0aa5f9fb7d7bff67e1ff98d2c2587df14239a965e6543be2c3321ed81a946d400b9ec47d4f8304648f6eb6c0617a523697e8cb2d20
   languageName: node
   linkType: hard
 
@@ -2261,7 +2261,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^16.9.24":
+"@types/react@npm:^16.9.23":
   version: 16.9.24
   resolution: "@types/react@npm:16.9.24"
   dependencies:
@@ -2303,6 +2303,17 @@ __metadata:
     "@types/react-dom": "*"
     "@types/testing-library__dom": "*"
   checksum: 2/de321819ce0e0ac182523f1286337b15d922903903bfada1e18dfcffc54faa94764f1bfd32dfd86cb8a20f54e7399f38ca3ffc115cc06fcfe8eee095e40ebd39
+  languageName: node
+  linkType: hard
+
+"@types/testing-library__react@npm:^9.1.3":
+  version: 9.1.3
+  resolution: "@types/testing-library__react@npm:9.1.3"
+  dependencies:
+    "@types/react-dom": "*"
+    "@types/testing-library__dom": "*"
+    pretty-format: ^25.1.0
+  checksum: 2/4b810c52276d4810a1e85bb767457d0aa661a2c42e95aba3c89a38f294f76cca72c4f867768e29def3b60157df040ead3054805d268a4449eec8aabdfe8ef326
   languageName: node
   linkType: hard
 
@@ -4547,15 +4558,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-env@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "cross-env@npm:7.0.1"
+"cross-env@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "cross-env@npm:7.0.2"
   dependencies:
     cross-spawn: ^7.0.1
   bin:
     cross-env: src/bin/cross-env.js
     cross-env-shell: src/bin/cross-env-shell.js
-  checksum: 2/fcd74ddc25c35808d738db73d9b35d87420002dcb7989251a99d0cb801473713504ff9a5c4598c3a73f78d37d6e7dedc589ded3735b9c9dba5c28f6c08785ce2
+  checksum: 2/624d638db3b4b6b221f32238aeb6785b865365bf41154f01d46a23b6d78f807ca5588a3b32e9af5f17384b866fed3752d0e3ecf8c4a8cfca2935d363d27ba058
   languageName: node
   linkType: hard
 
@@ -5877,14 +5888,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:^23.8.1":
-  version: 23.8.1
-  resolution: "eslint-plugin-jest@npm:23.8.1"
+"eslint-plugin-jest@npm:^23.8.2":
+  version: 23.8.2
+  resolution: "eslint-plugin-jest@npm:23.8.2"
   dependencies:
     "@typescript-eslint/experimental-utils": ^2.5.0
   peerDependencies:
     eslint: ">=5"
-  checksum: 2/765ce2e85d3bf28dd7d5c91e1f8aabf50639ff43cc52ba3933e734a0deed5eed9b95e67534e4d58f46e54111c3b8b4e3f0558edb0c0aeac3a3b18f662b8d1f2c
+  checksum: 2/eec0f788a98f3c6b962e47533a421a15e2cc6e74fd971ae890ac322446a7b964775b8eb781898ac45d0508f25922765e0dc118d4c4385e6ca3281db104d036ee
   languageName: node
   linkType: hard
 
@@ -5966,9 +5977,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:^7.18.3":
-  version: 7.18.3
-  resolution: "eslint-plugin-react@npm:7.18.3"
+"eslint-plugin-react@npm:^7.19.0":
+  version: 7.19.0
+  resolution: "eslint-plugin-react@npm:7.19.0"
   dependencies:
     array-includes: ^3.1.1
     doctrine: ^2.1.0
@@ -5978,11 +5989,13 @@ __metadata:
     object.fromentries: ^2.0.2
     object.values: ^1.1.1
     prop-types: ^15.7.2
-    resolve: ^1.14.2
+    resolve: ^1.15.1
+    semver: ^6.3.0
     string.prototype.matchall: ^4.0.2
+    xregexp: ^4.3.0
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
-  checksum: 2/7d775db2d6640b5b593e581fdbb10c357d27258cda50451370b0dc5f43056e1e64bb9022ae6f19d97eec5eae1a85b491c1456886b6829d6066e01fb9e31ffb11
+  checksum: 2/3e5b7bd3b2ea663716fd2518efd1eed359712711a3c0284ed04e5955e6b7019151d8b54dddad2a9116a54e251dd180bf5ba0ccf34a80ffbe8f4d535a0d03e6b3
   languageName: node
   linkType: hard
 
@@ -6850,10 +6863,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fuse.js@npm:^3.4.6":
-  version: 3.4.6
-  resolution: "fuse.js@npm:3.4.6"
-  checksum: 2/8ff4907cfe9e87b7d4fb43d30694637bb78f4573123214a46e7bd3545067856bcd9c2aaa1101b702514cf4d73906cb8798b8fb39a78fa43fcf5bd6724ffc88e9
+"fuse.js@npm:^3.6.1":
+  version: 3.6.1
+  resolution: "fuse.js@npm:3.6.1"
+  checksum: 2/2eebc6f8f74abdbf65557f2fe81679ddfb20890482343892bfef43742ad3b7146cc9b89f5b12a40b35ecdfb1d8401848d567fc727261fa90fa87e899e8ec6112
   languageName: node
   linkType: hard
 
@@ -13038,6 +13051,15 @@ resolve@1.1.7:
   languageName: node
   linkType: hard
 
+resolve@^1.15.1:
+  version: 1.15.1
+  resolution: "resolve@npm:1.15.1"
+  dependencies:
+    path-parse: ^1.0.6
+  checksum: 2/34f77287b44a7eb4588d9d631165c763099a82aca3132920e0fdcde428a51f2cf69190c19e2309e35288a0702f57fefeb951da6138677036a16636b2f0e7b8dd
+  languageName: node
+  linkType: hard
+
 "resolve@patch:resolve@1.1.7#builtin<compat/resolve>":
   version: 1.1.7
   resolution: "resolve@patch:resolve@npm%3A1.1.7#builtin<compat/resolve>::version=1.1.7&hash=8fccd0"
@@ -13051,6 +13073,15 @@ resolve@1.1.7:
   dependencies:
     path-parse: ^1.0.6
   checksum: 2/a977306c59618000d5954b2fb9d6c100c15f2c4df6acdab3e86bdbd3ae1e8d52e89cbbf19e6dce93ce535af1bba097c26332b1a0f85fd4daa45943ec06d90fe8
+  languageName: node
+  linkType: hard
+
+"resolve@patch:resolve@^1.15.1#builtin<compat/resolve>":
+  version: 1.15.1
+  resolution: "resolve@patch:resolve@npm%3A1.15.1#builtin<compat/resolve>::version=1.15.1&hash=8fccd0"
+  dependencies:
+    path-parse: ^1.0.6
+  checksum: 2/fe7e72ddef33d5c157991b824ba2d439cafcd386cb4b26d86c32e77fea442bdd9a93c6cdd93ab90f87a29449008df64b53a8310dd89ebe88ea87fb5db09c03aa
   languageName: node
   linkType: hard
 
@@ -15684,6 +15715,15 @@ resolve@1.1.7:
   version: 2.2.0
   resolution: "xmlchars@npm:2.2.0"
   checksum: 2/69bbb61e8d939873c8aa7d006d082944de2eb6f12f55e53fdfc670d544e677736b59e498ece303f264bd1dc39b77557eef1c1c9bfb09eb5e1e30ac552420d81e
+  languageName: node
+  linkType: hard
+
+"xregexp@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "xregexp@npm:4.3.0"
+  dependencies:
+    "@babel/runtime-corejs3": ^7.8.3
+  checksum: 2/2dcef4888ea32e7c01b8f42d1ee3df24970de14b299a8f534ccecf2252d297092f92d037502176ec334b6c8d7cd1dd3dba0d3cf949e26f418d50b46846268839
   languageName: node
   linkType: hard
 
