@@ -6,6 +6,9 @@
 # testing
 /coverage
 
+# yarn
+.yarn/build-state.yml
+
 # production
 /build
 
