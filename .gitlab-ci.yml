@@ -11,9 +11,9 @@ install_dependencies:
   tags:
     - docker-executor
   script:
-    - npm install -g yarn@berry --force
+    - npm install -g yarn@berry rimraf --force
+    - rimraf .yarn/unplugged .yarn/build-state.yml
     - yarn --immutable
-    - yarn rebuild
 
 stages:
   - install_dependencies
@@ -33,7 +33,6 @@ test:
     - docker-executor
   stage: test
   script:
-    - yarn add -D canvas
     - yarn test
 
 build:
