@@ -7,7 +7,7 @@ const typeMap: Record<number, AnimationKeyableType> = {
 };
 
 export function getAnimationKeyType(numCurves: number) {
-  if (!typeMap[numCurves]) {
+  if (typeof typeMap[numCurves] === "undefined") {
     console.warn("Unexpected amount of curves per keyframe: " + numCurves);
     return AnimationKeyableType.NUM;
   }
