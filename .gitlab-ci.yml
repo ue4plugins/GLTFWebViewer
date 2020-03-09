@@ -33,9 +33,6 @@ test:
     - docker-executor
   stage: test
   script:
-    # For some reason canvas isn't included in the
-    # cache properly so we need to install it again
-    # - yarn add -D canvas
     - yarn test
 
 build:
