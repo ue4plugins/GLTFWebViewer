@@ -6,8 +6,9 @@
 # testing
 /coverage
 
-# yarn
+# yarn (only ignore these for zero-installs)
 .yarn/build-state.yml
+.yarn/unplugged
 
 # production
 /build
