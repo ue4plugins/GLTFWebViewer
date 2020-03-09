@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import ListItem from "@material-ui/core/ListItem";
@@ -31,7 +31,8 @@ interface Props {
 }
 
 export const SearchField: React.FC<Props> = ({ term, onChange }) => {
-  const [debounce, setDebounce] = useState<NodeJS.Timeout>();
+  const [value, setValue] = useState(term);
+  const debounceRef = useRef<NodeJS.Timeout>();
   const classes = useStyles();
   return (
     <ListItem className={classes.root}>
@@ -39,15 +40,14 @@ export const SearchField: React.FC<Props> = ({ term, onChange }) => {
         className={classes.input}
         placeholder="Search models"
         inputProps={{ "aria-label": "search models", spellCheck: "false" }}
-        value={term}
+        value={value}
         onChange={e => {
           const { value } = e.target;
-          debounce && clearTimeout(debounce);
-          setDebounce(
-            setTimeout(() => {
-              onChange(value);
-            }, 10),
-          );
+          setValue(value);
+          debounceRef.current && clearTimeout(debounceRef.current);
+          debounceRef.current = setTimeout(() => {
+            onChange(value);
+          }, 10);
         }}
       />
       <IconButton
