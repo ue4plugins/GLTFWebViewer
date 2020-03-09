@@ -4,6 +4,7 @@ import { Image as GlTfImage, GlTf } from "../types";
 import { resampleImage } from "./resampleImage";
 import { isPowerOf2 } from "./isPowerOf2";
 import { isDataURI } from "./isDataURI";
+import { shouldResampleImage } from "./shouldResampleImage";
 
 const debug = createDebug("translateImage");
 
@@ -21,6 +22,7 @@ export function translateImage(
   const gltfTextures = gltf.textures;
   const gltfImages = gltf.images;
 
+  // istanbul ignore if
   if (!gltfTextures || !gltfImages) {
     return;
   }
@@ -32,6 +34,7 @@ export function translateImage(
     image.removeEventListener("load", onLoad, false);
     const gltfTexture = gltfTextures.find(gt => gt.source === imageIndex);
 
+    // istanbul ignore if
     if (!gltfTexture) {
       return;
     }
@@ -45,26 +48,10 @@ export function translateImage(
       return;
     }
 
-    const { addressU: aU, addressV: aV, minFilter: mF } = gltfTexture;
+    const notPowerOf2 = !isPowerOf2(image.width) || !isPowerOf2(image.height);
+    const { addressU, addressV, minFilter } = gltfTexture;
 
-    const notPowerOf2 = !isPowerOf2(image.width) || !isPowerOf2(image.width);
-
-    const isAURepeat =
-      aU && [pc.ADDRESS_REPEAT, pc.ADDRESS_MIRRORED_REPEAT].includes(aU);
-
-    const isAVRepeat =
-      aV && [pc.ADDRESS_REPEAT, pc.ADDRESS_MIRRORED_REPEAT].includes(aV);
-
-    const nearestMinFilter =
-      mF &&
-      [
-        pc.FILTER_LINEAR_MIPMAP_LINEAR,
-        pc.FILTER_NEAREST_MIPMAP_LINEAR,
-        pc.FILTER_LINEAR_MIPMAP_NEAREST,
-        pc.FILTER_NEAREST_MIPMAP_NEAREST,
-      ].includes(mF);
-
-    if (notPowerOf2 && (isAURepeat || isAVRepeat || nearestMinFilter)) {
+    if (notPowerOf2 && shouldResampleImage(addressU, addressV, minFilter)) {
       const potImage = new Image();
       potImage.addEventListener("load", function() {
         texture.setSource(potImage);
