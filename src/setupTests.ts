@@ -7,12 +7,16 @@ import "jest";
 // import "jest-webgl-canvas-mock";
 
 const orgWarn = console.warn;
+
+const filterMessages = [
+  "TextDecoder not supported - pc.Untar module will not work",
+  'Unexpected key type: "2" (expected "1")',
+  "Unexpected amount of curves per keyframe: 1337",
+];
+
 // eslint-disable-next-line
 console.warn = (...args: any[]) => {
-  if (args[0] === "TextDecoder not supported - pc.Untar module will not work") {
-    return;
-  }
-  if (args[0] === 'Unexpected key type: "2" (expected "1")') {
+  if (filterMessages.includes(args[0])) {
     return;
   }
   orgWarn(...args);
