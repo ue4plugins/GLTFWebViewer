@@ -33,6 +33,7 @@ test:
     - docker-executor
   stage: test
   script:
+    - yarn add -D canvas
     - yarn test
 
 build:
