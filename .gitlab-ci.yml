@@ -1,4 +1,4 @@
-image: node:13.9
+image: node:lts
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
