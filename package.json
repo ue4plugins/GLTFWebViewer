@@ -10,8 +10,8 @@
     "test:e2e": "jest -c e2e/jest.config.js --runInBand",
     "test:e2e-watch": "jest -c e2e/jest.config.js --runInBand --watch",
     "eject": "react-scripts eject",
-    "lint": "yarn eslint -c .eslintrc.js \"**/*.{js,jsx,json,ts,tsx}\"",
-    "fix": "yarn lint -- --fix"
+    "lint": "eslint -c .eslintrc.js \"**/*.{js,jsx,json,ts,tsx}\"",
+    "fix": "npm run lint -- --fix"
   },
   "browserslist": {
     "production": [
