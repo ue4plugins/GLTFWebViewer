@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "@epic/web-viewer",
-  "description": "Playcanvas Viewer",
+  "name": "@epic/gltf-web-viewer",
+  "description": "glTF Web Viewer",
   "version": "1.0.0",
   "scripts": {
     "start": "react-app-rewired start",
