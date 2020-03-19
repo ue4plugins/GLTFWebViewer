@@ -8,8 +8,5 @@
   },
   "eslint.enable": true,
   "eslint.lintTask.enable": true,
-  "typescript.tsdk": ".vscode/pnpify/typescript/lib",
-  "eslint.nodePath": ".vscode/pnpify",
-  "prettier.prettierPath": ".vscode/pnpify/prettier/index.js",
   "javascript.suggestionActions.enabled": false
 }

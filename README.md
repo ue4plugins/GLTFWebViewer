@@ -1,15 +1,13 @@
-# Playcanvas glTF Viewer
+# Epic glTF Web Viewer
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Contributing
 
-This project uses [Yarn v2](https://yarnpkg.com/) with offline cache and zero-install. Make sure you have Yarn v2 installed before continuing.
-
 ### Running the development server
 
 ```bash
-yarn start
+npm run start
 ```
 
 Runs the app in the development mode.<br />
@@ -18,7 +16,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 ### Testing
 
 ```bash
-yarn test
+npm run test
 ```
 
 Launches the test runner in the interactive watch mode.<br />
@@ -27,7 +25,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 ### Building
 
 ```bash
-yarn build
+npm run build
 ```
 
 Builds the app for production to the `build` folder.<br />
@@ -61,6 +59,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/ad
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
 
-### `yarn build` fails to minify
+### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

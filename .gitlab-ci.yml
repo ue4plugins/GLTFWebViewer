@@ -3,7 +3,6 @@ image: node:lts
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - .yarn/
     - node_modules/
 
 install_dependencies:
@@ -11,9 +10,7 @@ install_dependencies:
   tags:
     - docker-executor
   script:
-    - npm install -g yarn@berry --force
-    - rm -rf .yarn/unplugged .yarn/build-state.yml .yarn/install-state.gz
-    - yarn --immutable
+    - npm install
 
 stages:
   - install_dependencies
@@ -26,14 +23,14 @@ lint:
     - docker-executor
   stage: test
   script:
-    - yarn lint
+    - npm run lint
 
 test:
   tags:
     - docker-executor
   stage: test
   script:
-    - yarn test
+    - npm run test
 
 build:
   tags:
@@ -44,7 +41,7 @@ build:
       - ./build
     expire_in: 1 day
   script:
-    - yarn build
+    - npm run build
 # release:
 #   tags:
 #     - docker-executor
