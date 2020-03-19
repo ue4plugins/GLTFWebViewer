@@ -1,3 +1,4 @@
+/* eslint-disable */
 window.onload = () => {
   if (window.recorderInjected) {
     return;

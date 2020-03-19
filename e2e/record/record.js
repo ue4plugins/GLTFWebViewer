@@ -1,3 +1,4 @@
+/* eslint-disable */
 var url = process.argv[2] || "http://chantier.lecollecteur.fr/nuit-du-cirque/",
   exportname = process.argv[3] || "capture",
   size = process.argv[4] || "1280x720",

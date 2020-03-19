@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* global chrome, MediaRecorder */
 let recorder = null;
 let filename = null;
