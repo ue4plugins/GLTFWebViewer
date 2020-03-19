@@ -46,7 +46,7 @@ export const ModelList: React.FC<{}> = () => {
     <>
       <SearchField term={searchTerm} onChange={setSearchTerm} />
       <Divider />
-      <List className={classes.scrollableList}>
+      <List id="model-list" className={classes.scrollableList}>
         {list.map(model => (
           <ListItem
             onClick={() => setModel(model)}

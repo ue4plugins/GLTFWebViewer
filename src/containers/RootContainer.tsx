@@ -7,7 +7,10 @@ import { FpsMonitor } from "../components/FpsMonitor";
 import { RootStoreProvider } from "../stores";
 import { PlayCanvas } from "./PlayCanvas";
 
-const drawerWidth = 300;
+const urlParams = new URLSearchParams(window.location.search);
+const showUI = !urlParams.get("hideUI");
+
+const drawerWidth = showUI ? 300 : 0;
 const useStyles = makeStyles(() => ({
   "@global": {
     html: {
@@ -48,8 +51,8 @@ export const RootContainer: React.FC = () => {
           <main className={classes.viewport}>
             <PlayCanvas />
           </main>
-          <Sidebar />
-          <FpsMonitor bottom="8px" left="8px" />
+          {showUI && <Sidebar />}
+          {showUI && <FpsMonitor bottom="8px" left="8px" />}
         </div>
       </ThemeProvider>
     </RootStoreProvider>

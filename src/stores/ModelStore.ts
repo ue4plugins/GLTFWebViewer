@@ -1,12 +1,15 @@
 import { observable, action } from "mobx";
 
+const urlParams = new URLSearchParams(window.location.search);
+const defaultModel = urlParams.get("model") || "DamagedHelmet";
+
 export class ModelStore {
   @observable
   public models = GLTF_MODELS;
 
   @observable
   public model = this.models.find(
-    val => val.name === "DamagedHelmet",
+    val => val.name === defaultModel && val.type === "normal",
   ) as GLTF_MODEL;
 
   @action.bound

@@ -37,6 +37,7 @@ export const SearchField: React.FC<Props> = ({ term, onChange }) => {
   return (
     <ListItem className={classes.root}>
       <InputBase
+        id="search-input"
         className={classes.input}
         placeholder="Search models"
         inputProps={{ "aria-label": "search models", spellCheck: "false" }}

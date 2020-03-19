@@ -30,5 +30,5 @@
     "noEmit": true
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["src"]
+  "include": ["src", "e2e"]
 }

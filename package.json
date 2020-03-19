@@ -82,6 +82,7 @@
     "fuse.js": "^5.0.6-beta",
     "glob": "^7.1.6",
     "husky": "^4.2.3",
+    "jest": "24.9.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-environment-puppeteer": "^4.4.0",
     "jest-puppeteer": "^4.4.0",
