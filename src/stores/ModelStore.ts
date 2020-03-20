@@ -8,9 +8,9 @@ export class ModelStore {
   public models = GLTF_MODELS;
 
   @observable
-  public model = this.models.find(
+  public model? = this.models.find(
     val => val.name === defaultModel && val.type === "normal",
-  ) as GLTF_MODEL;
+  );
 
   @action.bound
   public setModel(model: GLTF_MODEL) {

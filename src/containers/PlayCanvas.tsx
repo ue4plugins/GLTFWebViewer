@@ -22,7 +22,7 @@ export const PlayCanvas: React.FC<{}> = observer(() => {
   }, []);
 
   useEffect(() => {
-    if (!viewer) {
+    if (!viewer || !model) {
       return;
     }
     viewer.loadModel(`${model.path}/${model.name}.gltf`);
