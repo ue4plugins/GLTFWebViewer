@@ -38,7 +38,9 @@ export const ModelList: React.FC<{}> = () => {
     setList(
       searchTerm.length === 0
         ? models
-        : (fuse.search(searchTerm) as GLTF_MODEL[]),
+        : (fuse.search(searchTerm) as Fuse.FuseResultWithScore<
+            GLTF_MODEL
+          >[]).map(result => result.item),
     );
   }, [fuse, searchTerm, models]);
 
