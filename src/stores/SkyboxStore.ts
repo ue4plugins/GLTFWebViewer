@@ -5,13 +5,11 @@ export class SkyboxStore {
   public skyboxes = SKYBOX_CUBEMAPS;
 
   @observable
-  public skybox = this.skyboxes.find(
-    val => val.name === "helipad",
-  ) as SKYBOX_CUBEMAP;
+  public skybox? = this.skyboxes[0];
 
   @computed
   public get skyboxIdx() {
-    return this.skyboxes.indexOf(this.skybox);
+    return this.skybox ? this.skyboxes.indexOf(this.skybox) : -1;
   }
 
   @action.bound
