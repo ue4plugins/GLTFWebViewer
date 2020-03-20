@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import ListItem from "@material-ui/core/ListItem";
@@ -34,6 +34,11 @@ export const SearchField: React.FC<Props> = ({ term, onChange }) => {
   const [value, setValue] = useState(term);
   const debounceRef = useRef<NodeJS.Timeout>();
   const classes = useStyles();
+
+  useEffect(() => {
+    setValue(term);
+  }, [term]);
+
   return (
     <ListItem className={classes.root}>
       <InputBase
