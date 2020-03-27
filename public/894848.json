@@ -1,0 +1,41 @@
+{
+  "name": "Milky Way",
+  "settings": {
+    "physics": {
+      "gravity": [0, -9.8, 0]
+    },
+    "render": {
+      "fog_end": 1000,
+      "tonemapping": 0,
+      "skybox": 29298171,
+      "fog_density": 0.01,
+      "gamma_correction": 1,
+      "exposure": 1,
+      "fog_start": 1,
+      "global_ambient": [0.2, 0.2, 0.2],
+      "skyboxIntensity": 1,
+      "fog_color": [0, 0, 0],
+      "lightmapMode": 1,
+      "fog": "none",
+      "lightmapMaxResolution": 2048,
+      "skyboxMip": 1,
+      "lightmapSizeMultiplier": 16
+    }
+  },
+  "entities": {
+    "fe86c3e2-d8b3-43be-be98-0b81996ca883": {
+      "position": [0, 0, 0],
+      "scale": [1, 1, 1],
+      "name": "Root",
+      "parent": null,
+      "resource_id": "fe86c3e2-d8b3-43be-be98-0b81996ca883",
+      "components": {},
+      "rotation": [0, 0, 0],
+      "tags": [],
+      "enabled": true,
+      "children": []
+    }
+  },
+  "created": "2020-03-27T10:46:17.376Z",
+  "id": 894848
+}

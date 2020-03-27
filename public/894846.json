@@ -1,0 +1,41 @@
+{
+  "name": "Helipad",
+  "created": "2020-03-27T10:38:09.474Z",
+  "settings": {
+    "physics": {
+      "gravity": [0, -9.8, 0]
+    },
+    "render": {
+      "fog_end": 1000,
+      "tonemapping": 0,
+      "skybox": 29298184,
+      "fog_density": 0.01,
+      "gamma_correction": 1,
+      "exposure": 1,
+      "fog_start": 1,
+      "global_ambient": [0.2, 0.2, 0.2],
+      "skyboxIntensity": 1,
+      "fog_color": [0, 0, 0],
+      "lightmapMode": 1,
+      "fog": "none",
+      "lightmapMaxResolution": 2048,
+      "skyboxMip": 1,
+      "lightmapSizeMultiplier": 16
+    }
+  },
+  "entities": {
+    "0d1c6f45-7017-11ea-97ae-026349a27a7c": {
+      "position": [0, 0, 0],
+      "scale": [1, 1, 1],
+      "name": "Root",
+      "parent": null,
+      "resource_id": "0d1c6f45-7017-11ea-97ae-026349a27a7c",
+      "components": {},
+      "rotation": [0, 0, 0],
+      "tags": [],
+      "enabled": true,
+      "children": []
+    }
+  },
+  "id": 894846
+}
