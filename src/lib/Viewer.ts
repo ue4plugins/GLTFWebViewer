@@ -21,7 +21,7 @@ export class Viewer {
   public playing = true;
   public gltf?: pc.Entity & { animComponent?: AnimationComponent };
   public asset?: pc.Asset;
-  public skybox?: pc.Asset;
+  public scene?: pc.Scene;
   public textures: pc.Texture[] = [];
   public animations: AnimationClip[] = [];
 
@@ -174,14 +174,12 @@ export class Viewer {
     });
   }
 
-  public async loadScene(scene: SCENE_FILE) {
+  public async loadScene(url: string) {
     this.destroyScene();
 
-    debug("Loading scene", scene);
-    const { path } = scene;
-
+    debug("Loading scene", url);
     return new Promise<void>((resolve, reject) => {
-      (this.app as any).loadScene(path, (error: string, scene: pc.Scene) => {
+      (this.app as any).loadScene(url, (error: string, scene: pc.Scene) => {
         if (error) {
           console.error(error);
           reject(error);
@@ -192,6 +190,18 @@ export class Viewer {
         resolve();
       });
     });
+  }
+
+  public async destroyScene() {
+    debug("Destroy scene", this.scene);
+    if (this.scene) {
+      if (this.scene.root) {
+        this.scene.root.destroy();
+        this.scene.root = (undefined as any) as pc.Entity;
+      }
+      (this.scene as any)?.destroy();
+      this.scene = undefined;
+    }
   }
 
   public destroyModel() {
@@ -222,7 +232,6 @@ export class Viewer {
     // Reset props
     this.asset = undefined;
     this.gltf = undefined;
-    this.skybox = undefined;
     this.textures = [];
   }
 

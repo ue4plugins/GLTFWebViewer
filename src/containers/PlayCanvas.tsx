@@ -36,7 +36,10 @@ export const PlayCanvas: React.FC<{}> = observer(() => {
     if (!viewer || !scene) {
       return;
     }
-    viewer.loadScene(scene);
+    viewer.loadScene(scene.path);
+    return () => {
+      viewer.destroyScene();
+    };
   }, [viewer, scene]);
 
   return <canvas ref={canvasEl} />;
