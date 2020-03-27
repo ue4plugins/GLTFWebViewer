@@ -31,16 +31,16 @@ export const ModelList: React.FC<{}> = () => {
   const { modelStore } = useStores();
   const { models, setModel } = modelStore;
   const [searchTerm, setSearchTerm] = useState("");
-  const [fuse] = useState(new Fuse(GLTF_MODELS, fuseOptions));
-  const [list, setList] = useState(GLTF_MODELS);
+  const [fuse] = useState(new Fuse(GLTF_FILES, fuseOptions));
+  const [list, setList] = useState(GLTF_FILES);
 
   useEffect(() => {
     setList(
       searchTerm.length === 0
         ? models
         : (fuse.search(searchTerm) as Fuse.FuseResultWithScore<
-            GLTF_MODEL
-          >[]).map(result => result.item),
+          GLTF_FILE
+        >[]).map(result => result.item),
     );
   }, [fuse, searchTerm, models]);
 

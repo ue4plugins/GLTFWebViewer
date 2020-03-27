@@ -12,13 +12,13 @@ declare namespace pc {
   type MorphInstance = any;
 }
 
-declare type GLTF_MODEL = {
+declare type GLTF_FILE = {
   type: string;
   name: string;
   path: string;
 };
 
-declare const GLTF_MODELS: GLTF_MODEL[];
+declare const GLTF_FILES: GLTF_FILE[];
 
 declare type SKYBOX_CUBEMAP = {
   name: string;

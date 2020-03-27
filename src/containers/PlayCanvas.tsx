@@ -27,7 +27,7 @@ export const PlayCanvas: React.FC<{}> = observer(() => {
     }
     viewer.loadModel(`${model.path}/${model.name}.gltf`);
     return () => {
-      viewer.destroyScene();
+      viewer.destroyModel();
     };
   }, [viewer, model]);
 
