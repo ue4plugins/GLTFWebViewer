@@ -20,29 +20,29 @@ const useStyles = makeStyles(theme =>
   }),
 );
 
-export const SkyboxSelector: React.FC<{}> = observer(() => {
-  const { skyboxStore } = useStores();
-  const { skyboxIdx, skyboxes, setSkybox } = skyboxStore;
+export const SceneSelector: React.FC<{}> = observer(() => {
+  const { sceneStore } = useStores();
+  const { sceneIdx, scenes, setScene } = sceneStore;
   const classes = useStyles();
   return (
     <>
       <FormControl className={classes.formControl}>
-        <InputLabel id="skybox-selector-label">Skybox</InputLabel>
+        <InputLabel id="scene-selector-label">Scene</InputLabel>
         <Select
-          labelId="skybox-selector-label"
-          value={skyboxIdx.toString()}
+          labelId="scene-selector-label"
+          value={sceneIdx.toString()}
           onChange={e => {
             const idx = parseInt(e.target.value as string, 10);
-            setSkybox(skyboxes[idx]);
+            setScene(scenes[idx]);
           }}
           inputProps={{
-            name: "skybox",
-            id: "skybox",
+            name: "scene",
+            id: "scene",
           }}
         >
-          {skyboxes.map((skybox, i) => (
-            <MenuItem key={skybox.name} value={i.toString()}>
-              {skybox.name[0].toUpperCase() + skybox.name.substr(1)}
+          {scenes.map((scene, i) => (
+            <MenuItem key={scene.name} value={i.toString()}>
+              {scene.name[0].toUpperCase() + scene.name.substr(1)}
             </MenuItem>
           ))}
         </Select>

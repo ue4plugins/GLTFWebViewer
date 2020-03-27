@@ -4,9 +4,9 @@ import { Viewer } from "../lib/Viewer";
 import { useStores } from "../stores";
 
 export const PlayCanvas: React.FC<{}> = observer(() => {
-  const { modelStore, skyboxStore } = useStores();
+  const { modelStore, sceneStore } = useStores();
   const { model } = modelStore;
-  const { skybox } = skyboxStore;
+  const { scene } = sceneStore;
   const canvasEl = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<Viewer>();
 
@@ -33,11 +33,11 @@ export const PlayCanvas: React.FC<{}> = observer(() => {
   }, [viewer, model]);
 
   useEffect(() => {
-    if (!viewer || !skybox) {
+    if (!viewer || !scene) {
       return;
     }
-    viewer.setSkybox(skybox);
-  }, [viewer, skybox]);
+    viewer.loadScene(scene);
+  }, [viewer, scene]);
 
   return <canvas ref={canvasEl} />;
 });

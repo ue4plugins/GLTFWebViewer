@@ -86,11 +86,6 @@ export class Viewer {
       this.canvas.parentElement?.clientHeight,
     );
 
-    app.scene.gammaCorrection = pc.GAMMA_SRGB;
-    app.scene.toneMapping = pc.TONEMAP_ACES;
-
-    app.scene.ambientLight = new pc.Color(0.2, 0.2, 0.2);
-
     // Ensure canvas is resized when window changes size
     window.addEventListener("resize", this.windowResizeHandler);
 
@@ -147,14 +142,6 @@ export class Viewer {
     debug("Starting app");
     app.start();
 
-    if (this.skybox) {
-      app.assets.add(this.skybox);
-      app.assets.load(this.skybox);
-      this.skybox.ready(cubemap => {
-        app.setSkybox(cubemap);
-      });
-    }
-
     return app;
   }
 
@@ -187,51 +174,24 @@ export class Viewer {
     });
   }
 
-  public loadSkybox(skybox: SKYBOX_CUBEMAP) {
-    debug("Loading skybox", skybox);
-    const { name, path, faces, prefiltered } = skybox;
+  public async loadScene(scene: SCENE_FILE) {
+    this.destroyScene();
 
-    const data = {
-      name,
-      prefiltered: `${path}/${prefiltered}`,
-      anisotropy: this.app.graphicsDevice?.maxAnisotropy || 1,
-      magFilter: 1,
-      minFilter: 5,
-      rgbm: true,
-      textures: faces.map(face => `${path}/${face}`),
-    };
+    debug("Loading scene", scene);
+    const { path } = scene;
 
-    const cubemap = new pc.Asset(
-      "skybox-" + name,
-      "cubemap",
-      {
-        url: `${path}/${prefiltered}`,
-      },
-      data,
-    );
+    return new Promise<void>((resolve, reject) => {
+      (this.app as any).loadScene(path, (error: string, scene: pc.Scene) => {
+        if (error) {
+          console.error(error);
+          reject(error);
+          return;
+        }
 
-    debug("Skybox data", data);
-
-    cubemap.preload = true;
-    this.app.assets.add(cubemap);
-    this.app.assets.load(cubemap);
-    this.skybox = cubemap;
-  }
-
-  public async setSkybox(skybox: SKYBOX_CUBEMAP) {
-    if (!this.app.scene) {
-      await this.waitForGraphicsDevice();
-    }
-    this.app.scene.skyboxMip = 2;
-    this.app.scene.skyboxIntensity = 1;
-
-    this.loadSkybox(skybox);
-
-    if (this.skybox) {
-      await new Promise(resolve => this.skybox?.ready(resolve));
-      debug("Applying skybox");
-      this.app.setSkybox(this.skybox);
-    }
+        this.scene = scene;
+        resolve();
+      });
+    });
   }
 
   public destroyModel() {

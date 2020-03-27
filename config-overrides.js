@@ -5,7 +5,7 @@ const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const gltfFiles = require("./scripts/gltfFiles");
-const cubemapFiles = require("./scripts/cubemapFiles");
+const sceneFiles = require("./scripts/sceneFiles");
 
 module.exports = {
   jest: config => {
@@ -27,7 +27,7 @@ module.exports = {
       plugins: [
         new webpack.DefinePlugin({
           GLTF_FILES: JSON.stringify(gltfFiles),
-          SKYBOX_CUBEMAPS: JSON.stringify(cubemapFiles),
+          SCENE_FILES: JSON.stringify(sceneFiles),
           "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
         }),
         new DynamicCdnWebpackPlugin(),

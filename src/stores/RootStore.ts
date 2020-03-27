@@ -1,7 +1,7 @@
 import { ModelStore } from "./ModelStore";
-import { SkyboxStore } from "./SkyboxStore";
+import { SceneStore } from "./SceneStore";
 
 export class RootStore {
   public modelStore = new ModelStore();
-  public skyboxStore = new SkyboxStore();
+  public sceneStore = new SceneStore();
 }

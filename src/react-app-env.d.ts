@@ -20,14 +20,12 @@ declare type GLTF_FILE = {
 
 declare const GLTF_FILES: GLTF_FILE[];
 
-declare type SKYBOX_CUBEMAP = {
+declare type SCENE_FILE = {
   name: string;
   path: string;
-  prefiltered: string;
-  faces: string[];
 };
 
-declare const SKYBOX_CUBEMAPS: SKYBOX_CUBEMAP[];
+declare const SCENE_FILES: SCENE_FILE[];
 
 declare module "draco3dgltf" {
   function createDecoderModule(): any;

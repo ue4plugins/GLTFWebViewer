@@ -2,7 +2,7 @@ import React from "react";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import { ModelList } from "./ModelList";
-import { SkyboxSelector } from "./SkyboxSelector";
+import { SceneSelector } from "./SceneSelector";
 
 const drawerWidth = 300;
 const useStyles = makeStyles(theme => ({
@@ -36,7 +36,7 @@ export const Sidebar: React.FC<{}> = () => {
         e.stopPropagation();
       }}
     >
-      <SkyboxSelector />
+      <SceneSelector />
       <ModelList />
     </Drawer>
   );
