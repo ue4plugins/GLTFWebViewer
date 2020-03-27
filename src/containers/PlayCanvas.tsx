@@ -15,6 +15,7 @@ export const PlayCanvas: React.FC<{}> = observer(() => {
       return;
     }
     const viewer = new Viewer(canvasEl.current);
+    viewer.configure();
     setViewer(viewer);
     return () => {
       viewer.destroy();

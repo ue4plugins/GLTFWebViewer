@@ -168,6 +168,25 @@ export class Viewer {
     }
   }
 
+  public async configure() {
+    const app = this.app;
+
+    return new Promise<void>((resolve, reject) => {
+      const url = "config.json";
+
+      app.configure(url, error => {
+        if (error) {
+          console.error(error);
+          reject();
+          return;
+        }
+        app.preload(() => {
+          resolve();
+        });
+      });
+    });
+  }
+
   public loadSkybox(skybox: SKYBOX_CUBEMAP) {
     debug("Loading skybox", skybox);
     const { name, path, faces, prefiltered } = skybox;
