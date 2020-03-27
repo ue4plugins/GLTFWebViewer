@@ -160,7 +160,7 @@ export class Viewer {
 
   public destroy() {
     try {
-      this.destroyScene();
+      this.destroyModel();
       window.removeEventListener("resize", this.windowResizeHandler);
       this.app.destroy();
     } catch (e) {
@@ -215,7 +215,7 @@ export class Viewer {
     }
   }
 
-  public destroyScene() {
+  public destroyModel() {
     try {
       this.textures.forEach(texture => {
         texture.destroy();
@@ -247,12 +247,12 @@ export class Viewer {
     this.textures = [];
   }
 
-  public initScene() {
+  public initModel() {
     if (this.gltf || !this.asset) {
-      // Scene already initialized or missing asset
+      // model already initialized or missing asset
       return;
     }
-    // Add the loaded scene to the hierarchy
+    // Add the loaded model to the hierarchy
     this.gltf = new pc.Entity("gltf");
     this.gltf.addComponent("model", {
       asset: this.asset,
@@ -437,15 +437,15 @@ export class Viewer {
   }
 
   public async loadModel(url: string) {
-    debug("Destroy scene");
-    this.destroyScene();
+    debug("Destroy model");
+    this.destroyModel();
     debug("Fetch glTF", url);
     const basePath = url.substring(0, url.lastIndexOf("/")) + "/";
     const res = await fetch(url);
     const gltf = await res.json();
     debug("Parse glTF");
     await this.parseGltf(gltf, basePath);
-    debug("Init scene");
-    this.initScene();
+    debug("Init model");
+    this.initModel();
   }
 }
