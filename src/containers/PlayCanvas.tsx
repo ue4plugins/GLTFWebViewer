@@ -6,7 +6,14 @@ import {
   useAsyncWithLoadingAndErrorHandling,
   usePreventableCameraInteractions,
 } from "../hooks";
-import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
+import {
+  Backdrop,
+  CircularProgress,
+  makeStyles,
+  Card,
+  CardContent,
+  Typography,
+} from "@material-ui/core";
 
 // TODO: remove
 const delay = (duration: number) =>
@@ -18,6 +25,9 @@ const useStyles = makeStyles(() => ({
   backdrop: {
     position: "absolute",
     zIndex: 3,
+  },
+  error: {
+    maxWidth: 300,
   },
 }));
 
@@ -92,7 +102,19 @@ export const PlayCanvas: React.FC<{}> = observer(() => {
       <canvas ref={canvasEl} style={{ pointerEvents: "none" }} />
       <Backdrop className={classes.backdrop} open={showBackdrop}>
         {isLoading && <CircularProgress />}
-        {isError && "Error!"}
+        {isError && (
+          <Card className={classes.error}>
+            <CardContent>
+              <Typography gutterBottom variant="h5">
+                Error
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Something went wrong when loading the requested asset. Check
+                console for more details.
+              </Typography>
+            </CardContent>
+          </Card>
+        )}
       </Backdrop>
     </>
   );
