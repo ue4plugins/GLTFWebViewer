@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { observer } from "mobx-react-lite";
 import { Viewer } from "../lib/Viewer";
 import { useStores } from "../stores";
-import { useLoadingState } from "./useLoadingState";
+import { useLoadingState } from "../hooks/useLoadingState";
 
 // TODO: remove
 const delay = (duration: number) =>
