@@ -2,7 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Viewer } from "../lib/Viewer";
 import { useStores } from "../stores";
-import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
+import {
+  useAsyncWithLoadingAndErrorHandling,
+  usePreventableCameraInteractions,
+} from "../hooks";
+import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
 
 // TODO: remove
 const delay = (duration: number) =>
@@ -10,13 +14,25 @@ const delay = (duration: number) =>
     setTimeout(() => resolve(), duration);
   });
 
+const useStyles = makeStyles(() => ({
+  backdrop: {
+    position: "absolute",
+    zIndex: 3,
+  },
+}));
+
 export const PlayCanvas: React.FC<{}> = observer(() => {
+  const classes = useStyles();
   const { modelStore, sceneStore } = useStores();
   const { model } = modelStore;
   const { scene } = sceneStore;
   const canvasEl = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<Viewer>();
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
+  const showBackdrop = isLoading || isError;
+  const [setPreventInteraction] = usePreventableCameraInteractions(
+    showBackdrop,
+  );
 
   useEffect(() => {
     if (!canvasEl.current) {
@@ -58,6 +74,7 @@ export const PlayCanvas: React.FC<{}> = observer(() => {
 
     runAsync(async () => {
       await viewer.loadScene(scene.path);
+      await delay(1000);
     });
 
     return () => {
@@ -65,11 +82,18 @@ export const PlayCanvas: React.FC<{}> = observer(() => {
     };
   }, [runAsync, viewer, scene]);
 
+  useEffect(() => setPreventInteraction(showBackdrop), [
+    showBackdrop,
+    setPreventInteraction,
+  ]);
+
   return (
     <>
-      {isLoading ? "Loading..." : null}
-      {isError ? "Error!" : null}
-      <canvas ref={canvasEl} />
+      <canvas ref={canvasEl} style={{ pointerEvents: "none" }} />
+      <Backdrop className={classes.backdrop} open={showBackdrop}>
+        {isLoading && <CircularProgress />}
+        {isError && "Error!"}
+      </Backdrop>
     </>
   );
 });

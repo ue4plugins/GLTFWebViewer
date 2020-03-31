@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import pc from "playcanvas";
+import { PreventableEvent } from "./PreventableEvent";
 
 export const createCameraScripts = (_app: pc.Application) => {
   type KeyboardInput = pc.ScriptType & {
@@ -32,10 +33,10 @@ export const createCameraScripts = (_app: pc.Application) => {
   };
 
   KeyboardInput.prototype.onKeyDown = function(event: {
-    event: { isOverlayEvent: boolean };
+    event: PreventableEvent;
     key: number;
   }) {
-    if (event.event.isOverlayEvent === true) {
+    if (event.event.prevent === true) {
       return;
     }
     if (this.orbitCamera) {
@@ -145,10 +146,10 @@ export const createCameraScripts = (_app: pc.Application) => {
   };
 
   MouseInput.prototype.onMouseDown = function(event: {
-    event: Event & { isOverlayEvent: boolean };
+    event: PreventableEvent;
     button: any;
   }) {
-    if (event.event.isOverlayEvent === true) {
+    if (event.event.prevent === true) {
       return;
     }
     switch (event.button) {
@@ -200,10 +201,10 @@ export const createCameraScripts = (_app: pc.Application) => {
   }
 
   MouseInput.prototype.onMouseWheel = function(event: {
-    event: Event & { isOverlayEvent: boolean; preventDefault: () => void };
+    event: PreventableEvent;
     wheel: number;
   }) {
-    if (event.event.isOverlayEvent === true) {
+    if (event.event.prevent === true) {
       return;
     }
 

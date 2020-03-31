@@ -9,7 +9,7 @@ const FONT_SIZE = 14;
 
 const useStyles = makeStyles(() => ({
   root: {
-    zIndex: 999999,
+    zIndex: 2,
     position: "fixed",
     height: GRAPH_HEIGHT + 9 + FONT_SIZE + "px",
     width: GRAPH_WIDTH + 6 + "px",
