@@ -1,42 +1,59 @@
 import React from "react";
-import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import { ModelList } from "./ModelList";
 import { SceneSelector } from "./SceneSelector";
+import { Drawer, Divider, IconButton, Theme } from "@material-ui/core";
+import { ChevronRight } from "@material-ui/icons";
 
-const drawerWidth = 300;
-const useStyles = makeStyles(theme => ({
-  drawer: {
-    width: drawerWidth,
+const useStyles = makeStyles<Theme, Props>(theme => ({
+  drawer: props => ({
+    width: props.width,
     flexShrink: 0,
-  },
+  }),
   drawerPaper: {
-    width: drawerWidth,
+    position: "relative",
+    width: "100%",
   },
-  content: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    height: "100%",
-    backgroundColor: theme.palette.background.default,
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-start",
   },
 }));
 
-export const Sidebar: React.FC = () => {
-  const classes = useStyles();
+type Props = {
+  width: number;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+};
+
+export const Sidebar: React.FC<Props> = props => {
+  const { isOpen, setIsOpen } = props;
+  const classes = useStyles(props);
   return (
     <Drawer
       className={classes.drawer}
       variant="persistent"
       anchor="right"
-      open={true}
+      open={isOpen}
       onWheel={e => e.nativeEvent.stopPropagation()}
-      classes={{
-        paper: classes.drawerPaper,
-      }}
       onMouseDown={e => {
         e.stopPropagation();
       }}
+      classes={{
+        paper: classes.drawerPaper,
+      }}
     >
+      <div className={classes.drawerHeader}>
+        <IconButton onClick={() => setIsOpen(false)}>
+          <ChevronRight />
+        </IconButton>
+      </div>
+      <Divider />
       <SceneSelector />
+      <Divider />
       <ModelList />
     </Drawer>
   );
