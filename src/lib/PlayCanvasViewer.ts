@@ -15,7 +15,7 @@ interface Resources {
   animations: AnimationClip[];
 }
 
-export class Viewer {
+export class PlayCanvasViewer {
   public app: pc.Application;
   public camera!: pc.Entity;
   public playing = true;

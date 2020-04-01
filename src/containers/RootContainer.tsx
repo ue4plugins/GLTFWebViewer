@@ -5,7 +5,7 @@ import { theme } from "../theme";
 import { Sidebar } from "../components/Sidebar";
 import { FpsMonitor } from "../components/FpsMonitor";
 import { RootStoreProvider } from "../stores";
-import { PlayCanvas } from "./PlayCanvas";
+import { Viewer } from "./PlayCanvas";
 
 const urlParams = new URLSearchParams(window.location.search);
 const showUI = !urlParams.get("hideUI");
@@ -50,7 +50,7 @@ export const RootContainer: React.FC = () => {
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
           <main className={classes.viewport}>
-            <PlayCanvas />
+            <Viewer />
           </main>
           {showUI && <Sidebar />}
           {showUI && <FpsMonitor bottom="8px" left="8px" />}

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Viewer } from "../lib/Viewer";
+import { PlayCanvasViewer } from "../lib/PlayCanvasViewer";
 import { useStores } from "../stores";
 import {
   useAsyncWithLoadingAndErrorHandling,
@@ -31,13 +31,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const PlayCanvas: React.FC<{}> = observer(() => {
+export const Viewer: React.FC<{}> = observer(() => {
   const classes = useStyles();
   const { modelStore, sceneStore } = useStores();
   const { model } = modelStore;
   const { scene } = sceneStore;
   const canvasEl = useRef<HTMLCanvasElement>(null);
-  const [viewer, setViewer] = useState<Viewer>();
+  const [viewer, setViewer] = useState<PlayCanvasViewer>();
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
   const showBackdrop = isLoading || isError;
   const [setPreventInteraction] = usePreventableCameraInteractions(
@@ -49,7 +49,7 @@ export const PlayCanvas: React.FC<{}> = observer(() => {
       return;
     }
 
-    const viewer = new Viewer(canvasEl.current);
+    const viewer = new PlayCanvasViewer(canvasEl.current);
 
     runAsync(async () => {
       await viewer.configure();
