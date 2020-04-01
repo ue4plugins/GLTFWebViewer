@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const Sidebar: React.FC<{}> = () => {
+export const Sidebar: React.FC = () => {
   const classes = useStyles();
   return (
     <Drawer

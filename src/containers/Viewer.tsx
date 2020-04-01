@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const Viewer: React.FC<{}> = observer(() => {
+export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
   const { modelStore, sceneStore } = useStores();
   const { model } = modelStore;

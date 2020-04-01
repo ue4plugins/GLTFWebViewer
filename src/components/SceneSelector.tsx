@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme =>
   }),
 );
 
-export const SceneSelector: React.FC<{}> = observer(() => {
+export const SceneSelector: React.FC = observer(() => {
   const { sceneStore } = useStores();
   const { sceneIdx, scenes, setScene } = sceneStore;
   const classes = useStyles();

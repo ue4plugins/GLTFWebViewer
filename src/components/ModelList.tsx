@@ -26,7 +26,7 @@ const fuseOptions = {
   keys: ["name"],
 };
 
-export const ModelList: React.FC<{}> = () => {
+export const ModelList: React.FC = () => {
   const classes = useStyles();
   const { modelStore } = useStores();
   const { models, setModel } = modelStore;
@@ -39,8 +39,8 @@ export const ModelList: React.FC<{}> = () => {
       searchTerm.length === 0
         ? models
         : (fuse.search(searchTerm) as Fuse.FuseResultWithScore<
-          GLTF_FILE
-        >[]).map(result => result.item),
+            GLTF_FILE
+          >[]).map(result => result.item),
     );
   }, [fuse, searchTerm, models]);
 
