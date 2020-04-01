@@ -32,6 +32,7 @@ type Props = {
 export const Sidebar: React.FC<Props> = props => {
   const { isOpen, setIsOpen } = props;
   const classes = useStyles(props);
+
   return (
     <Drawer
       className={classes.drawer}

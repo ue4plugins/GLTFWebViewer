@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { ThemeProvider, makeStyles } from "@material-ui/core/styles";
-import { theme as customTheme } from "../theme";
+import { makeStyles } from "@material-ui/core/styles";
 import { Sidebar } from "../components/Sidebar";
 import { FpsMonitor } from "../components/FpsMonitor";
-import { RootStoreProvider } from "../stores";
 import { Viewer } from "./Viewer";
 import { SidebarToggle } from "../components/SidebarToggle";
 
@@ -50,7 +48,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const RootLayout: React.FC = () => {
+export const Root: React.FC = () => {
   const classes = useStyles();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -76,15 +74,5 @@ const RootLayout: React.FC = () => {
       )}
       {showUI && <FpsMonitor bottom="8px" left="8px" />}
     </div>
-  );
-};
-
-export const Root: React.FC = () => {
-  return (
-    <RootStoreProvider>
-      <ThemeProvider theme={customTheme}>
-        <RootLayout />
-      </ThemeProvider>
-    </RootStoreProvider>
   );
 };
