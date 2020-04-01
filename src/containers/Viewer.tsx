@@ -56,8 +56,8 @@ export const Viewer: React.FC = observer(() => {
     const viewer = new PlayCanvasViewer(canvasEl.current);
 
     runAsync(async () => {
-      await viewer.configure();
       await delay(1000);
+      await viewer.configure();
       setViewer(viewer);
     });
 
@@ -72,8 +72,8 @@ export const Viewer: React.FC = observer(() => {
     }
 
     runAsync(async () => {
-      await viewer.loadModel(`${model.path}/${model.name}.gltf`);
       await delay(1000);
+      await viewer.loadModel(`${model.path}/${model.name}.gltf`);
     });
 
     return () => {
@@ -87,8 +87,8 @@ export const Viewer: React.FC = observer(() => {
     }
 
     runAsync(async () => {
-      await viewer.loadScene(scene.path);
       await delay(1000);
+      await viewer.loadScene(scene.path);
     });
 
     return () => {
