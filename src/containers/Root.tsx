@@ -67,7 +67,7 @@ export const Root: React.FC = () => {
       {showUI && (
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       )}
-      {showUI && <FpsMonitor bottom="8px" left="8px" />}
+      {showUI && <FpsMonitor />}
     </div>
   );
 };

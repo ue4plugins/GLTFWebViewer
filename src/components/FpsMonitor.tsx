@@ -3,46 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { observable, computed, action } from "mobx";
 import { observer } from "mobx-react-lite";
 
-const GRAPH_HEIGHT = 39;
-const GRAPH_WIDTH = 250;
-const FONT_SIZE = 14;
-
-const useStyles = makeStyles(() => ({
-  root: {
-    zIndex: 2,
-    position: "fixed",
-    height: GRAPH_HEIGHT + 9 + FONT_SIZE + "px",
-    width: GRAPH_WIDTH + 6 + "px",
-    padding: "3px",
-    backgroundColor: "#000",
-    color: "#f3f3f3",
-    fontSize: FONT_SIZE + "px",
-    lineHeight: FONT_SIZE + 1 + "px",
-    fontFamily: "Helvetica, Arial, sans-serif",
-    fontWeight: "bold",
-    MozBoxSizing: "border-box",
-    boxSizing: "border-box",
-    pointerEvents: "none",
-  },
-  graph: {
-    position: "absolute",
-    left: "3px",
-    right: "3px",
-    bottom: "3px",
-    height: GRAPH_HEIGHT + "px",
-    backgroundColor: "#282844",
-    MozBoxSizing: "border-box",
-    boxSizing: "border-box",
-  },
-  bar: {
-    position: "absolute",
-    bottom: 0,
-    width: "1px",
-    backgroundColor: "#00ffff",
-    boxSizing: "border-box",
-  },
-}));
-
+const graphHeight = 40;
+const graphWidth = 250;
 const barColors = [
   "#F44336",
   "#FF9800",
@@ -52,6 +14,48 @@ const barColors = [
   "#8BC34A",
   "#4CAF50",
 ];
+
+const useStyles = makeStyles(theme => {
+  const { fontSize, fontWeightBold: fontWeight } = theme.typography;
+  const internalSpacing = theme.spacing(0.5);
+  const externalSpacing = theme.spacing(1);
+  const backgroundColor = theme.palette.common.black;
+  return {
+    root: {
+      zIndex: 2,
+      position: "fixed",
+      bottom: externalSpacing,
+      left: externalSpacing,
+      height: graphHeight + fontSize + internalSpacing * 3,
+      width: graphWidth + internalSpacing * 2,
+      padding: internalSpacing,
+      backgroundColor: backgroundColor,
+      color: theme.palette.getContrastText(backgroundColor),
+      fontSize: fontSize,
+      lineHeight: 1,
+      fontWeight: fontWeight,
+      MozBoxSizing: "border-box",
+      boxSizing: "border-box",
+      pointerEvents: "none",
+    },
+    graph: {
+      position: "absolute",
+      left: internalSpacing,
+      right: internalSpacing,
+      bottom: internalSpacing,
+      height: graphHeight,
+      backgroundColor: "#282844",
+      MozBoxSizing: "border-box",
+      boxSizing: "border-box",
+    },
+    bar: {
+      position: "absolute",
+      bottom: 0,
+      width: 1,
+      boxSizing: "border-box",
+    },
+  };
+});
 
 class FpsCalculator {
   @observable public fps: Array<number> = [];
@@ -92,7 +96,7 @@ class FpsCalculator {
         nextFps = 60;
       }
       const fps = [...this.fps, nextFps];
-      this.fps = fps.length > GRAPH_WIDTH ? fps.slice(1, GRAPH_WIDTH + 1) : fps;
+      this.fps = fps.length > graphWidth ? fps.slice(1, graphWidth + 1) : fps;
       this.prevTime = currentTime;
       this.frames = 0;
     }
@@ -108,14 +112,7 @@ class FpsCalculator {
   }
 }
 
-interface Props {
-  top?: string;
-  left?: string;
-  bottom?: string;
-  right?: string;
-}
-
-export const FpsMonitor: React.FC<Props> = observer(props => {
+export const FpsMonitor: React.FC = observer(() => {
   const classes = useStyles();
   const [calculator, setCalculator] = useState<FpsCalculator>();
 
@@ -133,16 +130,15 @@ export const FpsMonitor: React.FC<Props> = observer(props => {
   }
 
   const { fps, lastFps, avgFps, minFps, maxFps } = calculator;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { children, ...posStyle } = props;
+
   return (
-    <div className={classes.root} style={posStyle}>
+    <div className={classes.root}>
       <span>
         FPS: {lastFps} MIN: {minFps} AVG: {avgFps} MAX: {maxFps}
       </span>
       <div className={classes.graph}>
         {fps.map((f, i) => {
-          const height = (GRAPH_HEIGHT * f) / 60;
+          const height = (graphHeight * f) / 60;
           const backgroundColor = barColors[Math.floor(f / 10)];
           const right = fps.length - 1 - i + "px";
           return (
