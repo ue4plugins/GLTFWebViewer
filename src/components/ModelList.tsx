@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Fuse from "fuse.js";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
+import { List, ListItem, ListItemText, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStores } from "../stores";
 import { SearchField } from "./SearchField";

@@ -1,10 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
-import Divider from "@material-ui/core/Divider";
+import { Select, InputLabel, FormControl, MenuItem } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { useStores } from "../stores";
 
