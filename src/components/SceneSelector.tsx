@@ -1,20 +1,15 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Select, InputLabel, FormControl, MenuItem } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { useStores } from "../stores";
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
-    },
-  }),
-);
+const useStyles = makeStyles(theme => ({
+  formControl: {
+    margin: theme.spacing(1, 2),
+    minWidth: 120,
+  },
+}));
 
 export const SceneSelector: React.FC = observer(() => {
   const { sceneStore } = useStores();

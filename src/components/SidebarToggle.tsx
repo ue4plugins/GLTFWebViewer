@@ -5,7 +5,7 @@ import { Fab } from "@material-ui/core";
 import { Menu } from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
-  sidebarToggle: {
+  root: {
     position: "absolute",
     top: 0,
     right: 0,
@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     ...theme.mixins.toolbar,
     justifyContent: "flex-start",
   },
-  sidebarToggleHide: {
+  hide: {
     display: "none",
   },
 }));
@@ -29,8 +29,8 @@ export const SidebarToggle: React.FC<Props> = ({ isOpen, setIsOpen }) => {
   const classes = useStyles();
   return (
     <div
-      className={clsx(classes.sidebarToggle, {
-        [classes.sidebarToggleHide]: isOpen,
+      className={clsx(classes.root, {
+        [classes.hide]: isOpen,
       })}
     >
       <Fab
