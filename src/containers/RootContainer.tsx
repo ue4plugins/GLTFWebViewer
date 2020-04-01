@@ -5,7 +5,7 @@ import { theme } from "../theme";
 import { Sidebar } from "../components/Sidebar";
 import { FpsMonitor } from "../components/FpsMonitor";
 import { RootStoreProvider } from "../stores";
-import { Viewer } from "./PlayCanvas";
+import { Viewer } from "./Viewer";
 
 const urlParams = new URLSearchParams(window.location.search);
 const showUI = !urlParams.get("hideUI");
