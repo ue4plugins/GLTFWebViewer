@@ -10,7 +10,6 @@ import { SidebarToggle } from "../components/SidebarToggle";
 const urlParams = new URLSearchParams(window.location.search);
 const showUI = !urlParams.get("hideUI");
 
-const sidebarWidth = 300;
 const useStyles = makeStyles(theme => ({
   "@global": {
     html: {
@@ -40,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     }),
   },
   viewportFullscreen: {
-    marginRight: -sidebarWidth,
+    marginRight: -1 * theme.sidebarWidth,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -66,11 +65,7 @@ export const Root: React.FC = () => {
         )}
       </main>
       {showUI && (
-        <Sidebar
-          width={sidebarWidth}
-          isOpen={isSidebarOpen}
-          setIsOpen={setIsSidebarOpen}
-        />
+        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       )}
       {showUI && <FpsMonitor bottom="8px" left="8px" />}
     </div>
