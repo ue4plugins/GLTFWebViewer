@@ -22,6 +22,10 @@ const delay = (duration: number) =>
   });
 
 const useStyles = makeStyles(() => ({
+  canvas: {
+    position: "relative",
+    maxWidth: "100%",
+  },
   backdrop: {
     position: "absolute",
     zIndex: 3,
@@ -99,7 +103,7 @@ export const Viewer: React.FC<{}> = observer(() => {
 
   return (
     <>
-      <canvas ref={canvasEl} style={{ pointerEvents: "none" }} />
+      <canvas className={classes.canvas} ref={canvasEl} />
       <Backdrop className={classes.backdrop} open={showBackdrop}>
         {isLoading && <CircularProgress />}
         {isError && (
