@@ -8,7 +8,7 @@ export class ModelStore {
   public models = GLTF_FILES;
 
   @observable
-  public model?= this.models.find(
+  public model? = this.models.find(
     val => val.name === defaultModel && val.type === "normal",
   );
 

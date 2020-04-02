@@ -4,8 +4,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import { Sidebar } from "../components/Sidebar";
 import { FpsMonitor } from "../components/FpsMonitor";
-import { Viewer } from "./Viewer";
 import { SidebarToggle } from "../components/SidebarToggle";
+import { Viewer } from "./Viewer";
 
 const urlParams = new URLSearchParams(window.location.search);
 const showUI = !urlParams.get("hideUI");

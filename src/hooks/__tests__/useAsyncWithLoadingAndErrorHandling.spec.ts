@@ -36,7 +36,7 @@ describe("useAsyncWithLoadingAndErrorHandling", () => {
   });
 
   describe("state error handling", () => {
-    const mockedConsoleError = () => {};
+    const mockedConsoleError = () => false;
     beforeEach(() => (console.error = mockedConsoleError));
 
     it("should set an error state if the async callback fails", async () => {

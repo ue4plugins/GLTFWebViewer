@@ -2,7 +2,7 @@ import { useCallback, useState, useEffect } from "react";
 import { PreventableEvent } from "../lib/PreventableEvent";
 
 export const usePreventableCameraInteractions = (
-  initialPrevent: boolean = false,
+  initialPrevent = false,
 ): [(prevent: boolean) => void] => {
   const [preventInteraction, setPreventInteraction] = useState(initialPrevent);
 

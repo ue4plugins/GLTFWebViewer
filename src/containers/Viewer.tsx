@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { PlayCanvasViewer } from "../lib/PlayCanvasViewer";
-import { useStores } from "../stores";
-import {
-  useAsyncWithLoadingAndErrorHandling,
-  usePreventableCameraInteractions,
-} from "../hooks";
 import {
   Backdrop,
   CircularProgress,
@@ -14,6 +8,12 @@ import {
   CardContent,
   Typography,
 } from "@material-ui/core";
+import { PlayCanvasViewer } from "../lib/PlayCanvasViewer";
+import { useStores } from "../stores";
+import {
+  useAsyncWithLoadingAndErrorHandling,
+  usePreventableCameraInteractions,
+} from "../hooks";
 
 // TODO: remove
 const delay = (duration: number) =>

@@ -5,7 +5,7 @@ export class SceneStore {
   public scenes = SCENE_FILES;
 
   @observable
-  public scene?= this.scenes[0];
+  public scene? = this.scenes[0];
 
   @computed
   public get sceneIdx() {
