@@ -67,8 +67,8 @@ describe("useAsyncWithLoadingAndErrorHandling", () => {
   });
 
   describe("console error handling", () => {
-    const consoleOutput: any[] = [];
-    const mockedConsoleError = (...output: any[]) =>
+    const consoleOutput: Error[] = [];
+    const mockedConsoleError = (...output: Error[]) =>
       consoleOutput.push(...output);
     beforeEach(() => (console.error = mockedConsoleError));
 
