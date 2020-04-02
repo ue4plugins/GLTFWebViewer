@@ -59,7 +59,10 @@ const ts = {
   },
   rules: {
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { varsIgnorePattern: "^_", argsIgnorePattern: "^_" },
+    ],
     "@typescript-eslint/explicit-member-accessibility": ["error"],
     "import/default": "off",
     "import/first": "error",
