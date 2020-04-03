@@ -27,6 +27,7 @@ type Props = {
 
 export const SidebarToggle: React.FC<Props> = ({ isOpen, setIsOpen }) => {
   const classes = useStyles();
+
   return (
     <div
       className={clsx(classes.root, {

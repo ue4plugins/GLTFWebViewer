@@ -15,6 +15,7 @@ export const SceneSelector: React.FC = observer(() => {
   const { sceneStore } = useStores();
   const { sceneIdx, scenes, setScene } = sceneStore;
   const classes = useStyles();
+
   return (
     <FormControl className={classes.formControl}>
       <InputLabel id="scene-selector-label">Scene</InputLabel>
