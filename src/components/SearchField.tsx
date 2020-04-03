@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import debounce from "lodash.debounce";
 import { InputBase, ListItem, IconButton } from "@material-ui/core";
 import { Search, Clear } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,13 +25,14 @@ interface Props {
 }
 
 export const SearchField: React.FC<Props> = ({ term, onChange }) => {
-  const [value, setValue] = useState(term);
-  const debounceRef = useRef<NodeJS.Timeout>();
   const classes = useStyles();
+  const [value, setValue] = useState(term);
+  const debouncedOnChange = useCallback(
+    debounce((t: string) => onChange(t), 100),
+    [onChange],
+  );
 
-  useEffect(() => {
-    setValue(term);
-  }, [term]);
+  useEffect(() => setValue(term), [term]);
 
   return (
     <ListItem className={classes.root}>
@@ -43,10 +45,7 @@ export const SearchField: React.FC<Props> = ({ term, onChange }) => {
         onChange={e => {
           const { value } = e.target;
           setValue(value);
-          debounceRef.current && clearTimeout(debounceRef.current);
-          debounceRef.current = setTimeout(() => {
-            onChange(value);
-          }, 10);
+          debouncedOnChange(value);
         }}
       />
       <IconButton
