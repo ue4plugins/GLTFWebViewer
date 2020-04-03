@@ -19,6 +19,7 @@ export const useAsyncWithLoadingAndErrorHandling = (): [
         console.error(error);
         setIsError(true);
         endLoadingTask();
+        return;
       }
       endLoadingTask();
     },
