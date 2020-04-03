@@ -8,7 +8,7 @@ import { translateNode } from "../translateNode";
 import { AnimationClip } from "../../animation/AnimationClip";
 import { AnimationSession } from "../../animation/AnimationSession";
 
-const basePath = "./public/assets/models/AnimatedCube/glTF";
+const basePath = "./public/assets/gltf/AnimatedCube/glTF";
 
 async function loadGltf(): Promise<GlTf> {
   return JSON.parse(

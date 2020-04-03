@@ -7,7 +7,7 @@ import { getRoots } from "../getRoots";
 import { translateNode } from "../translateNode";
 
 async function getData() {
-  const basePath = "./public/assets/models/TextureTransformTest/glTF";
+  const basePath = "./public/assets/gltf/TextureTransformTest/glTF";
   const buf = await readFile(
     path.join(basePath, "./TextureTransformTest.gltf"),
   );

@@ -3,7 +3,7 @@ import { readFile } from "fs-extra";
 import { GlTf, ComponentType, Accessor } from "../types";
 import { toArrayBuffer } from "../utils/toArrayBuffer";
 
-const basePath = "./public/assets/models";
+const basePath = "./public/assets/gltf";
 
 export async function loadAsset(
   name: string,

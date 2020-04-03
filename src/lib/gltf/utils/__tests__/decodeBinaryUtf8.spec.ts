@@ -4,7 +4,7 @@ import { readFile } from "fs-extra";
 import { decodeBinaryUtf8 } from "../decodeBinaryUtf8";
 import { toArrayBuffer } from "../toArrayBuffer";
 
-const basePath = "./public/assets/models";
+const basePath = "./public/assets/gltf";
 
 describe("decodeBinaryUtf8", () => {
   it("should decode binary Duck to utf8", async () => {

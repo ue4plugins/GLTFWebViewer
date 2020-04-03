@@ -20,9 +20,10 @@ describe("translateImage", () => {
     );
 
     const gltf = await loadGltf("TextureSettingsTest");
+
     const buffers = await loadBuffers(
       gltf,
-      "./public/assets/models/TextureSettingsTest/glTF/",
+      "./public/assets/gltf/TextureSettingsTest/glTF/",
     );
 
     const canvas = document.createElement("canvas");
@@ -34,7 +35,7 @@ describe("translateImage", () => {
       ?.map(img =>
         translateImage(img, {
           gltf,
-          basePath: "./public/assets/models/TextureSettingsTest/glTF/",
+          basePath: "./public/assets/gltf/TextureSettingsTest/glTF/",
           textures,
           buffers,
         }),

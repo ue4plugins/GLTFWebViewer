@@ -3,7 +3,7 @@ import { loadBuffers } from "../loadBuffers";
 import { GlTf } from "../../types";
 import { loadGltf, loadBin, arrayBuffersAreEqual } from "../../helpers";
 
-const basePath = "./public/assets/models/Duck";
+const basePath = "./public/assets/gltf/Duck";
 
 describe("loadBuffers", () => {
   it("should resolve to empty array if buffers are missing", () => {
