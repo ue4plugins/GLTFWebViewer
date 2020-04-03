@@ -62,6 +62,7 @@ export class PlayCanvasViewer {
 
     debug("Creating Playcanvas for target:", this.canvas);
     const app = new pc.Application(this.canvas, {
+      assetPrefix: "assets/playcanvas/",
       mouse: new pc.Mouse(document.body),
       keyboard: new pc.Keyboard(window),
       graphicsDeviceOptions: {
@@ -162,7 +163,7 @@ export class PlayCanvasViewer {
     const app = this.app;
 
     return new Promise<void>((resolve, reject) => {
-      const url = "config.json";
+      const url = "assets/playcanvas/config.json";
 
       app.configure(url, error => {
         if (error) {

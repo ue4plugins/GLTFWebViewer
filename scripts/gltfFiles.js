@@ -4,7 +4,7 @@ const glob = require("glob");
 const typeRegex = new RegExp(`/glTF-([a-zA-Z0-9]+)/`);
 
 const gltfFiles = glob
-  .sync("./public/assets/models/**/{glTF,glTF-*}/*.gltf")
+  .sync("./public/assets/gltf/**/{glTF,glTF-*}/*.gltf")
   .map(fp => {
     const typeMatch = typeRegex.exec(fp);
     // if (!typeMatch) {
