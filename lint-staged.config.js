@@ -1,4 +1,6 @@
 module.exports = {
-  "**/*.{md,html,yaml}": ["prettier --write"],
-  "**/*.{ts?(x),js?(x),json}": ["prettier --write", "eslint"],
+  "**/*.{html}": ["prettier --write"],
+  "src/**/*.{ts?(x),js?(x),json}": ["prettier --write", "eslint"],
+  "scripts/**/*.{ts?(x),js?(x),json}": ["prettier --write", "eslint"],
+  "e2e/**/*.{ts?(x),js?(x),json}": ["prettier --write", "eslint"],
 };
