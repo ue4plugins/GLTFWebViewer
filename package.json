@@ -101,6 +101,7 @@
     "react-test-renderer": "^16.13.1",
     "ts-jest": "^24.3.0",
     "webpack": "4.41.5",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "write-json-webpack-plugin": "^1.1.0"
   }
 }

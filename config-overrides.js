@@ -2,6 +2,7 @@ const { override } = require("customize-cra");
 const { addReactRefresh } = require("customize-cra-react-refresh");
 // const { alias } = require("react-app-rewire-alias");
 const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
+const WriteJsonPlugin = require("write-json-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const gltfFiles = require("./scripts/gltfFiles");
@@ -31,6 +32,12 @@ module.exports = {
           "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
         }),
         new DynamicCdnWebpackPlugin(),
+        new WriteJsonPlugin({
+          object: gltfFiles,
+          path: "assets",
+          filename: "index.json",
+          pretty: true,
+        }),
       ],
     });
   }),

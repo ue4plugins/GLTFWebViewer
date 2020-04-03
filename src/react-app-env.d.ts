@@ -12,14 +12,6 @@ declare namespace pc {
   type MorphInstance = any;
 }
 
-declare type GLTF_FILE = {
-  type: string;
-  name: string;
-  path: string;
-};
-
-declare const GLTF_FILES: GLTF_FILE[];
-
 declare type SCENE_FILE = {
   name: string;
   path: string;
