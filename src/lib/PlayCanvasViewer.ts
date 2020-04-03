@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import pc from "playcanvas";
 import Debug from "debug";
+import debounce from "lodash.debounce";
+import ResizeObserver from "resize-observer-polyfill";
 import { GlTf } from "./gltf/types";
 import { GlTfParser } from "./gltf/GlTfParser";
 import { AnimationClip } from "./gltf/animation/AnimationClip";
@@ -24,16 +26,18 @@ export class PlayCanvasViewer {
   public scene?: pc.Scene;
   public textures: pc.Texture[] = [];
   public animations: AnimationClip[] = [];
+  private debouncedCanvasResize = debounce(() => this.resizeCanvas(), 10);
+  private canvasResizeObserver = new ResizeObserver(this.debouncedCanvasResize);
 
   public constructor(public canvas: HTMLCanvasElement) {
     if (!canvas) {
       throw new Error("Missing canvas");
     }
-    this.windowResizeHandler = this.windowResizeHandler.bind(this);
+    this.resizeCanvas = this.resizeCanvas.bind(this);
     this.app = this.createPlaycanvasApp();
   }
 
-  private windowResizeHandler() {
+  private resizeCanvas() {
     this.app.resizeCanvas(
       this.canvas.parentElement?.clientWidth,
       this.canvas.parentElement?.clientHeight,
@@ -86,8 +90,7 @@ export class PlayCanvasViewer {
       this.canvas.parentElement?.clientHeight,
     );
 
-    // Ensure canvas is resized when window changes size
-    window.addEventListener("resize", this.windowResizeHandler);
+    this.canvasResizeObserver.observe(this.canvas);
 
     // Create camera entity
     debug("Creating camera");
@@ -148,7 +151,7 @@ export class PlayCanvasViewer {
   public destroy() {
     try {
       this.destroyModel();
-      window.removeEventListener("resize", this.windowResizeHandler);
+      this.canvasResizeObserver.unobserve(this.canvas);
       this.app.destroy();
     } catch (e) {
       // Ignore any errors
