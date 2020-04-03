@@ -5,7 +5,7 @@ const sceneFiles = glob
   .sync("./public/assets/playcanvas/*.json")
   .filter(fp => !fp.endsWith("config.json"))
   .map(fp => ({
-    name: path.basename(fp, ".json"),
+    name: path.basename(fp, path.extname(fp)),
     path: path.basename(fp),
   }));
 

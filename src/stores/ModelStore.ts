@@ -9,7 +9,7 @@ export class ModelStore {
 
   @observable
   public model? = this.models.find(
-    val => val.name === defaultModel && val.type === "normal",
+    val => val.name === defaultModel && val.type === "unpacked",
   );
 
   @action.bound

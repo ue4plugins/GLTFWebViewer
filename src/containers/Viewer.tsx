@@ -73,7 +73,7 @@ export const Viewer: React.FC = observer(() => {
 
     runAsync(async () => {
       await delay(1000);
-      await viewer.loadModel(`${model.path}/${model.name}.gltf`);
+      await viewer.loadModel(model.path);
     });
 
     return () => {
