@@ -49,6 +49,16 @@ export const ModelList: React.FC = observer(() => {
   const [list, setList] = useState(models);
 
   useEffect(() => {
+    runAsync(async () => {
+      await fetchModels();
+    });
+  }, [fetchModels, runAsync]);
+
+  useEffect(() => {
+    setFuse(models.length > 0 ? new Fuse(models, fuseOptions) : undefined);
+  }, [models]);
+
+  useEffect(() => {
     setList(
       searchTerm.length === 0
         ? models
@@ -59,16 +69,6 @@ export const ModelList: React.FC = observer(() => {
         : [],
     );
   }, [fuse, searchTerm, models]);
-
-  useEffect(() => {
-    setFuse(models.length > 0 ? new Fuse(models, fuseOptions) : undefined);
-  }, [models]);
-
-  useEffect(() => {
-    runAsync(async () => {
-      await fetchModels();
-    });
-  }, [fetchModels, runAsync]);
 
   return (
     <>
