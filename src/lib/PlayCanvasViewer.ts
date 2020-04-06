@@ -167,8 +167,7 @@ export class PlayCanvasViewer {
 
       app.configure(url, error => {
         if (error) {
-          console.error(error);
-          reject();
+          reject(error);
           return;
         }
         app.preload(() => {
@@ -185,7 +184,6 @@ export class PlayCanvasViewer {
     return new Promise<void>((resolve, reject) => {
       (this.app as any).loadScene(url, (error: string, scene: pc.Scene) => {
         if (error) {
-          console.error(error);
           reject(error);
           return;
         }
