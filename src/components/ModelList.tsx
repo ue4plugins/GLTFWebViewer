@@ -61,7 +61,7 @@ export const ModelList: React.FC = observer(() => {
   }, [fuse, searchTerm, models]);
 
   useEffect(() => {
-    setFuse(new Fuse(models, fuseOptions));
+    setFuse(models.length > 0 ? new Fuse(models, fuseOptions) : undefined);
   }, [models]);
 
   useEffect(() => {
