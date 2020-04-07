@@ -411,26 +411,7 @@ export class PlayCanvasViewer {
     this.animations = res.animations || [];
   }
 
-  private waitForGraphicsDevice(count = 0) {
-    if (this.app.graphicsDevice) {
-      return Promise.resolve();
-    }
-    if (count === 5) {
-      this.app = this.createPlaycanvasApp();
-    }
-    return new Promise(resolve => {
-      debug("Waiting for graphics device");
-      setTimeout(() => {
-        resolve(this.waitForGraphicsDevice(count + 1));
-      }, 500);
-    });
-  }
-
   private async parseGltf(gltf: GlTf, basePath: string) {
-    if (!this.app.graphicsDevice || !(this.app.graphicsDevice as any).gl) {
-      this.app = this.createPlaycanvasApp();
-      await this.waitForGraphicsDevice();
-    }
     const parser = new GlTfParser(gltf, this.app.graphicsDevice, {
       basePath,
     });
