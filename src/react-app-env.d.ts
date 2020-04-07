@@ -10,12 +10,12 @@ declare namespace pc {
   type Morph = any;
   type MorphTarget = any;
   type MorphInstance = any;
-}
 
-declare type SceneFile = {
-  name: string;
-  url: string;
-};
+  type SceneFile = {
+    name: string;
+    url: string;
+  };
+}
 
 declare module "draco3dgltf" {
   function createDecoderModule(): any;

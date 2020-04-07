@@ -52,7 +52,7 @@ export class PlayCanvasViewer {
     return !!this.app.graphicsDevice;
   }
 
-  public get scenes(): SceneFile[] {
+  public get scenes(): pc.SceneFile[] {
     return (this.app as any)._sceneRegistry?.list() || [];
   }
 

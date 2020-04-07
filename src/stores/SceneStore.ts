@@ -2,10 +2,10 @@ import { observable, action, computed } from "mobx";
 
 export class SceneStore {
   @observable
-  public scenes: SceneFile[] = [];
+  public scenes: pc.SceneFile[] = [];
 
   @observable
-  public scene?: SceneFile;
+  public scene?: pc.SceneFile;
 
   @computed
   public get sceneIndex() {
@@ -14,12 +14,12 @@ export class SceneStore {
   }
 
   @action.bound
-  public setScene(scene?: SceneFile) {
+  public setScene(scene?: pc.SceneFile) {
     this.scene = scene;
   }
 
   @action.bound
-  public setScenes(scenes: SceneFile[]) {
+  public setScenes(scenes: pc.SceneFile[]) {
     this.scenes = scenes;
     if (!this.scene) {
       this.setScene(scenes[0]);
