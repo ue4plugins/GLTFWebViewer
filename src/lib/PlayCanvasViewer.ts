@@ -25,7 +25,6 @@ export class PlayCanvasViewer {
   private entity?: pc.Entity;
   private gltfAsset?: pc.Asset;
   private modelAsset?: pc.Asset;
-  private textureAssets: pc.Asset[] = [];
   private animationAssets: pc.Asset[] = [];
   private debouncedCanvasResize = debounce(() => this.resizeCanvas(), 10);
   private canvasResizeObserver = new ResizeObserver(this.debouncedCanvasResize);
@@ -186,7 +185,6 @@ export class PlayCanvasViewer {
     }
 
     this.modelAsset = undefined;
-    this.textureAssets = [];
     this.animationAssets = [];
   }
 
@@ -264,7 +262,6 @@ export class PlayCanvasViewer {
 
     this.gltfAsset = asset;
     this.modelAsset = resource.model;
-    this.textureAssets = resource.textures || [];
     this.animationAssets = resource.animations || [];
   }
 
