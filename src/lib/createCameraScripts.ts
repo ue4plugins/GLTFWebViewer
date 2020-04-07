@@ -5,7 +5,7 @@ import pc from "playcanvas";
 import { PreventableEvent } from "./PreventableEvent";
 
 export const createCameraScripts = (_app: pc.Application) => {
-  type KeyboardInput = pc.ScriptType & {
+  type KeyboardInput = typeof pc.ScriptType & {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     prototype: any;
   };
@@ -51,7 +51,7 @@ export const createCameraScripts = (_app: pc.Application) => {
     }
   };
 
-  type MouseInput = pc.ScriptType & {
+  type MouseInput = typeof pc.ScriptType & {
     app: pc.Application;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     prototype: any;
@@ -247,7 +247,7 @@ export const createCameraScripts = (_app: pc.Application) => {
     this.panButtonDown = false;
   };
 
-  type TouchInput = pc.ScriptType & {
+  type TouchInput = typeof pc.ScriptType & {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     prototype: any;
     fromWorldPoint: pc.Vec3;
@@ -415,7 +415,7 @@ export const createCameraScripts = (_app: pc.Application) => {
     }
   };
 
-  type OrbitCamera = pc.ScriptType & {
+  type OrbitCamera = typeof pc.ScriptType & {
     prototype: any;
     distanceBetween: pc.Vec3;
     quatWithoutYaw: pc.Quat;
