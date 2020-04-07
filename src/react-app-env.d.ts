@@ -2,6 +2,7 @@
 /// <reference types="react-scripts" />
 
 declare namespace pc {
+  // TODO: remove when custom parser has been removed
   interface GraphNode {
     _dirtifyLocal: () => void;
     localScale: pc.Vec3;
@@ -11,10 +12,6 @@ declare namespace pc {
     destroy: () => void;
     root: Entity | undefined;
   }
-
-  type Morph = any;
-  type MorphTarget = any;
-  type MorphInstance = any;
 
   type SceneFile = {
     name: string;

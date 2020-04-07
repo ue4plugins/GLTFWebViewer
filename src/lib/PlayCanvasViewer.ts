@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import pc from "playcanvas";
 import Debug from "debug";
 import debounce from "lodash.debounce";
@@ -7,11 +6,11 @@ import { createCameraScripts } from "./createCameraScripts";
 
 const debug = Debug("playCanvasViewer");
 
-interface ContainerResource {
-  model?: pc.Model;
-  textures: pc.Texture[];
+type ContainerResource = {
+  model?: pc.Asset;
+  textures: pc.Asset[];
   animations: pc.Asset[];
-}
+};
 
 type OrbitCameraEntity = pc.Entity & {
   script: pc.ScriptComponent & {
@@ -24,10 +23,10 @@ export class PlayCanvasViewer {
   public camera!: OrbitCameraEntity;
   public playing = true;
   public gltf?: pc.Entity;
-  public model?: pc.Model;
+  public model?: pc.Asset;
   public asset?: pc.Asset;
   public scene?: pc.Scene;
-  public textures: pc.Texture[] = [];
+  public textures: pc.Asset[] = [];
   public animations: pc.Asset[] = [];
   private debouncedCanvasResize = debounce(() => this.resizeCanvas(), 10);
   private canvasResizeObserver = new ResizeObserver(this.debouncedCanvasResize);
@@ -37,7 +36,7 @@ export class PlayCanvasViewer {
       throw new Error("Missing canvas");
     }
     this.resizeCanvas = this.resizeCanvas.bind(this);
-    this.app = this.createPlaycanvasApp();
+    this.app = this.createApp();
   }
 
   private resizeCanvas() {
@@ -45,10 +44,6 @@ export class PlayCanvasViewer {
       this.canvas.parentElement?.clientWidth,
       this.canvas.parentElement?.clientHeight,
     );
-  }
-
-  public get cameraPosition() {
-    return this.camera.getPosition();
   }
 
   public get isReady() {
@@ -60,7 +55,7 @@ export class PlayCanvasViewer {
     return (this.app as any)._sceneRegistry?.list() || [];
   }
 
-  private createPlaycanvasApp() {
+  private createApp() {
     const existingApp = pc.Application.getApplication();
     if (existingApp) {
       debug("Destroying existing PlayCanvas app");
@@ -88,7 +83,7 @@ export class PlayCanvasViewer {
 
     createCameraScripts(app);
 
-    // rotator script
+    // Rotator script
     const Rotate = pc.createScript("rotate");
     Rotate.prototype.update = function(deltaTime: number) {
       this.entity.rotate(0, deltaTime * 20, 0);
@@ -130,8 +125,6 @@ export class PlayCanvasViewer {
       camera.script.create("orbitCamera");
       camera.script.create("keyboardInput");
       camera.script.create("mouseInput");
-
-      console.log(camera.script);
       this.focusCameraOnEntity();
     }
 
@@ -163,14 +156,10 @@ export class PlayCanvasViewer {
   }
 
   public destroy() {
-    try {
-      this.destroyModel();
-      this.destroyScene();
-      this.canvasResizeObserver.unobserve(this.canvas);
-      this.app.destroy();
-    } catch (e) {
-      // Ignore any errors
-    }
+    this.destroyModel();
+    this.destroyScene();
+    this.canvasResizeObserver.unobserve(this.canvas);
+    this.app.destroy();
   }
 
   public async configure() {
@@ -224,39 +213,42 @@ export class PlayCanvasViewer {
 
   public destroyModel() {
     debug("Destroy model", this.gltf);
-    try {
-      this.textures.forEach(texture => {
-        texture.destroy();
-      });
 
-      if (this.gltf) {
-        if (this.camera.script.orbitCamera.focusEntity) {
-          this.camera.script.orbitCamera.focusEntity = null;
-        }
-        this.gltf.destroy();
-      }
-
-      if (this.asset) {
-        // If not done in this order,
-        // the entity will be retained by the JS engine.
-        this.app.assets.remove(this.asset);
-        this.asset.unload();
-      }
-    } catch (e) {
-      // Ignore any errors
-    }
-    // Reset props
-    this.asset = undefined;
-    this.gltf = undefined;
+    this.textures.forEach(asset => asset.unload());
     this.textures = [];
+
+    this.animations.forEach(asset => asset.unload());
+    this.animations = [];
+
+    if (this.model) {
+      this.model.unload();
+      this.model = undefined;
+    }
+
+    if (this.gltf) {
+      this.gltf.destroy();
+      this.gltf = undefined;
+    }
+
+    if (this.asset) {
+      // If not done in this order,
+      // the entity will be retained by the JS engine.
+      this.app.assets.remove(this.asset);
+      this.asset.unload();
+      this.asset = undefined;
+    }
   }
 
   private initModel() {
     debug("Init model");
 
-    if (this.gltf || !this.asset) {
-      // Model already initialized or missing asset
+    if (this.gltf) {
+      // Model already initialized
       return;
+    }
+
+    if (!this.asset || !this.model) {
+      throw new Error("initModel called before registering resources");
     }
 
     // Add the loaded model to the hierarchy
@@ -272,7 +264,7 @@ export class PlayCanvasViewer {
     // this.gltf.script?.create("rotate");
     this.app.root.addChild(this.gltf);
 
-    debug("Animations", this.animations);
+    debug("Init animations", this.animations);
 
     if (this.animations.length > 0) {
       this.gltf.addComponent("animation", {
@@ -288,11 +280,10 @@ export class PlayCanvasViewer {
   }
 
   public focusCameraOnEntity() {
-    if (this.camera.script.orbitCamera) {
-      debug("Focus on entity", this.gltf);
-      this.camera.script.orbitCamera.frameOnStart = true;
-      this.camera.script.orbitCamera.focusEntity = this.gltf;
-    }
+    debug("Focus on model", this.gltf);
+
+    this.camera.script.orbitCamera.frameOnStart = true;
+    this.camera.script.orbitCamera.focusEntity = this.gltf;
   }
 
   private async loadGltfAsset(url: string) {
@@ -331,11 +322,11 @@ export class PlayCanvasViewer {
     this.destroyModel();
 
     const asset = await this.loadGltfAsset(url);
-    if (asset) {
-      await this.registerGltfResources(asset);
-      this.initModel();
-    } else {
+    if (!asset) {
       throw new Error("Asset not found");
     }
+
+    await this.registerGltfResources(asset);
+    this.initModel();
   }
 }
