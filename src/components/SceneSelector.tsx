@@ -21,7 +21,7 @@ export const SceneSelector: React.FC = observer(() => {
       <InputLabel id="scene-selector-label">Scene</InputLabel>
       <Select
         labelId="scene-selector-label"
-        value={sceneIndex.toString()}
+        value={sceneIndex > -1 ? sceneIndex.toString() : ""}
         onChange={e => {
           const idx = parseInt(e.target.value as string, 10);
           setScene(scenes[idx]);
