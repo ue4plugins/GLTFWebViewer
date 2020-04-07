@@ -236,7 +236,7 @@ export class PlayCanvasViewer {
 
       if (this.asset) {
         // If not done in this order,
-        // the entity will be retained by the JS engine.
+        // the entity will be retained by the JS engine
         this.app.assets.remove(this.asset);
         this.asset.unload();
       }
