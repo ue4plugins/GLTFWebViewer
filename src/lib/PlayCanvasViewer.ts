@@ -172,17 +172,6 @@ export class PlayCanvasViewer {
   public destroyModel() {
     debug("Destroy model", this.entity);
 
-    this.textureAssets.forEach(asset => asset.unload());
-    this.textureAssets = [];
-
-    this.animationAssets.forEach(asset => asset.unload());
-    this.animationAssets = [];
-
-    if (this.modelAsset) {
-      this.modelAsset.unload();
-      this.modelAsset = undefined;
-    }
-
     if (this.entity) {
       this.entity.destroy();
       this.entity = undefined;
@@ -195,6 +184,10 @@ export class PlayCanvasViewer {
       this.gltfAsset.unload();
       this.gltfAsset = undefined;
     }
+
+    this.modelAsset = undefined;
+    this.textureAssets = [];
+    this.animationAssets = [];
   }
 
   private initModel() {
