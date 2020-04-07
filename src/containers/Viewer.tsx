@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
+import Debug from "debug";
 import {
   Backdrop,
   CircularProgress,
@@ -15,11 +16,7 @@ import {
   usePreventableCameraInteractions,
 } from "../hooks";
 
-// TODO: remove
-const delay = (duration: number) =>
-  new Promise(resolve => {
-    setTimeout(() => resolve(), duration);
-  });
+const debug = Debug("viewer");
 
 const useStyles = makeStyles(() => ({
   canvas: {
@@ -40,7 +37,7 @@ export const Viewer: React.FC = observer(() => {
   const { modelStore, sceneStore } = useStores();
   const { model } = modelStore;
   const { scene, setScenes } = sceneStore;
-  const canvasEl = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<PlayCanvasViewer>();
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
   const showBackdrop = isLoading || isError;
@@ -49,62 +46,81 @@ export const Viewer: React.FC = observer(() => {
   );
 
   useEffect(() => {
-    if (!canvasEl.current) {
+    if (!canvasRef.current) {
       return;
     }
 
-    const viewer = new PlayCanvasViewer(canvasEl.current);
+    debug("Create viewer");
+    const viewer = new PlayCanvasViewer(canvasRef.current);
 
     runAsync(async () => {
-      await delay(1000);
+      debug("Configure viewer start");
       await viewer.configure();
-      setScenes((viewer.app as any)._sceneRegistry.list());
       setViewer(viewer);
+      debug("Configure viewer end");
     });
 
     return () => {
+      debug("Destroy viewer");
       viewer.destroy();
     };
-  }, [runAsync, setScenes]);
+  }, [runAsync]);
 
   useEffect(() => {
-    if (!viewer || !model) {
+    if (!viewer?.isReady) {
+      return;
+    }
+    debug("Set scene list", viewer.scenes);
+    setScenes(viewer.scenes);
+
+    return () => {
+      debug("Unset scene list");
+      setScenes([]);
+    };
+  }, [viewer, setScenes]);
+
+  useEffect(() => {
+    if (!viewer?.isReady || !scene) {
       return;
     }
 
     runAsync(async () => {
-      await delay(1000);
-      await viewer.loadModel(model.path);
+      debug("Load scene start", scene.url);
+      await viewer.loadScene(scene.url);
+      debug("Load scene end", scene.url);
     });
 
     return () => {
+      debug("Destroy scene");
+      viewer.destroyScene();
+    };
+  }, [runAsync, viewer, scene]);
+
+  useEffect(() => {
+    if (!viewer?.isReady || !model) {
+      return;
+    }
+
+    runAsync(async () => {
+      debug("Load model start", model.path);
+      await viewer.loadModel(model.path);
+      debug("Load model end", model.path);
+    });
+
+    return () => {
+      debug("Destroy model");
       viewer.destroyModel();
     };
   }, [runAsync, viewer, model]);
 
   useEffect(() => {
-    if (!viewer || !scene) {
-      return;
-    }
-
-    runAsync(async () => {
-      await delay(1000);
-      await viewer.loadScene(scene.url);
-    });
-
-    return () => {
-      viewer.destroyScene();
-    };
-  }, [runAsync, viewer, scene]);
-
-  useEffect(() => setPreventInteraction(showBackdrop), [
-    showBackdrop,
-    setPreventInteraction,
-  ]);
+    debug("Prevent camera interaction", showBackdrop);
+    setPreventInteraction(showBackdrop);
+  }, [showBackdrop, setPreventInteraction]);
 
   return (
     <>
-      <canvas className={classes.canvas} ref={canvasEl} />
+      <canvas className={classes.canvas} ref={canvasRef} />
       <Backdrop className={classes.backdrop} open={showBackdrop}>
         {isLoading && <CircularProgress />}
         {isError && (

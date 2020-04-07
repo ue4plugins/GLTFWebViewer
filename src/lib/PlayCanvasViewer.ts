@@ -9,7 +9,7 @@ import { AnimationClip } from "./gltf/animation/AnimationClip";
 import { createCameraScripts } from "./createCameraScripts";
 import { AnimationComponent } from "./gltf/animation/AnimationComponent";
 
-const debug = Debug("viewer");
+const debug = Debug("playCanvasViewer");
 
 interface Resources {
   model?: pc.Model;
@@ -46,6 +46,14 @@ export class PlayCanvasViewer {
 
   public get cameraPosition() {
     return this.camera.getPosition();
+  }
+
+  public get isReady() {
+    return !!(this.app as any)._sceneRegistry;
+  }
+
+  public get scenes(): SceneFile[] {
+    return (this.app as any)._sceneRegistry?.list() || [];
   }
 
   private createPlaycanvasApp() {
