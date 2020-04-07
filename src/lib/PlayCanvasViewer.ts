@@ -3,29 +3,32 @@ import pc from "playcanvas";
 import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
-import { GlTf } from "./gltf/types";
-import { GlTfParser } from "./gltf/GlTfParser";
-import { AnimationClip } from "./gltf/animation/AnimationClip";
 import { createCameraScripts } from "./createCameraScripts";
-import { AnimationComponent } from "./gltf/animation/AnimationComponent";
 
 const debug = Debug("playCanvasViewer");
 
-interface Resources {
+interface ContainerResource {
   model?: pc.Model;
   textures: pc.Texture[];
-  animations: AnimationClip[];
+  animations: pc.Asset[];
 }
+
+type OrbitCameraEntity = pc.Entity & {
+  script: pc.ScriptComponent & {
+    orbitCamera: any;
+  };
+};
 
 export class PlayCanvasViewer {
   public app: pc.Application;
-  public camera!: pc.Entity;
+  public camera!: OrbitCameraEntity;
   public playing = true;
-  public gltf?: pc.Entity & { animComponent?: AnimationComponent };
+  public gltf?: pc.Entity;
+  public model?: pc.Model;
   public asset?: pc.Asset;
   public scene?: pc.Scene;
   public textures: pc.Texture[] = [];
-  public animations: AnimationClip[] = [];
+  public animations: pc.Asset[] = [];
   private debouncedCanvasResize = debounce(() => this.resizeCanvas(), 10);
   private canvasResizeObserver = new ResizeObserver(this.debouncedCanvasResize);
 
@@ -53,22 +56,23 @@ export class PlayCanvasViewer {
   }
 
   public get scenes(): pc.SceneFile[] {
+    // TODO: change this when the new scene API is introduced in the engine
     return (this.app as any)._sceneRegistry?.list() || [];
   }
 
   private createPlaycanvasApp() {
     const existingApp = pc.Application.getApplication();
     if (existingApp) {
-      debug("Destroying existing Playcanvas app");
+      debug("Destroying existing PlayCanvas app");
       existingApp.destroy();
     }
 
-    if (!this.canvas) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this.canvas = document.querySelector("canvas")!;
-    }
+    // if (!this.canvas) {
+    //   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    //   this.canvas = document.querySelector("canvas")!;
+    // }
 
-    debug("Creating Playcanvas for target:", this.canvas);
+    debug("Creating PlayCanvas for target", this.canvas);
     const app = new pc.Application(this.canvas, {
       assetPrefix: "assets/playcanvas/",
       mouse: new pc.Mouse(document.body),
@@ -85,8 +89,7 @@ export class PlayCanvasViewer {
     createCameraScripts(app);
 
     // rotator script
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const Rotate: any = pc.createScript("rotate");
+    const Rotate = pc.createScript("rotate");
     Rotate.prototype.update = function(deltaTime: number) {
       this.entity.rotate(0, deltaTime * 20, 0);
     };
@@ -110,7 +113,7 @@ export class PlayCanvasViewer {
     });
     camera.addComponent("script");
     camera.setPosition(0, 0, 8);
-    this.camera = camera;
+    this.camera = camera as OrbitCameraEntity;
     app.root.addChild(camera);
 
     // const bloom = new (pc as any).BloomEffect(app.graphicsDevice);
@@ -127,6 +130,8 @@ export class PlayCanvasViewer {
       camera.script.create("orbitCamera");
       camera.script.create("keyboardInput");
       camera.script.create("mouseInput");
+
+      console.log(camera.script);
       this.focusCameraOnEntity();
     }
 
@@ -210,9 +215,9 @@ export class PlayCanvasViewer {
     if (this.scene) {
       if (this.scene.root) {
         this.scene.root.destroy();
-        this.scene.root = (undefined as any) as pc.Entity;
+        (this.scene.root as pc.Entity | undefined) = undefined;
       }
-      (this.scene as any)?.destroy();
+      this.scene.destroy();
       this.scene = undefined;
     }
   }
@@ -225,11 +230,8 @@ export class PlayCanvasViewer {
       });
 
       if (this.gltf) {
-        if (this.gltf.animComponent) {
-          this.gltf.animComponent.stopClip();
-        }
-        if ((this.camera.script as any).orbitCamera.focusEntity) {
-          (this.camera.script as any).orbitCamera.focusEntity = null;
+        if (this.camera.script.orbitCamera.focusEntity) {
+          this.camera.script.orbitCamera.focusEntity = null;
         }
         this.gltf.destroy();
       }
@@ -249,15 +251,19 @@ export class PlayCanvasViewer {
     this.textures = [];
   }
 
-  public initModel() {
+  private initModel() {
+    debug("Init model");
+
     if (this.gltf || !this.asset) {
-      // model already initialized or missing asset
+      // Model already initialized or missing asset
       return;
     }
+
     // Add the loaded model to the hierarchy
     this.gltf = new pc.Entity("gltf");
     this.gltf.addComponent("model", {
-      asset: this.asset,
+      type: "asset",
+      asset: this.model,
       castShadows: true,
       receiveShadows: true,
       shadowType: pc.SHADOW_VSM32,
@@ -266,168 +272,70 @@ export class PlayCanvasViewer {
     // this.gltf.script?.create("rotate");
     this.app.root.addChild(this.gltf);
 
-    // Now that the model is created, after translateAnimation, we have to hook here
-    if (this.animations) {
-      for (let i = 0; i < this.animations.length; i += 1) {
-        for (let c = 0; c < this.animations[i].animCurves.length; c += 1) {
-          const curve = this.animations[i].animCurves[c];
-          if ((curve.animTargets[0].targetNode as any) === "model") {
-            curve.animTargets[0].targetNode = this.gltf;
-          }
-        }
-      }
-    }
-
     debug("Animations", this.animations);
 
-    // Load any animations
-    if (this.animations && this.animations.length > 0) {
-      // If we don't already have an animation component, create one.
-      // Note that this isn't really a 'true' component like those
-      // found in the engine...
-      if (!this.gltf.animComponent) {
-        this.gltf.animComponent = new AnimationComponent();
+    if (this.animations.length > 0) {
+      this.gltf.addComponent("animation", {
+        assets: this.animations.map(asset => asset.id),
+        speed: 1,
+      });
+      if (this.gltf.animation) {
+        this.gltf.animation.play(this.animations[0].name, 1);
       }
-
-      // Add all animations to the model's animation component
-      for (let i = 0; i < this.animations.length; i += 1) {
-        this.animations[i].transferToRoot(this.gltf);
-        this.gltf.animComponent.addClip(this.animations[i]);
-      }
-      this.gltf.animComponent.curClip = this.animations[0].name;
-      this.pauseAnimationClips();
-      this.playCurrentAnimationClip();
-
-      // select_remove_options(this.anim_select);
-      // for (i = 0; i < animationClips.length; i += 1) {
-      //   select_add_option(this.anim_select, this.animations[i].name);
-      // }
-      // this.anim_info.innerHTML =
-      //   this.animations.length + " animation clips loaded";
     }
 
     this.focusCameraOnEntity();
   }
 
   public focusCameraOnEntity() {
-    if ((this.camera.script as any).orbitCamera) {
+    if (this.camera.script.orbitCamera) {
       debug("Focus on entity", this.gltf);
-      (this.camera.script as any).orbitCamera.frameOnStart = true;
-      (this.camera.script as any).orbitCamera.focusEntity = this.gltf;
+      this.camera.script.orbitCamera.frameOnStart = true;
+      this.camera.script.orbitCamera.focusEntity = this.gltf;
     }
   }
 
-  public pauseAnimationClips() {
-    if (!this.gltf || !this.gltf.animComponent) {
-      return;
-    }
-    this.gltf.animComponent.pauseAll();
-    this.playing = false;
-    // this.anim_pause.value = ">";
-  }
+  private async loadGltfAsset(url: string) {
+    debug("Load glTF asset", url);
 
-  public playCurrentAnimationClip() {
-    if (!this.gltf || !this.gltf.animComponent) {
-      return;
-    }
-    //this.gltf.animComponent.getCurrentClip().resume(); // resume doesn't work yet
-    const clip = this.gltf.animComponent.getCurrentClip();
-    clip.play(); // just play it again, until resume() works
-    // this.anim_slider.max = clip.duration;
-    this.playing = true;
-    // this.anim_pause.value = "||";
-    // this.clip = clip; // quick access for f12 devtools
-    // this.timeline.resize();
-  }
-
-  public resumeCurrentAnimationClip() {
-    if (!this.gltf || !this.gltf.animComponent) {
-      return;
-    }
-    const clip = this.gltf.animComponent.getCurrentClip();
-    clip.resume();
-    // this.anim_slider.max = clip.duration;
-    this.playing = true;
-    // this.anim_pause.value = "||";
-    // this.clip = clip; // quick access for f12 devtools
-    // this.timeline.resize();
-  }
-
-  public pauseAnimationsAndSeekToTime(curTime: number) {
-    if (!this.gltf || !this.gltf.animComponent) {
-      return;
-    }
-
-    // once we seek into the animation, stop the default playing
-    this.pauseAnimationClips();
-    // now set the seeked time for the last played clip
-    const clip = this.gltf.animComponent.getCurrentClip();
-    const session = clip.session;
-    const self = session;
-    session.curTime = curTime;
-    self.showAt(
-      self.curTime,
-      self.fadeDir,
-      self.fadeBegTime,
-      self.fadeEndTime,
-      self.fadeTime,
-    );
-    self.invokeByTime(self.curTime);
-  }
-
-  public switchToClipByName(clipName: string) {
-    if (!this.gltf || !this.gltf.animComponent) {
-      return;
-    }
-
-    // const clip = this.gltf.animComponent.animClipsMap[clipName];
-    this.gltf.animComponent.curClip = clipName;
-    this.pauseAnimationClips();
-    this.playCurrentAnimationClip();
-  }
-
-  public togglePlayPauseAnimation() {
-    if (this.playing) {
-      this.pauseAnimationClips();
-    } else {
-      this.resumeCurrentAnimationClip();
-    }
-  }
-
-  private registerResources(res: Resources) {
-    debug("Register resources");
-    // Wrap the model as an asset and add to the asset registry
-    const asset = new pc.Asset("gltf", "model", {
-      url: "",
+    return new Promise<pc.Asset | undefined>((resolve, reject) => {
+      this.app.assets.loadFromUrl(
+        pc.path.join("../..", url), // Counteract assetPrefix
+        "container",
+        (err, asset) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(asset);
+          }
+        },
+      );
     });
-    asset.resource = res.model;
-    asset.loaded = true;
+  }
 
-    debug("Add model to asset library");
-    this.app.assets.add(asset);
+  private async registerGltfResources(asset: pc.Asset) {
+    debug("Register glTF resources", asset.resource);
+
+    const resource = asset.resource as ContainerResource | undefined;
+    if (!resource) {
+      return;
+    }
 
     this.asset = asset;
-    this.textures = res.textures || [];
-    this.animations = res.animations || [];
-  }
-
-  private async parseGltf(gltf: GlTf, basePath: string) {
-    const parser = new GlTfParser(gltf, this.app.graphicsDevice, {
-      basePath,
-    });
-    const res = await parser.load();
-    this.registerResources(res);
+    this.model = resource.model;
+    this.textures = resource.textures || [];
+    this.animations = resource.animations || [];
   }
 
   public async loadModel(url: string) {
     this.destroyModel();
-    debug("Fetch glTF", url);
-    const basePath = url.substring(0, url.lastIndexOf("/")) + "/";
-    const res = await fetch(url);
-    const gltf = await res.json();
-    debug("Parse glTF");
-    await this.parseGltf(gltf, basePath);
-    debug("Init model");
-    this.initModel();
+
+    const asset = await this.loadGltfAsset(url);
+    if (asset) {
+      await this.registerGltfResources(asset);
+      this.initModel();
+    } else {
+      throw new Error("Asset not found");
+    }
   }
 }

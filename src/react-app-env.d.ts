@@ -7,6 +7,11 @@ declare namespace pc {
     localScale: pc.Vec3;
   }
 
+  interface Scene {
+    destroy: () => void;
+    root: Entity | undefined;
+  }
+
   type Morph = any;
   type MorphTarget = any;
   type MorphInstance = any;
