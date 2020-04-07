@@ -152,6 +152,7 @@ export class PlayCanvasViewer {
   public destroy() {
     try {
       this.destroyModel();
+      this.destroyScene();
       this.canvasResizeObserver.unobserve(this.canvas);
       this.app.destroy();
     } catch (e) {
@@ -162,6 +163,7 @@ export class PlayCanvasViewer {
   public async configure() {
     const app = this.app;
 
+    debug("Configuring app");
     return new Promise<void>((resolve, reject) => {
       const url = "assets/playcanvas/config.json";
 
@@ -182,6 +184,7 @@ export class PlayCanvasViewer {
 
     debug("Loading scene", url);
     return new Promise<void>((resolve, reject) => {
+      // TODO: change to new scene registry API once it's released
       (this.app as any).loadScene(url, (error: string, scene: pc.Scene) => {
         if (error) {
           reject(error);
@@ -207,6 +210,7 @@ export class PlayCanvasViewer {
   }
 
   public destroyModel() {
+    debug("Destroy model", this.gltf);
     try {
       this.textures.forEach(texture => {
         texture.destroy();
@@ -427,7 +431,6 @@ export class PlayCanvasViewer {
   }
 
   public async loadModel(url: string) {
-    debug("Destroy model");
     this.destroyModel();
     debug("Fetch glTF", url);
     const basePath = url.substring(0, url.lastIndexOf("/")) + "/";

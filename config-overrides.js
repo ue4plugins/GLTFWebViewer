@@ -6,7 +6,6 @@ const WriteJsonPlugin = require("write-json-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const gltfFiles = require("./scripts/gltfFiles");
-const sceneFiles = require("./scripts/sceneFiles");
 
 module.exports = {
   jest: config => {
@@ -28,7 +27,6 @@ module.exports = {
       plugins: [
         new webpack.DefinePlugin({
           GLTF_FILES: JSON.stringify(gltfFiles),
-          SCENE_FILES: JSON.stringify(sceneFiles),
           "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
         }),
         new DynamicCdnWebpackPlugin(),

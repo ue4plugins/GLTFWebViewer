@@ -12,7 +12,7 @@ export class ModelStore {
   public model?: GltfFile;
 
   @action.bound
-  public setModel(model: GltfFile) {
+  public setModel(model?: GltfFile) {
     this.model = model;
   }
 

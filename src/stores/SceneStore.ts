@@ -2,18 +2,27 @@ import { observable, action, computed } from "mobx";
 
 export class SceneStore {
   @observable
-  public scenes = SCENE_FILES;
+  public scenes: SceneFile[] = [];
 
   @observable
-  public scene? = this.scenes[0];
+  public scene?: SceneFile;
 
   @computed
-  public get sceneIdx() {
-    return this.scene ? this.scenes.indexOf(this.scene) : -1;
+  public get sceneIndex() {
+    const scene = this.scene;
+    return scene ? this.scenes.findIndex(s => s.url === scene.url) : -1;
   }
 
   @action.bound
-  public setScene(scene: SCENE_FILE) {
+  public setScene(scene?: SceneFile) {
     this.scene = scene;
+  }
+
+  @action.bound
+  public setScenes(scenes: SceneFile[]) {
+    this.scenes = scenes;
+    if (!this.scene) {
+      this.setScene(scenes[0]);
+    }
   }
 }

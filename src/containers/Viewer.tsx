@@ -39,7 +39,7 @@ export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
   const { modelStore, sceneStore } = useStores();
   const { model } = modelStore;
-  const { scene } = sceneStore;
+  const { scene, setScenes } = sceneStore;
   const canvasEl = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<PlayCanvasViewer>();
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
@@ -58,13 +58,14 @@ export const Viewer: React.FC = observer(() => {
     runAsync(async () => {
       await delay(1000);
       await viewer.configure();
+      setScenes((viewer.app as any)._sceneRegistry.list());
       setViewer(viewer);
     });
 
     return () => {
       viewer.destroy();
     };
-  }, [runAsync]);
+  }, [runAsync, setScenes]);
 
   useEffect(() => {
     if (!viewer || !model) {
@@ -88,7 +89,7 @@ export const Viewer: React.FC = observer(() => {
 
     runAsync(async () => {
       await delay(1000);
-      await viewer.loadScene(scene.path);
+      await viewer.loadScene(scene.url);
     });
 
     return () => {

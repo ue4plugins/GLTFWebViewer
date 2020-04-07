@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 
 export const SceneSelector: React.FC = observer(() => {
   const { sceneStore } = useStores();
-  const { sceneIdx, scenes, setScene } = sceneStore;
+  const { sceneIndex, scenes, setScene } = sceneStore;
   const classes = useStyles();
 
   return (
@@ -21,7 +21,7 @@ export const SceneSelector: React.FC = observer(() => {
       <InputLabel id="scene-selector-label">Scene</InputLabel>
       <Select
         labelId="scene-selector-label"
-        value={sceneIdx.toString()}
+        value={sceneIndex.toString()}
         onChange={e => {
           const idx = parseInt(e.target.value as string, 10);
           setScene(scenes[idx]);
@@ -33,7 +33,7 @@ export const SceneSelector: React.FC = observer(() => {
       >
         {scenes.map((scene, i) => (
           <MenuItem key={scene.name} value={i.toString()}>
-            {scene.name[0].toUpperCase() + scene.name.substr(1)}
+            {scene.name}
           </MenuItem>
         ))}
       </Select>
