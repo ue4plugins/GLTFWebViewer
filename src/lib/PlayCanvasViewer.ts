@@ -21,12 +21,12 @@ type OrbitCameraEntity = pc.Entity & {
 export class PlayCanvasViewer {
   private app: pc.Application;
   private camera: OrbitCameraEntity;
-  private gltf?: pc.Entity;
-  private model?: pc.Asset;
-  private asset?: pc.Asset;
   private scene?: pc.Scene;
-  private textures: pc.Asset[] = [];
-  private animations: pc.Asset[] = [];
+  private entity?: pc.Entity;
+  private gltfAsset?: pc.Asset;
+  private modelAsset?: pc.Asset;
+  private textureAssets: pc.Asset[] = [];
+  private animationAssets: pc.Asset[] = [];
   private debouncedCanvasResize = debounce(() => this.resizeCanvas(), 10);
   private canvasResizeObserver = new ResizeObserver(this.debouncedCanvasResize);
 
@@ -170,66 +170,66 @@ export class PlayCanvasViewer {
   }
 
   public destroyModel() {
-    debug("Destroy model", this.gltf);
+    debug("Destroy model", this.entity);
 
-    this.textures.forEach(asset => asset.unload());
-    this.textures = [];
+    this.textureAssets.forEach(asset => asset.unload());
+    this.textureAssets = [];
 
-    this.animations.forEach(asset => asset.unload());
-    this.animations = [];
+    this.animationAssets.forEach(asset => asset.unload());
+    this.animationAssets = [];
 
-    if (this.model) {
-      this.model.unload();
-      this.model = undefined;
+    if (this.modelAsset) {
+      this.modelAsset.unload();
+      this.modelAsset = undefined;
     }
 
-    if (this.gltf) {
-      this.gltf.destroy();
-      this.gltf = undefined;
+    if (this.entity) {
+      this.entity.destroy();
+      this.entity = undefined;
     }
 
-    if (this.asset) {
+    if (this.gltfAsset) {
       // If not done in this order,
       // the entity will be retained by the JS engine.
-      this.app.assets.remove(this.asset);
-      this.asset.unload();
-      this.asset = undefined;
+      this.app.assets.remove(this.gltfAsset);
+      this.gltfAsset.unload();
+      this.gltfAsset = undefined;
     }
   }
 
   private initModel() {
     debug("Init model");
 
-    if (this.gltf) {
+    if (this.entity) {
       // Model already initialized
       return;
     }
 
-    if (!this.asset || !this.model) {
+    if (!this.gltfAsset || !this.modelAsset) {
       throw new Error("initModel called before registering resources");
     }
 
     // Add the loaded model to the hierarchy
-    this.gltf = new pc.Entity("gltf");
-    this.gltf.addComponent("model", {
+    this.entity = new pc.Entity("gltf");
+    this.entity.addComponent("model", {
       type: "asset",
-      asset: this.model,
+      asset: this.modelAsset,
       castShadows: true,
       receiveShadows: true,
       shadowType: pc.SHADOW_VSM32,
     });
-    this.gltf.addComponent("script");
-    this.app.root.addChild(this.gltf);
+    this.entity.addComponent("script");
+    this.app.root.addChild(this.entity);
 
-    debug("Init animations", this.animations);
+    debug("Init animations", this.animationAssets);
 
-    if (this.animations.length > 0) {
-      this.gltf.addComponent("animation", {
-        assets: this.animations.map(asset => asset.id),
+    if (this.animationAssets.length > 0) {
+      this.entity.addComponent("animation", {
+        assets: this.animationAssets.map(asset => asset.id),
         speed: 1,
       });
-      if (this.gltf.animation) {
-        this.gltf.animation.play(this.animations[0].name, 1);
+      if (this.entity.animation) {
+        this.entity.animation.play(this.animationAssets[0].name, 1);
       }
     }
 
@@ -237,10 +237,10 @@ export class PlayCanvasViewer {
   }
 
   public focusCameraOnEntity() {
-    debug("Focus on model", this.gltf);
+    debug("Focus on model", this.entity);
 
     this.camera.script.orbitCamera.frameOnStart = true;
-    this.camera.script.orbitCamera.focusEntity = this.gltf;
+    this.camera.script.orbitCamera.focusEntity = this.entity;
   }
 
   private async loadGltfAsset(url: string) {
@@ -269,10 +269,10 @@ export class PlayCanvasViewer {
       return;
     }
 
-    this.asset = asset;
-    this.model = resource.model;
-    this.textures = resource.textures || [];
-    this.animations = resource.animations || [];
+    this.gltfAsset = asset;
+    this.modelAsset = resource.model;
+    this.textureAssets = resource.textures || [];
+    this.animationAssets = resource.animations || [];
   }
 
   public async loadModel(url: string) {
