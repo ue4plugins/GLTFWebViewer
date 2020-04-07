@@ -49,7 +49,7 @@ export class PlayCanvasViewer {
   }
 
   public get isReady() {
-    return !!(this.app as any)._sceneRegistry;
+    return !!this.app.graphicsDevice;
   }
 
   public get scenes(): SceneFile[] {
