@@ -36,6 +36,7 @@ export class PlayCanvasViewer {
       throw new Error("Missing canvas");
     }
     this.resizeCanvas = this.resizeCanvas.bind(this);
+    // TODO: remove side effects of createApp
     this.app = this.createApp();
   }
 
@@ -62,11 +63,6 @@ export class PlayCanvasViewer {
       existingApp.destroy();
     }
 
-    // if (!this.canvas) {
-    //   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    //   this.canvas = document.querySelector("canvas")!;
-    // }
-
     debug("Creating PlayCanvas for target", this.canvas);
     const app = new pc.Application(this.canvas, {
       assetPrefix: "assets/playcanvas/",
@@ -81,15 +77,15 @@ export class PlayCanvasViewer {
       },
     });
 
+    // TODO: refactor and make scripts strongly typed
     createCameraScripts(app);
 
-    // Rotator script
+    // TODO: remove?
     const Rotate = pc.createScript("rotate");
     Rotate.prototype.update = function(deltaTime: number) {
       this.entity.rotate(0, deltaTime * 20, 0);
     };
 
-    // Fill the available space at full resolution
     app.setCanvasFillMode(pc.FILLMODE_NONE);
     app.setCanvasResolution(pc.RESOLUTION_AUTO);
     app.resizeCanvas(
@@ -99,55 +95,21 @@ export class PlayCanvasViewer {
 
     this.canvasResizeObserver.observe(this.canvas);
 
-    // Create camera entity
     debug("Creating camera");
     const camera = new pc.Entity("camera");
     camera.addComponent("camera", {
       fov: 45.8366,
       clearColor: new pc.Color(0, 0, 0),
     });
-    camera.addComponent("script");
     camera.setPosition(0, 0, 8);
-    this.camera = camera as OrbitCameraEntity;
-    app.root.addChild(camera);
-
-    // const bloom = new (pc as any).BloomEffect(app.graphicsDevice);
-    // bloom.bloomThreshold = 0.1;
-
-    // const bokeh = new (pc as any).BokehEffect(app.graphicsDevice);
-    // bokeh.focus = 0.4;
-
-    // if (camera.camera) {
-    //   camera.camera.postEffects.addEffect(bloom);
-    // }
-
+    camera.addComponent("script");
     if (camera.script) {
       camera.script.create("orbitCamera");
       camera.script.create("keyboardInput");
       camera.script.create("mouseInput");
-      this.focusCameraOnEntity();
     }
-
-    // Create directional light entity
-    // debug("Creating light");
-    // const light = new pc.Entity("light");
-    // light.addComponent("light", {
-    //   type: "spot",
-    //   color: new pc.Color(1, 1, 1),
-    //   outerConeAngle: 60,
-    //   innerConeAngle: 40,
-    //   range: 100,
-    //   intensity: 1,
-    //   castShadows: true,
-    //   shadowBias: 0.005,
-    //   normalOffsetBias: 0.01,
-    //   shadowResolution: 2048,
-    //   shadowType: pc.SHADOW_VSM32,
-    // });
-    // light.setLocalPosition(4, 5, 10);
-    // light.setEulerAngles(45, 0, 0);
-    // light.enabled = true;
-    // app.root.addChild(light);
+    app.root.addChild(camera);
+    this.camera = camera as OrbitCameraEntity;
 
     debug("Starting app");
     app.start();
@@ -174,9 +136,7 @@ export class PlayCanvasViewer {
           reject(error);
           return;
         }
-        app.preload(() => {
-          resolve();
-        });
+        app.preload(() => resolve());
       });
     });
   }
@@ -192,15 +152,15 @@ export class PlayCanvasViewer {
           reject(error);
           return;
         }
-
         this.scene = scene;
         resolve();
       });
     });
   }
 
-  public async destroyScene() {
+  public destroyScene() {
     debug("Destroy scene", this.scene);
+
     if (this.scene) {
       if (this.scene.root) {
         this.scene.root.destroy();
