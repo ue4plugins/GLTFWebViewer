@@ -33,7 +33,6 @@ export class PlayCanvasViewer {
     this.resizeCanvas = this.resizeCanvas.bind(this);
 
     this.app = this.createApp();
-    this.registerScripts();
     this.camera = this.createCamera(this.app);
 
     this.canvasResizeObserver.observe(this.canvas);
@@ -89,27 +88,19 @@ export class PlayCanvasViewer {
     return app;
   }
 
-  private registerScripts() {
-    pc.registerScript(OrbitCamera);
-  }
-
   private createCamera(app: pc.Application) {
     debug("Creating camera");
+
+    pc.registerScript(OrbitCamera);
 
     const camera = new pc.Entity("camera") as CameraEntity;
     camera.addComponent("camera", {
       fov: 45.8366,
       clearColor: new pc.Color(0, 0, 0),
     });
-
-    camera.setPosition(0, 0, 8);
-
     camera.addComponent("script");
-    if (camera.script) {
-      camera.script.create(OrbitCamera.name);
-    }
-
-    camera.script.OrbitCamera.distanceMax = 12;
+    camera.script.create(OrbitCamera.name);
+    camera.script.OrbitCamera.inertiaFactor = 0.07;
 
     app.root.addChild(camera);
 
@@ -232,8 +223,9 @@ export class PlayCanvasViewer {
   public focusCameraOnEntity() {
     debug("Focus on model", this.entity);
 
-    this.camera.script.OrbitCamera.frameOnStart = true;
-    this.camera.script.OrbitCamera.focusEntity = this.entity;
+    if (this.entity) {
+      this.camera.script.OrbitCamera.focus(this.entity);
+    }
   }
 
   private async loadGltfAsset(url: string) {

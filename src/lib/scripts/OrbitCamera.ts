@@ -17,51 +17,92 @@ type MouseMoveEvent = {
 };
 
 export class OrbitCamera extends pc.ScriptType {
-  public distanceMax = 0;
-  public distanceMin = 0;
-  public pitchAngleMax = 90;
-  public pitchAngleMin = -90;
+  /**
+   * Inertia Factor. Higher value means that the camera will continue moving after the user has stopped dragging. 0 is fully responsive.
+   */
   public inertiaFactor = 0;
-  public focusEntity?: pc.Entity;
-  public frameOnStart = false;
+  /**
+   * How fast the camera moves around the orbit. Higher is faster.
+   */
   public orbitSensitivity = 0.3;
+  /**
+   * How fast the camera moves in and out. Higher is faster.
+   */
   public distanceSensitivity = 0.5;
 
-  private _modelsAabb = new pc.BoundingBox();
-
-  private _pivotPoint = new pc.Vec3();
-  private _targetDistance = 0;
-  private _targetPitch = 0;
-  private _targetYaw = 0;
-
+  private _cameraComponent!: pc.CameraComponent;
+  private _distanceMin = 0;
+  private _distanceMax = 0;
+  private _pitchAngleMax = 90;
+  private _pitchAngleMin = -90;
   private _distance = 0;
   private _pitch = 0;
   private _yaw = 0;
-
-  private lookButtonDown = false;
-  private panButtonDown = false;
-  private lastPoint = new pc.Vec2();
-  private fromWorldPoint = new pc.Vec3();
-  private toWorldPoint = new pc.Vec3();
-  private worldDiff = new pc.Vec3();
-  private animFrame = 0;
-
-  private distanceBetween = new pc.Vec3();
-  private quatWithoutYaw = new pc.Quat();
-  private yawOffset = new pc.Quat();
+  private _targetDistance = 0;
+  private _targetPitch = 0;
+  private _targetYaw = 0;
+  private _pivotPoint = new pc.Vec3();
+  private _focusEntity?: pc.Entity;
+  private _lookButtonDown = false;
+  private _panButtonDown = false;
+  private _lastMousePos = new pc.Vec2();
+  private _zoomAnimFrame = 0;
 
   public constructor(args: { app: pc.Application; entity: pc.Entity }) {
     super(args);
   }
 
   /**
+   * Max distance. Setting this at 0 will give an infinite distance limit.
+   */
+  public get distanceMax() {
+    return this._distanceMax;
+  }
+  public set distanceMax(value: number) {
+    this._distanceMax = value;
+    this._targetDistance = this._clampDistance(this._distance);
+  }
+
+  /**
+   * Min distance.
+   */
+  public get distanceMin() {
+    return this._distanceMin;
+  }
+  public set distanceMin(value: number) {
+    this._distanceMin = value;
+    this._targetDistance = this._clampDistance(this._distance);
+  }
+
+  /**
+   * Max pitch angle (degrees).
+   */
+  public get pitchAngleMax() {
+    return this._pitchAngleMax;
+  }
+  public set pitchAngleMax(value: number) {
+    this._pitchAngleMax = value;
+    this._targetPitch = this._clampPitchAngle(this._pitch);
+  }
+
+  /**
+   * Min pitch angle (degrees).
+   */
+  public get pitchAngleMin() {
+    return this._pitchAngleMin;
+  }
+  public set pitchAngleMin(value: number) {
+    this._pitchAngleMin = value;
+    this._targetPitch = this._clampPitchAngle(this._pitch);
+  }
+
+  /**
    * Property to get and set the distance between the pivot point and camera.
-   * Clamped between this.distanceMin and this.distanceMax
+   * Clamped between this.distanceMin and this.distanceMax.
    */
   public get distance() {
     return this._targetDistance;
   }
-
   public set distance(value: number) {
     this._targetDistance = this._clampDistance(value);
   }
@@ -74,7 +115,6 @@ export class OrbitCamera extends pc.ScriptType {
   public get pitch() {
     return this._targetPitch;
   }
-
   public set pitch(value: number) {
     this._targetPitch = this._clampPitchAngle(value);
   }
@@ -85,7 +125,6 @@ export class OrbitCamera extends pc.ScriptType {
   public get yaw() {
     return this._targetYaw;
   }
-
   public set yaw(value: number) {
     // Ensure that the yaw takes the shortest route by making sure that
     // the difference between the targetYaw and the actual is 180 degrees
@@ -107,80 +146,38 @@ export class OrbitCamera extends pc.ScriptType {
   public get pivotPoint() {
     return this._pivotPoint;
   }
-
   public set pivotPoint(value: pc.Vec3) {
     this._pivotPoint.copy(value);
   }
 
   public initialize() {
-    // Find all the models in the scene that are under the focused entity
-    this._buildAabb(this.focusEntity || this.app.root, 0);
+    const { camera } = this.entity;
+    if (!camera) {
+      throw new Error("Entity is missing camera component");
+    }
 
-    this.entity.lookAt(this._modelsAabb.center, 0, 0);
-
-    this.pivotPoint = this._modelsAabb.center;
+    this._cameraComponent = camera;
 
     // Calculate the camera euler angle rotation around x and y axes
     // This allows us to place the camera at a particular rotation to begin with in the scene
     const cameraQuat = this.entity.getRotation();
 
     // Preset the camera
-    this._yaw = this._calcYaw(cameraQuat);
-    this._pitch = this._clampPitchAngle(this._calcPitch(cameraQuat, this._yaw));
+    this._targetYaw = this._yaw = this._calcYaw(cameraQuat);
+    this._targetPitch = this._pitch = this._clampPitchAngle(
+      this._calcPitch(cameraQuat, this._yaw),
+    );
     this.entity.setLocalEulerAngles(this._pitch, this._yaw, 0);
 
-    this._distance = 0;
+    const distanceBetween = new pc.Vec3();
+    distanceBetween.sub2(this.entity.getPosition(), this._pivotPoint);
+    this._targetDistance = this._distance = this._clampDistance(
+      distanceBetween.length(),
+    );
 
-    this._targetYaw = this._yaw;
-    this._targetPitch = this._pitch;
-
-    // If we have ticked focus on start, then attempt to position the camera where it frames
-    // the focused entity and move the pivot point to entity's position otherwise, set the distance
-    // to be between the camera position in the scene and the pivot point
-    if (this.frameOnStart) {
-      this.focus(this.focusEntity || this.app.root);
-    } else {
-      const distanceBetween = new pc.Vec3();
-      distanceBetween.sub2(this.entity.getPosition(), this._pivotPoint);
-      this._distance = this._clampDistance(distanceBetween.length());
-    }
-
-    this._targetDistance = this._distance;
-
-    // // Reapply the clamps if they are changed in the editor
-    // this.on("attr:distanceMin", (_value: any, _prev: any) => {
-    //   this._targetDistance = this._clampDistance(this._distance);
-    // });
-
-    // this.on("attr:distanceMax", (_value: any, _prev: any) => {
-    //   this._targetDistance = this._clampDistance(this._distance);
-    // });
-
-    // this.on("attr:pitchAngleMin", (_value: any, _prev: any) => {
-    //   this._targetPitch = this._clampPitchAngle(this._pitch);
-    // });
-
-    // this.on("attr:pitchAngleMax", (_value: any, _prev: any) => {
-    //   this._targetPitch = this._clampPitchAngle(this._pitch);
-    // });
-
-    // // Focus on the entity if we change the focus entity
-    // this.on("attr:focusEntity", (value: any, _prev: any) => {
-    //   if (this.frameOnStart) {
-    //     this.focus(value || this.app.root);
-    //   } else {
-    //     this.resetAndLookAtEntity(
-    //       this.entity.getPosition(),
-    //       value || this.app.root,
-    //     );
-    //   }
-    // });
-
-    // this.on("attr:frameOnStart", (value: any, _prev: any) => {
-    //   if (value) {
-    //     this.focus(this.focusEntity || this.app.root);
-    //   }
-    // });
+    // Disabling the context menu stops the browser displaying a menu when
+    // you right-click the page
+    this.app.mouse.disableContextMenu();
 
     this.app.keyboard.on(pc.EVENT_KEYDOWN, this._onKeyDown, this);
     this.app.mouse.on(pc.EVENT_MOUSEDOWN, this._onMouseDown, this);
@@ -214,30 +211,28 @@ export class OrbitCamera extends pc.ScriptType {
    * @param focusEntity
    */
   public focus(focusEntity: pc.Entity) {
-    // Calculate an bounding box that encompasses all the models to frame in the camera view
-    this._buildAabb(focusEntity, 0);
+    this._focusEntity = focusEntity;
 
-    const halfExtents = this._modelsAabb.halfExtents;
+    // Calculate an bounding box that encompasses all the models to frame in the camera view
+    const aabb = this._buildAabb(focusEntity);
+    const halfExtents = aabb.halfExtents;
 
     let distance = Math.max(
       halfExtents.x,
       Math.max(halfExtents.y, halfExtents.z),
     );
     distance =
-      distance /
-      Math.tan(0.5 * (this.entity.camera?.fov || 45) * pc.math.DEG_TO_RAD);
+      distance / Math.tan(0.5 * this._cameraComponent.fov * pc.math.DEG_TO_RAD);
     distance = distance * 2;
 
     this.distance = distance;
 
-    if (this.entity.camera) {
-      this.entity.camera.nearClip = distance * 0.002;
-      this.entity.camera.farClip = distance * 5;
-    }
+    this._cameraComponent.nearClip = distance * 0.002;
+    this._cameraComponent.farClip = distance * 5;
 
     this._removeInertia();
 
-    this._pivotPoint.copy(this._modelsAabb.center);
+    this._pivotPoint.copy(aabb.center);
   }
 
   /**
@@ -252,7 +247,7 @@ export class OrbitCamera extends pc.ScriptType {
 
     this.entity.lookAt(lookAtPoint, 0, 0);
 
-    const distance = this.distanceBetween;
+    const distance = new pc.Vec3();
     distance.sub2(lookAtPoint, resetPoint);
     this.distance = distance.length();
 
@@ -273,8 +268,8 @@ export class OrbitCamera extends pc.ScriptType {
    * @param entity
    */
   public resetAndLookAtEntity(resetPoint: pc.Vec3, entity: pc.Entity) {
-    this._buildAabb(entity, 0);
-    this.resetAndLookAtPoint(resetPoint, this._modelsAabb.center);
+    const modelsAabb = this._buildAabb(entity);
+    this.resetAndLookAtPoint(resetPoint, modelsAabb.center);
   }
 
   /**
@@ -309,30 +304,35 @@ export class OrbitCamera extends pc.ScriptType {
     this._distance = this._targetDistance;
   }
 
-  private _buildAabb(entity: pc.Entity, modelsAdded: number) {
-    let i = 0;
+  private _buildAabb(entity: pc.Entity) {
+    const modelsAabb = new pc.BoundingBox();
+    let modelsAdded = 0;
 
     if (entity.model) {
       const mi = entity.model.meshInstances;
-      for (i = 0; i < mi.length; i += 1) {
+      for (let i = 0; i < mi.length; i += 1) {
         if (modelsAdded === 0) {
-          this._modelsAabb.copy(mi[i].aabb);
+          modelsAabb.copy(mi[i].aabb);
         } else {
-          this._modelsAabb.add(mi[i].aabb);
+          modelsAabb.add(mi[i].aabb);
         }
 
         modelsAdded += 1;
       }
     }
 
-    for (i = 0; i < entity.children.length; i += 1) {
-      modelsAdded += this._buildAabb(
-        entity.children[i] as pc.Entity,
-        modelsAdded,
-      );
+    for (let i = 0; i < entity.children.length; i += 1) {
+      const childAabb = this._buildAabb(entity.children[i] as pc.Entity);
+      if (modelsAdded === 0) {
+        modelsAabb.copy(childAabb);
+      } else {
+        modelsAabb.add(childAabb);
+      }
+
+      modelsAdded += 1;
     }
 
-    return modelsAdded;
+    return modelsAabb;
   }
 
   private _calcYaw(quat: pc.Quat) {
@@ -359,8 +359,8 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _calcPitch(quat: pc.Quat, yaw: number) {
-    const quatWithoutYaw = this.quatWithoutYaw;
-    const yawOffset = this.yawOffset;
+    const quatWithoutYaw = new pc.Quat();
+    const yawOffset = new pc.Quat();
 
     yawOffset.setFromEulerAngles(0, -yaw, 0);
     quatWithoutYaw.mul2(yawOffset, quat);
@@ -375,20 +375,51 @@ export class OrbitCamera extends pc.ScriptType {
     );
   }
 
+  public _orbit(event: MouseMoveEvent) {
+    this.pitch -= event.dy * this.orbitSensitivity;
+    this.yaw -= event.dx * this.orbitSensitivity;
+  }
+
+  public _pan(event: MouseMoveEvent) {
+    const fromWorldPoint = new pc.Vec3();
+    const toWorldPoint = new pc.Vec3();
+    const worldDiff = new pc.Vec3();
+
+    // For panning to work at any zoom level, we use screen point to world projection
+    // to work out how far we need to pan the pivotEntity in world space
+    const distance = this.distance;
+
+    this._cameraComponent.screenToWorld(
+      event.x,
+      event.y,
+      distance,
+      fromWorldPoint,
+    );
+    this._cameraComponent.screenToWorld(
+      this._lastMousePos.x,
+      this._lastMousePos.y,
+      distance,
+      toWorldPoint,
+    );
+
+    worldDiff.sub2(toWorldPoint, fromWorldPoint);
+
+    this.pivotPoint.add(worldDiff);
+  }
+
   private _onKeyDown(event: KeyDownEvent) {
     if (event.event.prevent) {
       return;
     }
-    if (event.key === pc.KEY_SPACE) {
-      // TODO
-      this.reset(20, 20, 20);
-      this.pivotPoint = new pc.Vec3();
+    if (event.key === pc.KEY_SPACE && this._focusEntity) {
+      this.reset(0, 0, 0);
+      this.focus(this._focusEntity);
     }
   }
 
   private _onMouseOut() {
-    this.lookButtonDown = false;
-    this.panButtonDown = false;
+    this._lookButtonDown = false;
+    this._panButtonDown = false;
   }
 
   private _onMouseDown(event: MouseDownEvent) {
@@ -397,12 +428,12 @@ export class OrbitCamera extends pc.ScriptType {
     }
     switch (event.button) {
       case pc.MOUSEBUTTON_LEFT:
-        this.lookButtonDown = true;
+        this._lookButtonDown = true;
         break;
 
       case pc.MOUSEBUTTON_RIGHT:
       case pc.MOUSEBUTTON_MIDDLE:
-        this.panButtonDown = true;
+        this._panButtonDown = true;
         event.event.preventDefault();
         break;
     }
@@ -411,54 +442,24 @@ export class OrbitCamera extends pc.ScriptType {
   private _onMouseUp(event: MouseUpEvent) {
     switch (event.button) {
       case pc.MOUSEBUTTON_LEFT:
-        this.lookButtonDown = false;
+        this._lookButtonDown = false;
         break;
 
       case pc.MOUSEBUTTON_MIDDLE:
       case pc.MOUSEBUTTON_RIGHT:
-        this.panButtonDown = false;
+        this._panButtonDown = false;
         break;
     }
   }
 
   private _onMouseMove(event: MouseMoveEvent) {
-    if (this.lookButtonDown) {
-      this.orbit(event);
-    } else if (this.panButtonDown) {
-      this.pan(event);
+    if (this._lookButtonDown) {
+      this._orbit(event);
+    } else if (this._panButtonDown) {
+      this._pan(event);
     }
 
-    this.lastPoint.set(event.x, event.y);
-  }
-
-  public orbit(event: MouseMoveEvent) {
-    this.pitch -= event.dy * this.orbitSensitivity;
-    this.yaw -= event.dx * this.orbitSensitivity;
-  }
-
-  public pan(event: MouseMoveEvent) {
-    const fromWorldPoint = this.fromWorldPoint;
-    const toWorldPoint = this.toWorldPoint;
-    const worldDiff = this.worldDiff;
-
-    // For panning to work at any zoom level, we use screen point to world projection
-    // to work out how far we need to pan the pivotEntity in world space
-    const camera = this.entity.camera;
-    const distance = this.distance;
-
-    if (camera) {
-      camera.screenToWorld(event.x, event.y, distance, fromWorldPoint);
-      camera.screenToWorld(
-        this.lastPoint.x,
-        this.lastPoint.y,
-        distance,
-        toWorldPoint,
-      );
-    }
-
-    worldDiff.sub2(toWorldPoint, fromWorldPoint);
-
-    this.pivotPoint.add(worldDiff);
+    this._lastMousePos.set(event.x, event.y);
   }
 
   private _onMouseWheel(event: MouseWheelEvent) {
@@ -466,9 +467,9 @@ export class OrbitCamera extends pc.ScriptType {
       return;
     }
 
-    if (this.animFrame) {
-      cancelAnimationFrame(this.animFrame);
-      this.animFrame = 0;
+    if (this._zoomAnimFrame) {
+      cancelAnimationFrame(this._zoomAnimFrame);
+      this._zoomAnimFrame = 0;
     }
 
     const curValue = this.distance;
@@ -491,9 +492,9 @@ export class OrbitCamera extends pc.ScriptType {
       if (elapsed >= duration) {
         return;
       }
-      this.animFrame = requestAnimationFrame(smoothZoom);
+      this._zoomAnimFrame = requestAnimationFrame(smoothZoom);
     };
-    this.animFrame = requestAnimationFrame(smoothZoom);
+    this._zoomAnimFrame = requestAnimationFrame(smoothZoom);
 
     event.event.preventDefault();
   }
