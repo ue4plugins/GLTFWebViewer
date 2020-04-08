@@ -27,7 +27,7 @@ export const createCameraScripts = (_app: pc.Application) => {
     }
   };
 
-  // update code called every frame
+  // update code called every frame.
   KeyboardInput.prototype.update = function(_dt: any) {
     // Do nothing
   };
