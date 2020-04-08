@@ -5,18 +5,21 @@ cache:
   paths:
     - node_modules/
 
-install_dependencies:
-  stage: install_dependencies
-  tags:
-    - docker-executor
-  script:
-    - npm ci
+variables:
+  CI: true
 
 stages:
   - install_dependencies
   - test
   - build
   # - release
+
+install_dependencies:
+  stage: install_dependencies
+  tags:
+    - docker-executor
+  script:
+    - npm ci
 
 lint:
   tags:
