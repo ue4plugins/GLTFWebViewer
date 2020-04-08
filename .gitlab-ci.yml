@@ -3,27 +3,24 @@ image: node:lts
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - .npm/
+    - node_modules/
 
 variables:
   CI: "true"
 
 stages:
-  # - install_dependencies
+  - install_dependencies
   - lint
   - test
   - build
   # - release
 
-before_script:
-  - npm ci --cache .npm --prefer-offline
-
-# install_dependencies:
-#   stage: install_dependencies
-#   tags:
-#     - docker-executor
-#   script:
-#     - npm ci
+install_dependencies:
+  stage: install_dependencies
+  tags:
+    - docker-executor
+  script:
+    - npm install --unsafe-perm
 
 lint:
   tags:
