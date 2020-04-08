@@ -25,9 +25,6 @@ install_dependencies:
     policy: pull-push
   script:
     - npm ci
-  only:
-    changes:
-      - package-lock.json
 
 lint:
   tags:
