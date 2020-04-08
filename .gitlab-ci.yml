@@ -6,7 +6,7 @@ cache:
     - node_modules/
 
 variables:
-  CI: true
+  CI: "true"
 
 stages:
   - install_dependencies
