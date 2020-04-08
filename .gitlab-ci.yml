@@ -44,12 +44,12 @@ build:
   tags:
     - docker-executor
   stage: build
-  artifacts:
-    paths:
-      - ./build
-    expire_in: 1 day
   script:
     - npm run build
+  # artifacts:
+  #   paths:
+  #     - ./build
+  #   expire_in: 1 day
 
 .release:
   tags:
