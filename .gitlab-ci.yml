@@ -20,7 +20,7 @@ install_dependencies:
   tags:
     - docker-executor
   script:
-    - npm install --unsafe-perm
+    - npm ci
 
 lint:
   tags:
