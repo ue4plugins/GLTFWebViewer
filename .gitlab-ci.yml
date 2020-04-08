@@ -1,9 +1,10 @@
 image: node:lts
 
-cache:
+cache: &default_cache
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
+  policy: pull
 
 variables:
   CI: "true"
@@ -16,11 +17,17 @@ stages:
   # - release
 
 install_dependencies:
-  stage: install_dependencies
   tags:
     - docker-executor
+  stage: install_dependencies
+  cache:
+    <<: *default_cache
+    policy: pull-push
   script:
     - npm ci
+  only:
+    changes:
+      - package-lock.json
 
 lint:
   tags:
