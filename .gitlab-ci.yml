@@ -10,7 +10,7 @@ install_dependencies:
   tags:
     - docker-executor
   script:
-    - npm install
+    - npm ci
 
 stages:
   - install_dependencies
