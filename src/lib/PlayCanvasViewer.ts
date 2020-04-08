@@ -2,7 +2,7 @@ import pc from "playcanvas";
 import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
-import { createCameraScripts } from "./createCameraScripts";
+import { OrbitCamera } from "./scripts";
 
 const debug = Debug("playCanvasViewer");
 
@@ -12,15 +12,15 @@ type ContainerResource = {
   animations: pc.Asset[];
 };
 
-type OrbitCameraEntity = pc.Entity & {
+type CameraEntity = pc.Entity & {
   script: pc.ScriptComponent & {
-    orbitCamera: any;
+    OrbitCamera: OrbitCamera;
   };
 };
 
 export class PlayCanvasViewer {
   private app: pc.Application;
-  private camera: OrbitCameraEntity;
+  private camera: CameraEntity;
   private scene?: pc.Scene;
   private entity?: pc.Entity;
   private gltfAsset?: pc.Asset;
@@ -33,6 +33,7 @@ export class PlayCanvasViewer {
     this.resizeCanvas = this.resizeCanvas.bind(this);
 
     this.app = this.createApp();
+    this.registerScripts();
     this.camera = this.createCamera(this.app);
 
     this.canvasResizeObserver.observe(this.canvas);
@@ -88,13 +89,14 @@ export class PlayCanvasViewer {
     return app;
   }
 
+  private registerScripts() {
+    pc.registerScript(OrbitCamera);
+  }
+
   private createCamera(app: pc.Application) {
     debug("Creating camera");
 
-    // TODO: refactor and make scripts strongly typed
-    createCameraScripts(app);
-
-    const camera = new pc.Entity("camera") as OrbitCameraEntity;
+    const camera = new pc.Entity("camera") as CameraEntity;
     camera.addComponent("camera", {
       fov: 45.8366,
       clearColor: new pc.Color(0, 0, 0),
@@ -104,10 +106,10 @@ export class PlayCanvasViewer {
 
     camera.addComponent("script");
     if (camera.script) {
-      camera.script.create("orbitCamera");
-      camera.script.create("keyboardInput");
-      camera.script.create("mouseInput");
+      camera.script.create(OrbitCamera.name);
     }
+
+    camera.script.OrbitCamera.distanceMax = 12;
 
     app.root.addChild(camera);
 
@@ -230,8 +232,8 @@ export class PlayCanvasViewer {
   public focusCameraOnEntity() {
     debug("Focus on model", this.entity);
 
-    this.camera.script.orbitCamera.frameOnStart = true;
-    this.camera.script.orbitCamera.focusEntity = this.entity;
+    this.camera.script.OrbitCamera.frameOnStart = true;
+    this.camera.script.OrbitCamera.focusEntity = this.entity;
   }
 
   private async loadGltfAsset(url: string) {
