@@ -46,6 +46,7 @@ export const SearchField: React.FC<Props> = ({ term, onChange }) => {
           const { value } = e.target;
           setValue(value);
           debouncedOnChange(value);
+          e.stopPropagation();
         }}
       />
       <IconButton
