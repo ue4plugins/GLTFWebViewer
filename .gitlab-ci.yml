@@ -53,11 +53,12 @@ build:
     expire_in: 1 day
   script:
     - npm run build
-# release:
-#   tags:
-#     - docker-executor
-#   stage: release
-#   script:
-#     - npx semantic-release --branch master
-#   only:
-#     - master
+
+.release:
+  tags:
+    - docker-executor
+  stage: release
+  script:
+    - npx semantic-release --branch master
+  only:
+    - master
