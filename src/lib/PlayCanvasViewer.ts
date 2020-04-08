@@ -257,7 +257,7 @@ export class PlayCanvasViewer {
 
     const resource = asset.resource as ContainerResource | undefined;
     if (!resource) {
-      return;
+      throw new Error("Asset is empty");
     }
 
     this.gltfAsset = asset;
