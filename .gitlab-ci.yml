@@ -10,6 +10,7 @@ variables:
 
 stages:
   - install_dependencies
+  - lint
   - test
   - build
   # - release
@@ -21,12 +22,12 @@ install_dependencies:
   script:
     - npm ci
 
-# lint:
-#   tags:
-#     - docker-executor
-#   stage: lint
-#   script:
-#     - npm run lint
+lint:
+  tags:
+    - docker-executor
+  stage: lint
+  script:
+    - npm run lint
 
 test:
   tags:
