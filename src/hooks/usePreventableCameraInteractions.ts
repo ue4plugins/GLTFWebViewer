@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
-import { PreventableEvent } from "../lib/PreventableEvent";
+import { PreventableEvent } from "../playcanvas";
 
 export const usePreventableCameraInteractions = (
   initialPrevent = false,

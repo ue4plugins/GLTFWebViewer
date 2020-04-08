@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import { GltfFile } from "../lib/GltfFile";
+import { GltfFile } from "../playcanvas";
 
 const urlParams = new URLSearchParams(window.location.search);
 const defaultModel = urlParams.get("model");

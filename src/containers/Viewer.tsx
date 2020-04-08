@@ -9,7 +9,7 @@ import {
   CardContent,
   Typography,
 } from "@material-ui/core";
-import { PlayCanvasViewer } from "../lib/PlayCanvasViewer";
+import { PlayCanvasViewer } from "../playcanvas";
 import { useStores } from "../stores";
 import {
   useAsyncWithLoadingAndErrorHandling,

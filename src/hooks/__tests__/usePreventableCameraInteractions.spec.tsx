@@ -3,7 +3,7 @@ import React from "react";
 import { renderHook, act } from "@testing-library/react-hooks";
 import { fireEvent, render } from "@testing-library/react";
 import { usePreventableCameraInteractions } from "../usePreventableCameraInteractions";
-import { PreventableEvent } from "../../lib/PreventableEvent";
+import { PreventableEvent } from "../../playcanvas";
 
 describe("usePreventableCameraInteractions", () => {
   const keyDownMockEventHandler = jest.fn((_: Event) => false);

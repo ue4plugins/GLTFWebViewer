@@ -11,7 +11,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores";
-import { GltfFile } from "../lib/GltfFile";
+import { GltfFile } from "../playcanvas";
 import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
 import { SearchField } from "./SearchField";
 
