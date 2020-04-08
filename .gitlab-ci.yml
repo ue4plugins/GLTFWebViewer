@@ -24,7 +24,7 @@ install_dependencies:
 lint:
   tags:
     - docker-executor
-  stage: test
+  stage: lint
   script:
     - npm run lint
 
