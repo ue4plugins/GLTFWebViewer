@@ -227,9 +227,6 @@ export class OrbitCamera extends pc.ScriptType {
 
     this.distance = distance;
 
-    this._cameraComponent.nearClip = distance * 0.002;
-    this._cameraComponent.farClip = distance * 5;
-
     this._removeInertia();
 
     this._pivotPoint.copy(aabb.center);
