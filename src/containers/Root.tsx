@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import { Sidebar } from "../components/Sidebar";
 import { FpsMonitor } from "../components/FpsMonitor";
 import { SidebarToggle } from "../components/SidebarToggle";
+import { useStores } from "../stores";
 import { Viewer } from "./Viewer";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -49,7 +50,15 @@ const useStyles = makeStyles(theme => ({
 
 export const Root: React.FC = () => {
   const classes = useStyles();
+  const { modelStore } = useStores();
+  const { fetchModels } = modelStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    if (!showUI) {
+      fetchModels();
+    }
+  }, [fetchModels]);
 
   return (
     <div className={classes.root}>
