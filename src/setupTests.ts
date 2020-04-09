@@ -4,7 +4,7 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect";
 import "jest";
-// import "jest-webgl-canvas-mock";
+import "jest-webgl-canvas-mock";
 
 const orgWarn = console.warn;
 
