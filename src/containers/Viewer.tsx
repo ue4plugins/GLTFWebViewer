@@ -57,11 +57,13 @@ export const Viewer: React.FC = observer(() => {
       debug("Configure viewer start");
       await viewer.configure();
       setViewer(viewer);
+      window.viewerInitiated = true;
       debug("Configure viewer end");
     });
 
     return () => {
       debug("Destroy viewer");
+      window.viewerInitiated = false;
       viewer.destroy();
     };
   }, [runAsync]);
@@ -87,11 +89,13 @@ export const Viewer: React.FC = observer(() => {
     runAsync(async () => {
       debug("Load scene start", scene.url);
       await viewer.loadScene(scene.url);
+      window.viewerSceneLoaded = true;
       debug("Load scene end", scene.url);
     });
 
     return () => {
       debug("Destroy scene");
+      window.viewerSceneLoaded = false;
       viewer.destroyScene();
     };
   }, [runAsync, viewer, scene]);
@@ -104,11 +108,13 @@ export const Viewer: React.FC = observer(() => {
     runAsync(async () => {
       debug("Load model start", model.path);
       await viewer.loadModel(model.path);
+      window.viewerModelLoaded = true;
       debug("Load model end", model.path);
     });
 
     return () => {
       debug("Destroy model");
+      window.viewerModelLoaded = false;
       viewer.destroyModel();
     };
   }, [runAsync, viewer, model]);
