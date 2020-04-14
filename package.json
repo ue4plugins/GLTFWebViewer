@@ -8,6 +8,7 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jest-environment-jsdom-sixteen",
     "test:e2e": "jest -c e2e/jest.config.js --runInBand",
+    "test:e2e-update": "jest -c e2e/jest.config.js --runInBand --updateSnapshot",
     "test:e2e-watch": "jest -c e2e/jest.config.js --runInBand --watch",
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc.js \"**/*.{js,jsx,json,ts,tsx}\"",
