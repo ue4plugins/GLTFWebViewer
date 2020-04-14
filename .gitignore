@@ -5,6 +5,7 @@
 
 # testing
 /coverage
+/e2e/**/__diff_output__
 
 # production
 /build

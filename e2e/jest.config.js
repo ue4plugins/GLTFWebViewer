@@ -4,7 +4,10 @@ module.exports = {
   globalTeardown: "jest-environment-puppeteer/teardown",
   testMatch: ["**/e2e/?(*.)+(spec|test).[t]s"],
   testPathIgnorePatterns: ["/node_modules/", "build"],
-  // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  setupFilesAfterEnv: ["<rootDir>/setupTests.ts"],
+  // TODO: Add reporter for persistent snapshot storage, see example:
+  // https://github.com/americanexpress/jest-image-snapshot#upload-diff-images-from-failed-tests
+  // reporters: ["default", "<rootDir>/image-reporter.js"],
   transform: {
     "^.+\\.ts?$": "ts-jest",
   },
