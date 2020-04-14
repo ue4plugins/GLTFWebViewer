@@ -2,7 +2,7 @@
 import path from "path";
 import { ensureDir } from "fs-extra";
 import { BoundingBox } from "puppeteer";
-import { record } from "./lib/puppeteer-record";
+// import { record } from "./lib/puppeteer-record";
 
 let counter = -1;
 const screenshot = async (name: string, clip?: BoundingBox) => {
@@ -14,37 +14,37 @@ const screenshot = async (name: string, clip?: BoundingBox) => {
   });
 };
 
-const recordScreen = async (name: string, seconds: number) => {
-  counter += 1;
-  const fps = 60;
-  return record({
-    page,
-    fps,
-    format: "mp4",
-    frames: fps * seconds,
-    output: path.join(__dirname, "screenshots", `${counter}-${name}.mp4`),
-    pipeOutput: true,
-  });
-};
+// const recordScreen = async (name: string, seconds: number) => {
+//   counter += 1;
+//   const fps = 60;
+//   return record({
+//     page,
+//     fps,
+//     format: "mp4",
+//     frames: fps * seconds,
+//     output: path.join(__dirname, "screenshots", `${counter}-${name}.mp4`),
+//     pipeOutput: true,
+//   });
+// };
 
-async function screenshotDOMElement(
-  name: string,
-  selector: string,
-  padding = 0,
-) {
-  const rect = await page.evaluate(selector => {
-    const element = document.querySelector(selector);
-    const { x, y, width, height } = element.getBoundingClientRect();
-    return { left: x, top: y, width, height, id: element.id };
-  }, selector);
+// async function screenshotDOMElement(
+//   name: string,
+//   selector: string,
+//   padding = 0,
+// ) {
+//   const rect = await page.evaluate(selector => {
+//     const element = document.querySelector(selector);
+//     const { x, y, width, height } = element.getBoundingClientRect();
+//     return { left: x, top: y, width, height, id: element.id };
+//   }, selector);
 
-  return screenshot(name, {
-    x: rect.left - padding,
-    y: rect.top - padding,
-    width: rect.width + padding * 2,
-    height: rect.height + padding * 2,
-  });
-}
+//   return screenshot(name, {
+//     x: rect.left - padding,
+//     y: rect.top - padding,
+//     width: rect.width + padding * 2,
+//     height: rect.height + padding * 2,
+//   });
+// }
 
 jest.setTimeout(600000);
 
@@ -101,34 +101,34 @@ describe("app", () => {
     await screenshot("Duck", { x: 400, y: 100, width: 800, height: 800 });
   });
 
-  it("should record animation", async () => {
-    const length = 10;
+  // it("should record animation", async () => {
+  //   const length = 10;
 
-    await (page as any)._client.send("Emulation.clearDeviceMetricsOverride");
-    await (page as any)._client.send("Page.setDownloadBehavior", {
-      behavior: "allow",
-      downloadPath: __dirname,
-    });
-    await page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: 1 });
-    await page.goto(
-      "http://localhost:3001/?hideUI=true&model=BrainStem#hotreload=false",
-    );
-    await page.setBypassCSP(true);
+  //   await (page as any)._client.send("Emulation.clearDeviceMetricsOverride");
+  //   await (page as any)._client.send("Page.setDownloadBehavior", {
+  //     behavior: "allow",
+  //     downloadPath: __dirname,
+  //   });
+  //   await page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: 1 });
+  //   await page.goto(
+  //     "http://localhost:3001/?hideUI=true&model=BrainStem#hotreload=false",
+  //   );
+  //   await page.setBypassCSP(true);
 
-    // Give a file name
-    await page.evaluate(filename => {
-      window.postMessage({ type: "SET_EXPORT_PATH", filename: filename }, "*");
-    }, "BrainStem.webm");
+  //   // Give a file name
+  //   await page.evaluate(filename => {
+  //     window.postMessage({ type: "SET_EXPORT_PATH", filename: filename }, "*");
+  //   }, "BrainStem.webm");
 
-    // Wait
-    await page.waitFor(length * 1000);
+  //   // Wait
+  //   await page.waitFor(length * 1000);
 
-    // Stop recording
-    await page.evaluate(_filename => {
-      window.postMessage({ type: "REC_STOP" }, "*");
-    }, "BrainStem.webm");
+  //   // Stop recording
+  //   await page.evaluate(_filename => {
+  //     window.postMessage({ type: "REC_STOP" }, "*");
+  //   }, "BrainStem.webm");
 
-    // Wait for download of webm to complete
-    await page.waitForSelector("html.downloadComplete", { timeout: 0 });
-  });
+  //   // Wait for download of webm to complete
+  //   await page.waitForSelector("html.downloadComplete", { timeout: 0 });
+  // });
 });
