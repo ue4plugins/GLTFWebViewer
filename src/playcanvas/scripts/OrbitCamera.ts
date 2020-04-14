@@ -29,6 +29,14 @@ export class OrbitCamera extends pc.ScriptType {
    * How fast the camera moves in and out. Higher is faster.
    */
   public distanceSensitivity = 0.5;
+  /**
+   * Factor to use when calculating near clip based on the camera distance from a focused object.
+   */
+  public nearClipFactor = 0.1;
+  /**
+   * Factor to use when calculating far clip based on the camera distance from a focused object.
+   */
+  public farClipFactor = 5;
 
   private _cameraComponent!: pc.CameraComponent;
   private _distanceMin = 0;
@@ -226,6 +234,9 @@ export class OrbitCamera extends pc.ScriptType {
     distance = distance * 2;
 
     this.distance = distance;
+
+    this._cameraComponent.nearClip = distance * this.nearClipFactor;
+    this._cameraComponent.farClip = distance * this.farClipFactor;
 
     this._removeInertia();
 
