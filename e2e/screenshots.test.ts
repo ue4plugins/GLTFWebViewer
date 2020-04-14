@@ -1,31 +1,5 @@
 import "jest";
-
-const waitUntilTrue = async (
-  expression: () => Promise<boolean>,
-  timeout = 10000,
-) => {
-  const interval = 500;
-  if (timeout < interval) {
-    return Promise.reject(new Error("waitUntilTrue timed out"));
-  }
-  if (await expression()) {
-    return Promise.resolve();
-  }
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(waitUntilTrue(expression, timeout - interval));
-    }, interval);
-  });
-};
-
-const waitForViewer = (timeout = 10000) =>
-  waitUntilTrue(() => page.evaluate(() => !!window.viewerInitiated), timeout);
-
-const waitForScene = (timeout = 10000) =>
-  waitUntilTrue(() => page.evaluate(() => !!window.viewerSceneLoaded), timeout);
-
-const waitForModel = (timeout = 10000) =>
-  waitUntilTrue(() => page.evaluate(() => !!window.viewerModelLoaded), timeout);
+import { waitForModel, waitForScene, waitForViewer } from "./lib/waiters";
 
 describe("todo", () => {
   it("todo", async () => {
