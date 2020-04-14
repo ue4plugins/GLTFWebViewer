@@ -101,6 +101,8 @@ export class PlayCanvasViewer {
     camera.addComponent("script");
     camera.script.create(OrbitCamera.name);
     camera.script.OrbitCamera.inertiaFactor = 0.07;
+    camera.script.OrbitCamera.nearClipFactor = 0.002;
+    camera.script.OrbitCamera.farClipFactor = 10;
 
     app.root.addChild(camera);
 
