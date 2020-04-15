@@ -3,9 +3,12 @@ import { waitForModel, waitForScene, waitForViewer } from "./lib/waiters";
 import { screenshotElement } from "./lib/screenshotElement";
 
 describe("UI", () => {
+  beforeAll(async () => {
+    await page.setViewport({ width: 1920, height: 1080 });
+  });
+
   beforeEach(async () => {
     await page.goto("http://localhost:3001");
-    await page.setViewport({ width: 1920, height: 1080 });
     await Promise.all([waitForViewer(), waitForScene(), waitForModel()]);
   });
 
