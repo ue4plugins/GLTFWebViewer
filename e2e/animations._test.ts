@@ -14,7 +14,7 @@ const recordScreen = async (name: string, seconds: number) => {
   });
 };
 
-describe("animations", () => {
+describe("Animations", () => {
   beforeAll(async () => {
     await ensureDir(path.join(__dirname, "screenshots"));
     const pages = await browser.pages();
