@@ -1,64 +1,57 @@
-# Epic glTF Web Viewer
+# Epic Games - glTF Web Viewer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Web viewer app for the Unreal Engine glTF Exporter Plugin. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Contributing
+## Prerequisites
 
-### Running the development server
+- [Node.js](https://nodejs.org/en/) 12.0.0 or greater
+
+## Installation
+
+```bash
+npm install
+```
+
+Run in the project root to install all project dependencies.
+
+## Running the development server
 
 ```bash
 npm run start
 ```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### Testing
+## Testing
+
+### Unit tests
 
 ```bash
 npm run test
 ```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the unit test runner in interactive watch mode.
 
-### Building
+### E2E tests
+
+```bash
+npm run test:e2e
+```
+
+Runs all e2e tests once.
+
+```bash
+npm run test:e2e-watch
+```
+
+Launches the e2e test runner in watch mode.
+
+## Building
 
 ```bash
 npm run build
 ```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production to the `build` folder. It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
