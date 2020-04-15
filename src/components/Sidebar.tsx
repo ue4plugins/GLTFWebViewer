@@ -33,6 +33,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen, setIsOpen }) => {
 
   return (
     <Drawer
+      id="sidebar"
       className={classes.drawer}
       variant="persistent"
       anchor="right"

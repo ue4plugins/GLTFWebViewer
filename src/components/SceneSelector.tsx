@@ -20,6 +20,7 @@ export const SceneSelector: React.FC = observer(() => {
     <FormControl className={classes.formControl}>
       <InputLabel id="scene-selector-label">Scene</InputLabel>
       <Select
+        id="scene-select"
         labelId="scene-selector-label"
         value={sceneIndex > -1 ? sceneIndex.toString() : ""}
         onChange={e => {
@@ -27,8 +28,11 @@ export const SceneSelector: React.FC = observer(() => {
           setScene(scenes[idx]);
         }}
         inputProps={{
-          name: "scene",
-          id: "scene",
+          name: "scene-select-input",
+          id: "scene-select-input",
+        }}
+        MenuProps={{
+          id: "scene-select-list",
         }}
       >
         {scenes.map((scene, i) => (
