@@ -13,7 +13,17 @@ declare namespace pc {
   };
 }
 
+interface Viewer {
+  loadModel(path: string): Promise<void>;
+  loadScene(path: string): Promise<void>;
+}
+
 interface Window {
+  /**
+   * Used by e2e tests to access the current viewer instance.
+   */
+  viewer?: Viewer;
+
   /**
    * Used by e2e tests to determine wether the viewer has been initiated.
    */

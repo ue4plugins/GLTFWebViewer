@@ -18,7 +18,7 @@ type CameraEntity = pc.Entity & {
   };
 };
 
-export class PlayCanvasViewer {
+export class PlayCanvasViewer implements Viewer {
   private app: pc.Application;
   private camera: CameraEntity;
   private scene?: pc.Scene;

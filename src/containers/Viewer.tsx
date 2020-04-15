@@ -57,12 +57,14 @@ export const Viewer: React.FC = observer(() => {
       debug("Configure viewer start");
       await viewer.configure();
       setViewer(viewer);
+      window.viewer = viewer;
       window.viewerInitiated = true;
       debug("Configure viewer end");
     });
 
     return () => {
       debug("Destroy viewer");
+      window.viewer = undefined;
       window.viewerInitiated = false;
       viewer.destroy();
     };
