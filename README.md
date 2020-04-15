@@ -46,6 +46,12 @@ npm run test:e2e-watch
 
 Launches the e2e test runner in watch mode.
 
+```bash
+npm run test:e2e-update
+```
+
+Runs e2e tests with the `--updateSnapshot` argument, automatically updating the snapshot baseline from the test result.
+
 ## Building
 
 ```bash
