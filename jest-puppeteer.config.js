@@ -7,7 +7,8 @@ module.exports = {
   },
   launch: {
     dumpio: true,
-    headless: process.env.HEADLESS !== "false",
+    // headless: process.env.HEADLESS !== "false",
+    headless: false,
     args: [
       "--window-size=1920,1080",
       "--allow-no-sandbox-job",
