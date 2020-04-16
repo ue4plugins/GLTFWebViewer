@@ -1,6 +1,7 @@
 module.exports = {
   server: {
-    command: "cross-env BROWSER=none CI=true PORT=3001 npm start",
+    command:
+      "cross-env BROWSER=none NODE_ENV=production CI=true PORT=3001 npm start",
     port: 3001,
     launchTimeout: 10000,
     debug: true,
