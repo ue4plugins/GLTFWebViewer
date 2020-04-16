@@ -90,8 +90,13 @@ export const Viewer: React.FC = observer(() => {
 
     runAsync(async () => {
       debug("Load scene start", scene.url);
-      await viewer.loadScene(scene.url);
-      window.viewerSceneLoaded = true;
+      try {
+        await viewer.loadScene(scene.url);
+        window.viewerSceneLoaded = true;
+      } catch (e) {
+        window.viewerSceneLoaded = true;
+        throw e;
+      }
       debug("Load scene end", scene.url);
     });
 
@@ -109,8 +114,13 @@ export const Viewer: React.FC = observer(() => {
 
     runAsync(async () => {
       debug("Load model start", model.path);
-      await viewer.loadModel(model.path);
-      window.viewerModelLoaded = true;
+      try {
+        await viewer.loadModel(model.path);
+        window.viewerModelLoaded = true;
+      } catch (e) {
+        window.viewerModelLoaded = true;
+        throw e;
+      }
       debug("Load model end", model.path);
     });
 
