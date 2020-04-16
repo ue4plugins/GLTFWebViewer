@@ -34,6 +34,11 @@ Launches the unit test runner in interactive watch mode.
 
 ### E2E tests
 
+Currently we can't run e2e tests in headless mode. This is due to limitations in headless Chromium that makes it
+impossible to render certain models in PlayCanvas.
+
+Please refrain from interacting with your computer while running the e2e tests as it may affect the test result.
+
 ```bash
 npm run test:e2e
 ```
