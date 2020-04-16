@@ -1,5 +1,8 @@
 import { observable, action, computed } from "mobx";
 
+const urlParams = new URLSearchParams(window.location.search);
+const defaultScene = urlParams.get("scene");
+
 export class SceneStore {
   @observable
   public scenes: pc.SceneFile[] = [];
@@ -22,7 +25,13 @@ export class SceneStore {
   public setScenes(scenes: pc.SceneFile[]) {
     this.scenes = scenes;
     if (!this.scene) {
-      this.setScene(scenes[0]);
+      this.setScene(
+        scenes.length > 0
+          ? defaultScene
+            ? scenes.find(s => s.name === defaultScene)
+            : scenes[0]
+          : undefined,
+      );
     }
   }
 }
