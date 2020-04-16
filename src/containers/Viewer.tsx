@@ -58,20 +58,18 @@ export const Viewer: React.FC = observer(() => {
       await viewer.configure();
       setViewer(viewer);
       window.viewer = viewer;
-      window.viewerInitiated = true;
       debug("Configure viewer end");
     });
 
     return () => {
       debug("Destroy viewer");
       window.viewer = undefined;
-      window.viewerInitiated = false;
       viewer.destroy();
     };
   }, [runAsync]);
 
   useEffect(() => {
-    if (!viewer?.isReady) {
+    if (!viewer?.initiated) {
       return;
     }
     debug("Set scene list", viewer.scenes);
@@ -84,49 +82,35 @@ export const Viewer: React.FC = observer(() => {
   }, [viewer, setScenes]);
 
   useEffect(() => {
-    if (!viewer?.isReady || !scene) {
+    if (!viewer?.initiated || !scene) {
       return;
     }
 
     runAsync(async () => {
       debug("Load scene start", scene.url);
-      try {
-        await viewer.loadScene(scene.url);
-        window.viewerSceneLoaded = true;
-      } catch (e) {
-        window.viewerSceneLoaded = true;
-        throw e;
-      }
+      await viewer.loadScene(scene.url);
       debug("Load scene end", scene.url);
     });
 
     return () => {
       debug("Destroy scene");
-      window.viewerSceneLoaded = false;
       viewer.destroyScene();
     };
   }, [runAsync, viewer, scene]);
 
   useEffect(() => {
-    if (!viewer?.isReady || !model) {
+    if (!viewer?.initiated || !model) {
       return;
     }
 
     runAsync(async () => {
       debug("Load model start", model.path);
-      try {
-        await viewer.loadModel(model.path);
-        window.viewerModelLoaded = true;
-      } catch (e) {
-        window.viewerModelLoaded = true;
-        throw e;
-      }
+      await viewer.loadModel(model.path);
       debug("Load model end", model.path);
     });
 
     return () => {
       debug("Destroy model");
-      window.viewerModelLoaded = false;
       viewer.destroyModel();
     };
   }, [runAsync, viewer, model]);

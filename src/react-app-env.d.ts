@@ -13,7 +13,10 @@ declare namespace pc {
   };
 }
 
-interface Viewer {
+interface TestableViewer {
+  initiated: readonly boolean;
+  sceneLoaded: readonly boolean;
+  modelLoaded: readonly boolean;
   loadModel(path: string): Promise<void>;
   loadScene(path: string): Promise<void>;
 }
@@ -22,22 +25,7 @@ interface Window {
   /**
    * Used by e2e tests to access the current viewer instance.
    */
-  viewer?: Viewer;
-
-  /**
-   * Used by e2e tests to determine wether the viewer has been initiated.
-   */
-  viewerInitiated?: boolean;
-
-  /**
-   * Used by e2e tests to determine wether the selected model has finished loading.
-   */
-  viewerModelLoaded?: boolean;
-
-  /**
-   * Used by e2e tests to determine wether the selected scene has finished loading.
-   */
-  viewerSceneLoaded?: boolean;
+  viewer?: TestableViewer;
 }
 
 declare module "draco3dgltf" {

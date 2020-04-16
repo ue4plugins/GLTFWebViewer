@@ -18,7 +18,7 @@ type CameraEntity = pc.Entity & {
   };
 };
 
-export class PlayCanvasViewer implements Viewer {
+export class PlayCanvasViewer implements TestableViewer {
   private app: pc.Application;
   private camera: CameraEntity;
   private scene?: pc.Scene;
@@ -28,6 +28,9 @@ export class PlayCanvasViewer implements Viewer {
   private animationAssets: pc.Asset[] = [];
   private debouncedCanvasResize = debounce(() => this.resizeCanvas(), 10);
   private canvasResizeObserver = new ResizeObserver(this.debouncedCanvasResize);
+  private _initiated = false;
+  private _sceneLoaded = false;
+  private _modelLoaded = false;
 
   public constructor(public canvas: HTMLCanvasElement) {
     this.resizeCanvas = this.resizeCanvas.bind(this);
@@ -38,8 +41,16 @@ export class PlayCanvasViewer implements Viewer {
     this.canvasResizeObserver.observe(this.canvas);
   }
 
-  public get isReady() {
-    return !!this.app.graphicsDevice;
+  public get initiated() {
+    return !!this.app.graphicsDevice && this._initiated;
+  }
+
+  public get sceneLoaded() {
+    return this._sceneLoaded;
+  }
+
+  public get modelLoaded() {
+    return this._modelLoaded;
   }
 
   public get scenes(): pc.SceneFile[] {
@@ -128,7 +139,10 @@ export class PlayCanvasViewer implements Viewer {
           reject(error);
           return;
         }
-        app.preload(() => resolve());
+        app.preload(() => {
+          this._initiated = true;
+          resolve();
+        });
       });
     });
   }
@@ -140,6 +154,7 @@ export class PlayCanvasViewer implements Viewer {
     return new Promise<void>((resolve, reject) => {
       // TODO: change to new scene registry API once it's released
       (this.app as any).loadScene(url, (error: string, scene: pc.Scene) => {
+        this._sceneLoaded = true;
         if (error) {
           reject(error);
           return;
@@ -153,6 +168,8 @@ export class PlayCanvasViewer implements Viewer {
   public destroyScene() {
     debug("Destroy scene", this.scene);
 
+    this._sceneLoaded = false;
+
     if (this.scene) {
       if (this.scene.root) {
         this.scene.root.destroy();
@@ -165,6 +182,8 @@ export class PlayCanvasViewer implements Viewer {
 
   public destroyModel() {
     debug("Destroy model", this.entity);
+
+    this._modelLoaded = false;
 
     if (this.entity) {
       this.entity.destroy();
@@ -271,12 +290,19 @@ export class PlayCanvasViewer implements Viewer {
   public async loadModel(url: string) {
     this.destroyModel();
 
-    const asset = await this.loadGltfAsset(url);
-    if (!asset) {
-      throw new Error("Asset not found");
-    }
+    try {
+      const asset = await this.loadGltfAsset(url);
+      if (!asset) {
+        throw new Error("Asset not found");
+      }
 
-    await this.registerGltfResources(asset);
-    this.initModel();
+      await this.registerGltfResources(asset);
+      this.initModel();
+
+      this._modelLoaded = true;
+    } catch (e) {
+      this._modelLoaded = true;
+      throw e;
+    }
   }
 }
