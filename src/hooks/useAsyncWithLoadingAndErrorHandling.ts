@@ -16,10 +16,9 @@ export const useAsyncWithLoadingAndErrorHandling = (): [
       try {
         await callback();
       } catch (error) {
-        console.error(error);
         setIsError(true);
         endLoadingTask();
-        return;
+        throw error;
       }
       endLoadingTask();
     },
