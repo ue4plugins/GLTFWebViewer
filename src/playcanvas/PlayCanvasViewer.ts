@@ -18,6 +18,10 @@ type CameraEntity = pc.Entity & {
   };
 };
 
+type PlayCanvasViewerOptions = {
+  autoPlayAnimations: boolean;
+};
+
 export class PlayCanvasViewer implements TestableViewer {
   private app: pc.Application;
   private camera: CameraEntity;
@@ -28,12 +32,18 @@ export class PlayCanvasViewer implements TestableViewer {
   private animationAssets: pc.Asset[] = [];
   private debouncedCanvasResize = debounce(() => this.resizeCanvas(), 10);
   private canvasResizeObserver = new ResizeObserver(this.debouncedCanvasResize);
+  private autoPlayAnimations: boolean;
   private _initiated = false;
   private _sceneLoaded = false;
   private _modelLoaded = false;
 
-  public constructor(public canvas: HTMLCanvasElement) {
+  public constructor(
+    public canvas: HTMLCanvasElement,
+    { autoPlayAnimations }: PlayCanvasViewerOptions,
+  ) {
     this.resizeCanvas = this.resizeCanvas.bind(this);
+
+    this.autoPlayAnimations = autoPlayAnimations;
 
     this.app = this.createApp();
     this.camera = this.createCamera(this.app);
@@ -231,10 +241,12 @@ export class PlayCanvasViewer implements TestableViewer {
     if (this.animationAssets.length > 0) {
       this.entity.addComponent("animation", {
         assets: this.animationAssets.map(asset => asset.id),
-        speed: 1,
+        speed: 0,
+        active: false,
       });
-      if (this.entity.animation) {
-        this.entity.animation.play(this.animationAssets[0].name, 1);
+      if (this.entity.animation && this.autoPlayAnimations) {
+        this.entity.animation.speed = 1;
+        this.entity.animation.play(this.animationAssets[0].name, 0);
       }
     }
 

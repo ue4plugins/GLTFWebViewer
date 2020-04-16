@@ -16,6 +16,9 @@ import {
   usePreventableCameraInteractions,
 } from "../hooks";
 
+const urlParams = new URLSearchParams(window.location.search);
+const autoPlayAnimations = !urlParams.get("noAnimations");
+
 const debug = Debug("viewer");
 
 const useStyles = makeStyles(() => ({
@@ -51,7 +54,9 @@ export const Viewer: React.FC = observer(() => {
     }
 
     debug("Create viewer");
-    const viewer = new PlayCanvasViewer(canvasRef.current);
+    const viewer = new PlayCanvasViewer(canvasRef.current, {
+      autoPlayAnimations,
+    });
 
     runAsync(async () => {
       debug("Configure viewer start");
