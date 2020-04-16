@@ -28,7 +28,7 @@ describe("Models", () => {
     "'%s' model '%s' renders the same as baseline snapshot",
     async (type, name) => {
       await page.goto(
-        `http://localhost:3001?hideUI=true&model=${name}&modelType=${type}`,
+        `http://localhost:3001?hideUI=true&noAnimations=true&model=${name}&modelType=${type}`,
       );
       await Promise.all([waitForViewer(), waitForScene(), waitForModel()]);
 
