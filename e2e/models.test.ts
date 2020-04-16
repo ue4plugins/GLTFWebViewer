@@ -1,30 +1,33 @@
 import "jest";
+import { GltfFile } from "../src/playcanvas";
 import { waitForModel, waitForScene, waitForViewer } from "./lib/waiters";
-import { models } from "./__fixtures__/models";
+import {
+  binaryModels,
+  embeddedModels,
+  unpackedModels,
+  dracoModels,
+  quantizedModels,
+  pbrspecularglossinessModels,
+} from "./__fixtures__/models";
 
-const binaryModels = models
-  .filter(m => m.type === "binary")
-  .slice(0, 5)
-  .map(m => [m.type, m.name]);
+type ModelTuple = [string, string];
+const toModelTuple = (model: GltfFile): ModelTuple => [model.type, model.name];
 
-const dracoModels = models
-  .filter(m => m.type === "draco")
-  .slice(0, 2)
-  .map(m => [m.type, m.name]);
-
-const unpackedModels = models
-  .filter(m => m.type === "unpacked")
-  .slice(0, 5)
-  .map(m => [m.type, m.name]);
-
-const allModels = [...binaryModels, ...dracoModels, ...unpackedModels];
+const models = [
+  ...binaryModels,
+  ...embeddedModels,
+  ...unpackedModels,
+  ...dracoModels,
+  ...quantizedModels,
+  ...pbrspecularglossinessModels,
+];
 
 describe("Models", () => {
   beforeAll(async () => {
     await page.setViewport({ width: 1920, height: 1080 });
   });
 
-  test.each(allModels)(
+  test.each(models.map(toModelTuple))(
     "'%s' model '%s' renders the same as baseline snapshot",
     async (type, name) => {
       await page.goto(

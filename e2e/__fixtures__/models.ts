@@ -1,6 +1,135 @@
 import { GltfFile } from "../../src/playcanvas";
 
-export const models: GltfFile[] = [
+export const binaryModels: GltfFile[] = [
+  {
+    type: "binary",
+    path: "assets/gltf/Duck/glTF-Binary/Duck.glb",
+    name: "Duck",
+  },
+  {
+    type: "binary",
+    path: "assets/gltf/2CylinderEngine/glTF-Binary/2CylinderEngine.glb",
+    name: "2CylinderEngine",
+  },
+  {
+    type: "binary",
+    path: "assets/gltf/AntiqueCamera/glTF-Binary/AntiqueCamera.glb",
+    name: "AntiqueCamera",
+  },
+  {
+    type: "binary",
+    path: "assets/gltf/BarramundiFish/glTF-Binary/BarramundiFish.glb",
+    name: "BarramundiFish",
+  },
+  {
+    type: "binary",
+    path: "assets/gltf/DamagedHelmet/glTF-Binary/DamagedHelmet.glb",
+    name: "DamagedHelmet",
+  },
+];
+
+export const embeddedModels: GltfFile[] = [
+  {
+    type: "embedded",
+    path: "assets/gltf/Duck/glTF-Embedded/Duck.gltf",
+    name: "Duck",
+  },
+  {
+    type: "embedded",
+    path: "assets/gltf/2CylinderEngine/glTF-Embedded/2CylinderEngine.gltf",
+    name: "2CylinderEngine",
+  },
+  {
+    type: "embedded",
+    path: "assets/gltf/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf",
+    name: "DamagedHelmet",
+  },
+  {
+    type: "unpacked",
+    path: "assets/gltf/BoxAnimated/glTF/BoxAnimated.gltf",
+    name: "BoxAnimated",
+  },
+  {
+    type: "embedded",
+    path: "assets/gltf/BoxVertexColors/glTF-Embedded/BoxVertexColors.gltf",
+    name: "BoxVertexColors",
+  },
+];
+
+export const unpackedModels: GltfFile[] = [
+  {
+    type: "unpacked",
+    path: "assets/gltf/Duck/glTF/Duck.gltf",
+    name: "Duck",
+  },
+  {
+    type: "unpacked",
+    path: "assets/gltf/2CylinderEngine/glTF/2CylinderEngine.gltf",
+    name: "2CylinderEngine",
+  },
+  {
+    type: "unpacked",
+    path: "assets/gltf/AntiqueCamera/glTF/AntiqueCamera.gltf",
+    name: "AntiqueCamera",
+  },
+  {
+    type: "unpacked",
+    path: "assets/gltf/RealisticCarHd05/glTF/RealisticCarHd05.gltf",
+    name: "RealisticCarHd05",
+  },
+  {
+    type: "unpacked",
+    path: "assets/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf",
+    name: "DamagedHelmet",
+  },
+];
+
+export const dracoModels: GltfFile[] = [
+  {
+    type: "draco",
+    path: "assets/gltf/Duck/glTF-Draco/Duck.gltf",
+    name: "Duck",
+  },
+  {
+    type: "draco",
+    path: "assets/gltf/2CylinderEngine/glTF-Draco/2CylinderEngine.gltf",
+    name: "2CylinderEngine",
+  },
+  {
+    type: "draco",
+    path: "assets/gltf/BarramundiFish/glTF-Draco/BarramundiFish.gltf",
+    name: "BarramundiFish",
+  },
+];
+
+export const quantizedModels: GltfFile[] = [
+  {
+    type: "quantized",
+    path: "assets/gltf/Duck/glTF-Quantized/Duck.gltf",
+    name: "Duck",
+  },
+  {
+    type: "quantized",
+    path: "assets/gltf/Lantern/glTF-Quantized/Lantern.gltf",
+    name: "Lantern",
+  },
+];
+
+export const pbrspecularglossinessModels: GltfFile[] = [
+  {
+    type: "pbrspecularglossiness",
+    path:
+      "assets/gltf/BarramundiFish/glTF-pbrSpecularGlossiness/BarramundiFish.gltf",
+    name: "BarramundiFish",
+  },
+  {
+    type: "pbrspecularglossiness",
+    path: "assets/gltf/Lantern/glTF-pbrSpecularGlossiness/Lantern.gltf",
+    name: "Lantern",
+  },
+];
+
+export const allModels: GltfFile[] = [
   {
     type: "binary",
     path: "assets/gltf/2CylinderEngine/glTF-Binary/2CylinderEngine.glb",
