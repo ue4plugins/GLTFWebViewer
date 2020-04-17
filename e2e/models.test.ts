@@ -36,7 +36,31 @@ describe("Models", () => {
       await Promise.all([waitForViewer(), waitForScene(), waitForModel()]);
 
       expect(await page.screenshot()).toMatchImageSnapshot({
-        customSnapshotIdentifier: `model-${type}-${name}`,
+        customSnapshotIdentifier: `model-${type}-${name}-front`,
+      });
+
+      page.evaluate(() => window.viewer?.resetCamera(90));
+
+      expect(await page.screenshot()).toMatchImageSnapshot({
+        customSnapshotIdentifier: `model-${type}-${name}-left`,
+      });
+
+      page.evaluate(() => window.viewer?.resetCamera(180));
+
+      expect(await page.screenshot()).toMatchImageSnapshot({
+        customSnapshotIdentifier: `model-${type}-${name}-rear`,
+      });
+
+      page.evaluate(() => window.viewer?.resetCamera(270));
+
+      expect(await page.screenshot()).toMatchImageSnapshot({
+        customSnapshotIdentifier: `model-${type}-${name}-right`,
+      });
+
+      page.evaluate(() => window.viewer?.resetCamera(0, -90));
+
+      expect(await page.screenshot()).toMatchImageSnapshot({
+        customSnapshotIdentifier: `model-${type}-${name}-above`,
       });
     },
   );
