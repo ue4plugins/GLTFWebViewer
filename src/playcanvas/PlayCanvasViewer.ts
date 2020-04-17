@@ -261,6 +261,10 @@ export class PlayCanvasViewer implements TestableViewer {
     }
   }
 
+  public resetCamera(yaw?: number, pitch?: number, distance?: number) {
+    this.camera.script.OrbitCamera.reset(yaw, pitch, distance);
+  }
+
   private async loadGltfAsset(url: string) {
     debug("Load glTF asset", url);
 

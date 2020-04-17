@@ -19,6 +19,7 @@ interface TestableViewer {
   modelLoaded: readonly boolean;
   loadModel(path: string): Promise<void>;
   loadScene(path: string): Promise<void>;
+  resetCamera(yaw?: number, pitch?: number, distance?: number): void;
 }
 
 interface Window {

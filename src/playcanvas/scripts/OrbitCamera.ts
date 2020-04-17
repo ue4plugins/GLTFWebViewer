@@ -286,10 +286,16 @@ export class OrbitCamera extends pc.ScriptType {
    * @param pitch
    * @param distance
    */
-  public reset(yaw: number, pitch: number, distance: number) {
-    this.pitch = pitch;
-    this.yaw = yaw;
-    this.distance = distance;
+  public reset(yaw?: number, pitch?: number, distance?: number) {
+    if (yaw !== undefined) {
+      this.yaw = yaw;
+    }
+    if (pitch !== undefined) {
+      this.pitch = pitch;
+    }
+    if (distance !== undefined) {
+      this.distance = distance;
+    }
 
     this._removeInertia();
   }
