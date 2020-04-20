@@ -14,9 +14,9 @@ declare namespace pc {
 }
 
 interface TestableViewer {
-  initiated: readonly boolean;
-  sceneLoaded: readonly boolean;
-  modelLoaded: readonly boolean;
+  initiated: boolean;
+  sceneLoaded: boolean;
+  modelLoaded: boolean;
   loadModel(path: string): Promise<void>;
   loadScene(path: string): Promise<void>;
   resetCamera(yaw?: number, pitch?: number, distance?: number): void;
