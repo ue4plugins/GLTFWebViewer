@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { ModelStore } from "./ModelStore";
 import { SceneStore } from "./SceneStore";
 
