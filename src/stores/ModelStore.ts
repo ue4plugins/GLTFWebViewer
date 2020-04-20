@@ -1,11 +1,16 @@
 import { observable, action } from "mobx";
 import { GltfFile } from "../playcanvas";
 
-const urlParams = new URLSearchParams(window.location.search);
-const defaultModel = urlParams.get("model");
-const defaultModelType = urlParams.get("modelType");
-
 export class ModelStore {
+  private defaultModel: string | null;
+  private defaultModelType: string | null;
+
+  public constructor() {
+    const urlParams = new URLSearchParams(window.location.search);
+    this.defaultModel = urlParams.get("model");
+    this.defaultModelType = urlParams.get("modelType");
+  }
+
   @observable
   public models: GltfFile[] = [];
 
@@ -29,16 +34,18 @@ export class ModelStore {
     this.models = models;
 
     if (!this.model) {
-      this.model =
+      this.setModel(
         models.length > 0
-          ? defaultModel
+          ? this.defaultModel
             ? models.find(
                 m =>
-                  m.name === defaultModel &&
-                  (m.type === defaultModelType || defaultModelType === null),
+                  m.name === this.defaultModel &&
+                  (m.type === this.defaultModelType ||
+                    this.defaultModelType === null),
               )
             : models[0]
-          : undefined;
+          : undefined,
+      );
     }
   }
 }

@@ -1,9 +1,13 @@
 import { observable, action, computed } from "mobx";
 
-const urlParams = new URLSearchParams(window.location.search);
-const defaultScene = urlParams.get("scene");
-
 export class SceneStore {
+  private defaultScene: string | null;
+
+  public constructor() {
+    const urlParams = new URLSearchParams(window.location.search);
+    this.defaultScene = urlParams.get("scene");
+  }
+
   @observable
   public scenes: pc.SceneFile[] = [];
 
@@ -27,8 +31,8 @@ export class SceneStore {
     if (!this.scene) {
       this.setScene(
         scenes.length > 0
-          ? defaultScene
-            ? scenes.find(s => s.name === defaultScene)
+          ? this.defaultScene
+            ? scenes.find(s => s.name === this.defaultScene)
             : scenes[0]
           : undefined,
       );
