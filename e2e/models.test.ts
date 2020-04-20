@@ -1,7 +1,7 @@
 import "jest";
-import { GltfFile } from "../src/playcanvas";
 import { waitForModel, waitForScene, waitForViewer } from "./lib/waiters";
 import {
+  TestModel,
   binaryModels,
   embeddedModels,
   unpackedModels,
@@ -10,8 +10,12 @@ import {
   pbrspecularglossinessModels,
 } from "./__fixtures__/models";
 
-type ModelTuple = [string, string];
-const toModelTuple = (model: GltfFile): ModelTuple => [model.type, model.name];
+type ModelTuple = [string, string, boolean];
+const toModelTuple = (model: TestModel): ModelTuple => [
+  model.type,
+  model.name,
+  !!model.multipleAngles,
+];
 
 const models = [
   ...binaryModels,
@@ -29,7 +33,7 @@ describe("Models", () => {
 
   test.each(models.map(toModelTuple))(
     "'%s' model '%s' renders the same as baseline snapshot",
-    async (type, name) => {
+    async (type, name, multipleAngles) => {
       await page.goto(
         `http://localhost:3001?hideUI=true&noAnimations=true&model=${name}&modelType=${type}`,
       );
@@ -39,29 +43,31 @@ describe("Models", () => {
         customSnapshotIdentifier: `model-${type}-${name}-front`,
       });
 
-      page.evaluate(() => window.viewer?.resetCamera(90));
+      if (multipleAngles) {
+        page.evaluate(() => window.viewer?.resetCamera(90));
 
-      expect(await page.screenshot()).toMatchImageSnapshot({
-        customSnapshotIdentifier: `model-${type}-${name}-left`,
-      });
+        expect(await page.screenshot()).toMatchImageSnapshot({
+          customSnapshotIdentifier: `model-${type}-${name}-left`,
+        });
 
-      page.evaluate(() => window.viewer?.resetCamera(180));
+        page.evaluate(() => window.viewer?.resetCamera(180));
 
-      expect(await page.screenshot()).toMatchImageSnapshot({
-        customSnapshotIdentifier: `model-${type}-${name}-rear`,
-      });
+        expect(await page.screenshot()).toMatchImageSnapshot({
+          customSnapshotIdentifier: `model-${type}-${name}-rear`,
+        });
 
-      page.evaluate(() => window.viewer?.resetCamera(270));
+        page.evaluate(() => window.viewer?.resetCamera(270));
 
-      expect(await page.screenshot()).toMatchImageSnapshot({
-        customSnapshotIdentifier: `model-${type}-${name}-right`,
-      });
+        expect(await page.screenshot()).toMatchImageSnapshot({
+          customSnapshotIdentifier: `model-${type}-${name}-right`,
+        });
 
-      page.evaluate(() => window.viewer?.resetCamera(0, -90));
+        page.evaluate(() => window.viewer?.resetCamera(0, -90));
 
-      expect(await page.screenshot()).toMatchImageSnapshot({
-        customSnapshotIdentifier: `model-${type}-${name}-above`,
-      });
+        expect(await page.screenshot()).toMatchImageSnapshot({
+          customSnapshotIdentifier: `model-${type}-${name}-above`,
+        });
+      }
     },
   );
 });

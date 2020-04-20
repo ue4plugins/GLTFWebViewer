@@ -1,6 +1,10 @@
 import { GltfFile } from "../../src/playcanvas";
 
-export const binaryModels: GltfFile[] = [
+export type TestModel = GltfFile & {
+  multipleAngles?: boolean;
+};
+
+export const binaryModels: TestModel[] = [
   {
     type: "binary",
     path: "assets/gltf/Duck/glTF-Binary/Duck.glb",
@@ -28,7 +32,7 @@ export const binaryModels: GltfFile[] = [
   },
 ];
 
-export const embeddedModels: GltfFile[] = [
+export const embeddedModels: TestModel[] = [
   {
     type: "embedded",
     path: "assets/gltf/Duck/glTF-Embedded/Duck.gltf",
@@ -56,35 +60,40 @@ export const embeddedModels: GltfFile[] = [
   },
 ];
 
-export const unpackedModels: GltfFile[] = [
+export const unpackedModels: TestModel[] = [
   {
     type: "unpacked",
     path: "assets/gltf/Duck/glTF/Duck.gltf",
     name: "Duck",
+    multipleAngles: true,
   },
   {
     type: "unpacked",
     path: "assets/gltf/2CylinderEngine/glTF/2CylinderEngine.gltf",
     name: "2CylinderEngine",
+    multipleAngles: true,
   },
   {
     type: "unpacked",
     path: "assets/gltf/AntiqueCamera/glTF/AntiqueCamera.gltf",
     name: "AntiqueCamera",
+    multipleAngles: true,
   },
   {
     type: "unpacked",
     path: "assets/gltf/RealisticCarHd05/glTF/RealisticCarHd05.gltf",
     name: "RealisticCarHd05",
+    multipleAngles: true,
   },
   {
     type: "unpacked",
     path: "assets/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf",
     name: "DamagedHelmet",
+    multipleAngles: true,
   },
 ];
 
-export const dracoModels: GltfFile[] = [
+export const dracoModels: TestModel[] = [
   {
     type: "draco",
     path: "assets/gltf/Duck/glTF-Draco/Duck.gltf",
@@ -102,7 +111,7 @@ export const dracoModels: GltfFile[] = [
   },
 ];
 
-export const quantizedModels: GltfFile[] = [
+export const quantizedModels: TestModel[] = [
   {
     type: "quantized",
     path: "assets/gltf/Duck/glTF-Quantized/Duck.gltf",
@@ -115,7 +124,7 @@ export const quantizedModels: GltfFile[] = [
   },
 ];
 
-export const pbrspecularglossinessModels: GltfFile[] = [
+export const pbrspecularglossinessModels: TestModel[] = [
   {
     type: "pbrspecularglossiness",
     path:
@@ -129,7 +138,7 @@ export const pbrspecularglossinessModels: GltfFile[] = [
   },
 ];
 
-export const allModels: GltfFile[] = [
+export const allModels: TestModel[] = [
   {
     type: "binary",
     path: "assets/gltf/2CylinderEngine/glTF-Binary/2CylinderEngine.glb",
