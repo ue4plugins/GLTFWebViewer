@@ -49,13 +49,19 @@ describe("useAsyncWithLoadingAndErrorHandling", () => {
       await act(async () => {
         const [_, __, runAsync] = result.current;
 
-        // Error state should be set if error is thrown
-        runAsync(async () => {
-          await delay(100);
-          throw new Error("Oh noes");
-        });
+        const waitForError = waitForValueToChange(() => result.current[1]);
 
-        await waitForValueToChange(() => result.current[1]);
+        // Error state should be set if error is thrown
+        try {
+          await runAsync(async () => {
+            await delay(100);
+            throw new Error("Oh noes");
+          });
+        } catch (e) {
+          // Suppress
+        }
+
+        await waitForError;
         expect(result.current[1]).toBe(true);
 
         // Error state should be reset if another callback is fired
@@ -63,28 +69,6 @@ describe("useAsyncWithLoadingAndErrorHandling", () => {
         await waitForNextUpdate();
         expect(result.current[1]).toBe(false);
       });
-    });
-  });
-
-  describe("console error handling", () => {
-    const consoleOutput: Error[] = [];
-    const mockedConsoleError = (...output: Error[]) =>
-      consoleOutput.push(...output);
-    beforeEach(() => (console.error = mockedConsoleError));
-
-    it("should log error to console if the async callback fails", async () => {
-      const { result, waitForValueToChange } = renderHook(() =>
-        useAsyncWithLoadingAndErrorHandling(),
-      );
-      act(() => {
-        const [_, __, runAsync] = result.current;
-        runAsync(async () => {
-          await delay(100);
-          throw new Error("Oh noes");
-        });
-      });
-      await waitForValueToChange(() => result.current[1]);
-      expect(consoleOutput).toEqual([new Error("Oh noes")]);
     });
   });
 
