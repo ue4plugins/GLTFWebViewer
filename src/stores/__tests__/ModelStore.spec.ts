@@ -86,26 +86,14 @@ describe("ModelStore", () => {
   it("should automatically set model from url param", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
-    mockLocationSearch("?model=DamagedHelmet");
+    mockLocationSearch("?model=DamagedHelmet-binary");
 
     const store = new ModelStore();
     await store.fetchModels();
 
-    expect(store.model).toEqual(models.find(m => m.name === "DamagedHelmet"));
-
-    spy.mockRestore();
-  });
-
-  it("should automatically set model and model type from url param", async () => {
-    const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
-
-    mockLocationSearch("?model=DamagedHelmet&modelType=embedded");
-
-    const store = new ModelStore();
-    await store.fetchModels();
-
+    expect(store.model).toBeDefined();
     expect(store.model).toEqual(
-      models.find(m => m.name === "DamagedHelmet" && m.type === "embedded"),
+      models.find(m => m.name === "DamagedHelmet-binary"),
     );
 
     spy.mockRestore();

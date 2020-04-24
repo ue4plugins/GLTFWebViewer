@@ -96,7 +96,10 @@ export const ModelList: React.FC = observer(() => {
               key={model.path}
               selected={selectedModel && model.path === selectedModel.path}
             >
-              <ListItemText primary={model.name} secondary={model.type} />
+              <ListItemText
+                primary={model.name}
+                secondary={model.description}
+              />
             </ListItem>
           ))
         )}

@@ -1,5 +1,5 @@
 export type GltfFile = {
-  type: string;
   name: string;
+  description?: string;
   path: string;
 };

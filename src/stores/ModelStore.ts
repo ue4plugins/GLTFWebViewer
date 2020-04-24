@@ -3,12 +3,10 @@ import { GltfFile } from "../playcanvas";
 
 export class ModelStore {
   private defaultModel: string | null;
-  private defaultModelType: string | null;
 
   public constructor() {
     const urlParams = new URLSearchParams(window.location.search);
     this.defaultModel = urlParams.get("model");
-    this.defaultModelType = urlParams.get("modelType");
   }
 
   @observable
@@ -37,12 +35,7 @@ export class ModelStore {
       this.setModel(
         models.length > 0
           ? this.defaultModel
-            ? models.find(
-                m =>
-                  m.name === this.defaultModel &&
-                  (m.type === this.defaultModelType ||
-                    this.defaultModelType === null),
-              )
+            ? models.find(m => m.name === this.defaultModel)
             : models[0]
           : undefined,
       );
