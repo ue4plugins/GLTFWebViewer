@@ -10,7 +10,6 @@ variables:
   CI: "true"
 
 stages:
-  - push_test
   - install_dependencies
   - lint
   # - test
@@ -68,18 +67,6 @@ test_e2e_update:
   script:
     - ./ci/setup-e2e-env.sh
     - npm run test:e2e-update
-    - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
-  when: manual
-
-push_test:
-  stage: push_test
-  image: samujoha/gitlab-ci-puppeteer-headful:latest
-  tags:
-    - docker-executor
-  before_script:
-    - chmod -R +x ./ci
-  script:
-    - ./ci/setup-e2e-env.sh
     - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
   when: manual
 
