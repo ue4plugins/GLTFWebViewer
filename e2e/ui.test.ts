@@ -4,11 +4,15 @@ import { screenshotElement } from "./lib/screenshotElement";
 
 describe("UI", () => {
   beforeAll(async () => {
+    await page.setDefaultNavigationTimeout(0);
     await page.setViewport({ width: 1920, height: 1080 });
   });
 
   beforeEach(async () => {
     await page.goto("http://localhost:3001");
+    await page.addStyleTag({
+      content: `* { caret-color: transparent !important; }`,
+    });
     await Promise.all([waitForViewer(), waitForScene(), waitForModel()]);
   });
 
@@ -17,6 +21,7 @@ describe("UI", () => {
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
 
     await expect(page).toFill("#search-input", "Duck");
+    await page.waitFor(100);
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
 
     const item = (await page.$$("#model-list .MuiListItem-button"))[0];
@@ -33,15 +38,14 @@ describe("UI", () => {
       "Duck",
     );
 
-    await item.hover();
-    expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
-
     await item.click();
+    await page.waitFor(500);
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
   });
 
   it("should have a scene list", async () => {
     await page.click("#scene-select");
+    await page.waitFor(500);
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
 
     const item = (await page.$$("#scene-select-list .MuiListItem-button"))[1];
@@ -49,10 +53,8 @@ describe("UI", () => {
       throw new Error("Missing item");
     }
 
-    await item.hover();
-    expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
-
     await item.click();
+    await page.waitFor(500);
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
   });
 });

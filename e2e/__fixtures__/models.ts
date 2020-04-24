@@ -9,27 +9,32 @@ export const binaryModels: TestModel[] = [
     type: "binary",
     path: "assets/gltf/Duck/glTF-Binary/Duck.glb",
     name: "Duck",
+    multipleAngles: true,
   },
   {
     type: "binary",
     path: "assets/gltf/2CylinderEngine/glTF-Binary/2CylinderEngine.glb",
     name: "2CylinderEngine",
+    multipleAngles: true,
   },
-  {
-    type: "binary",
-    path: "assets/gltf/AntiqueCamera/glTF-Binary/AntiqueCamera.glb",
-    name: "AntiqueCamera",
-  },
-  {
-    type: "binary",
-    path: "assets/gltf/BarramundiFish/glTF-Binary/BarramundiFish.glb",
-    name: "BarramundiFish",
-  },
-  {
-    type: "binary",
-    path: "assets/gltf/DamagedHelmet/glTF-Binary/DamagedHelmet.glb",
-    name: "DamagedHelmet",
-  },
+  // {
+  //   type: "binary",
+  //   path: "assets/gltf/AntiqueCamera/glTF-Binary/AntiqueCamera.glb",
+  //   name: "AntiqueCamera",
+  //   multipleAngles: true,
+  // },
+  // {
+  //   type: "binary",
+  //   path: "assets/gltf/BarramundiFish/glTF-Binary/BarramundiFish.glb",
+  //   name: "BarramundiFish",
+  //   multipleAngles: true,
+  // },
+  // {
+  //   type: "binary",
+  //   path: "assets/gltf/DamagedHelmet/glTF-Binary/DamagedHelmet.glb",
+  //   name: "DamagedHelmet",
+  //   multipleAngles: true,
+  // },
 ];
 
 export const embeddedModels: TestModel[] = [
@@ -49,11 +54,6 @@ export const embeddedModels: TestModel[] = [
     name: "DamagedHelmet",
   },
   {
-    type: "unpacked",
-    path: "assets/gltf/BoxAnimated/glTF/BoxAnimated.gltf",
-    name: "BoxAnimated",
-  },
-  {
     type: "embedded",
     path: "assets/gltf/BoxVertexColors/glTF-Embedded/BoxVertexColors.gltf",
     name: "BoxVertexColors",
@@ -65,31 +65,26 @@ export const unpackedModels: TestModel[] = [
     type: "unpacked",
     path: "assets/gltf/Duck/glTF/Duck.gltf",
     name: "Duck",
-    multipleAngles: true,
   },
   {
     type: "unpacked",
     path: "assets/gltf/2CylinderEngine/glTF/2CylinderEngine.gltf",
     name: "2CylinderEngine",
-    multipleAngles: true,
   },
-  {
-    type: "unpacked",
-    path: "assets/gltf/AntiqueCamera/glTF/AntiqueCamera.gltf",
-    name: "AntiqueCamera",
-    multipleAngles: true,
-  },
-  {
-    type: "unpacked",
-    path: "assets/gltf/RealisticCarHd05/glTF/RealisticCarHd05.gltf",
-    name: "RealisticCarHd05",
-    multipleAngles: true,
-  },
+  // {
+  //   type: "unpacked",
+  //   path: "assets/gltf/AntiqueCamera/glTF/AntiqueCamera.gltf",
+  //   name: "AntiqueCamera",
+  // },
+  // {
+  //   type: "unpacked",
+  //   path: "assets/gltf/RealisticCarHd05/glTF/RealisticCarHd05.gltf",
+  //   name: "RealisticCarHd05",
+  // },
   {
     type: "unpacked",
     path: "assets/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf",
     name: "DamagedHelmet",
-    multipleAngles: true,
   },
 ];
 
@@ -117,11 +112,11 @@ export const quantizedModels: TestModel[] = [
     path: "assets/gltf/Duck/glTF-Quantized/Duck.gltf",
     name: "Duck",
   },
-  {
-    type: "quantized",
-    path: "assets/gltf/Lantern/glTF-Quantized/Lantern.gltf",
-    name: "Lantern",
-  },
+  // {
+  //   type: "quantized",
+  //   path: "assets/gltf/Lantern/glTF-Quantized/Lantern.gltf",
+  //   name: "Lantern",
+  // },
 ];
 
 export const pbrspecularglossinessModels: TestModel[] = [

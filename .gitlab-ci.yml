@@ -12,7 +12,8 @@ variables:
 stages:
   - install_dependencies
   - lint
-  - test
+  # - test
+  - test_e2e
   - build
   # - release
 
@@ -33,12 +34,41 @@ lint:
   script:
     - npm run lint
 
-test:
+.test:
   tags:
     - docker-executor
   stage: test
   script:
     - npm run test
+
+test_e2e:
+  stage: test_e2e
+  image: samujoha/gitlab-ci-puppeteer-headful:latest
+  tags:
+    - docker-executor
+  before_script:
+    - chmod -R +x ./ci
+  script:
+    - ./ci/setup-e2e-env.sh
+    - npm run test:e2e
+  artifacts:
+    when: on_failure
+    paths:
+      - ./e2e/__image_snapshots__/__diff_output__
+    expire_in: 30 days
+
+test_e2e_update:
+  stage: test_e2e
+  image: samujoha/gitlab-ci-puppeteer-headful:latest
+  tags:
+    - docker-executor
+  before_script:
+    - chmod -R +x ./ci
+  script:
+    - ./ci/setup-e2e-env.sh
+    - npm run test:e2e-update
+    - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
+  when: manual
 
 build:
   tags:

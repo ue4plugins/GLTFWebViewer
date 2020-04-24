@@ -1,7 +1,11 @@
 import { spawn } from "child_process";
 import { Writable } from "stream";
 import { launch, Browser, Page } from "puppeteer";
-import pathToFfmpeg from "ffmpeg-static";
+// import pathToFfmpeg from "ffmpeg-static";
+
+// Used to suppress build errors. Replace with package ffmpeg-static if we decide
+// to run animation tests again.
+const pathToFfmpeg: any = {};
 
 const ffmpegArgs = (fps: number) => [
   "-y",

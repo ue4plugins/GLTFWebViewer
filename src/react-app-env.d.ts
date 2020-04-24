@@ -28,8 +28,3 @@ interface Window {
    */
   viewer?: TestableViewer;
 }
-
-declare module "draco3dgltf" {
-  function createDecoderModule(): any;
-  function createEncoderModule(): any;
-}

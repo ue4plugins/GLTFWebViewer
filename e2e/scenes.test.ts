@@ -7,6 +7,7 @@ const toSceneTuple = (scene: pc.SceneFile): SceneTuple => [scene.name];
 
 describe("Scenes", () => {
   beforeAll(async () => {
+    await page.setDefaultNavigationTimeout(0);
     await page.setViewport({ width: 1920, height: 1080 });
   });
 
@@ -17,6 +18,7 @@ describe("Scenes", () => {
         `http://localhost:3001?hideUI=true&model=_&scene=${name}`,
       );
       await Promise.all([waitForViewer(), waitForScene()]);
+      await page.waitFor(500);
 
       expect(await page.screenshot()).toMatchImageSnapshot({
         customSnapshotIdentifier: `scene-${name}`,
