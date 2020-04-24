@@ -35,7 +35,7 @@ describe("UI", () => {
     }
 
     expect(await page.evaluate(element => element.textContent, itemSpan)).toBe(
-      "Duck",
+      "Duck-binary",
     );
 
     await item.click();
