@@ -68,4 +68,9 @@ export const models: TestModel[] = [
     name: "Duck-unpacked",
     description: "unpacked",
   },
+  {
+    path: "assets/gltf/RealisticCarHd05/glTF/RealisticCarHd05.gltf",
+    name: "RealisticCarHd05-unpacked",
+    description: "unpacked",
+  },
 ];
