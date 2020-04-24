@@ -10,6 +10,7 @@ variables:
   CI: "true"
 
 stages:
+  - push_test
   - install_dependencies
   - lint
   # - test
@@ -71,7 +72,7 @@ test_e2e_update:
   when: manual
 
 push_test:
-  stage: test_e2e
+  stage: push_test
   image: samujoha/gitlab-ci-puppeteer-headful:latest
   tags:
     - docker-executor
