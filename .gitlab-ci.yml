@@ -70,6 +70,18 @@ test_e2e_update:
     - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
   when: manual
 
+push_test:
+  stage: test_e2e
+  image: samujoha/gitlab-ci-puppeteer-headful:latest
+  tags:
+    - docker-executor
+  before_script:
+    - chmod -R +x ./ci
+  script:
+    - ./ci/setup-e2e-env.sh
+    - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
+  when: manual
+
 build:
   tags:
     - docker-executor
