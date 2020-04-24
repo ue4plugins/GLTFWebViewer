@@ -51,6 +51,7 @@ test_e2e:
   script:
     - ./ci/setup-e2e-env.sh
     - npm run test:e2e
+    - './ci/gitlab-commit-push.sh "test(e2e): add baseline snapshots [skip ci]"'
   artifacts:
     when: on_failure
     paths:
