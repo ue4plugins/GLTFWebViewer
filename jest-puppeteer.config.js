@@ -17,7 +17,7 @@ module.exports = {
       "--mute-audio",
       "--no-sandbox",
       "--hide-scrollbars",
-      "--use-gl=swiftshader", // Necessary for GL to work in GitLab CI docker executor
+      // "--use-gl=swiftshader", // Necessary for GL to work in GitLab CI docker executor
       // "--allow-no-sandbox-job",
       // "--enable-usermedia-screen-capturing",
       // "--allow-http-screen-capture",

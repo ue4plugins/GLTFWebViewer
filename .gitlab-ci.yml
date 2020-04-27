@@ -13,7 +13,7 @@ stages:
   - install_dependencies
   - lint
   # - test
-  - test_e2e
+  # - test_e2e
   - build
   # - release
 
@@ -41,7 +41,7 @@ lint:
   script:
     - npm run test
 
-test_e2e:
+.test_e2e:
   stage: test_e2e
   image: samujoha/gitlab-ci-puppeteer-headful:latest
   tags:
@@ -58,7 +58,7 @@ test_e2e:
       - ./e2e/__image_snapshots__/__diff_output__
     expire_in: 30 days
 
-test_e2e_update:
+.test_e2e_update:
   stage: test_e2e
   image: samujoha/gitlab-ci-puppeteer-headful:latest
   tags:
