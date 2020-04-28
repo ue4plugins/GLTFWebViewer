@@ -58,11 +58,6 @@ export const models: TestModel[] = [
     name: "Duck-embedded",
     description: "embedded",
   },
-  // {
-  //   path: "assets/gltf/Duck/glTF-Quantized/Duck.gltf",
-  //   name: "Duck-quantized",
-  //   description: "quantized",
-  // },
   {
     path: "assets/gltf/Duck/glTF/Duck.gltf",
     name: "Duck-unpacked",
