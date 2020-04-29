@@ -47,7 +47,7 @@ export const Viewer: React.FC = observer(() => {
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const gltfFile = acceptedFiles.find(f =>
-      [".glb", ".gltf"].includes(path.extname(f.name)),
+      path.extname(f.name).match(/\.(gltf|glb)$/),
     );
     if (!gltfFile) {
       console.error(
