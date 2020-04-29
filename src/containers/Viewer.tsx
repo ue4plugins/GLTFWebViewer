@@ -1,6 +1,4 @@
-import path from "path";
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { useDropzone } from "react-dropzone";
 import { observer } from "mobx-react-lite";
 import Debug from "debug";
 import {
@@ -16,6 +14,7 @@ import { useStores } from "../stores";
 import {
   useAsyncWithLoadingAndErrorHandling,
   usePreventableCameraInteractions,
+  useDropModel,
 } from "../hooks";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -43,42 +42,27 @@ export const Viewer: React.FC = observer(() => {
   const { modelStore, sceneStore } = useStores();
   const { model, setModel } = modelStore;
   const { scene, setScenes } = sceneStore;
-  const [hasDropError, setHasDropError] = useState(false);
-
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      const gltfFile = acceptedFiles.find(f =>
-        path.extname(f.name).match(/\.(gltf|glb)$/),
-      );
-      if (!gltfFile) {
-        console.error(
-          "The dropped file type is not supported. Drop a gltf or glb file.",
-        );
-        setHasDropError(true);
-        return;
-      }
-
-      setHasDropError(false);
-
-      setModel({
-        name: path.basename(gltfFile.name, path.extname(gltfFile.name)),
-        path: URL.createObjectURL(gltfFile),
-        blobFileName: gltfFile.name,
-      });
-    },
-    [setModel],
-  );
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<PlayCanvasViewer>();
-  const { getRootProps, isDragActive } = useDropzone({ onDrop });
+
+  const onDropModel = useCallback(setModel, [setModel]);
+  const [
+    isDragActive,
+    hasDropError,
+    setHasDropError,
+    getRootProps,
+  ] = useDropModel(onDropModel);
+
   const [
     isLoading,
     hasLoadError,
     runAsync,
   ] = useAsyncWithLoadingAndErrorHandling();
+
   const showBackdrop =
     isLoading || hasLoadError || isDragActive || hasDropError;
+
   const [setPreventInteraction] = usePreventableCameraInteractions(
     showBackdrop,
   );
@@ -158,7 +142,7 @@ export const Viewer: React.FC = observer(() => {
   useEffect(() => {
     debug("Reset drop error state");
     setHasDropError(false);
-  }, [model, scene, viewer]);
+  }, [model, scene, setHasDropError, viewer]);
 
   useEffect(() => {
     debug("Prevent camera interaction", showBackdrop);
