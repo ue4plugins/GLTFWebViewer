@@ -90,8 +90,6 @@ export const useDropModel = (
         return;
       }
 
-      console.log(assets);
-
       const gltfBlob: Blob | undefined =
         assets.length > 0 && path.extname(gltf.name) === ".gltf"
           ? await createGltfWithBlobAssets(gltf, assets)
