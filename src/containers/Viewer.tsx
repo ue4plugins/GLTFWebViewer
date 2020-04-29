@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import path from "path";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import { observer } from "mobx-react-lite";
 import Debug from "debug";
 import {
@@ -21,7 +23,7 @@ const autoPlayAnimations = !urlParams.get("noAnimations");
 
 const debug = Debug("viewer");
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   canvas: {
     position: "relative",
     maxWidth: "100%",
@@ -29,6 +31,7 @@ const useStyles = makeStyles(() => ({
   backdrop: {
     position: "absolute",
     zIndex: 3,
+    color: theme.palette.common.white,
   },
   error: {
     maxWidth: 300,
@@ -40,10 +43,36 @@ export const Viewer: React.FC = observer(() => {
   const { modelStore, sceneStore } = useStores();
   const { model } = modelStore;
   const { scene, setScenes } = sceneStore;
+  const [hasDropError, setHasDropError] = useState(false);
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    const gltfFile = acceptedFiles.find(f =>
+      [".glb", ".gltf"].includes(path.extname(f.name)),
+    );
+    if (!gltfFile) {
+      console.error(
+        "The dropped file type is not supported. Drop a gltf or glb file.",
+      );
+      setHasDropError(true);
+      return;
+    }
+
+    setHasDropError(false);
+
+    console.log(acceptedFiles);
+    // setModel();
+  }, []);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<PlayCanvasViewer>();
-  const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
-  const showBackdrop = isLoading || isError;
+  const { getRootProps, isDragActive } = useDropzone({ onDrop });
+  const [
+    isLoading,
+    hasLoadError,
+    runAsync,
+  ] = useAsyncWithLoadingAndErrorHandling();
+  const showBackdrop =
+    isLoading || hasLoadError || isDragActive || hasDropError;
   const [setPreventInteraction] = usePreventableCameraInteractions(
     showBackdrop,
   );
@@ -121,29 +150,39 @@ export const Viewer: React.FC = observer(() => {
   }, [runAsync, viewer, model]);
 
   useEffect(() => {
+    debug("Reset drop error state");
+    setHasDropError(false);
+  }, [model, scene, viewer]);
+
+  useEffect(() => {
     debug("Prevent camera interaction", showBackdrop);
     setPreventInteraction(showBackdrop);
   }, [showBackdrop, setPreventInteraction]);
 
   return (
-    <>
+    <div {...getRootProps()}>
       <canvas className={classes.canvas} ref={canvasRef} />
       <Backdrop className={classes.backdrop} open={showBackdrop}>
-        {isLoading && <CircularProgress />}
-        {isError && (
+        {isDragActive ? (
+          <Typography variant="h5" color="inherit">
+            Drop glTF and accompanying assets here
+          </Typography>
+        ) : isLoading ? (
+          <CircularProgress />
+        ) : hasDropError || hasLoadError ? (
           <Card className={classes.error}>
             <CardContent>
               <Typography gutterBottom variant="h5">
                 Error
               </Typography>
               <Typography variant="body2" color="textSecondary">
-                Something went wrong when loading the requested asset. Check
-                console for more details.
+                Something went wrong when loading the asset. Check console for
+                more details.
               </Typography>
             </CardContent>
           </Card>
-        )}
+        ) : null}
       </Backdrop>
-    </>
+    </div>
   );
 });
