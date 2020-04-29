@@ -22,6 +22,8 @@ type PlayCanvasViewerOptions = {
   autoPlayAnimations: boolean;
 };
 
+const assetPrefix = "assets/playcanvas/";
+
 export class PlayCanvasViewer implements TestableViewer {
   private app: pc.Application;
   private camera: CameraEntity;
@@ -84,7 +86,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     debug("Creating app for target", this.canvas);
     const app = new pc.Application(this.canvas, {
-      assetPrefix: "assets/playcanvas/",
+      assetPrefix,
       mouse: new pc.Mouse(document.body),
       keyboard: new pc.Keyboard(window),
       graphicsDeviceOptions: {
@@ -265,8 +267,8 @@ export class PlayCanvasViewer implements TestableViewer {
     this.camera.script.OrbitCamera.reset(yaw, pitch, distance);
   }
 
-  private async loadGltfAsset(url: string) {
-    debug("Load glTF asset", url);
+  private async loadGltfAsset(url: string, fileName?: string) {
+    debug("Load glTF asset", url, fileName);
 
     return new Promise<pc.Asset | undefined>((resolve, reject) => {
       // This is necessary because the callback of loadFromUrl is not fired when an
@@ -275,18 +277,35 @@ export class PlayCanvasViewer implements TestableViewer {
         () => reject("Asset request timed out"),
         10000,
       );
-      this.app.assets.loadFromUrl(
-        pc.path.join("../..", url), // Counteract assetPrefix
-        "container",
-        (err, asset) => {
-          clearTimeout(timeout);
-          if (err) {
-            reject(err);
-          } else {
-            resolve(asset);
-          }
-        },
-      );
+
+      const callback: pc.callbacks.LoadAsset = (err, asset) => {
+        clearTimeout(timeout);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(asset);
+        }
+      };
+
+      if (fileName) {
+        // Remove asset prefix in order to prevent it from being prepended
+        // to blob urls
+        this.app.assets.prefix = "";
+        this.app.assets.loadFromUrlAndFilename(
+          url,
+          fileName,
+          "container",
+          callback,
+        );
+        // Add asset prefix again
+        this.app.assets.prefix = assetPrefix;
+      } else {
+        this.app.assets.loadFromUrl(
+          pc.path.join("../..", url),
+          "container",
+          callback,
+        );
+      }
     });
   }
 
@@ -303,11 +322,11 @@ export class PlayCanvasViewer implements TestableViewer {
     this.animationAssets = resource.animations || [];
   }
 
-  public async loadModel(url: string) {
+  public async loadModel(url: string, fileName?: string) {
     this.destroyModel();
 
     try {
-      const asset = await this.loadGltfAsset(url);
+      const asset = await this.loadGltfAsset(url, fileName);
       if (!asset) {
         throw new Error("Asset not found");
       }

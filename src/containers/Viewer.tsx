@@ -41,27 +41,33 @@ const useStyles = makeStyles(theme => ({
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
   const { modelStore, sceneStore } = useStores();
-  const { model } = modelStore;
+  const { model, setModel } = modelStore;
   const { scene, setScenes } = sceneStore;
   const [hasDropError, setHasDropError] = useState(false);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const gltfFile = acceptedFiles.find(f =>
-      path.extname(f.name).match(/\.(gltf|glb)$/),
-    );
-    if (!gltfFile) {
-      console.error(
-        "The dropped file type is not supported. Drop a gltf or glb file.",
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const gltfFile = acceptedFiles.find(f =>
+        path.extname(f.name).match(/\.(gltf|glb)$/),
       );
-      setHasDropError(true);
-      return;
-    }
+      if (!gltfFile) {
+        console.error(
+          "The dropped file type is not supported. Drop a gltf or glb file.",
+        );
+        setHasDropError(true);
+        return;
+      }
 
-    setHasDropError(false);
+      setHasDropError(false);
 
-    console.log(acceptedFiles);
-    // setModel();
-  }, []);
+      setModel({
+        name: path.basename(gltfFile.name, path.extname(gltfFile.name)),
+        path: URL.createObjectURL(gltfFile),
+        blobFileName: gltfFile.name,
+      });
+    },
+    [setModel],
+  );
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<PlayCanvasViewer>();
@@ -139,7 +145,7 @@ export const Viewer: React.FC = observer(() => {
 
     runAsync(async () => {
       debug("Load model start", model.path);
-      await viewer.loadModel(model.path);
+      await viewer.loadModel(model.path, model.blobFileName);
       debug("Load model end", model.path);
     });
 

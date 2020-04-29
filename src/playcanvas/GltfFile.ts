@@ -1,5 +1,6 @@
 export type GltfFile = {
   name: string;
-  description?: string;
   path: string;
+  description?: string;
+  blobFileName?: string;
 };
