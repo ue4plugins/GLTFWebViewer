@@ -9,6 +9,7 @@ import {
   getUnpackedFiles,
   getInvalidFiles,
 } from "../__fixtures__/files";
+import { readFile } from "../utility";
 
 function createDataTransferEvent(type: string, files: File[]) {
   const event = new Event(type, { bubbles: true });
@@ -35,14 +36,15 @@ const testGuid = "d9031d07-b017-4aa8-af51-f6bc461f37a4";
 const testUrl = `http://domain.com/${testGuid}`;
 
 describe("useModelDrop", () => {
-  const mockedConsoleError = jest.fn(console.error);
+  const mockedConsoleError = jest.fn();
+  const mockedCreateObjectURL = jest.fn((_: Blob) => testUrl);
   let invalidDropFiles: File[] = [];
   let unpackedDropFiles: File[] = [];
   let embeddedDropFiles: File[] = [];
 
   beforeAll(async () => {
     // eslint-disable-next-line
-    (global as any).URL.createObjectURL = jest.fn(() => testUrl);
+    (global as any).URL.createObjectURL = mockedCreateObjectURL;
     console.error = mockedConsoleError;
     invalidDropFiles = getInvalidFiles();
     unpackedDropFiles = await getUnpackedFiles();
@@ -51,9 +53,34 @@ describe("useModelDrop", () => {
 
   beforeEach(() => {
     mockedConsoleError.mockClear();
+    mockedCreateObjectURL.mockClear();
   });
 
-  it("should trigger callback if valid gltf file was dropped", async () => {
+  it("should trigger callback for embedded gltf files", async () => {
+    const onDrop = jest.fn();
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useModelDrop(onDrop),
+    );
+
+    const getRootProps = result.current[3];
+    const { container } = render(<div {...getRootProps()} />);
+    const div = container.children[0];
+
+    await act(async () => {
+      fireEvent(div, createDataTransferEvent("drop", embeddedDropFiles));
+      await waitForNextUpdate();
+      await flushPromises();
+    });
+
+    expect(onDrop).toHaveBeenCalledTimes(1);
+    expect(onDrop.mock.calls[0][0]).toEqual({
+      name: "TestModel",
+      path: testUrl,
+      blobFileName: "TestModel.gltf",
+    });
+  });
+
+  it("should trigger callback for unpacked gltf files", async () => {
     const onDrop = jest.fn();
     const { result, waitForNextUpdate } = renderHook(() =>
       useModelDrop(onDrop),
@@ -77,29 +104,38 @@ describe("useModelDrop", () => {
     });
   });
 
-  // it("should trigger callback if valid gltf file was dropped", async () => {
-  //   const onDrop = jest.fn();
-  //   const { result, waitForNextUpdate } = renderHook(() =>
-  //     useModelDrop(onDrop),
-  //   );
+  it("should update asset references for unpacked gltf files", async () => {
+    const onDrop = jest.fn();
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useModelDrop(onDrop),
+    );
 
-  //   const getRootProps = result.current[3];
-  //   const { container } = render(<div {...getRootProps()} />);
-  //   const div = container.children[0];
+    const getRootProps = result.current[3];
+    const { container } = render(<div {...getRootProps()} />);
+    const div = container.children[0];
 
-  //   await act(async () => {
-  //     fireEvent(div, createDataTransferEvent("drop", validDropFiles));
-  //     await waitForNextUpdate();
-  //     await flushPromises();
-  //   });
+    await act(async () => {
+      fireEvent(div, createDataTransferEvent("drop", unpackedDropFiles));
+      await waitForNextUpdate();
+      await flushPromises();
+    });
 
-  //   expect(onDrop).toHaveBeenCalledTimes(1);
-  //   expect(onDrop.mock.calls[0][0]).toEqual({
-  //     name: "TestModel",
-  //     path: testUrl,
-  //     blobFileName: "TestModel.gltf",
-  //   });
-  // });
+    expect(mockedCreateObjectURL).toHaveBeenCalledTimes(
+      unpackedDropFiles.length,
+    );
+
+    const gltfFile =
+      mockedCreateObjectURL.mock.calls[unpackedDropFiles.length - 1][0];
+    const gltfFileContent = await readFile(gltfFile, "text");
+    const gltf = JSON.parse(gltfFileContent!); // eslint-disable-line
+
+    // Ensures that reference to asset in same directory work
+    expect(gltf?.buffers[0]?.uri).toBe(testGuid);
+
+    // Ensures that reference to asset in sub directory work
+    expect(gltf?.images[0]?.uri).toBe(testGuid);
+    expect(gltf?.images[1]?.uri).toBe(testGuid);
+  });
 
   it("should abort and log error if no valid gltf file was dropped", async () => {
     const onDrop = jest.fn();
