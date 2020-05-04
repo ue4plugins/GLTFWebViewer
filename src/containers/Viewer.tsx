@@ -14,7 +14,7 @@ import { useStores } from "../stores";
 import {
   useAsyncWithLoadingAndErrorHandling,
   usePreventableCameraInteractions,
-  useDropModel,
+  useModelDrop,
 } from "../hooks";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -52,7 +52,7 @@ export const Viewer: React.FC = observer(() => {
     hasDropError,
     setHasDropError,
     getRootProps,
-  ] = useDropModel(onDropModel);
+  ] = useModelDrop(onDropModel);
 
   const [
     isLoading,

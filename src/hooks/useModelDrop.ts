@@ -8,7 +8,7 @@ function isGltfFile(file: File) {
   return !!path.extname(file.name).match(/\.(gltf|glb)$/);
 }
 
-export const useDropModel = (
+export const useModelDrop = (
   onDropModel: (file: GltfFile) => void,
 ): [
   boolean,
