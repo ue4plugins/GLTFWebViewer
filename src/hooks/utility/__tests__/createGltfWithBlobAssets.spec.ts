@@ -1,10 +1,6 @@
 import "jest";
-import { getTestFile } from "../__fixtures__/getTestFile";
+import { getTestFile } from "../../__fixtures__/getTestFile";
 import { readFile, createGltfWithBlobAssets } from "..";
-
-function blobToFile(blob: Blob, name: string) {
-  return new File([blob], name);
-}
 
 const testGuid = "d9031d07-b017-4aa8-af51-f6bc461f37a4";
 
@@ -17,32 +13,20 @@ describe("createGltfWithBlobAssets", () => {
   });
 
   it("should return gltf with object URL references", async () => {
-    const gltf = blobToFile(
-      await getTestFile("TestModel/TestModel.gltf", {
-        type: "application/json",
-      }),
-      "TestModel.gltf",
-    );
+    const gltf = await getTestFile("TestModelUnpacked/TestModel.gltf", {
+      type: "application/json",
+    });
 
     const assets = [
-      blobToFile(
-        await getTestFile("TestModel/TestModel.bin", {
-          type: "application/octet-stream",
-        }),
-        "TestModel.bin",
-      ),
-      blobToFile(
-        await getTestFile("TestModel/images/roughness_metallic_0.jpg", {
-          type: "image/jpeg",
-        }),
-        "roughness_metallic_0.jpg",
-      ),
-      blobToFile(
-        await getTestFile("TestModel/images/roughness_metallic_1.jpg", {
-          type: "image/jpeg",
-        }),
-        "roughness_metallic_1.jpg",
-      ),
+      await getTestFile("TestModelUnpacked/TestModel.bin", {
+        type: "application/octet-stream",
+      }),
+      await getTestFile("TestModelUnpacked/images/roughness_metallic_0.jpg", {
+        type: "image/jpeg",
+      }),
+      await getTestFile("TestModelUnpacked/images/roughness_metallic_1.jpg", {
+        type: "image/jpeg",
+      }),
     ];
 
     const outputFile = await createGltfWithBlobAssets(gltf, assets);
@@ -62,7 +46,7 @@ describe("createGltfWithBlobAssets", () => {
   });
 
   it("should return undefined for invalid/empty gltf file", async () => {
-    const gltf = blobToFile(new Blob([]), "TestModel.gltf");
+    const gltf = new File([], "TestModel.gltf");
     const outputFile = await createGltfWithBlobAssets(gltf, []);
     expect(outputFile).toBeUndefined();
   });

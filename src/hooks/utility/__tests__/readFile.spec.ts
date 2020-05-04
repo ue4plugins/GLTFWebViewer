@@ -1,10 +1,10 @@
 import "jest";
 import { readFile } from "../readFile";
-import { getTestFile } from "../__fixtures__/getTestFile";
+import { getTestFileBlob } from "../../__fixtures__/getTestFile";
 
 describe("readFile", () => {
   it("should be able to read gltf as text", async () => {
-    const file = await getTestFile("TestModel/TestModel.gltf", {
+    const file = await getTestFileBlob("TestModelUnpacked/TestModel.gltf", {
       type: "application/json",
     });
 
@@ -16,8 +16,8 @@ describe("readFile", () => {
   });
 
   it("should be able to read image as dataURL", async () => {
-    const file = await getTestFile(
-      "TestModel/images/roughness_metallic_0.jpg",
+    const file = await getTestFileBlob(
+      "TestModelUnpacked/images/roughness_metallic_0.jpg",
       { type: "image/jpeg" },
     );
     const content = await readFile(file, "dataURL");
@@ -26,7 +26,7 @@ describe("readFile", () => {
   });
 
   it("should be able to read binary as arrayBuffer", async () => {
-    const file = await getTestFile("TestModel/TestModel.bin");
+    const file = await getTestFileBlob("TestModelUnpacked/TestModel.bin");
     const content = await readFile(file, "arrayBuffer");
     expect(content instanceof ArrayBuffer).toBe(true);
     expect(content?.byteLength).toBe(340472);
