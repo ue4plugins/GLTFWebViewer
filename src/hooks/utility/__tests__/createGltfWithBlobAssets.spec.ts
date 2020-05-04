@@ -10,6 +10,7 @@ const testGuid = "d9031d07-b017-4aa8-af51-f6bc461f37a4";
 
 describe("createGltfWithBlobAssets", () => {
   beforeAll(() => {
+    // eslint-disable-next-line
     (global as any).URL.createObjectURL = jest.fn(
       () => `http://domain.com/${testGuid}`,
     );
