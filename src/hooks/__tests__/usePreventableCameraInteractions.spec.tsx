@@ -21,9 +21,9 @@ describe("usePreventableCameraInteractions", () => {
     window.removeEventListener("wheel", wheelMockEventHandler);
   });
   beforeEach(() => {
-    keyDownMockEventHandler.mockReset();
-    mouseDownMockEventHandler.mockReset();
-    wheelMockEventHandler.mockReset();
+    keyDownMockEventHandler.mockClear();
+    mouseDownMockEventHandler.mockClear();
+    wheelMockEventHandler.mockClear();
   });
 
   it("should add 'prevent' attribute to events if preventInteraction is set", () => {
