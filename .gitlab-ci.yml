@@ -12,7 +12,7 @@ variables:
 stages:
   - install_dependencies
   - lint
-  # - test
+  - test
   # - test_e2e
   - build
   # - release
@@ -34,7 +34,7 @@ lint:
   script:
     - npm run lint
 
-.test:
+test:
   tags:
     - docker-executor
   stage: test
