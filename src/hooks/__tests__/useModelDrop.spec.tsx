@@ -8,6 +8,7 @@ import {
   getEmbeddedFiles,
   getUnpackedFiles,
   getInvalidFiles,
+  getBinaryFiles,
 } from "../__fixtures__/files";
 import { readFile } from "../utility";
 
@@ -41,6 +42,7 @@ describe("useModelDrop", () => {
   let invalidDropFiles: File[] = [];
   let unpackedDropFiles: File[] = [];
   let embeddedDropFiles: File[] = [];
+  let binaryDropFiles: File[] = [];
 
   beforeAll(async () => {
     // eslint-disable-next-line
@@ -49,6 +51,7 @@ describe("useModelDrop", () => {
     invalidDropFiles = getInvalidFiles();
     unpackedDropFiles = await getUnpackedFiles();
     embeddedDropFiles = await getEmbeddedFiles();
+    binaryDropFiles = await getBinaryFiles();
   });
 
   beforeEach(() => {
@@ -77,6 +80,30 @@ describe("useModelDrop", () => {
       name: "TestModel",
       path: testUrl,
       blobFileName: "TestModel.gltf",
+    });
+  });
+
+  it("should trigger callback for binary glb files", async () => {
+    const onDrop = jest.fn();
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useModelDrop(onDrop),
+    );
+
+    const getRootProps = result.current[3];
+    const { container } = render(<div {...getRootProps()} />);
+    const div = container.children[0];
+
+    await act(async () => {
+      fireEvent(div, createDataTransferEvent("drop", binaryDropFiles));
+      await waitForNextUpdate();
+      await flushPromises();
+    });
+
+    expect(onDrop).toHaveBeenCalledTimes(1);
+    expect(onDrop.mock.calls[0][0]).toEqual({
+      name: "TestModel",
+      path: testUrl,
+      blobFileName: "TestModel.glb",
     });
   });
 

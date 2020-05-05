@@ -20,3 +20,7 @@ export async function getUnpackedFiles() {
 export async function getEmbeddedFiles() {
   return [await getTestFile("TestModelEmbedded/TestModel.gltf")];
 }
+
+export async function getBinaryFiles() {
+  return [await getTestFile("TestModelBinary/TestModel.glb")];
+}
