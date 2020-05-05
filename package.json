@@ -30,6 +30,7 @@
     "@material-ui/core": "^4.9.7",
     "@material-ui/icons": "^4.9.1",
     "clsx": "^1.1.0",
+    "draco3d": "^1.3.6",
     "fs-extra": "^8.1.0",
     "fuse.js": "^5.0.6-beta",
     "lodash.debounce": "^4.0.8",

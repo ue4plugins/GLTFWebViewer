@@ -27,4 +27,14 @@ interface Window {
    * Used by e2e tests to access the current viewer instance.
    */
   viewer?: TestableViewer;
+
+  /**
+   * Used by PlayCanvas glTF parser.
+   */
+  DracoDecoderModule: any;
+}
+
+declare module "draco3d" {
+  function createDecoderModule(): any;
+  function createEncoderModule(): any;
 }
