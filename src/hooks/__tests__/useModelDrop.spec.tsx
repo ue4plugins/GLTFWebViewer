@@ -9,6 +9,7 @@ import {
   getUnpackedFiles,
   getInvalidFiles,
   getBinaryFiles,
+  getEmptyGltfFiles,
 } from "../__fixtures__/files";
 import { readFile } from "../utility";
 
@@ -40,6 +41,7 @@ describe("useModelDrop", () => {
   const mockedConsoleError = jest.fn();
   const mockedCreateObjectURL = jest.fn((_: Blob) => testUrl);
   let invalidDropFiles: File[] = [];
+  let emptyGltfDropFiles: File[] = [];
   let unpackedDropFiles: File[] = [];
   let embeddedDropFiles: File[] = [];
   let binaryDropFiles: File[] = [];
@@ -49,6 +51,7 @@ describe("useModelDrop", () => {
     (global as any).URL.createObjectURL = mockedCreateObjectURL;
     console.error = mockedConsoleError;
     invalidDropFiles = getInvalidFiles();
+    emptyGltfDropFiles = getEmptyGltfFiles();
     unpackedDropFiles = await getUnpackedFiles();
     embeddedDropFiles = await getEmbeddedFiles();
     binaryDropFiles = await getBinaryFiles();
@@ -164,7 +167,7 @@ describe("useModelDrop", () => {
     expect(gltf?.images[1]?.uri).toBe(testGuid);
   });
 
-  it("should abort and log error if no valid gltf file was dropped", async () => {
+  it("should abort and log error if no gltf file was dropped", async () => {
     const onDrop = jest.fn();
     const { result, waitForNextUpdate } = renderHook(() =>
       useModelDrop(onDrop),
@@ -182,5 +185,78 @@ describe("useModelDrop", () => {
 
     expect(mockedConsoleError).toHaveBeenCalledTimes(1);
     expect(onDrop).toHaveBeenCalledTimes(0);
+    expect(result.current[1]).toBe(true);
+  });
+
+  it("should abort and log error if an invalid gltf file was dropped", async () => {
+    const onDrop = jest.fn();
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useModelDrop(onDrop),
+    );
+
+    const getRootProps = result.current[3];
+    const { container } = render(<div {...getRootProps()} />);
+    const div = container.children[0];
+
+    await act(async () => {
+      fireEvent(div, createDataTransferEvent("drop", emptyGltfDropFiles));
+      await waitForNextUpdate();
+      await flushPromises();
+    });
+
+    expect(mockedConsoleError).toHaveBeenCalledTimes(1);
+    expect(onDrop).toHaveBeenCalledTimes(0);
+    expect(result.current[1]).toBe(true);
+  });
+
+  it("should set error state if error state callback is used", async () => {
+    const onDrop = jest.fn();
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useModelDrop(onDrop),
+    );
+
+    const getRootProps = result.current[3];
+    const { container } = render(<div {...getRootProps()} />);
+    const div = container.children[0];
+
+    await act(async () => {
+      fireEvent(div, createDataTransferEvent("drop", emptyGltfDropFiles));
+      await waitForNextUpdate();
+      await flushPromises();
+    });
+
+    expect(result.current[1]).toBe(true);
+
+    await act(async () => {
+      result.current[2](false);
+      await waitForNextUpdate();
+    });
+
+    expect(result.current[1]).toBe(false);
+  });
+
+  it("should toggle drag active state on drag enter and drag leave", async () => {
+    const onDrop = jest.fn();
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useModelDrop(onDrop),
+    );
+
+    const getRootProps = result.current[3];
+    const { container } = render(<div {...getRootProps()} />);
+    const div = container.children[0];
+
+    await act(async () => {
+      fireEvent(div, createDataTransferEvent("dragenter", embeddedDropFiles));
+      await waitForNextUpdate();
+    });
+
+    expect(result.current[0]).toBe(true);
+
+    await act(async () => {
+      fireEvent(div, createDataTransferEvent("dragleave", embeddedDropFiles));
+      await waitForNextUpdate();
+    });
+
+    expect(result.current[0]).toBe(false);
   });
 });

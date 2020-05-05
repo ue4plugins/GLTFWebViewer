@@ -7,6 +7,9 @@ export function getInvalidFiles() {
     }),
   ];
 }
+export function getEmptyGltfFiles() {
+  return [new File([], "TestModel.gltf"), new File([], "TestImage1.jpg")];
+}
 
 export async function getUnpackedFiles() {
   return [
