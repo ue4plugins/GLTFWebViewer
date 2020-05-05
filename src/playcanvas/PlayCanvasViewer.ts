@@ -66,8 +66,7 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public get scenes(): pc.SceneFile[] {
-    // TODO: change this when the new scene API is introduced in the engine
-    return (this.app as any)._sceneRegistry?.list() || [];
+    return this.app.scenes.list();
   }
 
   private resizeCanvas() {
@@ -164,8 +163,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     debug("Loading scene", url);
     return new Promise<void>((resolve, reject) => {
-      // TODO: change to new scene registry API once it's released
-      (this.app as any).loadScene(url, (error: string, scene: pc.Scene) => {
+      this.app.scenes.loadScene(url, (error: string, scene: pc.Scene) => {
         this._sceneLoaded = true;
         if (error) {
           reject(error);
