@@ -80,7 +80,7 @@ build:
     - npm run build
   artifacts:
     paths:
-      - ./$BUILD_FOLDER
+      - $BUILD_FOLDER
     expire_in: 1 day
 
 .release:
