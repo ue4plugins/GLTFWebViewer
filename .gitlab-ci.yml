@@ -11,10 +11,10 @@ variables:
 
 stages:
   - install_dependencies
-  - lint
-  - test
+  # - lint
+  # - test
   # - test_e2e
-  - build
+  # - build
   # - release
   - deploy
 
@@ -28,14 +28,14 @@ install_dependencies:
   script:
     - npm ci
 
-lint:
+.lint:
   tags:
     - docker-executor
   stage: lint
   script:
     - npm run lint
 
-test:
+.test:
   tags:
     - docker-executor
   stage: test
@@ -72,7 +72,7 @@ test:
     - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
   when: manual
 
-build:
+.build:
   tags:
     - docker-executor
   stage: build
@@ -88,7 +88,7 @@ build:
     - docker-executor
   stage: release
   script:
-    - npx semantic-release --branch master
+    - npx semantic-release
   only:
     - master
 
