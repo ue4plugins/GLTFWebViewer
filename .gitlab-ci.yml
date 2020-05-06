@@ -10,15 +10,15 @@ variables:
   CI: "true"
 
 stages:
-  # - install_dependencies
+  - install_dependencies
   # - lint
   # - test
   # - test_e2e
-  # - build
+  - build
   # - release
   - deploy
 
-.install_dependencies:
+install_dependencies:
   tags:
     - docker-executor
   stage: install_dependencies
@@ -72,16 +72,16 @@ stages:
     - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
   when: manual
 
-.build:
+build:
   tags:
     - docker-executor
   stage: build
   script:
     - npm run build
-  # artifacts:
-  #   paths:
-  #     - ./build
-  #   expire_in: 1 day
+  artifacts:
+    paths:
+      - ./$BUILD_FOLDER
+    expire_in: 1 day
 
 .release:
   tags:
@@ -100,5 +100,5 @@ deploy:
     - apt-get update -qy
     - apt-get install -y lftp
   script:
-    - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete public/ $FTP_DEST_FOLDER/; bye"
+    - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete $BUILD_FOLDER/ $FTP_DEST_FOLDER/; bye"
   when: manual
