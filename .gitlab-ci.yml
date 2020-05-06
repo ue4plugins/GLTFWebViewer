@@ -16,6 +16,7 @@ stages:
   # - test_e2e
   - build
   # - release
+  - deploy
 
 install_dependencies:
   tags:
@@ -90,3 +91,15 @@ build:
     - npx semantic-release --branch master
   only:
     - master
+
+deploy:
+  tags:
+    - docker-executor
+  stage: deploy
+  when: manual
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y lftp
+  script:
+    - npm run build
+    - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete $BUILD_FOLDER $FTP_DEST_FOLDER/; bye"
