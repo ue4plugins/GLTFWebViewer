@@ -37,7 +37,7 @@
     "lodash.debounce": "^4.0.8",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
-    "playcanvas": "^1.27.0",
+    "playcanvas": "^1.27.3",
     "react": "^16.13.1",
     "react-app-rewire-alias": "^0.1.3",
     "react-dom": "^16.13.1",
