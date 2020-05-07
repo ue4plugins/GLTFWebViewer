@@ -5,6 +5,14 @@ import ResizeObserver from "resize-observer-polyfill";
 import { OrbitCamera } from "./scripts";
 
 const debug = Debug("playCanvasViewer");
+const orbitCameraScriptName = "OrbitCamera";
+const assetPrefix = "assets/playcanvas/";
+
+type CameraEntity = pc.Entity & {
+  script: pc.ScriptComponent & {
+    [orbitCameraScriptName]: OrbitCamera;
+  };
+};
 
 type ContainerResource = {
   model?: pc.Asset;
@@ -12,17 +20,9 @@ type ContainerResource = {
   animations: pc.Asset[];
 };
 
-type CameraEntity = pc.Entity & {
-  script: pc.ScriptComponent & {
-    OrbitCamera: OrbitCamera;
-  };
-};
-
 type PlayCanvasViewerOptions = {
   autoPlayAnimations: boolean;
 };
-
-const assetPrefix = "assets/playcanvas/";
 
 export class PlayCanvasViewer implements TestableViewer {
   private app: pc.Application;
@@ -113,7 +113,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private createCamera(app: pc.Application) {
     debug("Creating camera");
 
-    pc.registerScript(OrbitCamera);
+    pc.registerScript(OrbitCamera, orbitCameraScriptName);
 
     const camera = new pc.Entity("camera") as CameraEntity;
     camera.addComponent("camera", {
@@ -121,10 +121,10 @@ export class PlayCanvasViewer implements TestableViewer {
       clearColor: new pc.Color(0, 0, 0),
     });
     camera.addComponent("script");
-    camera.script.create(OrbitCamera.name);
-    camera.script.OrbitCamera.inertiaFactor = 0.07;
-    camera.script.OrbitCamera.nearClipFactor = 0.002;
-    camera.script.OrbitCamera.farClipFactor = 10;
+    camera.script.create(orbitCameraScriptName);
+    camera.script[orbitCameraScriptName].inertiaFactor = 0.07;
+    camera.script[orbitCameraScriptName].nearClipFactor = 0.002;
+    camera.script[orbitCameraScriptName].farClipFactor = 10;
 
     app.root.addChild(camera);
 
@@ -257,12 +257,12 @@ export class PlayCanvasViewer implements TestableViewer {
     debug("Focus on model", this.entity);
 
     if (this.entity) {
-      this.camera.script.OrbitCamera.focus(this.entity);
+      this.camera.script[orbitCameraScriptName].focus(this.entity);
     }
   }
 
   public resetCamera(yaw?: number, pitch?: number, distance?: number) {
-    this.camera.script.OrbitCamera.reset(yaw, pitch, distance);
+    this.camera.script[orbitCameraScriptName].reset(yaw, pitch, distance);
   }
 
   private async loadGltfAsset(url: string, fileName?: string) {
