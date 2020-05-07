@@ -43,10 +43,10 @@ test:
     - npm run test
 
 .test_e2e:
-  stage: test_e2e
-  image: samujoha/gitlab-ci-puppeteer-headful:latest
   tags:
     - docker-executor
+  stage: test_e2e
+  image: samujoha/gitlab-ci-puppeteer-headful:latest
   before_script:
     - chmod -R +x ./ci
   script:
@@ -60,11 +60,11 @@ test:
     expire_in: 30 days
 
 .test_e2e_update:
+  tags:
+    - docker-executor
   stage: test_e2e
   when: manual
   image: samujoha/gitlab-ci-puppeteer-headful:latest
-  tags:
-    - docker-executor
   before_script:
     - chmod -R +x ./ci
   script:
