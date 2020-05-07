@@ -3,6 +3,7 @@
   "name": "@epic/gltf-web-viewer",
   "description": "glTF Web Viewer",
   "version": "1.0.0",
+  "homepage": ".",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
