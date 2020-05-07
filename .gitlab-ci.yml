@@ -96,6 +96,8 @@ deploy:
   tags:
     - docker-executor
   stage: deploy
+  only:
+    - master
   dependencies:
     - build
   before_script:
