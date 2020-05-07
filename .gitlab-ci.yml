@@ -61,6 +61,7 @@ install_dependencies:
 
 .test_e2e_update:
   stage: test_e2e
+  when: manual
   image: samujoha/gitlab-ci-puppeteer-headful:latest
   tags:
     - docker-executor
@@ -70,7 +71,6 @@ install_dependencies:
     - ./ci/setup-e2e-env.sh
     - npm run test:e2e-update
     - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
-  when: manual
 
 build:
   tags:
@@ -103,4 +103,3 @@ deploy:
     - apt-get install -y lftp
   script:
     - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete $BUILD_FOLDER/ $FTP_DEST_FOLDER/; bye"
-  when: manual
