@@ -1,14 +1,21 @@
 /* eslint-disable import/extensions */
 import "jest";
+import { TextEncoder } from "util";
 import xhrMock from "xhr-mock";
 import pc from "playcanvas";
 import { PlayCanvasViewer } from "../PlayCanvasViewer";
-import mockConfig from "../../../public/assets/playcanvas/config.json";
-import mockScene from "../__fixtures__/Scene.json";
+import mockConfigObject from "../../../public/assets/playcanvas/config.json";
+import mockSceneObject from "../__fixtures__/Scene.json";
+import mockModelObject from "../__fixtures__/Model.json";
 
+const mockConfig = JSON.stringify(mockConfigObject);
+const mockScene = JSON.stringify(mockSceneObject);
+const mockModel = new TextEncoder().encode(JSON.stringify(mockModelObject));
 const mockSceneUrl = "scene.json";
+const mockModelUrl = "model.gltf";
 
-const toRegExp = (pattern: string) => new RegExp(pattern.replace(/\./g, "\\."));
+const toEscapedRegExp = (pattern: string) =>
+  new RegExp(pattern.replace(/\./g, "\\."));
 
 const createAndConfigureViewer = async () => {
   const canvas = document.createElement("canvas");
@@ -20,13 +27,10 @@ const createAndConfigureViewer = async () => {
 describe("PlayCanvasViewer", () => {
   beforeEach(() => {
     xhrMock.setup();
-    // xhrMock.use((...args) => {
-    //   // console.log(args);
-    //   return undefined;
-    // });
-    xhrMock.get(/config\.json$/, { body: JSON.stringify(mockConfig) });
-    xhrMock.get(toRegExp(mockSceneUrl), { body: JSON.stringify(mockScene) });
-    xhrMock.get(/\.dds/, { body: undefined });
+    xhrMock.get(toEscapedRegExp("config.json"), { body: mockConfig });
+    xhrMock.get(toEscapedRegExp(mockSceneUrl), { body: mockScene });
+    xhrMock.get(toEscapedRegExp(mockModelUrl), { body: mockModel });
+    xhrMock.get(toEscapedRegExp(".dds"), { body: null });
   });
 
   afterEach(() => xhrMock.teardown());
@@ -68,7 +72,17 @@ describe("PlayCanvasViewer", () => {
 
   describe("Model", () => {
     it("should be able to load model", async () => {
-      // TODO
+      const viewer = await createAndConfigureViewer();
+      expect(viewer.modelLoaded).toBe(false);
+
+      const modelBeforeLoad = viewer.app.root.findComponent("model");
+      expect(modelBeforeLoad).toBeFalsy();
+
+      await viewer.loadModel(mockModelUrl);
+      expect(viewer.modelLoaded).toBe(true);
+
+      const modelAfterLoad = viewer.app.root.findComponent("model");
+      expect(modelAfterLoad).not.toBeFalsy();
     });
 
     it("should be able to load model from blob URL (drag-and-drop) ", async () => {
