@@ -18,14 +18,14 @@ const shouldSuppressMessage = (msg: string) =>
 
 // eslint-disable-next-line
 console.warn = (...args: any[]) => {
-  if (!shouldSuppressMessage(args[0])) {
+  if (typeof args[0] !== "string" || !shouldSuppressMessage(args[0])) {
     orgWarn(...args);
   }
 };
 
 // eslint-disable-next-line
 console.log = (...args: any[]) => {
-  if (!shouldSuppressMessage(args[0])) {
+  if (typeof args[0] !== "string" || !shouldSuppressMessage(args[0])) {
     orgLog(...args);
   }
 };
