@@ -16,14 +16,14 @@ const shouldSuppressMessage = (msg: string) =>
     /Powered by PlayCanvas/,
   ].some(m => msg.match(new RegExp(m)));
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 console.warn = (...args: any[]) => {
   if (typeof args[0] !== "string" || !shouldSuppressMessage(args[0])) {
     orgWarn(...args);
   }
 };
 
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 console.log = (...args: any[]) => {
   if (typeof args[0] !== "string" || !shouldSuppressMessage(args[0])) {
     orgLog(...args);

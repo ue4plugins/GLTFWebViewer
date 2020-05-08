@@ -48,7 +48,7 @@ describe("useModelDrop", () => {
   let binaryDropFiles: File[] = [];
 
   beforeAll(async () => {
-    // eslint-disable-next-line
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any).URL.createObjectURL = mockedCreateObjectURL;
     console.error = mockedConsoleError;
     invalidDropFiles = getInvalidFiles();
