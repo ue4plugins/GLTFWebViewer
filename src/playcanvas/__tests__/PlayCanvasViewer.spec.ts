@@ -1,14 +1,14 @@
+/* eslint-disable import/extensions */
 import "jest";
 import xhrMock from "xhr-mock";
 import pc from "playcanvas";
 import { PlayCanvasViewer } from "../PlayCanvasViewer";
-// eslint-disable-next-line
 import mockConfig from "../../../public/assets/playcanvas/config.json";
-// eslint-disable-next-line
-import mockScene from "../../../public/assets/playcanvas/894846.json";
+import mockScene from "../__fixtures__/Scene.json";
 
-const mockSceneUrl = `${mockScene.id}.json`;
-const mockSceneUrlRegExp = new RegExp(mockSceneUrl.replace(/\./g, "\\."));
+const mockSceneUrl = "scene.json";
+
+const toRegExp = (pattern: string) => new RegExp(pattern.replace(/\./g, "\\."));
 
 const createAndConfigureViewer = async () => {
   const canvas = document.createElement("canvas");
@@ -25,7 +25,7 @@ describe("PlayCanvasViewer", () => {
     //   return undefined;
     // });
     xhrMock.get(/config\.json$/, { body: JSON.stringify(mockConfig) });
-    xhrMock.get(mockSceneUrlRegExp, { body: JSON.stringify(mockScene) });
+    xhrMock.get(toRegExp(mockSceneUrl), { body: JSON.stringify(mockScene) });
     xhrMock.get(/\.dds/, { body: undefined });
   });
 
@@ -52,26 +52,14 @@ describe("PlayCanvasViewer", () => {
       const viewer = await createAndConfigureViewer();
       expect(viewer.sceneLoaded).toBe(false);
       expect(viewer.app.scene.root).toBe(null);
-
-      const scene = viewer.scenes.find(s => s.url === mockSceneUrl);
-      if (!scene) {
-        throw new Error("Test scene not found");
-      }
-
-      await viewer.loadScene(scene.url);
+      await viewer.loadScene(mockSceneUrl);
       expect(viewer.sceneLoaded).toBe(true);
       expect(viewer.app.scene.root).toBeInstanceOf(pc.GraphNode);
     });
 
     it("should clean up when destroying scene", async () => {
       const viewer = await createAndConfigureViewer();
-      const scene = viewer.scenes.find(s => s.url === mockSceneUrl);
-      if (!scene) {
-        throw new Error("Test scene not found");
-      }
-      await viewer.loadScene(scene.url);
-      expect(viewer.sceneLoaded).toBe(true);
-      expect(viewer.app.scene.root).toBeInstanceOf(pc.GraphNode);
+      await viewer.loadScene(mockSceneUrl);
       viewer.destroyScene();
       expect(viewer.sceneLoaded).toBe(false);
       expect(viewer.app.scene.root).toBeUndefined();
