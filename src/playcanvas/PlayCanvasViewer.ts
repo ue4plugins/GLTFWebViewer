@@ -55,6 +55,10 @@ export class PlayCanvasViewer implements TestableViewer {
     this._canvasResizeObserver.observe(this.canvas);
   }
 
+  public get app() {
+    return this._app;
+  }
+
   public get initiated() {
     return !!this._app.graphicsDevice && this._initiated;
   }
