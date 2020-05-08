@@ -143,7 +143,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     debug("Configuring app");
     return new Promise<void>((resolve, reject) => {
-      const url = "assets/playcanvas/config.json";
+      const url = pc.path.join(assetPrefix, "config.json");
 
       app.configure(url, error => {
         if (error) {
