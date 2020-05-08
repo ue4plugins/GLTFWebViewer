@@ -9,6 +9,16 @@ import mockScene from "../../../public/assets/playcanvas/894846.json";
 
 const mockSceneUrl = `${mockScene.id}.json`;
 const mockSceneUrlRegExp = new RegExp(mockSceneUrl.replace(/\./g, "\\."));
+
+const createAndConfigureViewer = async () => {
+  const canvas = document.createElement("canvas");
+  const viewer = new PlayCanvasViewer(canvas, {
+    autoPlayAnimations: false,
+  });
+  await viewer.configure();
+  return viewer;
+};
+
 describe("PlayCanvasViewer", () => {
   beforeEach(() => {
     xhrMock.setup();
@@ -25,20 +35,12 @@ describe("PlayCanvasViewer", () => {
 
   describe("Setup and teardown", () => {
     it("should be initiated after setup", async () => {
-      const canvas = document.createElement("canvas");
-      const viewer = new PlayCanvasViewer(canvas, {
-        autoPlayAnimations: false,
-      });
-      await viewer.configure();
+      const viewer = await createAndConfigureViewer();
       expect(viewer.initiated).toBe(true);
     });
 
     it("should have scene list after setup", async () => {
-      const canvas = document.createElement("canvas");
-      const viewer = new PlayCanvasViewer(canvas, {
-        autoPlayAnimations: false,
-      });
-      await viewer.configure();
+      const viewer = await createAndConfigureViewer();
       expect(viewer.scenes.length).toBeGreaterThan(0);
     });
 
@@ -49,11 +51,7 @@ describe("PlayCanvasViewer", () => {
 
   describe("Scene", () => {
     it("should be able to load scene", async () => {
-      const canvas = document.createElement("canvas");
-      const viewer = new PlayCanvasViewer(canvas, {
-        autoPlayAnimations: false,
-      });
-      await viewer.configure();
+      const viewer = await createAndConfigureViewer();
       expect(viewer.sceneLoaded).toBe(false);
       expect(viewer.app.scene.root).toBe(null);
 
@@ -68,43 +66,43 @@ describe("PlayCanvasViewer", () => {
     });
 
     it("should clean up when destroying scene", async () => {
-      //TODO
+      // TODO
     });
   });
 
   describe("Model", () => {
     it("should be able to load model", async () => {
-      //TODO
+      // TODO
     });
 
     it("should be able to load model from blob URL (drag-and-drop) ", async () => {
-      //TODO
+      // TODO
     });
 
     it("should clean up when destroying model", async () => {
-      //TODO
+      // TODO
     });
 
     it("should auto play animations if specified in constructor", async () => {
-      //TODO
+      // TODO
     });
   });
 
   describe("Camera", () => {
     it("should have camera", async () => {
-      //TODO
+      // TODO
     });
 
     it("should focus camera after loading model", async () => {
-      //TODO
+      // TODO
     });
 
     it("should be able to focus on entity", async () => {
-      //TODO
+      // TODO
     });
 
     it("should be able to reset camera placement props", async () => {
-      //TODO
+      // TODO
     });
   });
 });
