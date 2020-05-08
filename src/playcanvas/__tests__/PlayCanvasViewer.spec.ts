@@ -64,7 +64,17 @@ describe("PlayCanvasViewer", () => {
     });
 
     it("should clean up when destroying scene", async () => {
-      // TODO
+      const viewer = await createAndConfigureViewer();
+      const scene = viewer.scenes.find(s => s.url === mockSceneUrl);
+      if (!scene) {
+        throw new Error("Test scene not found");
+      }
+      await viewer.loadScene(scene.url);
+      expect(viewer.sceneLoaded).toBe(true);
+      expect(viewer.app.scene.root).toBeInstanceOf(pc.GraphNode);
+      viewer.destroyScene();
+      expect(viewer.sceneLoaded).toBe(false);
+      expect(viewer.app.scene.root).toBeUndefined();
     });
   });
 
