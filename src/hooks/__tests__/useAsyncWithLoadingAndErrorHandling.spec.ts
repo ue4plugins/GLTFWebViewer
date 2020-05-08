@@ -8,9 +8,6 @@ const delay = (duration: number) =>
   });
 
 describe("useAsyncWithLoadingAndErrorHandling", () => {
-  const originalConsoleError = console.error;
-  afterEach(() => (console.error = originalConsoleError));
-
   it("should not be loading initially", () => {
     const { result } = renderHook(() => useAsyncWithLoadingAndErrorHandling());
     expect(result.current[0]).toBe(false);

@@ -38,6 +38,7 @@ const testGuid = "d9031d07-b017-4aa8-af51-f6bc461f37a4";
 const testUrl = `http://domain.com/${testGuid}`;
 
 describe("useModelDrop", () => {
+  const originalConsoleError = console.error;
   const mockedConsoleError = jest.fn();
   const mockedCreateObjectURL = jest.fn((_: Blob) => testUrl);
   let invalidDropFiles: File[] = [];
@@ -55,6 +56,10 @@ describe("useModelDrop", () => {
     unpackedDropFiles = await getUnpackedFiles();
     embeddedDropFiles = await getEmbeddedFiles();
     binaryDropFiles = await getBinaryFiles();
+  });
+
+  afterAll(() => {
+    console.error = originalConsoleError;
   });
 
   beforeEach(() => {
