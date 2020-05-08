@@ -12,9 +12,7 @@ const mockSceneUrlRegExp = new RegExp(mockSceneUrl.replace(/\./g, "\\."));
 
 const createAndConfigureViewer = async () => {
   const canvas = document.createElement("canvas");
-  const viewer = new PlayCanvasViewer(canvas, {
-    autoPlayAnimations: false,
-  });
+  const viewer = new PlayCanvasViewer(canvas, { autoPlayAnimations: false });
   await viewer.configure();
   return viewer;
 };
