@@ -3,7 +3,7 @@ import React from "react";
 import { render } from "react-dom";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { createDecoderModule } from "draco3d";
-import { Root } from "./containers/Root";
+import { Root } from "./containers";
 import { RootStoreProvider } from "./stores";
 import { theme } from "./theme";
 import * as serviceWorker from "./serviceWorker";

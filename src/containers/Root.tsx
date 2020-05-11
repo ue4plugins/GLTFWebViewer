@@ -3,11 +3,13 @@ import clsx from "clsx";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import { Divider } from "@material-ui/core";
-import { Sidebar } from "../components/Sidebar";
-import { FpsMonitor } from "../components/FpsMonitor";
-import { SidebarToggle } from "../components/SidebarToggle";
-import { SceneSelector } from "../components/SceneSelector";
-import { ModelList } from "../components/ModelList";
+import {
+  Sidebar,
+  FpsMonitor,
+  SidebarToggle,
+  SceneSelector,
+  ModelList,
+} from "../components";
 import { useStores } from "../stores";
 import { Viewer } from "./Viewer";
 
