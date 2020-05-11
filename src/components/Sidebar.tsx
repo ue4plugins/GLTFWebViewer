@@ -2,8 +2,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Drawer, Divider, IconButton } from "@material-ui/core";
 import { ChevronRight } from "@material-ui/icons";
-import { ModelList } from "./ModelList";
-import { SceneSelector } from "./SceneSelector";
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -28,7 +26,7 @@ type Props = {
   setIsOpen: (open: boolean) => void;
 };
 
-export const Sidebar: React.FC<Props> = ({ isOpen, setIsOpen }) => {
+export const Sidebar: React.FC<Props> = ({ children, isOpen, setIsOpen }) => {
   const classes = useStyles();
 
   return (
@@ -52,9 +50,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen, setIsOpen }) => {
         </IconButton>
       </div>
       <Divider />
-      <SceneSelector />
-      <Divider />
-      <ModelList />
+      {children}
     </Drawer>
   );
 };
