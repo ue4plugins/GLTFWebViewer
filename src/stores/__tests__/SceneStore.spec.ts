@@ -43,6 +43,18 @@ describe("SceneStore", () => {
     expect(store.scene).toEqual(scenes[1]);
   });
 
+  it("should have scene index after setScene is called", async () => {
+    const store = new SceneStore();
+    store.setScenes(scenes);
+    expect(store.sceneIndex).toEqual(0);
+
+    store.setScene(undefined);
+    expect(store.sceneIndex).toEqual(-1);
+
+    store.setScene(scenes[1]);
+    expect(store.sceneIndex).toEqual(1);
+  });
+
   it("should automatically set scene from url param", async () => {
     mockLocationSearch("?scene=Tropical%20Beach");
 
