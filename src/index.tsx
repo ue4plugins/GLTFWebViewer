@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React from "react";
 import { render } from "react-dom";
 import { ThemeProvider } from "@material-ui/core/styles";

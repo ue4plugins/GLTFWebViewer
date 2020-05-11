@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { createMuiTheme } from "@material-ui/core/styles";
 
 declare module "@material-ui/core/styles" {
