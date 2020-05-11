@@ -1,5 +1,11 @@
 import React, { createContext, useContext } from "react";
-import { RootStore } from "./RootStore";
+import { ModelStore } from "./ModelStore";
+import { SceneStore } from "./SceneStore";
+
+export class RootStore {
+  public modelStore = new ModelStore();
+  public sceneStore = new SceneStore();
+}
 
 export const RootStoreContext = createContext<RootStore>({} as RootStore);
 
