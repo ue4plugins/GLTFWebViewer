@@ -20,7 +20,7 @@ type ContainerResource = {
   animations: pc.Asset[];
 };
 
-type PlayCanvasViewerOptions = {
+export type PlayCanvasViewerOptions = {
   autoPlayAnimations: boolean;
 };
 
