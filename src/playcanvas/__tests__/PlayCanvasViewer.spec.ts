@@ -8,6 +8,7 @@ import {
   configResponse,
   sceneResponse,
   modelEmbeddedResponse,
+  modelEmbeddedInvalidResponse,
   modelEmbeddedAnimatedResponse,
   modelUnpackedResponse,
   modelUnpackedBinResponse,
@@ -15,6 +16,7 @@ import {
 
 const sceneUrl = "scene.json";
 const modelEmbeddedUrl = "model-embedded.gltf";
+const modelEmbeddedInvalidUrl = "model-embedded-invalid.gltf";
 const modelEmbeddedAnimatedUrl = "model-embedded-anim.gltf";
 const modelUnpackedUrl = "model-unpacked.gltf";
 const modelUnpackedBlobUrl = "d9031d07-b017-4aa8-af51-f6bc461f37a4";
@@ -45,6 +47,9 @@ describe("PlayCanvasViewer", () => {
   const configHandler = createRequestHandler(configResponse);
   const sceneHandler = createRequestHandler(sceneResponse);
   const modelEmbeddedHandler = createRequestHandler(modelEmbeddedResponse);
+  const modelEmbeddedInvalidHandler = createRequestHandler(
+    modelEmbeddedInvalidResponse,
+  );
   const modelEmbeddedAnimatedHandler = createRequestHandler(
     modelEmbeddedAnimatedResponse,
   );
@@ -57,6 +62,10 @@ describe("PlayCanvasViewer", () => {
     xhrMock.get(toEscapedRegExp("config.json"), configHandler);
     xhrMock.get(toEscapedRegExp(sceneUrl), sceneHandler);
     xhrMock.get(toEscapedRegExp(modelEmbeddedUrl), modelEmbeddedHandler);
+    xhrMock.get(
+      toEscapedRegExp(modelEmbeddedInvalidUrl),
+      modelEmbeddedInvalidHandler,
+    );
     xhrMock.get(
       toEscapedRegExp(modelEmbeddedAnimatedUrl),
       modelEmbeddedAnimatedHandler,
@@ -214,6 +223,27 @@ describe("PlayCanvasViewer", () => {
       ) as pc.AnimationComponent;
       expect(animation2 || undefined).toBeDefined();
       expect(animation2.speed).toBe(0);
+    });
+
+    it("should throw when loading invalid model", async () => {
+      const originalConsoleError = console.error;
+      console.error = jest.fn();
+
+      expect.assertions(3);
+
+      const viewer = await createAndConfigureViewer();
+
+      try {
+        await viewer.loadModel(modelEmbeddedInvalidUrl);
+      } catch (e) {
+        expect(e).toBeDefined();
+      }
+
+      expect(viewer.modelLoaded).toBe(true);
+      const model = viewer.app.root.findComponent("model");
+      expect(model || undefined).toBeUndefined();
+
+      console.error = originalConsoleError;
     });
   });
 
