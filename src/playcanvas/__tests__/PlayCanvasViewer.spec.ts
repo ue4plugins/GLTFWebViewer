@@ -33,6 +33,7 @@ const createAndConfigureViewer = async (
   return viewer;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createRequestHandler = (body: any) => {
   const handler: MockFunction = (_, res) => res.body(body);
   return jest.fn(handler);
