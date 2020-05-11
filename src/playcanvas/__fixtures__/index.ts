@@ -11,6 +11,10 @@ export const modelEmbeddedResponse = readFileSync(
   join(__dirname, "./ModelEmbedded.gltf"),
 );
 
+export const modelEmbeddedAnimatedResponse = readFileSync(
+  join(__dirname, "./ModelEmbeddedAnimated.gltf"),
+);
+
 export const modelUnpackedResponse = readFileSync(
   join(__dirname, "./ModelUnpacked.gltf"),
 );

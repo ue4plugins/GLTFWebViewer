@@ -3,26 +3,30 @@ import "jest";
 import xhrMock from "xhr-mock";
 import { MockFunction } from "xhr-mock/lib/types";
 import pc from "playcanvas";
-import { PlayCanvasViewer } from "../PlayCanvasViewer";
+import { PlayCanvasViewer, PlayCanvasViewerOptions } from "../PlayCanvasViewer";
 import {
   configResponse,
   sceneResponse,
   modelEmbeddedResponse,
+  modelEmbeddedAnimatedResponse,
   modelUnpackedResponse,
   modelUnpackedBinResponse,
 } from "../__fixtures__";
 
 const sceneUrl = "scene.json";
 const modelEmbeddedUrl = "model-embedded.gltf";
+const modelEmbeddedAnimatedUrl = "model-embedded-anim.gltf";
 const modelUnpackedUrl = "model-unpacked.gltf";
 const modelUnpackedBlobUrl = "d9031d07-b017-4aa8-af51-f6bc461f37a4";
 
 const toEscapedRegExp = (pattern: string) =>
   new RegExp(pattern.replace(/\./g, "\\."));
 
-const createAndConfigureViewer = async () => {
+const createAndConfigureViewer = async (
+  options: PlayCanvasViewerOptions = { autoPlayAnimations: false },
+) => {
   const canvas = document.createElement("canvas");
-  const viewer = new PlayCanvasViewer(canvas, { autoPlayAnimations: false });
+  const viewer = new PlayCanvasViewer(canvas, options);
   await viewer.configure();
   return viewer;
 };
@@ -36,6 +40,9 @@ describe("PlayCanvasViewer", () => {
   const configHandler = createRequestHandler(configResponse);
   const sceneHandler = createRequestHandler(sceneResponse);
   const modelEmbeddedHandler = createRequestHandler(modelEmbeddedResponse);
+  const modelEmbeddedAnimatedHandler = createRequestHandler(
+    modelEmbeddedAnimatedResponse,
+  );
   const modelUnpackedHandler = createRequestHandler(modelUnpackedResponse);
   const ddsHandler = createRequestHandler(null);
   const binHandler = createRequestHandler(modelUnpackedBinResponse);
@@ -45,6 +52,10 @@ describe("PlayCanvasViewer", () => {
     xhrMock.get(toEscapedRegExp("config.json"), configHandler);
     xhrMock.get(toEscapedRegExp(sceneUrl), sceneHandler);
     xhrMock.get(toEscapedRegExp(modelEmbeddedUrl), modelEmbeddedHandler);
+    xhrMock.get(
+      toEscapedRegExp(modelEmbeddedAnimatedUrl),
+      modelEmbeddedAnimatedHandler,
+    );
     xhrMock.get(toEscapedRegExp(modelUnpackedUrl), modelUnpackedHandler);
     xhrMock.get(toEscapedRegExp(modelUnpackedBlobUrl), modelUnpackedHandler);
     xhrMock.get(toEscapedRegExp(".dds"), ddsHandler);
@@ -169,7 +180,19 @@ describe("PlayCanvasViewer", () => {
     });
 
     it("should auto play animations if specified in constructor", async () => {
-      // TODO
+      const viewer = await createAndConfigureViewer({
+        autoPlayAnimations: true,
+      });
+      await viewer.loadModel(modelEmbeddedAnimatedUrl);
+
+      const model = viewer.app.root.findComponent("model");
+      expect(model || undefined).toBeDefined();
+
+      const animation = model.entity.findComponent(
+        "animation",
+      ) as pc.AnimationComponent;
+      expect(animation || undefined).toBeDefined();
+      expect(animation.speed).toBe(1);
     });
   });
 
