@@ -1,16 +1,14 @@
 /* eslint-disable import/extensions */
 import "jest";
-import { TextEncoder } from "util";
 import xhrMock from "xhr-mock";
 import pc from "playcanvas";
 import { PlayCanvasViewer } from "../PlayCanvasViewer";
-import mockConfigObject from "../../../public/assets/playcanvas/config.json";
-import mockSceneObject from "../__fixtures__/Scene.json";
-import mockModelObject from "../__fixtures__/Model.json";
+import {
+  mockConfigResponse,
+  mockModelResponse,
+  mockSceneResponse,
+} from "../__fixtures__";
 
-const mockConfig = JSON.stringify(mockConfigObject);
-const mockScene = JSON.stringify(mockSceneObject);
-const mockModel = new TextEncoder().encode(JSON.stringify(mockModelObject));
 const mockSceneUrl = "scene.json";
 const mockModelUrl = "model.gltf";
 
@@ -27,9 +25,9 @@ const createAndConfigureViewer = async () => {
 describe("PlayCanvasViewer", () => {
   beforeEach(() => {
     xhrMock.setup();
-    xhrMock.get(toEscapedRegExp("config.json"), { body: mockConfig });
-    xhrMock.get(toEscapedRegExp(mockSceneUrl), { body: mockScene });
-    xhrMock.get(toEscapedRegExp(mockModelUrl), { body: mockModel });
+    xhrMock.get(toEscapedRegExp("config.json"), { body: mockConfigResponse });
+    xhrMock.get(toEscapedRegExp(mockSceneUrl), { body: mockSceneResponse });
+    xhrMock.get(toEscapedRegExp(mockModelUrl), { body: mockModelResponse });
     xhrMock.get(toEscapedRegExp(".dds"), { body: null });
   });
 
