@@ -75,7 +75,17 @@ describe("PlayCanvasViewer", () => {
     });
 
     it("should destroy model, scene and app on teardown", async () => {
-      // TODO
+      const viewer = await createAndConfigureViewer();
+      await viewer.loadScene(sceneUrl);
+      await viewer.loadModel(modelEmbeddedUrl);
+      viewer.destroy();
+
+      expect(viewer.initiated).toBe(false);
+      expect(viewer.sceneLoaded).toBe(false);
+      expect(viewer.modelLoaded).toBe(false);
+      expect(viewer.scenes.length).toBe(0);
+      expect(viewer.app.scene || undefined).toBeUndefined();
+      expect(viewer.app.root || undefined).toBeUndefined();
     });
   });
 
@@ -149,7 +159,13 @@ describe("PlayCanvasViewer", () => {
     });
 
     it("should clean up when destroying model", async () => {
-      // TODO
+      const viewer = await createAndConfigureViewer();
+      await viewer.loadModel(modelEmbeddedUrl);
+      viewer.destroyModel();
+      expect(viewer.modelLoaded).toBe(false);
+
+      const model = viewer.app.root.findComponent("model");
+      expect(model || undefined).toBeUndefined();
     });
 
     it("should auto play animations if specified in constructor", async () => {

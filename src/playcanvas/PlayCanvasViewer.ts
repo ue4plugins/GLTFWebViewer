@@ -72,7 +72,7 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public get scenes(): pc.SceneFile[] {
-    return this._app.scenes.list();
+    return this._app.scenes?.list() || [];
   }
 
   private _resizeCanvas() {
