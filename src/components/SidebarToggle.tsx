@@ -36,7 +36,8 @@ export const SidebarToggle: React.FC<Props> = ({ isOpen, setIsOpen }) => {
     >
       <Fab
         color="default"
-        aria-label="open drawer"
+        aria-label="open sidebar"
+        data-testid="open-button"
         size="medium"
         onClick={() => setIsOpen(true)}
       >

@@ -45,7 +45,11 @@ export const Sidebar: React.FC<Props> = ({ children, isOpen, setIsOpen }) => {
       }}
     >
       <div className={classes.drawerHeader}>
-        <IconButton onClick={() => setIsOpen(false)}>
+        <IconButton
+          aria-label="close sidebar"
+          data-testid="close-button"
+          onClick={() => setIsOpen(false)}
+        >
           <ChevronRight />
         </IconButton>
       </div>
