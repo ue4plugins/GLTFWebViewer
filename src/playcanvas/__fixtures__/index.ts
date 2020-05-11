@@ -1,11 +1,20 @@
 /* eslint-disable import/extensions */
-import { TextEncoder } from "util";
-import mockConfigObject from "../../../public/assets/playcanvas/config.json";
-import mockSceneObject from "./Scene.json";
-import mockModelObject from "./Model.json";
+import { join } from "path";
+import { readFileSync } from "fs";
+import configObject from "../../../public/assets/playcanvas/config.json";
+import sceneObject from "./Scene.json";
 
-export const mockConfigResponse = JSON.stringify(mockConfigObject);
-export const mockSceneResponse = JSON.stringify(mockSceneObject);
-export const mockModelResponse = new TextEncoder().encode(
-  JSON.stringify(mockModelObject),
+export const configResponse = JSON.stringify(configObject);
+export const sceneResponse = JSON.stringify(sceneObject);
+
+export const modelEmbeddedResponse = readFileSync(
+  join(__dirname, "./ModelEmbedded.gltf"),
+);
+
+export const modelUnpackedResponse = readFileSync(
+  join(__dirname, "./ModelUnpacked.gltf"),
+);
+
+export const modelUnpackedBinResponse = readFileSync(
+  join(__dirname, "./ModelUnpacked.bin"),
 );
