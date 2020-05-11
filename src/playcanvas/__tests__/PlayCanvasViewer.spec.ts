@@ -36,6 +36,11 @@ const createRequestHandler = (body: any) => {
   return jest.fn(handler);
 };
 
+const waitForAnimationFrame = () =>
+  new Promise<void>(resolve => {
+    requestAnimationFrame(() => resolve());
+  });
+
 describe("PlayCanvasViewer", () => {
   const configHandler = createRequestHandler(configResponse);
   const sceneHandler = createRequestHandler(sceneResponse);
@@ -180,6 +185,7 @@ describe("PlayCanvasViewer", () => {
     });
 
     it("should auto play animations if specified in constructor", async () => {
+      // Test auto play true
       const viewer = await createAndConfigureViewer({
         autoPlayAnimations: true,
       });
@@ -193,24 +199,83 @@ describe("PlayCanvasViewer", () => {
       ) as pc.AnimationComponent;
       expect(animation || undefined).toBeDefined();
       expect(animation.speed).toBe(1);
+
+      // Test auto play false
+      const viewer2 = await createAndConfigureViewer({
+        autoPlayAnimations: false,
+      });
+      await viewer2.loadModel(modelEmbeddedAnimatedUrl);
+
+      const model2 = viewer2.app.root.findComponent("model");
+      expect(model2 || undefined).toBeDefined();
+
+      const animation2 = model2.entity.findComponent(
+        "animation",
+      ) as pc.AnimationComponent;
+      expect(animation2 || undefined).toBeDefined();
+      expect(animation2.speed).toBe(0);
     });
   });
 
   describe("Camera", () => {
-    it("should have camera", async () => {
-      // TODO
+    it("should have a default camera", async () => {
+      const viewer = await createAndConfigureViewer();
+      const camera = viewer.app.root.findComponent("camera");
+      expect(camera || undefined).toBeDefined();
     });
 
     it("should focus camera after loading model", async () => {
-      // TODO
+      const viewer = await createAndConfigureViewer();
+      const camera = viewer.app.root.findComponent(
+        "camera",
+      ) as pc.CameraComponent;
+      expect(camera || undefined).toBeDefined();
+
+      const transformBefore = camera.entity.getLocalTransform().clone().data;
+
+      await viewer.loadModel(modelEmbeddedUrl);
+      await waitForAnimationFrame();
+
+      const transformAfter = camera.entity.getLocalTransform().clone().data;
+      expect(transformAfter).not.toEqual(transformBefore);
     });
 
     it("should be able to focus on entity", async () => {
-      // TODO
+      const viewer = await createAndConfigureViewer();
+      const camera = viewer.app.root.findComponent(
+        "camera",
+      ) as pc.CameraComponent;
+
+      await viewer.loadModel(modelEmbeddedUrl);
+      await waitForAnimationFrame();
+
+      const transformBefore = camera.entity.getLocalTransform().clone().data;
+
+      viewer.resetCamera(0, 0, 0);
+      await waitForAnimationFrame();
+      viewer.focusCameraOnEntity();
+      await waitForAnimationFrame();
+
+      const transformAfter = camera.entity.getLocalTransform().clone().data;
+      expect(transformAfter).toEqual(transformBefore);
     });
 
     it("should be able to reset camera placement props", async () => {
-      // TODO
+      const viewer = await createAndConfigureViewer();
+      const camera = viewer.app.root.findComponent(
+        "camera",
+      ) as pc.CameraComponent;
+
+      await viewer.loadModel(modelEmbeddedUrl);
+      await waitForAnimationFrame();
+
+      const transformBefore = camera.entity.getLocalTransform().clone().data;
+
+      viewer.resetCamera(1, 1, 1);
+      await waitForAnimationFrame();
+
+      const transformAfter = camera.entity.getLocalTransform().clone().data;
+      expect(transformAfter).not.toEqual(transformBefore);
     });
   });
 });
