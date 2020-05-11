@@ -7,6 +7,11 @@ const fetchMock = () =>
     json: async () => models,
   } as Response);
 
+const fetchMockEmpty = () =>
+  Promise.resolve({
+    json: async () => [],
+  } as Response);
+
 const fetchMockFail = () => Promise.reject(new Error("Request failed"));
 
 const mockLocationSearch = (search: string) =>
@@ -66,6 +71,25 @@ describe("ModelStore", () => {
 
   it("should throw and have empty model list if request fails", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMockFail);
+
+    expect.assertions(4);
+
+    const store = new ModelStore();
+    try {
+      await store.fetchModels();
+    } catch (e) {
+      expect(e).toBeDefined();
+    }
+
+    expect(store.models).toEqual([]);
+    expect(store.model).toBeUndefined();
+    expect(window.fetch).toHaveBeenCalledTimes(1);
+
+    spy.mockRestore();
+  });
+
+  it("should throw if empty model list is fetched", async () => {
+    const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMockEmpty);
 
     expect.assertions(4);
 
