@@ -44,15 +44,13 @@ test:
 
 .test_e2e:
   tags:
-    - linux-docker
+    - windows-native
   stage: test_e2e
-  image: samujoha/gitlab-ci-puppeteer-headful:latest
-  before_script:
-    - chmod -R +x ./ci
   script:
-    - ./ci/setup-e2e-env.sh
+    - nvm use 12.16.3
+    - npm ci
     - npm run test:e2e
-    - './ci/gitlab-commit-push.sh "test(e2e): add baseline snapshots [skip ci]"'
+    # - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
   artifacts:
     when: on_failure
     paths:
@@ -61,16 +59,14 @@ test:
 
 .test_e2e_update:
   tags:
-    - linux-docker
+    - windows-native
   stage: test_e2e
   when: manual
-  image: samujoha/gitlab-ci-puppeteer-headful:latest
-  before_script:
-    - chmod -R +x ./ci
   script:
-    - ./ci/setup-e2e-env.sh
+    - nvm use 12.16.3
+    - npm ci
     - npm run test:e2e-update
-    - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
+    # - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
 
 build:
   tags:
