@@ -20,7 +20,7 @@ stages:
 
 install_dependencies:
   tags:
-    - docker-executor
+    - linux-docker
   stage: install_dependencies
   cache:
     <<: *default_cache
@@ -30,21 +30,21 @@ install_dependencies:
 
 lint:
   tags:
-    - docker-executor
+    - linux-docker
   stage: lint
   script:
     - npm run lint
 
 test:
   tags:
-    - docker-executor
+    - linux-docker
   stage: test
   script:
     - npm run test
 
 .test_e2e:
   tags:
-    - docker-executor
+    - linux-docker
   stage: test_e2e
   image: samujoha/gitlab-ci-puppeteer-headful:latest
   before_script:
@@ -61,7 +61,7 @@ test:
 
 .test_e2e_update:
   tags:
-    - docker-executor
+    - linux-docker
   stage: test_e2e
   when: manual
   image: samujoha/gitlab-ci-puppeteer-headful:latest
@@ -74,7 +74,7 @@ test:
 
 build:
   tags:
-    - docker-executor
+    - linux-docker
   stage: build
   script:
     - npm run build
@@ -85,7 +85,7 @@ build:
 
 .release:
   tags:
-    - docker-executor
+    - linux-docker
   stage: release
   script:
     - npx semantic-release
@@ -94,7 +94,7 @@ build:
 
 deploy:
   tags:
-    - docker-executor
+    - linux-docker
   stage: deploy
   only:
     - master
