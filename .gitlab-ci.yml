@@ -49,10 +49,6 @@ test_e2e:
     - windows
   stage: test_e2e
   script:
-    - Write-Host $Env:PATH
-    - nvm ls
-    - nvm use 12.16.3
-    - npm -v
     - npm ci
     - npm run test:e2e
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
