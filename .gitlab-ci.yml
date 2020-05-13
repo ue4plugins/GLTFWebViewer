@@ -53,8 +53,7 @@ test:
     - npm ci
   script:
     - npm run test:e2e
-    # TODO: push updated snapshots
-    # - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
+    - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
   artifacts:
     when: on_failure
     paths:
@@ -71,8 +70,7 @@ test:
     - npm ci
   script:
     - npm run test:e2e-update
-    # TODO: push updated snapshots
-    # - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
+    - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
 
 build:
   tags:
