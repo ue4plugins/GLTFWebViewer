@@ -42,14 +42,13 @@ stages:
   script:
     - npm run test
 
-# TODO: add separate install step for Windows
-
 test_e2e:
   tags:
     - windows
   stage: test_e2e
-  script:
+  before_script:
     - npm ci
+  script:
     - npm run test:e2e
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
   artifacts:
