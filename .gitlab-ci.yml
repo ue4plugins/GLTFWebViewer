@@ -10,7 +10,7 @@ variables:
   CI: "true"
 
 stages:
-  # - install_dependencies
+  - install_dependencies
   # - lint
   # - test
   - test_e2e
@@ -18,9 +18,19 @@ stages:
   # - release
   # - deploy
 
-.install_dependencies:
+.install_dependencies_linux:
   tags:
     - linux-docker
+  stage: install_dependencies
+  cache:
+    <<: *default_cache
+    policy: pull-push
+  script:
+    - npm ci
+
+install_dependencies_windows:
+  tags:
+    - windows
   stage: install_dependencies
   cache:
     <<: *default_cache
@@ -42,14 +52,11 @@ stages:
   script:
     - npm run test
 
-# TODO: add separate install step for Windows
-
 test_e2e:
   tags:
     - windows
   stage: test_e2e
   script:
-    - npm ci
     - npm run test:e2e
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
   artifacts:
@@ -63,8 +70,6 @@ test_e2e_update:
     - windows
   stage: test_e2e
   when: manual
-  before_script:
-    - npm ci
   script:
     - npm run test:e2e-update
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
