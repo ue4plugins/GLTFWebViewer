@@ -42,14 +42,18 @@ test:
   script:
     - npm run test
 
+# TODO: add separate install step for Windows
+
 .test_e2e:
   tags:
     - windows-native
   stage: test_e2e
-  script:
+  before_script:
     - nvm use 12.16.3
     - npm ci
+  script:
     - npm run test:e2e
+    # TODO: push updated snapshots
     # - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
   artifacts:
     when: on_failure
@@ -62,10 +66,12 @@ test:
     - windows-native
   stage: test_e2e
   when: manual
-  script:
+  before_script:
     - nvm use 12.16.3
     - npm ci
+  script:
     - npm run test:e2e-update
+    # TODO: push updated snapshots
     # - './ci/gitlab-commit-push.sh "test(e2e): update baseline snapshots [skip ci]"'
 
 build:
