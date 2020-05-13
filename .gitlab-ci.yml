@@ -46,10 +46,9 @@ test:
 
 .test_e2e:
   tags:
-    - windows-native
+    - windows
   stage: test_e2e
   before_script:
-    - nvm use 12.16.3
     - npm ci
   script:
     - npm run test:e2e
@@ -62,11 +61,10 @@ test:
 
 .test_e2e_update:
   tags:
-    - windows-native
+    - windows
   stage: test_e2e
   when: manual
   before_script:
-    - nvm use 12.16.3
     - npm ci
   script:
     - npm run test:e2e-update
