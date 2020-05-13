@@ -48,9 +48,10 @@ test_e2e:
   tags:
     - windows
   stage: test_e2e
-  before_script:
-    - npm ci
   script:
+    - node -v
+    - npm -v
+    - npm ci
     - npm run test:e2e
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
   artifacts:
