@@ -49,6 +49,7 @@ test_e2e:
     - windows
   stage: test_e2e
   script:
+    - nvm use
     - node -v
     - npm -v
     - npm ci
