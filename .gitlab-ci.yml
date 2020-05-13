@@ -10,15 +10,15 @@ variables:
   CI: "true"
 
 stages:
-  - install_dependencies
-  - lint
-  - test
-  # - test_e2e
-  - build
+  # - install_dependencies
+  # - lint
+  # - test
+  - test_e2e
+  # - build
   # - release
-  - deploy
+  # - deploy
 
-install_dependencies:
+.install_dependencies:
   tags:
     - linux-docker
   stage: install_dependencies
@@ -28,14 +28,14 @@ install_dependencies:
   script:
     - npm ci
 
-lint:
+.lint:
   tags:
     - linux-docker
   stage: lint
   script:
     - npm run lint
 
-test:
+.test:
   tags:
     - linux-docker
   stage: test
@@ -44,7 +44,7 @@ test:
 
 # TODO: add separate install step for Windows
 
-.test_e2e:
+test_e2e:
   tags:
     - windows
   stage: test_e2e
@@ -59,7 +59,7 @@ test:
       - ./e2e/__image_snapshots__/__diff_output__
     expire_in: 30 days
 
-.test_e2e_update:
+test_e2e_update:
   tags:
     - windows
   stage: test_e2e
@@ -70,7 +70,7 @@ test:
     - npm run test:e2e-update
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
 
-build:
+.build:
   tags:
     - linux-docker
   stage: build
@@ -90,7 +90,7 @@ build:
   only:
     - master
 
-deploy:
+.deploy:
   tags:
     - linux-docker
   stage: deploy
