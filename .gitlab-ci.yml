@@ -50,7 +50,7 @@ test_e2e:
   stage: test_e2e
   script:
     - nvm ls
-    - nvm use 14.2.0
+    - nvm use 12.16.3
     - npm -v
     - npm ci
     - npm run test:e2e
