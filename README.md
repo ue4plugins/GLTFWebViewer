@@ -42,7 +42,7 @@ Please refrain from interacting with your computer while running the e2e tests a
 ⚠️ Note that the snapshot results may vary depending on the hardware/OS the tests are run on. This is mainly due to
 hardware and system specific settings that affect web and WebGL rendering.
 **The E2E tests are intended to run in Docker in a CI environment where the snapshot result will be consistent.**
-Currently the project is set up to work with GitLab CI Docker Executor.
+Currently the project is set up to work with GitLab CI using a Windows runner.
 
 #### Run on GitLab CI
 
