@@ -2,63 +2,43 @@ import { GltfFile } from "../../playcanvas";
 
 export const models: GltfFile[] = [
   {
-    path: "assets/gltf/2CylinderEngine/glTF-Binary/2CylinderEngine.glb",
-    name: "2CylinderEngine-binary",
-    description: "binary",
-  },
-  {
-    path: "assets/gltf/2CylinderEngine/glTF-Draco/2CylinderEngine.gltf",
-    name: "2CylinderEngine-draco",
-    description: "draco",
-  },
-  {
-    path: "assets/gltf/2CylinderEngine/glTF-Embedded/2CylinderEngine.gltf",
-    name: "2CylinderEngine-embedded",
-    description: "embedded",
-  },
-  {
-    path: "assets/gltf/2CylinderEngine/glTF/2CylinderEngine.gltf",
-    name: "2CylinderEngine-unpacked",
+    path: "assets/gltf/AlfaRomeo/glTF/AlfaRomeo.gltf",
+    name: "AlfaRomeo",
     description: "unpacked",
   },
   {
-    path: "assets/gltf/DamagedHelmet/glTF-Binary/DamagedHelmet.glb",
-    name: "DamagedHelmet-binary",
+    path: "assets/gltf/AntiqueCamera/glTF-Binary/AntiqueCamera.glb",
+    name: "AntiqueCamera",
     description: "binary",
   },
   {
     path: "assets/gltf/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf",
-    name: "DamagedHelmet-embedded",
+    name: "DamagedHelmet",
     description: "embedded",
   },
   {
-    path: "assets/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf",
-    name: "DamagedHelmet-unpacked",
+    path: "assets/gltf/FlightHelmet/glTF/FlightHelmet.gltf",
+    name: "FlightHelmet",
     description: "unpacked",
   },
   {
-    path: "assets/gltf/Duck/glTF-Binary/Duck.glb",
-    name: "Duck-binary",
-    description: "binary",
+    path: "assets/gltf/FuturisticTruck/glTF/FuturisticTruck.gltf",
+    name: "FuturisticTruck",
+    description: "unpacked",
   },
   {
-    path: "assets/gltf/Duck/glTF-Draco/Duck.gltf",
-    name: "Duck-draco",
+    path: "assets/gltf/Hoverbike/glTF/Hoverbike.gltf",
+    name: "Hoverbike",
+    description: "unpacked",
+  },
+  {
+    path: "assets/gltf/WaterBottle/glTF-Draco/WaterBottle.gltf",
+    name: "WaterBottle",
     description: "draco",
   },
   {
-    path: "assets/gltf/Duck/glTF-Embedded/Duck.gltf",
-    name: "Duck-embedded",
-    description: "embedded",
-  },
-  {
-    path: "assets/gltf/Duck/glTF-Quantized/Duck.gltf",
-    name: "Duck-quantized",
-    description: "quantized",
-  },
-  {
-    path: "assets/gltf/Duck/glTF/Duck.gltf",
-    name: "Duck-unpacked",
+    path: "assets/gltf/ZIS101A/glTF/ZIS101A.gltf",
+    name: "ZIS101A",
     description: "unpacked",
   },
 ];
