@@ -19,6 +19,7 @@ const useStyles = makeStyles(theme => ({
   list: {
     maxHeight: "100%",
     overflow: "auto",
+    textTransform: "capitalize",
   },
   spinner: {
     paddingTop: theme.spacing(2),
