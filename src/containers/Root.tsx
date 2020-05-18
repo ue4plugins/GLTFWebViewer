@@ -3,12 +3,14 @@ import clsx from "clsx";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import { Divider } from "@material-ui/core";
+import { observer } from "mobx-react-lite";
 import {
   Sidebar,
   FpsMonitor,
   SidebarToggle,
   SceneSelector,
   ModelList,
+  ModelMeta,
 } from "../components";
 import { useStores } from "../stores";
 import { Viewer } from "./Viewer";
@@ -53,10 +55,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const Root: React.FC = () => {
+export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { modelStore } = useStores();
-  const { fetchModels } = modelStore;
+  const { model, fetchModels } = modelStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
@@ -77,6 +79,7 @@ export const Root: React.FC = () => {
         {showUI && (
           <SidebarToggle isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
         )}
+        {showUI && model && <ModelMeta model={model} />}
       </main>
       {showUI && (
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
@@ -88,4 +91,4 @@ export const Root: React.FC = () => {
       {showUI && <FpsMonitor />}
     </div>
   );
-};
+});
