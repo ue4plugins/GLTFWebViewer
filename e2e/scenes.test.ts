@@ -1,5 +1,6 @@
 import "jest";
 import { waitForScene, waitForViewer } from "./lib/waiters";
+import { removeIllegalChars } from "./lib/removeIllegalChars";
 import { scenes } from "./__fixtures__/scenes";
 
 type SceneTuple = [string];
@@ -21,7 +22,7 @@ describe("Scenes", () => {
       await page.waitFor(500);
 
       expect(await page.screenshot()).toMatchImageSnapshot({
-        customSnapshotIdentifier: `scene-${name}`,
+        customSnapshotIdentifier: `scene-${removeIllegalChars(name)}`,
       });
     },
   );

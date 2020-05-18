@@ -1,5 +1,6 @@
 import "jest";
 import { waitForModel, waitForScene, waitForViewer } from "./lib/waiters";
+import { removeIllegalChars } from "./lib/removeIllegalChars";
 import { TestModel, models } from "./__fixtures__/models";
 
 type ModelTuple = [string, boolean];
@@ -23,33 +24,35 @@ describe("Models", () => {
       await Promise.all([waitForViewer(), waitForScene(), waitForModel()]);
       await page.waitFor(1000);
 
+      const fileName = removeIllegalChars(name);
+
       expect(await page.screenshot()).toMatchImageSnapshot({
-        customSnapshotIdentifier: `model-${name}-front`,
+        customSnapshotIdentifier: `model-${fileName}-front`,
       });
 
       if (multipleAngles) {
         page.evaluate(() => window.viewer?.resetCamera(90));
 
         expect(await page.screenshot()).toMatchImageSnapshot({
-          customSnapshotIdentifier: `model-${name}-left`,
+          customSnapshotIdentifier: `model-${fileName}-left`,
         });
 
         page.evaluate(() => window.viewer?.resetCamera(180));
 
         expect(await page.screenshot()).toMatchImageSnapshot({
-          customSnapshotIdentifier: `model-${name}-rear`,
+          customSnapshotIdentifier: `model-${fileName}-rear`,
         });
 
         page.evaluate(() => window.viewer?.resetCamera(270));
 
         expect(await page.screenshot()).toMatchImageSnapshot({
-          customSnapshotIdentifier: `model-${name}-right`,
+          customSnapshotIdentifier: `model-${fileName}-right`,
         });
 
         page.evaluate(() => window.viewer?.resetCamera(0, -90));
 
         expect(await page.screenshot()).toMatchImageSnapshot({
-          customSnapshotIdentifier: `model-${name}-above`,
+          customSnapshotIdentifier: `model-${fileName}-above`,
         });
       }
     },

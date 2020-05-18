@@ -86,7 +86,7 @@ describe("useModelDrop", () => {
     expect(onDrop).toHaveBeenCalledTimes(1);
     expect(onDrop.mock.calls[0][0]).toEqual({
       name: "TestModel",
-      path: testUrl,
+      filePath: testUrl,
       blobFileName: "TestModel.gltf",
     });
   });
@@ -110,7 +110,7 @@ describe("useModelDrop", () => {
     expect(onDrop).toHaveBeenCalledTimes(1);
     expect(onDrop.mock.calls[0][0]).toEqual({
       name: "TestModel",
-      path: testUrl,
+      filePath: testUrl,
       blobFileName: "TestModel.glb",
     });
   });
@@ -134,7 +134,7 @@ describe("useModelDrop", () => {
     expect(onDrop).toHaveBeenCalledTimes(1);
     expect(onDrop.mock.calls[0][0]).toEqual({
       name: "TestModel",
-      path: testUrl,
+      filePath: testUrl,
       blobFileName: "TestModel.gltf",
     });
   });

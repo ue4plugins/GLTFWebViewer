@@ -7,50 +7,42 @@ export type TestModel = GltfFile & {
 export const models: TestModel[] = [
   // {
   //   filePath: "assets/gltf/AlfaRomeo/glTF/AlfaRomeo.gltf",
-  //   name: "AlfaRomeo",
-  //   description: "unpacked",
+  //   name: "Alfa Romeo Stradale 1967",
   //   multipleAngles: true,
   // },
   // {
   //   filePath: "assets/gltf/AntiqueCamera/glTF-Binary/AntiqueCamera.glb",
-  //   name: "AntiqueCamera",
-  //   description: "binary",
+  //   name: "Antique Camera",
   //   multipleAngles: true,
   // },
   {
     filePath: "assets/gltf/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf",
-    name: "DamagedHelmet",
-    description: "embedded",
+    name: "Damaged Helmet",
     multipleAngles: true,
   },
-  {
-    filePath: "assets/gltf/FlightHelmet/glTF/FlightHelmet.gltf",
-    name: "FlightHelmet",
-    description: "unpacked",
-    multipleAngles: true,
-  },
+  // {
+  //   filePath: "assets/gltf/FlightHelmet/glTF/FlightHelmet.gltf",
+  //   name: "Flight Helmet",
+  //   multipleAngles: true,
+  // },
   // {
   //   filePath: "assets/gltf/FuturisticTruck/glTF/FuturisticTruck.gltf",
-  //   name: "FuturisticTruck",
-  //   description: "unpacked",
+  //   name: "Futuristic Truck",
   //   multipleAngles: true,
   // },
-  // {
-  //   filePath: "assets/gltf/Hoverbike/glTF/Hoverbike.gltf",
-  //   name: "Hoverbike",
-  //   description: "unpacked",
-  //   multipleAngles: true,
-  // },
+  {
+    filePath: "assets/gltf/HoverBike/glTF/Hoverbike.gltf",
+    name: 'Hover Bike - "The Rocket"',
+    multipleAngles: true,
+  },
   // {
   //   filePath: "assets/gltf/WaterBottle/glTF-Draco/WaterBottle.gltf",
-  //   name: "WaterBottle",
-  //   description: "draco",
+  //   name: "Water Bottle",
   //   multipleAngles: true,
   // },
   // {
   //   filePath: "assets/gltf/ZIS101A/glTF/ZIS101A.gltf",
-  //   name: "ZIS101A",
-  //   description: "unpacked",
+  //   name: "ZIS-101A Sport (1938)",
   //   multipleAngles: true,
   // },
 ];
