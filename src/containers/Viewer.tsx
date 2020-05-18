@@ -128,9 +128,9 @@ export const Viewer: React.FC = observer(() => {
     }
 
     runAsync(async () => {
-      debug("Load model start", model.path);
-      await viewer.loadModel(model.path, model.blobFileName);
-      debug("Load model end", model.path);
+      debug("Load model start", model.filePath);
+      await viewer.loadModel(model.filePath, model.blobFileName);
+      debug("Load model end", model.filePath);
     });
 
     return () => {

@@ -7,8 +7,8 @@ const gltfFiles = glob.sync("./public/assets/gltf/**/*.{gltf,glb}").map(fp => {
   const typeMatch = typeRegex.exec(fp);
   const type = ((typeMatch && typeMatch[1]) || "unpacked").toLowerCase();
   return {
-    path: path.relative("./public/", fp).replace(/\\/gi, "/"),
     name: path.basename(fp, path.extname(fp)),
+    filePath: path.relative("./public/", fp).replace(/\\/gi, "/"),
     description: type,
   };
 });

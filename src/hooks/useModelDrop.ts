@@ -46,7 +46,7 @@ export const useModelDrop = (
 
       onDropModel({
         name: path.basename(gltf.name, path.extname(gltf.name)),
-        path: URL.createObjectURL(gltfBlob),
+        filePath: URL.createObjectURL(gltfBlob),
         blobFileName: gltf.name,
       });
     },

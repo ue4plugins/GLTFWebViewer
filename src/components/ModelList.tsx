@@ -94,8 +94,10 @@ export const ModelList: React.FC = observer(() => {
             <ListItem
               onClick={() => setModel(model)}
               button
-              key={model.path}
-              selected={selectedModel && model.path === selectedModel.path}
+              key={model.filePath}
+              selected={
+                selectedModel && model.filePath === selectedModel.filePath
+              }
             >
               <ListItemText
                 primary={model.name}
