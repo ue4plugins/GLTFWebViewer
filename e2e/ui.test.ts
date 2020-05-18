@@ -1,5 +1,5 @@
 import "jest";
-import { waitForModel, waitForScene, waitForViewer } from "./lib/waiters";
+import { waitForViewer } from "./lib/waiters";
 import { screenshotElement } from "./lib/screenshotElement";
 
 describe("UI", () => {
@@ -9,18 +9,18 @@ describe("UI", () => {
   });
 
   beforeEach(async () => {
-    await page.goto("http://localhost:3001");
+    await page.goto("http://localhost:3001?model=_");
     await page.addStyleTag({
       content: `* { caret-color: transparent !important; }`,
     });
-    await Promise.all([waitForViewer(), waitForScene(), waitForModel()]);
+    await Promise.all([waitForViewer()]);
   });
 
   it("should have a searchable model list", async () => {
     await page.click("#search-input");
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
 
-    await expect(page).toFill("#search-input", "Duck");
+    await expect(page).toFill("#search-input", "Truck");
     await page.waitFor(100);
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
 
@@ -35,7 +35,7 @@ describe("UI", () => {
     }
 
     expect(await page.evaluate(element => element.textContent, itemSpan)).toBe(
-      "Duck-binary",
+      "FuturisticTruck",
     );
 
     await item.click();
