@@ -1,5 +1,3 @@
-import "jest";
-
 export const scenes: pc.SceneFile[] = [
   {
     name: "Helipad",

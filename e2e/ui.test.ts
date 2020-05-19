@@ -20,7 +20,7 @@ describe("UI", () => {
     await page.click("#search-input");
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
 
-    await expect(page).toFill("#search-input", "Futuristic");
+    await expect(page).toFill("#search-input", "Damaged");
     await page.waitFor(100);
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
 
@@ -35,7 +35,7 @@ describe("UI", () => {
     }
 
     expect(await page.evaluate(element => element.textContent, itemSpan)).toBe(
-      "Futuristic Truck",
+      "Damaged Helmet",
     );
 
     await item.click();

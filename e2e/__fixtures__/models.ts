@@ -1,48 +1,31 @@
-import { GltfFile } from "../../src/playcanvas";
-
-export type TestModel = GltfFile & {
+export type TestModel = {
+  name: string;
   multipleAngles?: boolean;
 };
 
 export const models: TestModel[] = [
-  // {
-  //   filePath: "assets/gltf/AlfaRomeo/glTF/AlfaRomeo.gltf",
-  //   name: "Alfa Romeo Stradale 1967",
-  //   multipleAngles: true,
-  // },
-  // {
-  //   filePath: "assets/gltf/AntiqueCamera/glTF-Binary/AntiqueCamera.glb",
-  //   name: "Antique Camera",
-  //   multipleAngles: true,
-  // },
   {
-    filePath: "assets/gltf/DamagedHelmet/glTF-Embedded/DamagedHelmet.gltf",
+    name: "Boom Box",
+    multipleAngles: true,
+  },
+  {
     name: "Damaged Helmet",
     multipleAngles: true,
   },
-  // {
-  //   filePath: "assets/gltf/FlightHelmet/glTF/FlightHelmet.gltf",
-  //   name: "Flight Helmet",
-  //   multipleAngles: true,
-  // },
-  // {
-  //   filePath: "assets/gltf/FuturisticTruck/glTF/FuturisticTruck.gltf",
-  //   name: "Futuristic Truck",
-  //   multipleAngles: true,
-  // },
   {
-    filePath: "assets/gltf/HoverBike/glTF/Hoverbike.gltf",
-    name: 'Hover Bike - "The Rocket"',
+    name: "Datsun 280ZX",
     multipleAngles: true,
   },
-  // {
-  //   filePath: "assets/gltf/WaterBottle/glTF-Draco/WaterBottle.gltf",
-  //   name: "Water Bottle",
-  //   multipleAngles: true,
-  // },
-  // {
-  //   filePath: "assets/gltf/ZIS101A/glTF/ZIS101A.gltf",
-  //   name: "ZIS-101A Sport (1938)",
-  //   multipleAngles: true,
-  // },
+  {
+    name: "Flight Helmet",
+    multipleAngles: true,
+  },
+  {
+    name: "Mazda MX-5",
+    multipleAngles: true,
+  },
+  {
+    name: "ZIS-101A Sport (1938)",
+    multipleAngles: true,
+  },
 ];
