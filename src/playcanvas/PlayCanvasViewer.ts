@@ -275,15 +275,7 @@ export class PlayCanvasViewer implements TestableViewer {
     debug("Load glTF asset", url, fileName);
 
     return new Promise<pc.Asset | undefined>((resolve, reject) => {
-      // This is necessary because the callback of loadFromUrl is not fired when an
-      // asset request that previously failed is attempted to load again.
-      const timeout = setTimeout(
-        () => reject("Asset request timed out"),
-        10000,
-      );
-
       const callback: pc.callbacks.LoadAsset = (err, asset) => {
-        clearTimeout(timeout);
         if (err) {
           reject(err);
         } else {
