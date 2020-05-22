@@ -230,16 +230,19 @@ export class PlayCanvasViewer implements TestableViewer {
       throw new Error("initModel called before registering resources");
     }
 
+    this._entity = (this._modelAsset.resource as unknown) as pc.Entity;
+    console.log(this._entity);
+
     // Add the loaded model to the hierarchy
-    this._entity = new pc.Entity("gltf");
-    this._entity.addComponent("model", {
-      type: "asset",
-      asset: this._modelAsset,
-      castShadows: true,
-      receiveShadows: true,
-      shadowType: pc.SHADOW_VSM32,
-    });
-    this._entity.addComponent("script");
+    // this._entity = new pc.Entity("gltf");
+    // this._entity.addComponent("model", {
+    //   type: "asset",
+    //   asset: this._modelAsset,
+    //   castShadows: true,
+    //   receiveShadows: true,
+    //   shadowType: pc.SHADOW_VSM32,
+    // });
+    // this._entity.addComponent("script");
     this._app.root.addChild(this._entity);
 
     debug("Init animations", this._animationAssets);
