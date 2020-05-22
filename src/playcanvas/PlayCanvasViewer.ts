@@ -169,13 +169,13 @@ export class PlayCanvasViewer implements TestableViewer {
 
     debug("Loading scene", url);
     return new Promise<void>((resolve, reject) => {
-      this._app.scenes.loadScene(url, (error: string, scene: pc.Scene) => {
+      this._app.scenes.loadScene(url, (error, scene) => {
         this._sceneLoaded = true;
         if (error) {
           reject(error);
           return;
         }
-        this._scene = scene;
+        this._scene = (scene as unknown) as pc.Scene;
         resolve();
       });
     });
