@@ -15,7 +15,9 @@ type CameraEntity = pc.Entity & {
 };
 
 type ContainerResource = {
-  model?: pc.Asset;
+  scene?: pc.Entity;
+  scenes: pc.Entity[];
+  models: pc.Asset[];
   textures: pc.Asset[];
   animations: pc.Asset[];
 };
@@ -30,7 +32,8 @@ export class PlayCanvasViewer implements TestableViewer {
   private _scene?: pc.Scene;
   private _entity?: pc.Entity;
   private _gltfAsset?: pc.Asset;
-  private _modelAsset?: pc.Asset;
+  private _sceneEntity?: pc.Entity;
+  private _modelAssets: pc.Asset[] = [];
   private _animationAssets: pc.Asset[] = [];
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
@@ -201,7 +204,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._modelLoaded = false;
 
-    if (this._entity) {
+    if (this._entity && this._entity.destroy) {
       this._entity.destroy();
       this._entity = undefined;
     }
@@ -214,7 +217,7 @@ export class PlayCanvasViewer implements TestableViewer {
       this._gltfAsset = undefined;
     }
 
-    this._modelAsset = undefined;
+    this._sceneEntity = undefined;
     this._animationAssets = [];
   }
 
@@ -226,36 +229,26 @@ export class PlayCanvasViewer implements TestableViewer {
       return;
     }
 
-    if (!this._gltfAsset || !this._modelAsset) {
+    if (!this._gltfAsset || !this._sceneEntity) {
       throw new Error("initModel called before registering resources");
     }
 
-    this._entity = (this._modelAsset.resource as unknown) as pc.Entity;
-    console.log(this._entity);
-
-    // Add the loaded model to the hierarchy
-    // this._entity = new pc.Entity("gltf");
-    // this._entity.addComponent("model", {
-    //   type: "asset",
-    //   asset: this._modelAsset,
-    //   castShadows: true,
-    //   receiveShadows: true,
-    //   shadowType: pc.SHADOW_VSM32,
-    // });
-    // this._entity.addComponent("script");
+    this._entity = this._sceneEntity;
     this._app.root.addChild(this._entity);
 
     debug("Init animations", this._animationAssets);
 
     if (this._animationAssets.length > 0) {
-      this._entity.addComponent("animation", {
+      const e = this._entity.children[0] as pc.Entity;
+      const a = this._animationAssets[0];
+      e.addComponent("script");
+      e.addComponent("animation", {
         assets: this._animationAssets.map(asset => asset.id),
-        speed: 0,
-        active: false,
+        speed: 1,
       });
-      if (this._entity.animation && this._autoPlayAnimations) {
-        this._entity.animation.speed = 1;
-        this._entity.animation.play(this._animationAssets[0].name, 0);
+      if (e.animation && this._autoPlayAnimations) {
+        e.animation.enabled = true;
+        e.animation.play(a.name, 1);
       }
     }
 
@@ -317,7 +310,8 @@ export class PlayCanvasViewer implements TestableViewer {
     }
 
     this._gltfAsset = asset;
-    this._modelAsset = resource.model;
+    this._sceneEntity = resource.scene;
+    this._modelAssets = resource.models || [];
     this._animationAssets = resource.animations || [];
   }
 
