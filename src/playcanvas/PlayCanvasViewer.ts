@@ -20,6 +20,7 @@ type ContainerResource = {
   models: pc.Asset[];
   textures: pc.Asset[];
   animations: pc.Asset[];
+  animationComponents: pc.AnimationComponent[][];
 };
 
 export type PlayCanvasViewerOptions = {
@@ -33,8 +34,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _entity?: pc.Entity;
   private _gltfAsset?: pc.Asset;
   private _sceneEntity?: pc.Entity;
-  private _modelAssets: pc.Asset[] = [];
-  private _animationAssets: pc.Asset[] = [];
+  private _animations: pc.AnimationComponent[][] = [];
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
@@ -218,7 +218,7 @@ export class PlayCanvasViewer implements TestableViewer {
     }
 
     this._sceneEntity = undefined;
-    this._animationAssets = [];
+    this._animations = [];
   }
 
   private _initModel() {
@@ -236,20 +236,14 @@ export class PlayCanvasViewer implements TestableViewer {
     this._entity = this._sceneEntity;
     this._app.root.addChild(this._entity);
 
-    debug("Init animations", this._animationAssets);
+    debug("Init animations", this._animations);
 
-    if (this._animationAssets.length > 0) {
-      const e = this._entity.children[0] as pc.Entity;
-      const a = this._animationAssets[0];
-      e.addComponent("script");
-      e.addComponent("animation", {
-        assets: this._animationAssets.map(asset => asset.id),
-        speed: 1,
+    if (this._animations.length > 0) {
+      this._animations.forEach(animation => {
+        animation.forEach(animationComponent => {
+          animationComponent.enabled = true;
+        });
       });
-      if (e.animation && this._autoPlayAnimations) {
-        e.animation.enabled = true;
-        e.animation.play(a.name, 1);
-      }
     }
 
     this.focusCameraOnEntity();
@@ -311,8 +305,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._gltfAsset = asset;
     this._sceneEntity = resource.scene;
-    this._modelAssets = resource.models || [];
-    this._animationAssets = resource.animations || [];
+    this._animations = resource.animationComponents || [];
   }
 
   public async loadModel(url: string, fileName?: string) {
