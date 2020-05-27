@@ -1,3 +1,4 @@
+export * from "./AnimationSelector";
 export * from "./FpsMonitor";
 export * from "./ModelList";
 export * from "./ModelMeta";

@@ -18,6 +18,7 @@ import {
 } from "../hooks";
 
 const urlParams = new URLSearchParams(window.location.search);
+// TODO: move to ModelStore
 const autoPlayAnimations = !urlParams.get("noAnimations");
 
 const debug = Debug("viewer");
@@ -40,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
   const { modelStore, sceneStore } = useStores();
-  const { model, setModel } = modelStore;
+  const { model, setModel, activeAnimations, setAnimations } = modelStore;
   const { scene, setScenes } = sceneStore;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -131,13 +132,26 @@ export const Viewer: React.FC = observer(() => {
       debug("Load model start", model.filePath);
       await viewer.loadModel(model.filePath, model.blobFileName);
       debug("Load model end", model.filePath);
+      debug("Set animation list", viewer.animations);
+      setAnimations(viewer.animations);
     });
 
     return () => {
       debug("Destroy model");
       viewer.destroyModel();
+      debug("Unset animation list");
+      setAnimations([]);
     };
-  }, [runAsync, viewer, model]);
+  }, [runAsync, viewer, model, setAnimations]);
+
+  useEffect(() => {
+    if (!viewer?.initiated || !model) {
+      return;
+    }
+
+    debug("Set active animations");
+    viewer.setActiveAnimations(activeAnimations);
+  }, [viewer, model, activeAnimations]);
 
   useEffect(() => {
     debug("Reset drop error state");

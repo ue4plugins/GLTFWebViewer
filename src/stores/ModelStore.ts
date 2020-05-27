@@ -1,5 +1,5 @@
-import { observable, action } from "mobx";
-import { GltfFile } from "../playcanvas";
+import { observable, computed, action } from "mobx";
+import { GltfFile, GltfFileAnimation } from "../playcanvas";
 
 export class ModelStore {
   private defaultModel: string | null;
@@ -40,5 +40,18 @@ export class ModelStore {
           : undefined,
       );
     }
+  }
+
+  @observable
+  public animations: GltfFileAnimation[] = [];
+
+  @computed
+  public get activeAnimations() {
+    return this.animations.filter(a => a.active);
+  }
+
+  @action.bound
+  public setAnimations(animations: GltfFileAnimation[]) {
+    this.animations = animations;
   }
 }

@@ -11,6 +11,7 @@ import {
   SceneSelector,
   ModelList,
   ModelMeta,
+  AnimationSelector,
 } from "../components";
 import { useStores } from "../stores";
 import { Viewer } from "./Viewer";
@@ -58,7 +59,7 @@ const useStyles = makeStyles(theme => ({
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { modelStore } = useStores();
-  const { model, fetchModels } = modelStore;
+  const { model, fetchModels, animations } = modelStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
@@ -85,6 +86,12 @@ export const Root: React.FC = observer(() => {
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
           <SceneSelector />
           <Divider />
+          {animations.length > 0 && (
+            <>
+              <AnimationSelector />
+              <Divider />
+            </>
+          )}
           <ModelList />
         </Sidebar>
       )}

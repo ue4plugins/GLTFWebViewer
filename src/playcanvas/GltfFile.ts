@@ -6,3 +6,9 @@ export type GltfFile = {
   creator?: string;
   creatorUrl?: string;
 };
+
+export type GltfFileAnimation = {
+  id: number;
+  name: string;
+  active: boolean;
+};

@@ -3,6 +3,7 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { OrbitCamera } from "./scripts";
+import { GltfFileAnimation } from "./GltfFile";
 
 const debug = Debug("playCanvasViewer");
 const orbitCameraScriptName = "OrbitCamera";
@@ -23,6 +24,15 @@ type ContainerResource = {
   animationComponents: pc.AnimationComponent[][];
 };
 
+type AnimTrack = {
+  name: string;
+};
+
+type Animation = {
+  asset: pc.Asset;
+  components: pc.AnimationComponent[];
+};
+
 export type PlayCanvasViewerOptions = {
   autoPlayAnimations: boolean;
 };
@@ -34,7 +44,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _entity?: pc.Entity;
   private _gltfAsset?: pc.Asset;
   private _sceneEntity?: pc.Entity;
-  private _animations: pc.AnimationComponent[][] = [];
+  private _animations: Animation[] = [];
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
@@ -76,6 +86,14 @@ export class PlayCanvasViewer implements TestableViewer {
 
   public get scenes(): pc.SceneFile[] {
     return this._app.scenes?.list() || [];
+  }
+
+  public get animations(): GltfFileAnimation[] {
+    return this._animations.map(a => ({
+      id: a.asset.id,
+      name: ((a.asset.resource as unknown) as AnimTrack).name,
+      active: this._autoPlayAnimations,
+    }));
   }
 
   private _resizeCanvas() {
@@ -236,17 +254,19 @@ export class PlayCanvasViewer implements TestableViewer {
     this._entity = this._sceneEntity;
     this._app.root.addChild(this._entity);
 
-    debug("Init animations", this._animations);
-
-    if (this._animations.length > 0) {
-      this._animations.forEach(animation => {
-        animation.forEach(animationComponent => {
-          animationComponent.enabled = true;
-        });
-      });
-    }
-
     this.focusCameraOnEntity();
+  }
+
+  public setActiveAnimations(animations: GltfFileAnimation[]) {
+    debug("Set active animations", animations);
+
+    const animationIds = animations.map(a => a.id);
+    this._animations.forEach(animation => {
+      const active = animationIds.includes(animation.asset.id);
+      animation.components.forEach(animationComponent => {
+        animationComponent.enabled = active;
+      });
+    });
   }
 
   public focusCameraOnEntity() {
@@ -305,7 +325,12 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._gltfAsset = asset;
     this._sceneEntity = resource.scene;
-    this._animations = resource.animationComponents || [];
+    this._animations = resource.animations.map<Animation>(
+      (animationAsset, index) => ({
+        asset: animationAsset,
+        components: resource.animationComponents[index],
+      }),
+    );
   }
 
   public async loadModel(url: string, fileName?: string) {
