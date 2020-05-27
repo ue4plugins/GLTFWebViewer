@@ -17,10 +17,6 @@ import {
   useModelDrop,
 } from "../hooks";
 
-const urlParams = new URLSearchParams(window.location.search);
-// TODO: move to ModelStore
-const autoPlayAnimations = !urlParams.get("noAnimations");
-
 const debug = Debug("viewer");
 
 const useStyles = makeStyles(theme => ({
@@ -74,9 +70,7 @@ export const Viewer: React.FC = observer(() => {
     }
 
     debug("Create viewer");
-    const viewer = new PlayCanvasViewer(canvasRef.current, {
-      autoPlayAnimations,
-    });
+    const viewer = new PlayCanvasViewer(canvasRef.current);
 
     runAsync(async () => {
       debug("Configure viewer start");

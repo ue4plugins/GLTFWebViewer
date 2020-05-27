@@ -33,10 +33,6 @@ type Animation = {
   components: pc.AnimationComponent[];
 };
 
-export type PlayCanvasViewerOptions = {
-  autoPlayAnimations: boolean;
-};
-
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
   private _camera: CameraEntity;
@@ -49,18 +45,12 @@ export class PlayCanvasViewer implements TestableViewer {
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
   );
-  private _autoPlayAnimations: boolean;
   private _initiated = false;
   private _sceneLoaded = false;
   private _modelLoaded = false;
 
-  public constructor(
-    public canvas: HTMLCanvasElement,
-    { autoPlayAnimations }: PlayCanvasViewerOptions,
-  ) {
+  public constructor(public canvas: HTMLCanvasElement) {
     this._resizeCanvas = this._resizeCanvas.bind(this);
-
-    this._autoPlayAnimations = autoPlayAnimations;
 
     this._app = this._createApp();
     this._camera = this._createCamera(this._app);
@@ -92,7 +82,7 @@ export class PlayCanvasViewer implements TestableViewer {
     return this._animations.map(a => ({
       id: a.asset.id,
       name: ((a.asset.resource as unknown) as AnimTrack).name,
-      active: this._autoPlayAnimations,
+      active: false,
     }));
   }
 

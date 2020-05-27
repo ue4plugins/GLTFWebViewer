@@ -3,7 +3,7 @@ import "jest";
 import xhrMock from "xhr-mock";
 import { MockFunction } from "xhr-mock/lib/types";
 import pc from "playcanvas";
-import { PlayCanvasViewer, PlayCanvasViewerOptions } from "../PlayCanvasViewer";
+import { PlayCanvasViewer } from "../PlayCanvasViewer";
 import {
   configResponse,
   sceneResponse,
@@ -24,11 +24,9 @@ const modelUnpackedBlobUrl = "d9031d07-b017-4aa8-af51-f6bc461f37a4";
 const toEscapedRegExp = (pattern: string) =>
   new RegExp(pattern.replace(/\./g, "\\."));
 
-const createAndConfigureViewer = async (
-  options: PlayCanvasViewerOptions = { autoPlayAnimations: false },
-) => {
+const createAndConfigureViewer = async () => {
   const canvas = document.createElement("canvas");
-  const viewer = new PlayCanvasViewer(canvas, options);
+  const viewer = new PlayCanvasViewer(canvas);
   await viewer.configure();
   return viewer;
 };
@@ -192,38 +190,6 @@ describe("PlayCanvasViewer", () => {
 
       const model = viewer.app.root.findComponent("model");
       expect(model || undefined).toBeUndefined();
-    });
-
-    it("should auto play animations if specified in constructor", async () => {
-      // Test auto play true
-      const viewer = await createAndConfigureViewer({
-        autoPlayAnimations: true,
-      });
-      await viewer.loadModel(modelEmbeddedAnimatedUrl);
-
-      const model = viewer.app.root.findComponent("model");
-      expect(model || undefined).toBeDefined();
-
-      const animation = model.entity.findComponent(
-        "animation",
-      ) as pc.AnimationComponent;
-      expect(animation || undefined).toBeDefined();
-      expect(animation.speed).toBe(1);
-
-      // Test auto play false
-      const viewer2 = await createAndConfigureViewer({
-        autoPlayAnimations: false,
-      });
-      await viewer2.loadModel(modelEmbeddedAnimatedUrl);
-
-      const model2 = viewer2.app.root.findComponent("model");
-      expect(model2 || undefined).toBeDefined();
-
-      const animation2 = model2.entity.findComponent(
-        "animation",
-      ) as pc.AnimationComponent;
-      expect(animation2 || undefined).toBeDefined();
-      expect(animation2.speed).toBe(0);
     });
 
     it("should throw when loading invalid model", async () => {

@@ -3,10 +3,12 @@ import { GltfFile, GltfFileAnimation } from "../playcanvas";
 
 export class ModelStore {
   private defaultModel: string | null;
+  private autoPlayAnimations: boolean;
 
   public constructor() {
     const urlParams = new URLSearchParams(window.location.search);
     this.defaultModel = urlParams.get("model");
+    this.autoPlayAnimations = !urlParams.get("noAnimations");
   }
 
   @observable
@@ -14,6 +16,14 @@ export class ModelStore {
 
   @observable
   public model?: GltfFile;
+
+  @observable
+  public animations: GltfFileAnimation[] = [];
+
+  @computed
+  public get activeAnimations() {
+    return this.animations.filter(a => a.active);
+  }
 
   @action.bound
   public setModel(model?: GltfFile) {
@@ -42,16 +52,11 @@ export class ModelStore {
     }
   }
 
-  @observable
-  public animations: GltfFileAnimation[] = [];
-
-  @computed
-  public get activeAnimations() {
-    return this.animations.filter(a => a.active);
-  }
-
   @action.bound
   public setAnimations(animations: GltfFileAnimation[]) {
     this.animations = animations;
+    if (this.autoPlayAnimations) {
+      this.animations.forEach(a => (a.active = true));
+    }
   }
 }
