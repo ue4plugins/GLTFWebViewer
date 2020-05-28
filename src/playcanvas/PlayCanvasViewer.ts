@@ -16,12 +16,12 @@ type CameraEntity = pc.Entity & {
 };
 
 type ContainerResource = {
-  scene?: pc.Entity;
+  scene: pc.Entity | null;
   scenes: pc.Entity[];
   models: pc.Asset[];
   textures: pc.Asset[];
   animations: pc.Asset[];
-  animationComponents: pc.AnimationComponent[][];
+  registry: pc.AssetRegistry;
 };
 
 type AnimTrack = {
@@ -37,10 +37,10 @@ export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
   private _camera: CameraEntity;
   private _scene?: pc.Scene;
-  private _entity?: pc.Entity;
+  private _modelRoot?: pc.Entity;
   private _gltfAsset?: pc.Asset;
-  private _sceneEntity?: pc.Entity;
-  private _animations: Animation[] = [];
+  private _gltfRootEntity?: pc.Entity;
+  private _gltfAnimations: Animation[] = [];
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
@@ -79,7 +79,7 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public get animations(): GltfFileAnimation[] {
-    return this._animations.map(a => ({
+    return this._gltfAnimations.map(a => ({
       id: a.asset.id,
       name: ((a.asset.resource as unknown) as AnimTrack).name,
       active: false,
@@ -208,41 +208,45 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public destroyModel() {
-    debug("Destroy model", this._entity);
+    debug("Destroy model", this._modelRoot);
 
     this._modelLoaded = false;
 
-    if (this._entity && this._entity.destroy) {
-      this._entity.destroy();
-      this._entity = undefined;
+    if (this._modelRoot) {
+      this._modelRoot.destroy();
+      this._modelRoot = undefined;
+    }
+
+    if (this._gltfRootEntity) {
+      this._gltfRootEntity.destroy();
+      this._gltfRootEntity = undefined;
+    }
+
+    if (this._gltfAnimations.length > 0) {
+      this._gltfAnimations = [];
     }
 
     if (this._gltfAsset) {
-      // If not done in this order,
-      // the entity will be retained by the JS engine.
       this._app.assets.remove(this._gltfAsset);
       this._gltfAsset.unload();
       this._gltfAsset = undefined;
     }
-
-    this._sceneEntity = undefined;
-    this._animations = [];
   }
 
   private _initModel() {
-    debug("Init model");
+    debug("Init model", this._gltfRootEntity);
 
-    if (this._entity) {
+    if (this._modelRoot) {
       // Model already initialized
       return;
     }
 
-    if (!this._gltfAsset || !this._sceneEntity) {
+    if (!this._gltfRootEntity) {
       throw new Error("initModel called before registering resources");
     }
 
-    this._entity = this._sceneEntity;
-    this._app.root.addChild(this._entity);
+    this._modelRoot = this._gltfRootEntity;
+    this._app.root.addChild(this._modelRoot);
 
     this.focusCameraOnEntity();
   }
@@ -251,7 +255,7 @@ export class PlayCanvasViewer implements TestableViewer {
     debug("Set active animations", animations);
 
     const animationIds = animations.map(a => a.id);
-    this._animations.forEach(animation => {
+    this._gltfAnimations.forEach(animation => {
       const active = animationIds.includes(animation.asset.id);
       animation.components.forEach(animationComponent => {
         animationComponent.enabled = active;
@@ -260,10 +264,10 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public focusCameraOnEntity() {
-    debug("Focus on model", this._entity);
+    debug("Focus on model", this._modelRoot);
 
-    if (this._entity) {
-      this._camera.script[orbitCameraScriptName].focus(this._entity);
+    if (this._modelRoot) {
+      this._camera.script[orbitCameraScriptName].focus(this._modelRoot);
     }
   }
 
@@ -313,13 +317,33 @@ export class PlayCanvasViewer implements TestableViewer {
       throw new Error("Asset is empty");
     }
 
+    if (!resource.scene) {
+      throw new Error("Asset contains no scene");
+    }
+
     this._gltfAsset = asset;
-    this._sceneEntity = resource.scene;
-    this._animations = resource.animations.map<Animation>(
-      (animationAsset, index) => ({
-        asset: animationAsset,
-        components: resource.animationComponents[index],
-      }),
+    this._gltfRootEntity = resource.scene;
+
+    const animationComponents = this._gltfRootEntity
+      ? ((this._gltfRootEntity.findComponents(
+          "animation",
+        ) as unknown) as pc.AnimationComponent[])
+      : [];
+
+    this._gltfAnimations = resource.animations.reduce<Animation[]>(
+      (acc, animationAsset) => [
+        ...acc,
+        {
+          asset: animationAsset,
+          components: animationComponents.filter(({ assets }) =>
+            (typeof assets[0] === "number"
+              ? (assets as number[])
+              : (assets as pc.Asset[]).map(a => a.id)
+            ).includes(animationAsset.id),
+          ),
+        },
+      ],
+      [],
     );
   }
 
