@@ -15,20 +15,7 @@ type CameraEntity = pc.Entity & {
   };
 };
 
-type ContainerResource = {
-  scene: pc.Entity | null;
-  scenes: pc.Entity[];
-  models: pc.Asset[];
-  textures: pc.Asset[];
-  animations: pc.Asset[];
-  registry: pc.AssetRegistry;
-};
-
-type AnimTrack = {
-  name: string;
-};
-
-type Animation = {
+type AnimationGroup = {
   asset: pc.Asset;
   components: pc.AnimationComponent[];
 };
@@ -40,7 +27,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _modelRoot?: pc.Entity;
   private _gltfAsset?: pc.Asset;
   private _gltfRootEntity?: pc.Entity;
-  private _gltfAnimations: Animation[] = [];
+  private _gltfAnimations: AnimationGroup[] = [];
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
@@ -81,7 +68,7 @@ export class PlayCanvasViewer implements TestableViewer {
   public get animations(): GltfFileAnimation[] {
     return this._gltfAnimations.map(a => ({
       id: a.asset.id,
-      name: ((a.asset.resource as unknown) as AnimTrack).name,
+      name: ((a.asset.resource as unknown) as pc.AnimTrack).name,
       active: false,
     }));
   }
@@ -312,7 +299,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private async _registerGltfResources(asset: pc.Asset) {
     debug("Register glTF resources", asset.resource);
 
-    const resource = asset.resource as ContainerResource | undefined;
+    const resource = asset.resource as pc.ContainerResource | undefined;
     if (!resource) {
       throw new Error("Asset is empty");
     }
@@ -330,7 +317,7 @@ export class PlayCanvasViewer implements TestableViewer {
         ) as unknown) as pc.AnimationComponent[])
       : [];
 
-    this._gltfAnimations = resource.animations.reduce<Animation[]>(
+    this._gltfAnimations = resource.animations.reduce<AnimationGroup[]>(
       (acc, animationAsset) => [
         ...acc,
         {

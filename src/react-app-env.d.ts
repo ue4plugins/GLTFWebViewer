@@ -4,12 +4,15 @@
 declare namespace pc {
   interface Scene {
     destroy: () => void;
-    root: Entity | undefined;
   }
 
   type SceneFile = {
     name: string;
     url: string;
+  };
+
+  type AnimTrack = {
+    name: string;
   };
 }
 
