@@ -15,11 +15,6 @@ type CameraEntity = pc.Entity & {
   };
 };
 
-type AnimationGroup = {
-  asset: pc.Asset;
-  components: pc.AnimationComponent[];
-};
-
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
   private _camera: CameraEntity;
@@ -27,7 +22,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _modelRoot?: pc.Entity;
   private _gltfAsset?: pc.Asset;
   private _gltfRootEntity?: pc.Entity;
-  private _gltfAnimations: AnimationGroup[] = [];
+  private _gltfAnimations: pc.AnimComponentLayer[] = [];
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
@@ -66,11 +61,13 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public get animations(): GltfFileAnimation[] {
-    return this._gltfAnimations.map(a => ({
-      id: a.asset.id,
-      name: ((a.asset.resource as unknown) as pc.AnimTrack).name,
-      active: false,
-    }));
+    return this._gltfAnimations
+      .map((anim, index) => ({
+        id: index,
+        name: anim.name,
+        active: false,
+      }))
+      .filter((_, index) => this._gltfAnimations[index].playable);
   }
 
   private _resizeCanvas() {
@@ -241,12 +238,15 @@ export class PlayCanvasViewer implements TestableViewer {
   public setActiveAnimations(animations: GltfFileAnimation[]) {
     debug("Set active animations", animations);
 
-    const animationIds = animations.map(a => a.id);
-    this._gltfAnimations.forEach(animation => {
-      const active = animationIds.includes(animation.asset.id);
-      animation.components.forEach(animationComponent => {
-        animationComponent.enabled = active;
-      });
+    const animationIndexes = animations.map(a => a.id);
+
+    this._gltfAnimations.forEach((animation, animationIndex) => {
+      const active = animationIndexes.includes(animationIndex);
+      if (active && animation.playable) {
+        animation.play();
+      } else {
+        animation.pause();
+      }
     });
   }
 
@@ -313,23 +313,12 @@ export class PlayCanvasViewer implements TestableViewer {
 
     const animationComponents = this._gltfRootEntity
       ? ((this._gltfRootEntity.findComponents(
-          "animation",
-        ) as unknown) as pc.AnimationComponent[])
+          "anim",
+        ) as unknown) as pc.AnimComponent[])
       : [];
 
-    this._gltfAnimations = resource.animations.reduce<AnimationGroup[]>(
-      (acc, animationAsset) => [
-        ...acc,
-        {
-          asset: animationAsset,
-          components: animationComponents.filter(({ assets }) =>
-            (typeof assets[0] === "number"
-              ? (assets as number[])
-              : (assets as pc.Asset[]).map(a => a.id)
-            ).includes(animationAsset.id),
-          ),
-        },
-      ],
+    this._gltfAnimations = animationComponents.reduce<pc.AnimComponentLayer[]>(
+      (acc, component) => [...acc, ...component.data.layers],
       [],
     );
   }

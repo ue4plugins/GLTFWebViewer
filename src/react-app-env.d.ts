@@ -10,10 +10,6 @@ declare namespace pc {
     name: string;
     url: string;
   };
-
-  type AnimTrack = {
-    name: string;
-  };
 }
 
 interface TestableViewer {
