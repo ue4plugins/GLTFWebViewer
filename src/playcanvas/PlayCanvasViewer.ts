@@ -1,4 +1,4 @@
-import pc from "playcanvas";
+import pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";

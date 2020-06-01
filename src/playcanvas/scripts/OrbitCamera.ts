@@ -1,4 +1,4 @@
-import pc from "playcanvas";
+import pc from "@animech-public/playcanvas";
 import { PreventableEvent } from "../PreventableEvent";
 
 function easeInQuad(t: number, b: number, c: number, d: number) {
