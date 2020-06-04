@@ -3,6 +3,12 @@ import Debug from "debug";
 
 const debug = Debug("playCanvasGltfLoader");
 
+type GltfData = {
+  asset: pc.Asset;
+  scene: pc.Entity;
+  animations: pc.AnimComponentLayer[];
+};
+
 export class PlayCanvasGltfLoader {
   public constructor(
     private _app: pc.Application,
@@ -22,7 +28,10 @@ export class PlayCanvasGltfLoader {
     );
   }
 
-  private async _loadAsset(url: string, fileName?: string) {
+  private async _loadAsset(
+    url: string,
+    fileName?: string,
+  ): Promise<pc.Asset | undefined> {
     debug("Load glTF asset", url, fileName);
 
     return new Promise<pc.Asset | undefined>((resolve, reject) => {
@@ -56,7 +65,35 @@ export class PlayCanvasGltfLoader {
     });
   }
 
-  public async load(url: string, fileName?: string): Promise<pc.Asset> {
+  private _parseAsset(asset: pc.Asset): GltfData {
+    debug("Parse glTF asset", asset.resource);
+
+    const resource = asset.resource as pc.ContainerResource | undefined;
+    if (!resource) {
+      throw new Error("Asset is empty");
+    }
+
+    const scene = resource.scene;
+    if (!scene) {
+      throw new Error("Asset contains no scene");
+    }
+
+    const animationComponents = scene
+      ? ((scene.findComponents("anim") as unknown) as pc.AnimComponent[])
+      : [];
+
+    const animComponentLayers = animationComponents.reduce<
+      pc.AnimComponentLayer[]
+    >((acc, component) => [...acc, ...component.data.layers], []);
+
+    return {
+      asset,
+      scene,
+      animations: animComponentLayers,
+    };
+  }
+
+  public async load(url: string, fileName?: string): Promise<GltfData> {
     const asset = await this._loadAsset(url, fileName);
     if (!asset) {
       throw new Error("Asset not found");
@@ -64,6 +101,6 @@ export class PlayCanvasGltfLoader {
 
     console.log("GLOBAL", asset.resource.extensions);
 
-    return asset;
+    return this._parseAsset(asset);
   }
 }

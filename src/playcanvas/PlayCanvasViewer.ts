@@ -299,39 +299,15 @@ export class PlayCanvasViewer implements TestableViewer {
     });
   }
 
-  private _registerGltfResources(asset: pc.Asset) {
-    debug("Register glTF resources", asset.resource);
-
-    const resource = asset.resource as pc.ContainerResource | undefined;
-    if (!resource) {
-      throw new Error("Asset is empty");
-    }
-
-    if (!resource.scene) {
-      throw new Error("Asset contains no scene");
-    }
-
-    this._gltfAsset = asset;
-    this._gltfRootEntity = resource.scene;
-
-    const animationComponents = this._gltfRootEntity
-      ? ((this._gltfRootEntity.findComponents(
-          "anim",
-        ) as unknown) as pc.AnimComponent[])
-      : [];
-
-    this._gltfAnimations = animationComponents.reduce<pc.AnimComponentLayer[]>(
-      (acc, component) => [...acc, ...component.data.layers],
-      [],
-    );
-  }
-
   public async loadModel(url: string, fileName?: string) {
     this.destroyModel();
 
     try {
-      const asset = await this._loader.load(url, fileName);
-      this._registerGltfResources(asset);
+      const gltf = await this._loader.load(url, fileName);
+      this._gltfAsset = gltf.asset;
+      this._gltfRootEntity = gltf.scene;
+      this._gltfAnimations = gltf.animations;
+
       this._initModel();
       this._modelLoaded = true;
     } catch (e) {
