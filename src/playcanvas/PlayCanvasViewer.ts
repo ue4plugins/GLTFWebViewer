@@ -4,6 +4,7 @@ import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { OrbitCamera } from "./scripts";
 import { GltfFileAnimation } from "./GltfFile";
+import { PlayCanvasGltfLoader } from "./PlayCanvasGltfLoader";
 
 const debug = Debug("playCanvasViewer");
 const orbitCameraScriptName = "OrbitCamera";
@@ -18,6 +19,7 @@ type CameraEntity = pc.Entity & {
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
   private _camera: CameraEntity;
+  private _loader: PlayCanvasGltfLoader;
   private _scene?: pc.Scene;
   private _modelRoot?: pc.Entity;
   private _gltfAsset?: pc.Asset;
@@ -36,6 +38,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._app = this._createApp();
     this._camera = this._createCamera(this._app);
+    this._loader = new PlayCanvasGltfLoader(this._app, assetPrefix);
 
     this._canvasResizeObserver.observe(this.canvas);
   }
@@ -296,7 +299,7 @@ export class PlayCanvasViewer implements TestableViewer {
     });
   }
 
-  private async _registerGltfResources(asset: pc.Asset) {
+  private _registerGltfResources(asset: pc.Asset) {
     debug("Register glTF resources", asset.resource);
 
     const resource = asset.resource as pc.ContainerResource | undefined;
@@ -327,14 +330,9 @@ export class PlayCanvasViewer implements TestableViewer {
     this.destroyModel();
 
     try {
-      const asset = await this._loadGltfAsset(url, fileName);
-      if (!asset) {
-        throw new Error("Asset not found");
-      }
-
-      await this._registerGltfResources(asset);
+      const asset = await this._loader.load(url, fileName);
+      this._registerGltfResources(asset);
       this._initModel();
-
       this._modelLoaded = true;
     } catch (e) {
       this._modelLoaded = true;
