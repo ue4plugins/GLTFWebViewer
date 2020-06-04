@@ -22,7 +22,20 @@ export class PlayCanvasGltfLoader {
       "EPIC_interaction_hotspots",
       (node, extension, gltf) => {
         console.log("EPIC_interaction_hotspots", node, extension, gltf);
-        node.rotateLocal(45, 45, 45);
+
+        const child = new pc.Entity();
+        child.rotateLocal(45, 45, 45);
+        child.setLocalScale(2, 2, 2);
+        child.addComponent("model", {
+          type: "box",
+        });
+        const material = child.model!.material as pc.StandardMaterial;
+        material.diffuse.fromString("ff0ff0");
+        material.update();
+        console.log(material);
+
+        node.addChild(child);
+
         return node;
       },
     );
