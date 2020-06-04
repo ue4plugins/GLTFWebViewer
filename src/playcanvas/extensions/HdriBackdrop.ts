@@ -37,7 +37,7 @@ export class HdriBackdropExtensionHandler implements ExtensionHandler {
 
   private _process(node: pc.Entity, extension: any, gltf: any) {
     const backdrops: HdriBackdropData[] | undefined =
-      gltf?.extensions?.EPIC_hdri_backdrops?.backdrops;
+      gltf?.extensions?.[this.name]?.backdrops;
     if (!backdrops) {
       return node;
     }

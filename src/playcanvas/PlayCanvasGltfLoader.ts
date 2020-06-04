@@ -1,6 +1,10 @@
 import pc from "@animech-public/playcanvas";
 import Debug from "debug";
-import { ExtensionHandler, HdriBackdropExtensionHandler } from "./extensions";
+import {
+  ExtensionHandler,
+  HdriBackdropExtensionHandler,
+  InteractionHotspotExtensionHandler,
+} from "./extensions";
 
 const debug = Debug("playCanvasGltfLoader");
 
@@ -9,28 +13,6 @@ type GltfData = {
   scene: pc.Entity;
   animations: pc.AnimComponentLayer[];
 };
-
-// private _registerExtensionsOld() {
-//   const registry = this._app.glbExtensions;
-
-//   registry.node.add("EPIC_interaction_hotspots", (node, extension, gltf) => {
-//     console.log("EPIC_interaction_hotspots", node, extension, gltf);
-
-//     const child = new pc.Entity();
-//     child.rotateLocal(45, 45, 45);
-//     child.setLocalScale(2, 2, 2);
-//     child.addComponent("model", {
-//       type: "box",
-//     });
-//     const material = child.model!.material as pc.StandardMaterial;
-//     material.diffuse.fromString("ff0ff0");
-//     material.update();
-
-//     node.addChild(child);
-
-//     return node;
-//   });
-// }
 
 export class PlayCanvasGltfLoader {
   public constructor(
@@ -105,7 +87,10 @@ export class PlayCanvasGltfLoader {
     const extensionRegistry = this._app.glbExtensions;
     extensionRegistry.removeAll();
 
-    const extensions: ExtensionHandler[] = [new HdriBackdropExtensionHandler()];
+    const extensions: ExtensionHandler[] = [
+      new HdriBackdropExtensionHandler(),
+      new InteractionHotspotExtensionHandler(),
+    ];
     extensions.forEach(e => e.register(extensionRegistry));
 
     const asset = await this._loadAsset(url, fileName);
