@@ -1,9 +1,9 @@
 import pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import {
-  ExtensionHandler,
-  HdriBackdropExtensionHandler,
-  InteractionHotspotExtensionHandler,
+  ExtensionParser,
+  HdriBackdropExtensionParser,
+  InteractionHotspotExtensionParser,
 } from "./extensions";
 
 const debug = Debug("playCanvasGltfLoader");
@@ -87,9 +87,9 @@ export class PlayCanvasGltfLoader {
     const extensionRegistry = this._app.glbExtensions;
     extensionRegistry.removeAll();
 
-    const extensions: ExtensionHandler[] = [
-      new HdriBackdropExtensionHandler(),
-      new InteractionHotspotExtensionHandler(),
+    const extensions: ExtensionParser[] = [
+      new HdriBackdropExtensionParser(),
+      new InteractionHotspotExtensionParser(),
     ];
     extensions.forEach(e => e.register(extensionRegistry));
 
@@ -104,7 +104,7 @@ export class PlayCanvasGltfLoader {
       throw new Error("Asset is empty");
     }
 
-    extensions.forEach(e => e.postProcess(resource));
+    extensions.forEach(e => e.postParse(resource));
     extensions.forEach(e => e.unregister(extensionRegistry));
 
     console.log("GLOBAL", asset.resource.extensions);

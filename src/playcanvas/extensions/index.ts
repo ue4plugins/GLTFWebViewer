@@ -1,3 +1,3 @@
-export * from "./ExtensionHandler";
+export * from "./ExtensionParser";
 export * from "./HdriBackdrop";
 export * from "./InteractionHotspot";

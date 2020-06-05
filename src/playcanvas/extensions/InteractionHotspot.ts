@@ -1,12 +1,12 @@
 import pc from "@animech-public/playcanvas";
-import { ExtensionHandler } from "./ExtensionHandler";
+import { ExtensionParser } from "./ExtensionParser";
 
 type InteractionHotspotData = {
   animation: 0;
   image: 0;
 };
 
-export class InteractionHotspotExtensionHandler implements ExtensionHandler {
+export class InteractionHotspotExtensionParser implements ExtensionParser {
   private _interactions: {
     node: pc.Entity;
     data: InteractionHotspotData;
@@ -17,14 +17,14 @@ export class InteractionHotspotExtensionHandler implements ExtensionHandler {
   }
 
   public register(registry: pc.GlbExtensionRegistry) {
-    registry.node.add(this.name, this._process.bind(this));
+    registry.node.add(this.name, this._parse.bind(this));
   }
 
   public unregister(registry: pc.GlbExtensionRegistry) {
     registry.node.remove(this.name);
   }
 
-  public postProcess(container: pc.ContainerResource) {
+  public postParse(container: pc.ContainerResource) {
     this._interactions.forEach(interaction => {
       const image = container.textures[interaction.data.image];
       const animation = container.animations[interaction.data.animation];
@@ -32,7 +32,7 @@ export class InteractionHotspotExtensionHandler implements ExtensionHandler {
     });
   }
 
-  private _process(node: pc.Entity, extension: any, gltf: any) {
+  private _parse(node: pc.Entity, extension: any, gltf: any) {
     const interactions: InteractionHotspotData[] | undefined =
       gltf?.extensions?.[this.name]?.interactions;
     if (!interactions) {
