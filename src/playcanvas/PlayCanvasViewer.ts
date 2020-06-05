@@ -275,19 +275,12 @@ export class PlayCanvasViewer implements TestableViewer {
       };
 
       if (fileName) {
-        // Temporarily remove asset prefix to prevent it from being prepended
-        // to blob urls
-        this._app.assets.prefix = "";
-
         this._app.assets.loadFromUrlAndFilename(
           url,
           fileName,
           "container",
           callback,
         );
-
-        // Add asset prefix again
-        this._app.assets.prefix = assetPrefix;
       } else {
         this._app.assets.loadFromUrl(
           pc.path.join("../..", url),
