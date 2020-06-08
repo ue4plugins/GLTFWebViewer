@@ -8,7 +8,6 @@ import { PlayCanvasGltfLoader } from "./PlayCanvasGltfLoader";
 
 const debug = Debug("playCanvasViewer");
 const orbitCameraScriptName = "OrbitCamera";
-const assetPrefix = "assets/playcanvas/";
 
 type CameraEntity = pc.Entity & {
   script: pc.ScriptComponent & {
@@ -38,7 +37,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._app = this._createApp();
     this._camera = this._createCamera(this._app);
-    this._loader = new PlayCanvasGltfLoader(this._app, assetPrefix);
+    this._loader = new PlayCanvasGltfLoader(this._app);
 
     this._canvasResizeObserver.observe(this.canvas);
   }
@@ -89,7 +88,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     debug("Creating app for target", this.canvas);
     const app = new pc.Application(this.canvas, {
-      assetPrefix,
+      assetPrefix: "assets/playcanvas/",
       mouse: new pc.Mouse(document.body),
       keyboard: new pc.Keyboard(window),
       graphicsDeviceOptions: {
@@ -147,7 +146,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     debug("Configuring app");
     return new Promise<void>((resolve, reject) => {
-      const url = pc.path.join(assetPrefix, "config.json");
+      const url = pc.path.join(app.assets.prefix, "config.json");
 
       app.configure(url, error => {
         if (error) {

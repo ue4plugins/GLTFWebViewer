@@ -15,10 +15,7 @@ type GltfData = {
 };
 
 export class PlayCanvasGltfLoader {
-  public constructor(
-    private _app: pc.Application,
-    private _assetPrefix: string,
-  ) {}
+  public constructor(private _app: pc.Application) {}
 
   private async _loadAsset(
     url: string,
