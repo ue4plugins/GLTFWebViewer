@@ -265,37 +265,6 @@ export class PlayCanvasViewer implements TestableViewer {
     this._camera.script[orbitCameraScriptName].reset(yaw, pitch, distance);
   }
 
-  private async _loadGltfAsset(url: string, fileName?: string) {
-    debug("Load glTF asset", url, fileName);
-
-    const asset = await new Promise<pc.Asset | undefined>((resolve, reject) => {
-      const callback: pc.callbacks.LoadAsset = (err, asset) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(asset);
-        }
-      };
-
-      if (fileName) {
-        this._app.assets.loadFromUrlAndFilename(
-          url,
-          fileName,
-          "container",
-          callback,
-        );
-      } else {
-        this._app.assets.loadFromUrl(
-          pc.path.join("../..", url),
-          "container",
-          callback,
-        );
-      }
-    });
-
-    return asset;
-  }
-
   public async loadModel(url: string, fileName?: string) {
     this.destroyModel();
 
