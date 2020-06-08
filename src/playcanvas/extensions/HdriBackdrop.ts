@@ -31,7 +31,7 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
   public postParse(container: pc.ContainerResource) {
     this._backdrops.forEach(backdrop => {
       const texture = container.textures[backdrop.data.cubemap];
-      console.log(this.name, "postProcess", texture);
+      console.log(this.name, "postParse", texture);
     });
   }
 
@@ -47,7 +47,7 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
       return node;
     }
 
-    console.log(this.name, "_process", backdrop);
+    console.log(this.name, "_parse", backdrop);
 
     this._backdrops.push({
       node,

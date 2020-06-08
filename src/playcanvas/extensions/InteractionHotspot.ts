@@ -28,7 +28,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
     this._interactions.forEach(interaction => {
       const image = container.textures[interaction.data.image];
       const animation = container.animations[interaction.data.animation];
-      console.log(this.name, "postProcess", image, animation);
+      console.log(this.name, "postParse", image, animation);
     });
   }
 
@@ -44,7 +44,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
       return node;
     }
 
-    console.log(this.name, "_process", interaction);
+    console.log(this.name, "_parse", interaction);
 
     const child = new pc.Entity();
     child.rotateLocal(45, 45, 45);
