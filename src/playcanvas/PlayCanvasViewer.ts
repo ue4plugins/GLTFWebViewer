@@ -268,7 +268,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private async _loadGltfAsset(url: string, fileName?: string) {
     debug("Load glTF asset", url, fileName);
 
-    return new Promise<pc.Asset | undefined>((resolve, reject) => {
+    const asset = await new Promise<pc.Asset | undefined>((resolve, reject) => {
       const callback: pc.callbacks.LoadAsset = (err, asset) => {
         if (err) {
           reject(err);
@@ -278,17 +278,12 @@ export class PlayCanvasViewer implements TestableViewer {
       };
 
       if (fileName) {
-        // Remove asset prefix in order to prevent it from being prepended
-        // to blob urls
-        this._app.assets.prefix = "";
         this._app.assets.loadFromUrlAndFilename(
           url,
           fileName,
           "container",
           callback,
         );
-        // Add asset prefix again
-        this._app.assets.prefix = assetPrefix;
       } else {
         this._app.assets.loadFromUrl(
           pc.path.join("../..", url),
@@ -297,6 +292,8 @@ export class PlayCanvasViewer implements TestableViewer {
         );
       }
     });
+
+    return asset;
   }
 
   public async loadModel(url: string, fileName?: string) {
