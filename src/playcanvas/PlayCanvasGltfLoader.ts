@@ -116,11 +116,10 @@ export class PlayCanvasGltfLoader {
       // TODO: get multiple
       const variantSets = variantSetParser.getVariantSetForScene(scene);
       debug("glTF global extensions", container.extensions);
-
       debug("glTF variant sets", variantSets);
+
       // TODO: return multiple scenes, default scene index,
       // variant sets and animations per scene
-
       return {
         asset,
         scene,
