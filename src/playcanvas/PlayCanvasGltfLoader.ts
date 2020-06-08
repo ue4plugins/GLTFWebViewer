@@ -4,6 +4,7 @@ import {
   ExtensionParser,
   HdriBackdropExtensionParser,
   InteractionHotspotExtensionParser,
+  VariantSetExtensionParser,
 } from "./extensions";
 
 const debug = Debug("playCanvasGltfLoader");
@@ -83,9 +84,11 @@ export class PlayCanvasGltfLoader {
   public async load(url: string, fileName?: string): Promise<GltfData> {
     debug("Load glTF asset", url, fileName);
 
+    const variantSetParser = new VariantSetExtensionParser();
     const extensions: ExtensionParser[] = [
       new HdriBackdropExtensionParser(),
       new InteractionHotspotExtensionParser(),
+      variantSetParser,
     ];
 
     this._clearExtensions();
@@ -110,8 +113,11 @@ export class PlayCanvasGltfLoader {
       this._applyExtensionPostParse(extensions, container);
       this._unregisterExtensions(extensions);
 
+      // TODO: get multiple
+      const variantSets = variantSetParser.getVariantSetForScene(scene);
       debug("glTF global extensions", container.extensions);
 
+      debug("glTF variant sets", variantSets);
       // TODO: return multiple scenes, default scene index,
       // variant sets and animations per scene
 
