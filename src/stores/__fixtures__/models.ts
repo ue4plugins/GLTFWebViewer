@@ -1,6 +1,6 @@
-import { GltfFile } from "../../playcanvas";
+import { GltfSource } from "../../playcanvas";
 
-export const models: GltfFile[] = [
+export const models: GltfSource[] = [
   {
     filePath: "assets/gltf/AlfaRomeo/glTF/AlfaRomeo.gltf",
     name: "AlfaRomeo",

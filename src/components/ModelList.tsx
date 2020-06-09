@@ -11,7 +11,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores";
-import { GltfFile } from "../playcanvas";
+import { GltfSource } from "../playcanvas";
 import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
 import { SearchField } from "./SearchField";
 
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const fuseOptions: FuseOptions<GltfFile> = {
+const fuseOptions: FuseOptions<GltfSource> = {
   shouldSort: true,
   includeScore: false,
   threshold: 0.6,
@@ -46,7 +46,7 @@ export const ModelList: React.FC = observer(() => {
   const { model: selectedModel, models, setModel, fetchModels } = modelStore;
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
   const [searchTerm, setSearchTerm] = useState("");
-  const [fuse, setFuse] = useState<Fuse<GltfFile, typeof fuseOptions>>();
+  const [fuse, setFuse] = useState<Fuse<GltfSource, typeof fuseOptions>>();
   const [list, setList] = useState(models);
 
   useEffect(() => {
@@ -64,9 +64,9 @@ export const ModelList: React.FC = observer(() => {
       searchTerm.length === 0
         ? models
         : fuse
-        ? (fuse.search(searchTerm) as Fuse.FuseResultWithScore<GltfFile>[]).map(
-            result => result.item,
-          )
+        ? (fuse.search(searchTerm) as Fuse.FuseResultWithScore<
+            GltfSource
+          >[]).map(result => result.item)
         : [],
     );
   }, [fuse, searchTerm, models]);

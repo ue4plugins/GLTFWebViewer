@@ -3,7 +3,7 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { OrbitCamera } from "./scripts";
-import { GltfFileAnimation } from "./GltfFile";
+import { GltfFileAnimation } from "./GltfSource";
 import { PlayCanvasGltfLoader } from "./PlayCanvasGltfLoader";
 
 const debug = Debug("playCanvasViewer");

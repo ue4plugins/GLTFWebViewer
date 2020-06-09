@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import { GltfFile } from "../playcanvas";
+import { GltfSource } from "../playcanvas";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type Props = {
-  model: GltfFile;
+  model: GltfSource;
 };
 
 export const ModelMeta: React.FC<Props> = ({ model }) => {

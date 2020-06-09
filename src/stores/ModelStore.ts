@@ -1,5 +1,5 @@
 import { observable, computed, action } from "mobx";
-import { GltfFile, GltfFileAnimation } from "../playcanvas";
+import { GltfSource, GltfFileAnimation } from "../playcanvas";
 
 export class ModelStore {
   private defaultModel: string | null;
@@ -12,10 +12,10 @@ export class ModelStore {
   }
 
   @observable
-  public models: GltfFile[] = [];
+  public models: GltfSource[] = [];
 
   @observable
-  public model?: GltfFile;
+  public model?: GltfSource;
 
   @observable
   public animations: GltfFileAnimation[] = [];
@@ -26,14 +26,14 @@ export class ModelStore {
   }
 
   @action.bound
-  public setModel(model?: GltfFile) {
+  public setModel(model?: GltfSource) {
     this.model = model;
   }
 
   @action.bound
   public async fetchModels() {
     const res = await fetch("assets/index.json");
-    const models = (await res.json()) as GltfFile[] | undefined;
+    const models = (await res.json()) as GltfSource[] | undefined;
 
     if (!models || models.length === 0) {
       throw new Error("No models found");

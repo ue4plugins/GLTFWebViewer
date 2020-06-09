@@ -1,4 +1,4 @@
-export type GltfFile = {
+export type GltfSource = {
   filePath: string;
   blobFileName?: string;
   name: string;

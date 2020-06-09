@@ -1,7 +1,7 @@
 import path from "path";
 import { useCallback, useState } from "react";
 import { useDropzone, DropzoneRootProps } from "react-dropzone";
-import { GltfFile } from "../playcanvas";
+import { GltfSource } from "../playcanvas";
 import { createGltfWithBlobAssets } from "./utility";
 
 function isGltfFile(file: File) {
@@ -9,7 +9,7 @@ function isGltfFile(file: File) {
 }
 
 export const useModelDrop = (
-  onDropModel: (file: GltfFile) => void,
+  onDropModel: (file: GltfSource) => void,
 ): [
   boolean,
   boolean,

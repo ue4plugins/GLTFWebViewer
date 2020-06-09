@@ -5,7 +5,7 @@ const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const WriteJsonPlugin = require("write-json-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
-const gltfFiles = require("./scripts/gltfFiles");
+const gltfSources = require("./scripts/gltfSources");
 
 module.exports = {
   jest: config => {
@@ -26,12 +26,12 @@ module.exports = {
       // },
       plugins: [
         new webpack.DefinePlugin({
-          GLTF_FILES: JSON.stringify(gltfFiles),
+          GLTF_FILES: JSON.stringify(gltfSources),
           "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
         }),
         new DynamicCdnWebpackPlugin(),
         new WriteJsonPlugin({
-          object: gltfFiles,
+          object: gltfSources,
           path: "assets",
           filename: "index.json",
           pretty: true,
