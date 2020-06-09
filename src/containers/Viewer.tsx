@@ -17,7 +17,7 @@ import {
   useGltfDrop,
 } from "../hooks";
 
-const debug = Debug("viewer");
+const debug = Debug("Viewer");
 
 const useStyles = makeStyles(theme => ({
   canvas: {

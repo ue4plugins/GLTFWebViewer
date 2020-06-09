@@ -7,7 +7,7 @@ import {
   VariantSetExtensionParser,
 } from "./extensions";
 
-const debug = Debug("playCanvasGltfLoader");
+const debug = Debug("PlayCanvasGltfLoader");
 
 type GltfData = {
   asset: pc.Asset;

@@ -6,7 +6,7 @@ import { GltfAnimation } from "../types";
 import { OrbitCamera } from "./scripts";
 import { PlayCanvasGltfLoader } from "./PlayCanvasGltfLoader";
 
-const debug = Debug("playCanvasViewer");
+const debug = Debug("PlayCanvasViewer");
 const orbitCameraScriptName = "OrbitCamera";
 
 type CameraEntity = pc.Entity & {
