@@ -2,7 +2,7 @@ import pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
-import { GltfAnimation, GltfScene } from "../types";
+import { GltfScene } from "../types";
 import { OrbitCamera } from "./scripts";
 import {
   PlayCanvasGltfLoader,
@@ -64,20 +64,6 @@ export class PlayCanvasViewer implements TestableViewer {
     return this._app.scenes?.list() || [];
   }
 
-  public get animations(): GltfAnimation[] {
-    const animationLayers = this._activeGltfScene?.animations;
-    if (!animationLayers) {
-      return [];
-    }
-    return animationLayers
-      .map((anim, index) => ({
-        id: index,
-        name: anim.name,
-        active: false,
-      }))
-      .filter((_, index) => animationLayers[index].playable);
-  }
-
   public get sceneHierarchies(): GltfScene[] {
     const scenes = this._gltf?.scenes;
     if (!scenes) {
@@ -86,7 +72,22 @@ export class PlayCanvasViewer implements TestableViewer {
     return scenes.map((scene, index) => ({
       id: index,
       name: scene.root.name,
+      animations: scene.animations
+        .map((anim, index) => ({
+          id: index,
+          name: anim.name,
+          active: false,
+        }))
+        .filter((_, index) => scene.animations[index].playable),
     }));
+  }
+
+  public get defaultSceneHierarchy(): GltfScene | undefined {
+    if (!this._gltf) {
+      return undefined;
+    }
+    const { defaultScene } = this._gltf;
+    return this.sceneHierarchies[defaultScene];
   }
 
   private _resizeCanvas() {
@@ -276,7 +277,6 @@ export class PlayCanvasViewer implements TestableViewer {
     try {
       this._gltf = await this._loader.load(url, fileName);
       debug("Loaded glTF", this._gltf);
-      this.setSceneHierarchy(this._gltf.defaultScene);
       this._gltfLoaded = true;
     } catch (e) {
       this._gltfLoaded = true;

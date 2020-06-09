@@ -1,5 +1,5 @@
 import { observable, computed, action } from "mobx";
-import { GltfSource, GltfAnimation } from "../types";
+import { GltfSource, GltfAnimation, GltfScene } from "../types";
 
 export class GltfStore {
   private defaultGltf: string | null;
@@ -18,10 +18,18 @@ export class GltfStore {
   public gltf?: GltfSource;
 
   @observable
-  public animations: GltfAnimation[] = [];
+  public sceneHierarchies: GltfScene[] = [];
+
+  @observable
+  public sceneHierarchy?: GltfScene;
 
   @computed
-  public get activeAnimationIds() {
+  public get animations(): GltfAnimation[] {
+    return this.sceneHierarchy?.animations || [];
+  }
+
+  @computed
+  public get activeAnimationIds(): number[] {
     return this.animations.filter(a => a.active).map(a => a.id);
   }
 
@@ -53,10 +61,15 @@ export class GltfStore {
   }
 
   @action.bound
-  public setAnimations(animations: GltfAnimation[]) {
-    this.animations = animations;
-    if (this.autoPlayAnimations) {
-      this.animations.forEach(a => (a.active = true));
+  public setSceneHierarchies(sceneHierarchies: GltfScene[]) {
+    this.sceneHierarchies = sceneHierarchies;
+  }
+
+  @action.bound
+  public setSceneHierarchy(sceneHierarchy?: GltfScene) {
+    this.sceneHierarchy = sceneHierarchy;
+    if (this.sceneHierarchy && this.autoPlayAnimations) {
+      this.sceneHierarchy.animations.forEach(a => (a.active = true));
     }
   }
 }

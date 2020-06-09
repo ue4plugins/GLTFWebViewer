@@ -16,4 +16,5 @@ export type GltfAnimation = {
 export type GltfScene = {
   id: number;
   name: string;
+  animations: GltfAnimation[];
 };

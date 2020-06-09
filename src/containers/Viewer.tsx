@@ -37,7 +37,14 @@ const useStyles = makeStyles(theme => ({
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore, sceneStore } = useStores();
-  const { gltf, setGltf, activeAnimationIds, setAnimations } = gltfStore;
+  const {
+    gltf,
+    setGltf,
+    sceneHierarchy,
+    setSceneHierarchies,
+    setSceneHierarchy,
+    activeAnimationIds,
+  } = gltfStore;
   const { scene, setScenes } = sceneStore;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -64,6 +71,7 @@ export const Viewer: React.FC = observer(() => {
     showBackdrop,
   );
 
+  // PlayCanvasViewer: Instantiate and configure
   useEffect(() => {
     if (!canvasRef.current) {
       return;
@@ -87,6 +95,7 @@ export const Viewer: React.FC = observer(() => {
     };
   }, [runAsync]);
 
+  // SceneStore: Update scene list
   useEffect(() => {
     if (!viewer?.initiated) {
       return;
@@ -100,6 +109,7 @@ export const Viewer: React.FC = observer(() => {
     };
   }, [viewer, setScenes]);
 
+  // PlayCanvasViewer: Load scene
   useEffect(() => {
     if (!viewer?.initiated || !scene) {
       return;
@@ -117,6 +127,8 @@ export const Viewer: React.FC = observer(() => {
     };
   }, [runAsync, viewer, scene]);
 
+  // PlayCanvasViewer: Load glTF
+  // GltfStore: Update scene hierarchy list
   useEffect(() => {
     if (!viewer?.initiated || !gltf) {
       return;
@@ -126,32 +138,53 @@ export const Viewer: React.FC = observer(() => {
       debug("Load glTF start", gltf.filePath);
       await viewer.loadGltf(gltf.filePath, gltf.blobFileName);
       debug("Load glTF end", gltf.filePath);
-      debug("Set animation list", viewer.animations);
-      setAnimations(viewer.animations);
+
+      debug("Set scene hierachy list", viewer.sceneHierarchies);
+      setSceneHierarchies(viewer.sceneHierarchies);
+
+      if (viewer.defaultSceneHierarchy) {
+        debug("Set scene hierachy", viewer.defaultSceneHierarchy);
+        setSceneHierarchy(viewer.defaultSceneHierarchy);
+      }
     });
 
     return () => {
       debug("Destroy glTF");
       viewer.destroyGltf();
-      debug("Unset animation list");
-      setAnimations([]);
-    };
-  }, [runAsync, viewer, gltf, setAnimations]);
 
+      debug("Unset scene hierachy list");
+      setSceneHierarchies([]);
+
+      debug("Unset scene hierachy");
+      setSceneHierarchy();
+    };
+  }, [runAsync, viewer, gltf, setSceneHierarchies, setSceneHierarchy]);
+
+  // PlayCanvasViewer: Set scene hierarchy
   useEffect(() => {
-    if (!viewer?.initiated || !gltf) {
+    if (!viewer?.initiated || !sceneHierarchy) {
       return;
     }
+    debug("Set scene hierarchy", sceneHierarchy);
+    viewer.setSceneHierarchy(sceneHierarchy.id);
+  }, [viewer, sceneHierarchy]);
 
-    debug("Set active animations");
+  // PlayCanvasViewer: Set active animations
+  useEffect(() => {
+    if (!viewer?.initiated) {
+      return;
+    }
+    debug("Set active animations", activeAnimationIds);
     viewer.setActiveAnimations(activeAnimationIds);
-  }, [viewer, gltf, activeAnimationIds]);
+  }, [viewer, activeAnimationIds]);
 
+  // Reset error state
   useEffect(() => {
     debug("Reset drop error state");
     setHasDropError(false);
   }, [gltf, scene, setHasDropError, viewer]);
 
+  // Prevent camera interactions
   useEffect(() => {
     debug("Prevent camera interaction", showBackdrop);
     setPreventInteraction(showBackdrop);
