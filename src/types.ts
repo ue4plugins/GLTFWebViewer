@@ -12,3 +12,11 @@ export type GltfAnimation = {
   name: string;
   active: boolean;
 };
+
+export type GltfVariantSet = any;
+
+export type GltfScene = {
+  root: pc.Entity;
+  variantSet: GltfVariantSet;
+  animations: GltfAnimation[];
+};

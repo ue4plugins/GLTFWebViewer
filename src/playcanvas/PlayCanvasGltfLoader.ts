@@ -9,7 +9,7 @@ import {
 
 const debug = Debug("PlayCanvasGltfLoader");
 
-type GltfData = {
+export type GltfData = {
   asset: pc.Asset;
   scene: pc.Entity;
   scenes: pc.Entity[];
