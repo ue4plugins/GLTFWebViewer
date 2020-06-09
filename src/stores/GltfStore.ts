@@ -24,6 +24,12 @@ export class GltfStore {
   public sceneHierarchy?: GltfScene;
 
   @computed
+  public get sceneHierarchyIndex() {
+    const scene = this.sceneHierarchy;
+    return scene ? this.sceneHierarchies.findIndex(s => s.id === scene.id) : -1;
+  }
+
+  @computed
   public get animations(): GltfAnimation[] {
     return this.sceneHierarchy?.animations || [];
   }

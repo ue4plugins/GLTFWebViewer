@@ -11,28 +11,32 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const SceneSelector: React.FC = observer(() => {
-  const { sceneStore } = useStores();
-  const { sceneIndex, scenes, setScene } = sceneStore;
+export const SceneHierarchySelector: React.FC = observer(() => {
+  const { gltfStore } = useStores();
+  const {
+    sceneHierarchyIndex: sceneIndex,
+    sceneHierarchies: scenes,
+    setSceneHierarchy: setScene,
+  } = gltfStore;
   const classes = useStyles();
 
   return (
     <FormControl className={classes.formControl}>
-      <InputLabel id="scene-selector-label">Cubemap</InputLabel>
+      <InputLabel id="scene-selector-label">Scene</InputLabel>
       <Select
-        id="scene-select"
-        labelId="scene-selector-label"
+        id="scene-hierarchy-select"
+        labelId="scene-hierarchy-selector-label"
         value={sceneIndex > -1 ? sceneIndex.toString() : ""}
         onChange={e => {
           const idx = parseInt(e.target.value as string, 10);
           setScene(scenes[idx]);
         }}
         inputProps={{
-          name: "scene-select-input",
-          id: "scene-select-input",
+          name: "scene-hierarchy-select-input",
+          id: "scene-hierarchy-select-input",
         }}
         MenuProps={{
-          id: "scene-select-list",
+          id: "scene-hierarchy-select-list",
         }}
       >
         {scenes.map((scene, i) => (

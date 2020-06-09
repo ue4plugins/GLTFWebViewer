@@ -9,6 +9,7 @@ import {
   FpsMonitor,
   SidebarToggle,
   SceneSelector,
+  SceneHierarchySelector,
   GltfList,
   GltfMeta,
   AnimationSelector,
@@ -85,6 +86,8 @@ export const Root: React.FC = observer(() => {
       {showUI && (
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
           <SceneSelector />
+          <Divider />
+          <SceneHierarchySelector />
           <Divider />
           {animations.length > 0 && (
             <>
