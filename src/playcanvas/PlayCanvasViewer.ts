@@ -20,7 +20,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _camera: CameraEntity;
   private _loader: PlayCanvasGltfLoader;
   private _scene?: pc.Scene;
-  private _modelRoot?: pc.Entity;
+  private _gltfRoot?: pc.Entity;
   private _gltfAsset?: pc.Asset;
   private _gltfRootEntity?: pc.Entity;
   private _gltfAnimations: pc.AnimComponentLayer[] = [];
@@ -30,7 +30,7 @@ export class PlayCanvasViewer implements TestableViewer {
   );
   private _initiated = false;
   private _sceneLoaded = false;
-  private _modelLoaded = false;
+  private _gltfLoaded = false;
 
   public constructor(public canvas: HTMLCanvasElement) {
     this._resizeCanvas = this._resizeCanvas.bind(this);
@@ -54,8 +54,8 @@ export class PlayCanvasViewer implements TestableViewer {
     return this._sceneLoaded;
   }
 
-  public get modelLoaded() {
-    return this._modelLoaded;
+  public get gltfLoaded() {
+    return this._gltfLoaded;
   }
 
   public get scenes(): pc.SceneSource[] {
@@ -135,7 +135,7 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public destroy() {
-    this.destroyModel();
+    this.destroyGltf();
     this.destroyScene();
     this._canvasResizeObserver.unobserve(this.canvas);
     this._app.destroy();
@@ -193,14 +193,14 @@ export class PlayCanvasViewer implements TestableViewer {
     }
   }
 
-  public destroyModel() {
-    debug("Destroy model", this._modelRoot);
+  public destroyGltf() {
+    debug("Destroy glTF", this._gltfRoot);
 
-    this._modelLoaded = false;
+    this._gltfLoaded = false;
 
-    if (this._modelRoot) {
-      this._modelRoot.destroy();
-      this._modelRoot = undefined;
+    if (this._gltfRoot) {
+      this._gltfRoot.destroy();
+      this._gltfRoot = undefined;
     }
 
     if (this._gltfRootEntity) {
@@ -219,20 +219,20 @@ export class PlayCanvasViewer implements TestableViewer {
     }
   }
 
-  private _initModel() {
-    debug("Init model", this._gltfRootEntity);
+  private _initGltf() {
+    debug("Init glTF", this._gltfRootEntity);
 
-    if (this._modelRoot) {
-      // Model already initialized
+    if (this._gltfRoot) {
+      // glTF already initialized
       return;
     }
 
     if (!this._gltfRootEntity) {
-      throw new Error("initModel called before registering resources");
+      throw new Error("_initGltf called before registering resources");
     }
 
-    this._modelRoot = this._gltfRootEntity;
-    this._app.root.addChild(this._modelRoot);
+    this._gltfRoot = this._gltfRootEntity;
+    this._app.root.addChild(this._gltfRoot);
 
     this.focusCameraOnEntity();
   }
@@ -253,10 +253,10 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public focusCameraOnEntity() {
-    debug("Focus on model", this._modelRoot);
+    debug("Focus on root entity", this._gltfRoot);
 
-    if (this._modelRoot) {
-      this._camera.script[orbitCameraScriptName].focus(this._modelRoot);
+    if (this._gltfRoot) {
+      this._camera.script[orbitCameraScriptName].focus(this._gltfRoot);
     }
   }
 
@@ -264,8 +264,8 @@ export class PlayCanvasViewer implements TestableViewer {
     this._camera.script[orbitCameraScriptName].reset(yaw, pitch, distance);
   }
 
-  public async loadModel(url: string, fileName?: string) {
-    this.destroyModel();
+  public async loadGltf(url: string, fileName?: string) {
+    this.destroyGltf();
 
     try {
       const gltf = await this._loader.load(url, fileName);
@@ -273,10 +273,10 @@ export class PlayCanvasViewer implements TestableViewer {
       this._gltfRootEntity = gltf.scene;
       this._gltfAnimations = gltf.animations;
 
-      this._initModel();
-      this._modelLoaded = true;
+      this._initGltf();
+      this._gltfLoaded = true;
     } catch (e) {
-      this._modelLoaded = true;
+      this._gltfLoaded = true;
       throw e;
     }
   }

@@ -9,7 +9,7 @@ describe("RootStore", () => {
       const { gltfStore, sceneStore } = useStores();
       return (
         <span>
-          Scene: {sceneStore.sceneIndex}, Gltf: {String(gltfStore.model)}
+          Scene: {sceneStore.sceneIndex}, Gltf: {String(gltfStore.gltf)}
         </span>
       );
     };

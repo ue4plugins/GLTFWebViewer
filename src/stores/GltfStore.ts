@@ -2,20 +2,20 @@ import { observable, computed, action } from "mobx";
 import { GltfSource, GltfAnimation } from "../types";
 
 export class GltfStore {
-  private defaultModel: string | null;
+  private defaultGltf: string | null;
   private autoPlayAnimations: boolean;
 
   public constructor() {
     const urlParams = new URLSearchParams(window.location.search);
-    this.defaultModel = urlParams.get("model");
+    this.defaultGltf = urlParams.get("model");
     this.autoPlayAnimations = !urlParams.get("noAnimations");
   }
 
   @observable
-  public models: GltfSource[] = [];
+  public gltfs: GltfSource[] = [];
 
   @observable
-  public model?: GltfSource;
+  public gltf?: GltfSource;
 
   @observable
   public animations: GltfAnimation[] = [];
@@ -26,27 +26,27 @@ export class GltfStore {
   }
 
   @action.bound
-  public setModel(model?: GltfSource) {
-    this.model = model;
+  public setGltf(gltf?: GltfSource) {
+    this.gltf = gltf;
   }
 
   @action.bound
-  public async fetchModels() {
+  public async fetchGltfs() {
     const res = await fetch("assets/index.json");
-    const models = (await res.json()) as GltfSource[] | undefined;
+    const gltfs = (await res.json()) as GltfSource[] | undefined;
 
-    if (!models || models.length === 0) {
-      throw new Error("No models found");
+    if (!gltfs || gltfs.length === 0) {
+      throw new Error("No glTFs found");
     }
 
-    this.models = models;
+    this.gltfs = gltfs;
 
-    if (!this.model) {
-      this.setModel(
-        models.length > 0
-          ? this.defaultModel
-            ? models.find(m => m.name === this.defaultModel)
-            : models[0]
+    if (!this.gltf) {
+      this.setGltf(
+        gltfs.length > 0
+          ? this.defaultGltf
+            ? gltfs.find(m => m.name === this.defaultGltf)
+            : gltfs[0]
           : undefined,
       );
     }

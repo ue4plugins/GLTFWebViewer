@@ -1,58 +1,58 @@
 import "jest";
-import { waitForModel, waitForScene, waitForViewer } from "./lib/waiters";
+import { waitForGltf, waitForScene, waitForViewer } from "./lib/waiters";
 import { removeIllegalChars } from "./lib/removeIllegalChars";
-import { TestModel, models } from "./__fixtures__/models";
+import { TestGltf, gltfs } from "./__fixtures__/gltfs";
 
-type ModelTuple = [string, boolean];
-const toModelTuple = (model: TestModel): ModelTuple => [
-  model.name,
-  !!model.multipleAngles,
+type GltfTuple = [string, boolean];
+const toGltfTuple = (gltf: TestGltf): GltfTuple => [
+  gltf.name,
+  !!gltf.multipleAngles,
 ];
 
-describe("Models", () => {
+describe("glTFs", () => {
   beforeAll(async () => {
     await page.setDefaultNavigationTimeout(0);
     await page.setViewport({ width: 1920, height: 1080 });
   });
 
-  test.each(models.map(toModelTuple))(
-    "model '%s' renders the same as baseline snapshot",
+  test.each(gltfs.map(toGltfTuple))(
+    "glTF '%s' renders the same as baseline snapshot",
     async (name, multipleAngles) => {
       await page.goto(
         `http://localhost:3001?hideUI=true&noAnimations=true&model=${name}`,
       );
-      await Promise.all([waitForViewer(), waitForScene(), waitForModel()]);
+      await Promise.all([waitForViewer(), waitForScene(), waitForGltf()]);
       await page.waitFor(1000);
 
       const fileName = removeIllegalChars(name);
 
       expect(await page.screenshot()).toMatchImageSnapshot({
-        customSnapshotIdentifier: `model-${fileName}-front`,
+        customSnapshotIdentifier: `gltf-${fileName}-front`,
       });
 
       if (multipleAngles) {
         page.evaluate(() => window.viewer?.resetCamera(90));
 
         expect(await page.screenshot()).toMatchImageSnapshot({
-          customSnapshotIdentifier: `model-${fileName}-left`,
+          customSnapshotIdentifier: `gltf-${fileName}-left`,
         });
 
         page.evaluate(() => window.viewer?.resetCamera(180));
 
         expect(await page.screenshot()).toMatchImageSnapshot({
-          customSnapshotIdentifier: `model-${fileName}-rear`,
+          customSnapshotIdentifier: `gltf-${fileName}-rear`,
         });
 
         page.evaluate(() => window.viewer?.resetCamera(270));
 
         expect(await page.screenshot()).toMatchImageSnapshot({
-          customSnapshotIdentifier: `model-${fileName}-right`,
+          customSnapshotIdentifier: `gltf-${fileName}-right`,
         });
 
         page.evaluate(() => window.viewer?.resetCamera(0, -90));
 
         expect(await page.screenshot()).toMatchImageSnapshot({
-          customSnapshotIdentifier: `model-${fileName}-above`,
+          customSnapshotIdentifier: `gltf-${fileName}-above`,
         });
       }
     },

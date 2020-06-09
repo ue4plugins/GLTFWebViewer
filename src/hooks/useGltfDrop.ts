@@ -8,8 +8,8 @@ function isGltfFile(file: File) {
   return !!path.extname(file.name).match(/\.(gltf|glb)$/);
 }
 
-export const useModelDrop = (
-  onDropModel: (file: GltfSource) => void,
+export const useGltfDrop = (
+  onDropGltf: (file: GltfSource) => void,
 ): [
   boolean,
   boolean,
@@ -44,13 +44,13 @@ export const useModelDrop = (
 
       setHasDropError(false);
 
-      onDropModel({
+      onDropGltf({
         name: path.basename(gltf.name, path.extname(gltf.name)),
         filePath: URL.createObjectURL(gltfBlob),
         blobFileName: gltf.name,
       });
     },
-    [onDropModel],
+    [onDropGltf],
   );
 
   const { getRootProps, isDragActive } = useDropzone({ onDrop });

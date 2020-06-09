@@ -16,7 +16,7 @@ describe("UI", () => {
     await Promise.all([waitForViewer()]);
   });
 
-  it("should have a searchable model list", async () => {
+  it("should have a searchable glTF list", async () => {
     await page.click("#search-input");
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
 
@@ -24,7 +24,7 @@ describe("UI", () => {
     await page.waitFor(100);
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
 
-    const item = (await page.$$("#model-list .MuiListItem-button"))[0];
+    const item = (await page.$$("#gltf-list .MuiListItem-button"))[0];
     if (!item) {
       throw new Error("Missing item");
     }

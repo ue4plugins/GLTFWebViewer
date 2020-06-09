@@ -9,7 +9,7 @@ module.exports = {
   launch: {
     dumpio: true,
     // Headless is way less performant when running WebGL and cause PlayCanvas
-    // to crash when opening some models
+    // to crash when opening some glTFs
     headless: false,
     args: [
       "--window-size=1280,1024",

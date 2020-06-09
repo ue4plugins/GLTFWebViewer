@@ -7,19 +7,19 @@ import { PlayCanvasViewer } from "../PlayCanvasViewer";
 import {
   configResponse,
   sceneResponse,
-  modelEmbeddedResponse,
-  modelEmbeddedInvalidResponse,
-  modelEmbeddedAnimatedResponse,
-  modelUnpackedResponse,
-  modelUnpackedBinResponse,
+  gltfEmbeddedResponse,
+  gltfEmbeddedInvalidResponse,
+  gltfEmbeddedAnimatedResponse,
+  gltfUnpackedResponse,
+  gltfUnpackedBinResponse,
 } from "../__fixtures__";
 
 const sceneUrl = "scene.json";
-const modelEmbeddedUrl = "model-embedded.gltf";
-const modelEmbeddedInvalidUrl = "model-embedded-invalid.gltf";
-const modelEmbeddedAnimatedUrl = "model-embedded-anim.gltf";
-const modelUnpackedUrl = "model-unpacked.gltf";
-const modelUnpackedBlobUrl = "d9031d07-b017-4aa8-af51-f6bc461f37a4";
+const gltfEmbeddedUrl = "gltf-embedded.gltf";
+const gltfEmbeddedInvalidUrl = "gltf-embedded-invalid.gltf";
+const gltfEmbeddedAnimatedUrl = "gltf-embedded-anim.gltf";
+const gltfUnpackedUrl = "gltf-unpacked.gltf";
+const gltfUnpackedBlobUrl = "d9031d07-b017-4aa8-af51-f6bc461f37a4";
 
 const toEscapedRegExp = (pattern: string) =>
   new RegExp(pattern.replace(/\./g, "\\."));
@@ -45,32 +45,32 @@ const waitForAnimationFrame = () =>
 describe("PlayCanvasViewer", () => {
   const configHandler = createRequestHandler(configResponse);
   const sceneHandler = createRequestHandler(sceneResponse);
-  const modelEmbeddedHandler = createRequestHandler(modelEmbeddedResponse);
-  const modelEmbeddedInvalidHandler = createRequestHandler(
-    modelEmbeddedInvalidResponse,
+  const gltfEmbeddedHandler = createRequestHandler(gltfEmbeddedResponse);
+  const gltfEmbeddedInvalidHandler = createRequestHandler(
+    gltfEmbeddedInvalidResponse,
   );
-  const modelEmbeddedAnimatedHandler = createRequestHandler(
-    modelEmbeddedAnimatedResponse,
+  const gltfEmbeddedAnimatedHandler = createRequestHandler(
+    gltfEmbeddedAnimatedResponse,
   );
-  const modelUnpackedHandler = createRequestHandler(modelUnpackedResponse);
+  const gltfUnpackedHandler = createRequestHandler(gltfUnpackedResponse);
   const ddsHandler = createRequestHandler(null);
-  const binHandler = createRequestHandler(modelUnpackedBinResponse);
+  const binHandler = createRequestHandler(gltfUnpackedBinResponse);
 
   beforeAll(() => {
     xhrMock.setup();
     xhrMock.get(toEscapedRegExp("config.json"), configHandler);
     xhrMock.get(toEscapedRegExp(sceneUrl), sceneHandler);
-    xhrMock.get(toEscapedRegExp(modelEmbeddedUrl), modelEmbeddedHandler);
+    xhrMock.get(toEscapedRegExp(gltfEmbeddedUrl), gltfEmbeddedHandler);
     xhrMock.get(
-      toEscapedRegExp(modelEmbeddedInvalidUrl),
-      modelEmbeddedInvalidHandler,
+      toEscapedRegExp(gltfEmbeddedInvalidUrl),
+      gltfEmbeddedInvalidHandler,
     );
     xhrMock.get(
-      toEscapedRegExp(modelEmbeddedAnimatedUrl),
-      modelEmbeddedAnimatedHandler,
+      toEscapedRegExp(gltfEmbeddedAnimatedUrl),
+      gltfEmbeddedAnimatedHandler,
     );
-    xhrMock.get(toEscapedRegExp(modelUnpackedUrl), modelUnpackedHandler);
-    xhrMock.get(toEscapedRegExp(modelUnpackedBlobUrl), modelUnpackedHandler);
+    xhrMock.get(toEscapedRegExp(gltfUnpackedUrl), gltfUnpackedHandler);
+    xhrMock.get(toEscapedRegExp(gltfUnpackedBlobUrl), gltfUnpackedHandler);
     xhrMock.get(toEscapedRegExp(".dds"), ddsHandler);
     xhrMock.get(toEscapedRegExp(".bin"), binHandler);
   });
@@ -80,8 +80,8 @@ describe("PlayCanvasViewer", () => {
   beforeEach(() => {
     configHandler.mockClear();
     sceneHandler.mockClear();
-    modelEmbeddedHandler.mockClear();
-    modelUnpackedHandler.mockClear();
+    gltfEmbeddedHandler.mockClear();
+    gltfUnpackedHandler.mockClear();
     ddsHandler.mockClear();
     binHandler.mockClear();
   });
@@ -98,15 +98,15 @@ describe("PlayCanvasViewer", () => {
       expect(viewer.scenes.length).toBeGreaterThan(0);
     });
 
-    it("should destroy model, scene and app on teardown", async () => {
+    it("should destroy glTF, scene and app on teardown", async () => {
       const viewer = await createAndConfigureViewer();
       await viewer.loadScene(sceneUrl);
-      await viewer.loadModel(modelEmbeddedUrl);
+      await viewer.loadGltf(gltfEmbeddedUrl);
       viewer.destroy();
 
       expect(viewer.initiated).toBe(false);
       expect(viewer.sceneLoaded).toBe(false);
-      expect(viewer.modelLoaded).toBe(false);
+      expect(viewer.gltfLoaded).toBe(false);
       expect(viewer.scenes.length).toBe(0);
       expect(viewer.app.scene || undefined).toBeUndefined();
       expect(viewer.app.root || undefined).toBeUndefined();
@@ -134,65 +134,65 @@ describe("PlayCanvasViewer", () => {
     });
   });
 
-  describe("Model", () => {
-    it("should be able to load embedded model", async () => {
+  describe("glTF", () => {
+    it("should be able to load embedded glTF", async () => {
       const viewer = await createAndConfigureViewer();
-      expect(viewer.modelLoaded).toBe(false);
+      expect(viewer.gltfLoaded).toBe(false);
 
       const modelBeforeLoad = viewer.app.root.findComponent("model");
       expect(modelBeforeLoad || undefined).toBeUndefined();
 
-      await viewer.loadModel(modelEmbeddedUrl);
-      expect(viewer.modelLoaded).toBe(true);
-      expect(modelEmbeddedHandler).toHaveBeenCalledTimes(1);
+      await viewer.loadGltf(gltfEmbeddedUrl);
+      expect(viewer.gltfLoaded).toBe(true);
+      expect(gltfEmbeddedHandler).toHaveBeenCalledTimes(1);
 
       const modelAfterLoad = viewer.app.root.findComponent("model");
       expect(modelAfterLoad || undefined).toBeDefined();
     });
 
-    it("should be able to load unpacked model", async () => {
+    it("should be able to load unpacked glTF", async () => {
       const viewer = await createAndConfigureViewer();
-      expect(viewer.modelLoaded).toBe(false);
+      expect(viewer.gltfLoaded).toBe(false);
 
       const modelBeforeLoad = viewer.app.root.findComponent("model");
       expect(modelBeforeLoad || undefined).toBeUndefined();
 
-      await viewer.loadModel(modelUnpackedUrl);
-      expect(viewer.modelLoaded).toBe(true);
-      expect(modelUnpackedHandler).toHaveBeenCalledTimes(1);
+      await viewer.loadGltf(gltfUnpackedUrl);
+      expect(viewer.gltfLoaded).toBe(true);
+      expect(gltfUnpackedHandler).toHaveBeenCalledTimes(1);
       expect(binHandler).toHaveBeenCalledTimes(1);
 
       const modelAfterLoad = viewer.app.root.findComponent("model");
       expect(modelAfterLoad || undefined).toBeDefined();
     });
 
-    it("should be able to load model from blob URL (drag-and-drop) ", async () => {
+    it("should be able to load glTF from blob URL (drag-and-drop) ", async () => {
       const viewer = await createAndConfigureViewer();
-      expect(viewer.modelLoaded).toBe(false);
+      expect(viewer.gltfLoaded).toBe(false);
 
       const modelBeforeLoad = viewer.app.root.findComponent("model");
       expect(modelBeforeLoad || undefined).toBeUndefined();
 
-      await viewer.loadModel(modelUnpackedBlobUrl, "model.gltf");
-      expect(viewer.modelLoaded).toBe(true);
-      expect(modelUnpackedHandler).toHaveBeenCalledTimes(1);
+      await viewer.loadGltf(gltfUnpackedBlobUrl, "model.gltf");
+      expect(viewer.gltfLoaded).toBe(true);
+      expect(gltfUnpackedHandler).toHaveBeenCalledTimes(1);
       expect(binHandler).toHaveBeenCalledTimes(1);
 
       const modelAfterLoad = viewer.app.root.findComponent("model");
       expect(modelAfterLoad || undefined).toBeDefined();
     });
 
-    it("should clean up when destroying model", async () => {
+    it("should clean up when destroying glTF", async () => {
       const viewer = await createAndConfigureViewer();
-      await viewer.loadModel(modelEmbeddedUrl);
-      viewer.destroyModel();
-      expect(viewer.modelLoaded).toBe(false);
+      await viewer.loadGltf(gltfEmbeddedUrl);
+      viewer.destroyGltf();
+      expect(viewer.gltfLoaded).toBe(false);
 
       const model = viewer.app.root.findComponent("model");
       expect(model || undefined).toBeUndefined();
     });
 
-    it("should throw when loading invalid model", async () => {
+    it("should throw when loading invalid glTF", async () => {
       const originalConsoleError = console.error;
       console.error = jest.fn();
 
@@ -201,12 +201,12 @@ describe("PlayCanvasViewer", () => {
       const viewer = await createAndConfigureViewer();
 
       try {
-        await viewer.loadModel(modelEmbeddedInvalidUrl);
+        await viewer.loadGltf(gltfEmbeddedInvalidUrl);
       } catch (e) {
         expect(e).toBeDefined();
       }
 
-      expect(viewer.modelLoaded).toBe(true);
+      expect(viewer.gltfLoaded).toBe(true);
       const model = viewer.app.root.findComponent("model");
       expect(model || undefined).toBeUndefined();
 
@@ -221,7 +221,7 @@ describe("PlayCanvasViewer", () => {
       expect(camera || undefined).toBeDefined();
     });
 
-    it("should focus camera after loading model", async () => {
+    it("should focus camera after loading glTF", async () => {
       const viewer = await createAndConfigureViewer();
       const camera = viewer.app.root.findComponent(
         "camera",
@@ -230,7 +230,7 @@ describe("PlayCanvasViewer", () => {
 
       const transformBefore = camera.entity.getLocalTransform().clone().data;
 
-      await viewer.loadModel(modelEmbeddedUrl);
+      await viewer.loadGltf(gltfEmbeddedUrl);
       await waitForAnimationFrame();
 
       const transformAfter = camera.entity.getLocalTransform().clone().data;
@@ -243,7 +243,7 @@ describe("PlayCanvasViewer", () => {
         "camera",
       ) as pc.CameraComponent;
 
-      await viewer.loadModel(modelEmbeddedUrl);
+      await viewer.loadGltf(gltfEmbeddedUrl);
       await waitForAnimationFrame();
 
       const transformBefore = camera.entity.getLocalTransform().clone().data;
@@ -263,7 +263,7 @@ describe("PlayCanvasViewer", () => {
         "camera",
       ) as pc.CameraComponent;
 
-      await viewer.loadModel(modelEmbeddedUrl);
+      await viewer.loadGltf(gltfEmbeddedUrl);
       await waitForAnimationFrame();
 
       const transformBefore = camera.entity.getLocalTransform().clone().data;

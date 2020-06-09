@@ -9,8 +9,8 @@ import {
   FpsMonitor,
   SidebarToggle,
   SceneSelector,
-  ModelList,
-  ModelMeta,
+  GltfList,
+  GltfMeta,
   AnimationSelector,
 } from "../components";
 import { useStores } from "../stores";
@@ -59,14 +59,14 @@ const useStyles = makeStyles(theme => ({
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { model, fetchModels, animations } = gltfStore;
+  const { gltf, fetchGltfs, animations } = gltfStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
     if (!showUI) {
-      fetchModels();
+      fetchGltfs();
     }
-  }, [fetchModels]);
+  }, [fetchGltfs]);
 
   return (
     <div className={classes.root}>
@@ -80,7 +80,7 @@ export const Root: React.FC = observer(() => {
         {showUI && (
           <SidebarToggle isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
         )}
-        {showUI && model && <ModelMeta model={model} />}
+        {showUI && gltf && <GltfMeta gltf={gltf} />}
       </main>
       {showUI && (
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
@@ -92,7 +92,7 @@ export const Root: React.FC = observer(() => {
               <Divider />
             </>
           )}
-          <ModelList />
+          <GltfList />
         </Sidebar>
       )}
       {showUI && <FpsMonitor />}

@@ -1,6 +1,6 @@
 import { GltfSource } from "../../types";
 
-export const models: GltfSource[] = [
+export const gltfs: GltfSource[] = [
   {
     filePath: "assets/gltf/AlfaRomeo/glTF/AlfaRomeo.gltf",
     name: "AlfaRomeo",

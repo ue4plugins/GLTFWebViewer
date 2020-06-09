@@ -14,7 +14,7 @@ import { useStores } from "../stores";
 import {
   useAsyncWithLoadingAndErrorHandling,
   usePreventableCameraInteractions,
-  useModelDrop,
+  useGltfDrop,
 } from "../hooks";
 
 const debug = Debug("viewer");
@@ -37,19 +37,19 @@ const useStyles = makeStyles(theme => ({
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore, sceneStore } = useStores();
-  const { model, setModel, activeAnimations, setAnimations } = gltfStore;
+  const { gltf, setGltf, activeAnimations, setAnimations } = gltfStore;
   const { scene, setScenes } = sceneStore;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<PlayCanvasViewer>();
 
-  const onDropModel = useCallback(setModel, [setModel]);
+  const onDropGltf = useCallback(setGltf, [setGltf]);
   const [
     isDragActive,
     hasDropError,
     setHasDropError,
     getRootProps,
-  ] = useModelDrop(onDropModel);
+  ] = useGltfDrop(onDropGltf);
 
   const [
     isLoading,
@@ -118,39 +118,39 @@ export const Viewer: React.FC = observer(() => {
   }, [runAsync, viewer, scene]);
 
   useEffect(() => {
-    if (!viewer?.initiated || !model) {
+    if (!viewer?.initiated || !gltf) {
       return;
     }
 
     runAsync(async () => {
-      debug("Load model start", model.filePath);
-      await viewer.loadModel(model.filePath, model.blobFileName);
-      debug("Load model end", model.filePath);
+      debug("Load glTF start", gltf.filePath);
+      await viewer.loadGltf(gltf.filePath, gltf.blobFileName);
+      debug("Load glTF end", gltf.filePath);
       debug("Set animation list", viewer.animations);
       setAnimations(viewer.animations);
     });
 
     return () => {
-      debug("Destroy model");
-      viewer.destroyModel();
+      debug("Destroy glTF");
+      viewer.destroyGltf();
       debug("Unset animation list");
       setAnimations([]);
     };
-  }, [runAsync, viewer, model, setAnimations]);
+  }, [runAsync, viewer, gltf, setAnimations]);
 
   useEffect(() => {
-    if (!viewer?.initiated || !model) {
+    if (!viewer?.initiated || !gltf) {
       return;
     }
 
     debug("Set active animations");
     viewer.setActiveAnimations(activeAnimations);
-  }, [viewer, model, activeAnimations]);
+  }, [viewer, gltf, activeAnimations]);
 
   useEffect(() => {
     debug("Reset drop error state");
     setHasDropError(false);
-  }, [model, scene, setHasDropError, viewer]);
+  }, [gltf, scene, setHasDropError, viewer]);
 
   useEffect(() => {
     debug("Prevent camera interaction", showBackdrop);

@@ -39,8 +39,8 @@ export const SearchField: React.FC<Props> = ({ term, onChange }) => {
       <InputBase
         id="search-input"
         className={classes.input}
-        placeholder="Search models"
-        inputProps={{ "aria-label": "search models", spellCheck: "false" }}
+        placeholder="Search glTF files"
+        inputProps={{ "aria-label": "search gltf files", spellCheck: "false" }}
         value={value}
         onChange={e => {
           const { value } = e.target;

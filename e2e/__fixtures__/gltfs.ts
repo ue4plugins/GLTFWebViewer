@@ -1,9 +1,9 @@
-export type TestModel = {
+export type TestGltf = {
   name: string;
   multipleAngles?: boolean;
 };
 
-export const models: TestModel[] = [
+export const gltfs: TestGltf[] = [
   {
     name: "Boom Box",
     multipleAngles: true,

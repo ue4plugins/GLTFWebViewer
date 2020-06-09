@@ -3,7 +3,7 @@ import React from "react";
 import { fireEvent } from "@testing-library/dom";
 import { render } from "@testing-library/react";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { useModelDrop } from "../useModelDrop";
+import { useGltfDrop } from "../useGltfDrop";
 import {
   getEmbeddedFiles,
   getUnpackedFiles,
@@ -37,7 +37,7 @@ function flushPromises() {
 const testGuid = "d9031d07-b017-4aa8-af51-f6bc461f37a4";
 const testUrl = `http://domain.com/${testGuid}`;
 
-describe("useModelDrop", () => {
+describe("useGltfDrop", () => {
   const originalConsoleError = console.error;
   const mockedConsoleError = jest.fn();
   const mockedCreateObjectURL = jest.fn((_: Blob) => testUrl);
@@ -69,9 +69,7 @@ describe("useModelDrop", () => {
 
   it("should trigger callback for embedded gltf files", async () => {
     const onDrop = jest.fn();
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useModelDrop(onDrop),
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useGltfDrop(onDrop));
 
     const getRootProps = result.current[3];
     const { container } = render(<div {...getRootProps()} />);
@@ -93,9 +91,7 @@ describe("useModelDrop", () => {
 
   it("should trigger callback for binary glb files", async () => {
     const onDrop = jest.fn();
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useModelDrop(onDrop),
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useGltfDrop(onDrop));
 
     const getRootProps = result.current[3];
     const { container } = render(<div {...getRootProps()} />);
@@ -117,9 +113,7 @@ describe("useModelDrop", () => {
 
   it("should trigger callback for unpacked gltf files", async () => {
     const onDrop = jest.fn();
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useModelDrop(onDrop),
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useGltfDrop(onDrop));
 
     const getRootProps = result.current[3];
     const { container } = render(<div {...getRootProps()} />);
@@ -141,9 +135,7 @@ describe("useModelDrop", () => {
 
   it("should update asset references for unpacked gltf files", async () => {
     const onDrop = jest.fn();
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useModelDrop(onDrop),
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useGltfDrop(onDrop));
 
     const getRootProps = result.current[3];
     const { container } = render(<div {...getRootProps()} />);
@@ -174,9 +166,7 @@ describe("useModelDrop", () => {
 
   it("should abort and log error if no gltf file was dropped", async () => {
     const onDrop = jest.fn();
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useModelDrop(onDrop),
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useGltfDrop(onDrop));
 
     const getRootProps = result.current[3];
     const { container } = render(<div {...getRootProps()} />);
@@ -195,9 +185,7 @@ describe("useModelDrop", () => {
 
   it("should abort and log error if an invalid gltf file was dropped", async () => {
     const onDrop = jest.fn();
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useModelDrop(onDrop),
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useGltfDrop(onDrop));
 
     const getRootProps = result.current[3];
     const { container } = render(<div {...getRootProps()} />);
@@ -216,9 +204,7 @@ describe("useModelDrop", () => {
 
   it("should set error state if error state callback is used", async () => {
     const onDrop = jest.fn();
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useModelDrop(onDrop),
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useGltfDrop(onDrop));
 
     const getRootProps = result.current[3];
     const { container } = render(<div {...getRootProps()} />);
@@ -242,9 +228,7 @@ describe("useModelDrop", () => {
 
   it("should toggle drag active state on drag enter and drag leave", async () => {
     const onDrop = jest.fn();
-    const { result, waitForNextUpdate } = renderHook(() =>
-      useModelDrop(onDrop),
-    );
+    const { result, waitForNextUpdate } = renderHook(() => useGltfDrop(onDrop));
 
     const getRootProps = result.current[3];
     const { container } = render(<div {...getRootProps()} />);

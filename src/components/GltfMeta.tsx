@@ -18,29 +18,29 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type Props = {
-  model: GltfSource;
+  gltf: GltfSource;
 };
 
-export const ModelMeta: React.FC<Props> = ({ model }) => {
+export const GltfMeta: React.FC<Props> = ({ gltf }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Typography variant="h6">{model.name}</Typography>
-      {model.creator && (
+      <Typography variant="h6">{gltf.name}</Typography>
+      {gltf.creator && (
         <Typography variant="caption">
           By{" "}
-          {model.creatorUrl ? (
+          {gltf.creatorUrl ? (
             <a
               className={classes.link}
-              href={model.creatorUrl}
+              href={gltf.creatorUrl}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {model.creator}
+              {gltf.creator}
             </a>
           ) : (
-            model.creator
+            gltf.creator
           )}
         </Typography>
       )}

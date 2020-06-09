@@ -1,10 +1,10 @@
 import "jest";
 import { GltfStore } from "../GltfStore";
-import { models } from "../__fixtures__/models";
+import { gltfs } from "../__fixtures__/gltfs";
 
 const fetchMock = () =>
   Promise.resolve({
-    json: async () => models,
+    json: async () => gltfs,
   } as Response);
 
 const fetchMockEmpty = () =>
@@ -31,105 +31,105 @@ describe("GltfStore", () => {
     });
   });
 
-  it("should load models", async () => {
+  it("should load glTFs", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
     const store = new GltfStore();
-    await store.fetchModels();
-    expect(store.models).toEqual(models);
+    await store.fetchGltfs();
+    expect(store.gltfs).toEqual(gltfs);
     expect(window.fetch).toHaveBeenCalledWith("assets/index.json");
     expect(window.fetch).toHaveBeenCalledTimes(1);
 
     spy.mockRestore();
   });
 
-  it("should have default model", async () => {
+  it("should have default glTF", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
     const store = new GltfStore();
-    await store.fetchModels();
-    expect(store.model).toEqual(models[0]);
+    await store.fetchGltfs();
+    expect(store.gltf).toEqual(gltfs[0]);
 
     spy.mockRestore();
   });
 
-  it("should have model after setModel is called", async () => {
+  it("should have glTF after setGltf is called", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
     const store = new GltfStore();
-    await store.fetchModels();
-    expect(store.model).toEqual(models[0]);
+    await store.fetchGltfs();
+    expect(store.gltf).toEqual(gltfs[0]);
 
-    store.setModel(undefined);
-    expect(store.model).toBeUndefined();
+    store.setGltf(undefined);
+    expect(store.gltf).toBeUndefined();
 
-    store.setModel(store.models[5]);
-    expect(store.model).toBe(store.models[5]);
+    store.setGltf(store.gltfs[5]);
+    expect(store.gltf).toBe(store.gltfs[5]);
 
     spy.mockRestore();
   });
 
-  it("should throw and have empty model list if request fails", async () => {
+  it("should throw and have empty glTF list if request fails", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMockFail);
 
     expect.assertions(4);
 
     const store = new GltfStore();
     try {
-      await store.fetchModels();
+      await store.fetchGltfs();
     } catch (e) {
       expect(e).toBeDefined();
     }
 
-    expect(store.models).toEqual([]);
-    expect(store.model).toBeUndefined();
+    expect(store.gltfs).toEqual([]);
+    expect(store.gltf).toBeUndefined();
     expect(window.fetch).toHaveBeenCalledTimes(1);
 
     spy.mockRestore();
   });
 
-  it("should throw if empty model list is fetched", async () => {
+  it("should throw if empty glTF list is fetched", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMockEmpty);
 
     expect.assertions(4);
 
     const store = new GltfStore();
     try {
-      await store.fetchModels();
+      await store.fetchGltfs();
     } catch (e) {
       expect(e).toBeDefined();
     }
 
-    expect(store.models).toEqual([]);
-    expect(store.model).toBeUndefined();
+    expect(store.gltfs).toEqual([]);
+    expect(store.gltf).toBeUndefined();
     expect(window.fetch).toHaveBeenCalledTimes(1);
 
     spy.mockRestore();
   });
 
-  it("should automatically set model from url param", async () => {
+  it("should automatically set glTF from url param", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
     mockLocationSearch("?model=DamagedHelmet");
 
     const store = new GltfStore();
-    await store.fetchModels();
+    await store.fetchGltfs();
 
-    expect(store.model).toBeDefined();
-    expect(store.model).toEqual(models.find(m => m.name === "DamagedHelmet"));
+    expect(store.gltf).toBeDefined();
+    expect(store.gltf).toEqual(gltfs.find(m => m.name === "DamagedHelmet"));
 
     spy.mockRestore();
   });
 
-  it("should not have model if model from url param is not found", async () => {
+  it("should not have glTF if glTF from url param is not found", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
     mockLocationSearch("?model=none");
 
     const store = new GltfStore();
-    await store.fetchModels();
+    await store.fetchGltfs();
 
-    expect(store.model).toBeUndefined();
+    expect(store.gltf).toBeUndefined();
 
     spy.mockRestore();
   });

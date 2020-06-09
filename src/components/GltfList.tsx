@@ -40,42 +40,42 @@ const fuseOptions: FuseOptions<GltfSource> = {
   keys: ["name"],
 };
 
-export const ModelList: React.FC = observer(() => {
+export const GltfList: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { model: selectedModel, models, setModel, fetchModels } = gltfStore;
+  const { gltf: selectedGltf, gltfs, setGltf, fetchGltfs } = gltfStore;
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
   const [searchTerm, setSearchTerm] = useState("");
   const [fuse, setFuse] = useState<Fuse<GltfSource, typeof fuseOptions>>();
-  const [list, setList] = useState(models);
+  const [list, setList] = useState(gltfs);
 
   useEffect(() => {
     runAsync(async () => {
-      await fetchModels();
+      await fetchGltfs();
     });
-  }, [fetchModels, runAsync]);
+  }, [fetchGltfs, runAsync]);
 
   useEffect(() => {
-    setFuse(models.length > 0 ? new Fuse(models, fuseOptions) : undefined);
-  }, [models]);
+    setFuse(gltfs.length > 0 ? new Fuse(gltfs, fuseOptions) : undefined);
+  }, [gltfs]);
 
   useEffect(() => {
     setList(
       searchTerm.length === 0
-        ? models
+        ? gltfs
         : fuse
         ? (fuse.search(searchTerm) as Fuse.FuseResultWithScore<
             GltfSource
           >[]).map(result => result.item)
         : [],
     );
-  }, [fuse, searchTerm, models]);
+  }, [fuse, searchTerm, gltfs]);
 
   return (
     <>
       <SearchField term={searchTerm} onChange={setSearchTerm} />
       <Divider />
-      <List id="model-list" className={classes.list}>
+      <List id="gltf-list" className={classes.list}>
         {isLoading ? (
           <div className={classes.spinner}>
             <CircularProgress />
@@ -86,23 +86,18 @@ export const ModelList: React.FC = observer(() => {
             variant="body2"
             color="textSecondary"
           >
-            Something went wrong when loading models. Check console for more
+            Something went wrong when loading glTF files. Check console for more
             details.
           </Typography>
         ) : (
-          list.map(model => (
+          list.map(gltf => (
             <ListItem
-              onClick={() => setModel(model)}
+              onClick={() => setGltf(gltf)}
               button
-              key={model.filePath}
-              selected={
-                selectedModel && model.filePath === selectedModel.filePath
-              }
+              key={gltf.filePath}
+              selected={selectedGltf && gltf.filePath === selectedGltf.filePath}
             >
-              <ListItemText
-                primary={model.name}
-                secondary={model.description}
-              />
+              <ListItemText primary={gltf.name} secondary={gltf.description} />
             </ListItem>
           ))
         )}
