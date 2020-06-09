@@ -1,5 +1,8 @@
 import pc from "@animech-public/playcanvas";
+import Debug from "debug";
 import { ExtensionParser } from "./ExtensionParser";
+
+const debug = Debug("VariantSet");
 
 type VariantSetData = any;
 
@@ -30,6 +33,8 @@ export class VariantSetExtensionParser implements ExtensionParser {
   }
 
   private _parse(scene: pc.Entity, extension: any, gltf: any) {
+    debug("Parse variant set", scene, extension);
+
     const variantSets: VariantSetData[] | undefined =
       gltf?.extensions?.[this.name]?.variantSets;
     if (!variantSets) {
@@ -41,7 +46,7 @@ export class VariantSetExtensionParser implements ExtensionParser {
       return scene;
     }
 
-    console.log(this.name, "_parse", variantSet);
+    debug("Found variant set", variantSet);
 
     this._variantSets.push({
       scene,

@@ -1,5 +1,8 @@
 import pc from "@animech-public/playcanvas";
+import Debug from "debug";
 import { ExtensionParser } from "./ExtensionParser";
+
+const debug = Debug("InteractionHotspot");
 
 type InteractionHotspotData = {
   animation: 0;
@@ -7,7 +10,7 @@ type InteractionHotspotData = {
 };
 
 export class InteractionHotspotExtensionParser implements ExtensionParser {
-  private _interactions: {
+  private _hotspots: {
     node: pc.Entity;
     data: InteractionHotspotData;
   }[] = [];
@@ -25,27 +28,31 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
   }
 
   public postParse(container: pc.ContainerResource) {
-    this._interactions.forEach(interaction => {
-      const image = container.textures[interaction.data.image];
-      const animation = container.animations[interaction.data.animation];
-      console.log(this.name, "postParse", image, animation);
+    debug("Post parse hotspot", container);
+    this._hotspots.forEach(hotspot => {
+      const image = container.textures[hotspot.data.image];
+      const animation = container.animations[hotspot.data.animation];
+      debug("Found image and animation", image, animation);
     });
   }
 
   private _parse(node: pc.Entity, extension: any, gltf: any) {
-    const interactions: InteractionHotspotData[] | undefined =
+    debug("Parse hotspot", node, extension);
+
+    const hotspots: InteractionHotspotData[] | undefined =
       gltf?.extensions?.[this.name]?.interactions;
-    if (!interactions) {
+    if (!hotspots) {
       return node;
     }
 
-    const interaction = interactions[extension.interaction];
-    if (!interaction) {
+    const hotspot = hotspots[extension.interaction];
+    if (!hotspot) {
       return node;
     }
 
-    console.log(this.name, "_parse", interaction);
+    debug("Found hotspot", hotspot);
 
+    // TODO: remove this test implementation
     const child = new pc.Entity();
     child.rotateLocal(45, 45, 45);
     child.setLocalScale(2, 2, 2);
@@ -58,9 +65,9 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
 
     node.addChild(child);
 
-    this._interactions.push({
+    this._hotspots.push({
       node,
-      data: interaction,
+      data: hotspot,
     });
 
     return node;

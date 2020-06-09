@@ -1,4 +1,7 @@
+import Debug from "debug";
 import { ExtensionParser } from "./ExtensionParser";
+
+const debug = Debug("HdriBackdrop");
 
 type HdriBackdropData = {
   type: "dome";
@@ -29,13 +32,16 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
   }
 
   public postParse(container: pc.ContainerResource) {
+    debug("Post parse backdrop", container);
     this._backdrops.forEach(backdrop => {
       const texture = container.textures[backdrop.data.cubemap];
-      console.log(this.name, "postParse", texture);
+      debug("Found texture ", texture);
     });
   }
 
   private _parse(node: pc.Entity, extension: any, gltf: any) {
+    debug("Parse backdrop", node, extension);
+
     const backdrops: HdriBackdropData[] | undefined =
       gltf?.extensions?.[this.name]?.backdrops;
     if (!backdrops) {
@@ -47,7 +53,7 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
       return node;
     }
 
-    console.log(this.name, "_parse", backdrop);
+    debug("Found backdrop", backdrop);
 
     this._backdrops.push({
       node,
