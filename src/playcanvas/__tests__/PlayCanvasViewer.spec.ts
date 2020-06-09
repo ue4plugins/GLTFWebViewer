@@ -250,7 +250,7 @@ describe("PlayCanvasViewer", () => {
 
       viewer.resetCamera(0, 0, 0);
       await waitForAnimationFrame();
-      viewer.focusCameraOnEntity();
+      viewer.focusCameraOnRootEntity();
       await waitForAnimationFrame();
 
       const transformAfter = camera.entity.getLocalTransform().clone().data;

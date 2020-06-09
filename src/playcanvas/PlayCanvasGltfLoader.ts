@@ -9,11 +9,21 @@ import {
 
 const debug = Debug("PlayCanvasGltfLoader");
 
+export type GltfVariantSetData = any;
+
+export type GltfSceneData = {
+  root: pc.Entity;
+  variantSet: GltfVariantSetData;
+  animations: pc.AnimComponentLayer[];
+};
+
 export type GltfData = {
   asset: pc.Asset;
   scene: pc.Entity;
   scenes: pc.Entity[];
   animations: pc.AnimComponentLayer[];
+  // scenes: GltfSceneData[];
+  // defaultScene: number;
 };
 
 export class PlayCanvasGltfLoader {
@@ -130,5 +140,14 @@ export class PlayCanvasGltfLoader {
       this._unregisterExtensions(extensions);
       throw e;
     }
+  }
+
+  public unload(data: GltfData) {
+    debug("Unload glTF asset", data);
+
+    data.scenes.forEach(scene => scene.destroy());
+
+    this._app.assets.remove(data.asset);
+    data.asset.unload();
   }
 }

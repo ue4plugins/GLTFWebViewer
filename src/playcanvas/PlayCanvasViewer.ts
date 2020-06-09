@@ -4,7 +4,7 @@ import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { GltfAnimation } from "../types";
 import { OrbitCamera } from "./scripts";
-import { PlayCanvasGltfLoader } from "./PlayCanvasGltfLoader";
+import { PlayCanvasGltfLoader, GltfData } from "./PlayCanvasGltfLoader";
 
 const debug = Debug("PlayCanvasViewer");
 const orbitCameraScriptName = "OrbitCamera";
@@ -20,10 +20,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _camera: CameraEntity;
   private _loader: PlayCanvasGltfLoader;
   private _scene?: pc.Scene;
-  private _gltfRoot?: pc.Entity;
-  private _gltfAsset?: pc.Asset;
-  private _gltfRootEntity?: pc.Entity;
-  private _gltfAnimations: pc.AnimComponentLayer[] = [];
+  private _gltf?: GltfData;
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
@@ -63,13 +60,17 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public get animations(): GltfAnimation[] {
-    return this._gltfAnimations
+    const animationLayers = this._gltf?.animations;
+    if (!animationLayers) {
+      return [];
+    }
+    return animationLayers
       .map((anim, index) => ({
         id: index,
         name: anim.name,
         active: false,
       }))
-      .filter((_, index) => this._gltfAnimations[index].playable);
+      .filter((_, index) => animationLayers[index].playable);
   }
 
   private _resizeCanvas() {
@@ -134,6 +135,10 @@ export class PlayCanvasViewer implements TestableViewer {
     return camera;
   }
 
+  private _setSceneHierarchy(entity: pc.Entity) {
+    this._app.root.addChild(entity);
+  }
+
   public destroy() {
     this.destroyGltf();
     this.destroyScene();
@@ -194,55 +199,26 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public destroyGltf() {
-    debug("Destroy glTF", this._gltfRoot);
+    debug("Destroy glTF", this._gltf);
 
     this._gltfLoaded = false;
 
-    if (this._gltfRoot) {
-      this._gltfRoot.destroy();
-      this._gltfRoot = undefined;
+    if (this._gltf) {
+      this._loader.unload(this._gltf);
+      this._gltf = undefined;
     }
-
-    if (this._gltfRootEntity) {
-      this._gltfRootEntity.destroy();
-      this._gltfRootEntity = undefined;
-    }
-
-    if (this._gltfAnimations.length > 0) {
-      this._gltfAnimations = [];
-    }
-
-    if (this._gltfAsset) {
-      this._app.assets.remove(this._gltfAsset);
-      this._gltfAsset.unload();
-      this._gltfAsset = undefined;
-    }
-  }
-
-  private _initGltf() {
-    debug("Init glTF", this._gltfRootEntity);
-
-    if (this._gltfRoot) {
-      // glTF already initialized
-      return;
-    }
-
-    if (!this._gltfRootEntity) {
-      throw new Error("_initGltf called before registering resources");
-    }
-
-    this._gltfRoot = this._gltfRootEntity;
-    this._app.root.addChild(this._gltfRoot);
-
-    this.focusCameraOnEntity();
   }
 
   public setActiveAnimations(animations: GltfAnimation[]) {
     debug("Set active animations", animations);
 
+    if (!this._gltf) {
+      return;
+    }
+
     const animationIndexes = animations.map(a => a.id);
 
-    this._gltfAnimations.forEach((animation, animationIndex) => {
+    this._gltf.animations.forEach((animation, animationIndex) => {
       const active = animationIndexes.includes(animationIndex);
       if (active && animation.playable) {
         animation.play();
@@ -252,11 +228,11 @@ export class PlayCanvasViewer implements TestableViewer {
     });
   }
 
-  public focusCameraOnEntity() {
-    debug("Focus on root entity", this._gltfRoot);
+  public focusCameraOnRootEntity() {
+    debug("Focus on root entity", this._app.root);
 
-    if (this._gltfRoot) {
-      this._camera.script[orbitCameraScriptName].focus(this._gltfRoot);
+    if (this._app.root) {
+      this._camera.script[orbitCameraScriptName].focus(this._app.root);
     }
   }
 
@@ -268,12 +244,9 @@ export class PlayCanvasViewer implements TestableViewer {
     this.destroyGltf();
 
     try {
-      const gltf = await this._loader.load(url, fileName);
-      this._gltfAsset = gltf.asset;
-      this._gltfRootEntity = gltf.scene;
-      this._gltfAnimations = gltf.animations;
-
-      this._initGltf();
+      this._gltf = await this._loader.load(url, fileName);
+      this._setSceneHierarchy(this._gltf.scene);
+      this.focusCameraOnRootEntity();
       this._gltfLoaded = true;
     } catch (e) {
       this._gltfLoaded = true;
