@@ -21,8 +21,8 @@ export class GltfStore {
   public animations: GltfAnimation[] = [];
 
   @computed
-  public get activeAnimations() {
-    return this.animations.filter(a => a.active);
+  public get activeAnimationIds() {
+    return this.animations.filter(a => a.active).map(a => a.id);
   }
 
   @action.bound

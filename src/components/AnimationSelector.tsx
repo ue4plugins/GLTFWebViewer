@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 
 export const AnimationSelector: React.FC = observer(() => {
   const { gltfStore } = useStores();
-  const { activeAnimations, animations } = gltfStore;
+  const { activeAnimationIds, animations } = gltfStore;
   const classes = useStyles();
 
   return (
@@ -30,7 +30,7 @@ export const AnimationSelector: React.FC = observer(() => {
         id="animation-select"
         labelId="animation-selector-label"
         multiple
-        value={activeAnimations.map(a => a.id)}
+        value={activeAnimationIds}
         onChange={e => {
           const active = e.target.value as number[];
           animations.forEach(a => {
@@ -51,7 +51,7 @@ export const AnimationSelector: React.FC = observer(() => {
         {animations.map(animation => (
           <MenuItem key={animation.id} value={animation.id}>
             <Checkbox
-              checked={activeAnimations.some(a => a.id === animation.id)}
+              checked={activeAnimationIds.some(id => id === animation.id)}
             />
             <ListItemText primary={animation.name} />
           </MenuItem>

@@ -221,10 +221,10 @@ export class PlayCanvasViewer implements TestableViewer {
     }
   }
 
-  public setSceneHierarchy(sceneHierarchy: GltfScene) {
-    debug("Set scene hierarchy", sceneHierarchy);
+  public setSceneHierarchy(sceneId: number) {
+    debug("Set scene hierarchy", sceneId);
 
-    const gltfScene = this._gltf?.scenes[sceneHierarchy.id];
+    const gltfScene = this._gltf?.scenes[sceneId];
     if (!gltfScene) {
       return;
     }
@@ -239,17 +239,15 @@ export class PlayCanvasViewer implements TestableViewer {
     this.focusCameraOnRootEntity();
   }
 
-  public setActiveAnimations(animations: GltfAnimation[]) {
-    debug("Set active animations", animations);
+  public setActiveAnimations(animationIds: number[]) {
+    debug("Set active animations", animationIds);
 
     if (!this._activeGltfScene) {
       return;
     }
 
-    const animationIndexes = animations.map(a => a.id);
-
     this._activeGltfScene.animations.forEach((animation, animationIndex) => {
-      const active = animationIndexes.includes(animationIndex);
+      const active = animationIds.includes(animationIndex);
       if (active && animation.playable) {
         animation.play();
       } else {
@@ -278,7 +276,7 @@ export class PlayCanvasViewer implements TestableViewer {
     try {
       this._gltf = await this._loader.load(url, fileName);
       debug("Loaded glTF", this._gltf);
-      this.setSceneHierarchy(this.sceneHierarchies[this._gltf.defaultScene]);
+      this.setSceneHierarchy(this._gltf.defaultScene);
       this._gltfLoaded = true;
     } catch (e) {
       this._gltfLoaded = true;

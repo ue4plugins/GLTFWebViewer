@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore, sceneStore } = useStores();
-  const { gltf, setGltf, activeAnimations, setAnimations } = gltfStore;
+  const { gltf, setGltf, activeAnimationIds, setAnimations } = gltfStore;
   const { scene, setScenes } = sceneStore;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -144,8 +144,8 @@ export const Viewer: React.FC = observer(() => {
     }
 
     debug("Set active animations");
-    viewer.setActiveAnimations(activeAnimations);
-  }, [viewer, gltf, activeAnimations]);
+    viewer.setActiveAnimations(activeAnimationIds);
+  }, [viewer, gltf, activeAnimationIds]);
 
   useEffect(() => {
     debug("Reset drop error state");
