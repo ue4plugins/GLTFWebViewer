@@ -3,7 +3,7 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { OrbitCamera } from "./scripts";
-import { GltfFileAnimation } from "./GltfSource";
+import { GltfAnimation } from "./GltfSource";
 import { PlayCanvasGltfLoader } from "./PlayCanvasGltfLoader";
 
 const debug = Debug("playCanvasViewer");
@@ -62,7 +62,7 @@ export class PlayCanvasViewer implements TestableViewer {
     return this._app.scenes?.list() || [];
   }
 
-  public get animations(): GltfFileAnimation[] {
+  public get animations(): GltfAnimation[] {
     return this._gltfAnimations
       .map((anim, index) => ({
         id: index,
@@ -237,7 +237,7 @@ export class PlayCanvasViewer implements TestableViewer {
     this.focusCameraOnEntity();
   }
 
-  public setActiveAnimations(animations: GltfFileAnimation[]) {
+  public setActiveAnimations(animations: GltfAnimation[]) {
     debug("Set active animations", animations);
 
     const animationIndexes = animations.map(a => a.id);

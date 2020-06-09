@@ -1,5 +1,5 @@
 import { observable, computed, action } from "mobx";
-import { GltfSource, GltfFileAnimation } from "../playcanvas";
+import { GltfSource, GltfAnimation } from "../playcanvas";
 
 export class ModelStore {
   private defaultModel: string | null;
@@ -18,7 +18,7 @@ export class ModelStore {
   public model?: GltfSource;
 
   @observable
-  public animations: GltfFileAnimation[] = [];
+  public animations: GltfAnimation[] = [];
 
   @computed
   public get activeAnimations() {
@@ -53,7 +53,7 @@ export class ModelStore {
   }
 
   @action.bound
-  public setAnimations(animations: GltfFileAnimation[]) {
+  public setAnimations(animations: GltfAnimation[]) {
     this.animations = animations;
     if (this.autoPlayAnimations) {
       this.animations.forEach(a => (a.active = true));

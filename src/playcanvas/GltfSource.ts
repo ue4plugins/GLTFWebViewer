@@ -7,7 +7,7 @@ export type GltfSource = {
   creatorUrl?: string;
 };
 
-export type GltfFileAnimation = {
+export type GltfAnimation = {
   id: number;
   name: string;
   active: boolean;
