@@ -58,7 +58,7 @@ export class PlayCanvasViewer implements TestableViewer {
     return this._modelLoaded;
   }
 
-  public get scenes(): pc.SceneFile[] {
+  public get scenes(): pc.SceneSource[] {
     return this._app.scenes?.list() || [];
   }
 

@@ -4,7 +4,7 @@ import { removeIllegalChars } from "./lib/removeIllegalChars";
 import { scenes } from "./__fixtures__/scenes";
 
 type SceneTuple = [string];
-const toSceneTuple = (scene: pc.SceneFile): SceneTuple => [scene.name];
+const toSceneTuple = (scene: pc.SceneSource): SceneTuple => [scene.name];
 
 describe("Scenes", () => {
   beforeAll(async () => {

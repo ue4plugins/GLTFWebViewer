@@ -6,7 +6,7 @@ declare namespace pc {
     destroy: () => void;
   }
 
-  type SceneFile = {
+  type SceneSource = {
     name: string;
     url: string;
   };
