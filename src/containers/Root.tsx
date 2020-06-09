@@ -60,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { gltf, fetchGltfs, animations } = gltfStore;
+  const { gltf, sceneHierarchies, fetchGltfs, animations } = gltfStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
@@ -87,8 +87,12 @@ export const Root: React.FC = observer(() => {
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
           <SceneSelector />
           <Divider />
-          <SceneHierarchySelector />
-          <Divider />
+          {sceneHierarchies.length > 1 && (
+            <>
+              <SceneHierarchySelector />
+              <Divider />
+            </>
+          )}
           {animations.length > 0 && (
             <>
               <AnimationSelector />
