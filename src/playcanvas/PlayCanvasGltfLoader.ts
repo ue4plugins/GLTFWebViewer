@@ -9,21 +9,18 @@ import {
 
 const debug = Debug("PlayCanvasGltfLoader");
 
-export type GltfVariantSetData = any;
+export type GltfVariantSetData = {};
 
 export type GltfSceneData = {
   root: pc.Entity;
-  variantSet: GltfVariantSetData;
+  variantSet?: GltfVariantSetData;
   animations: pc.AnimComponentLayer[];
 };
 
 export type GltfData = {
   asset: pc.Asset;
-  scene: pc.Entity;
-  scenes: pc.Entity[];
-  animations: pc.AnimComponentLayer[];
-  // scenes: GltfSceneData[];
-  // defaultScene: number;
+  scenes: GltfSceneData[];
+  defaultScene: number;
 };
 
 export class PlayCanvasGltfLoader {
@@ -115,26 +112,23 @@ export class PlayCanvasGltfLoader {
         throw new Error("Asset is empty");
       }
 
-      const scene = container.scene;
-      if (!scene) {
-        throw new Error("Asset contains no scene");
+      const defaultScene = container.scene;
+      if (!defaultScene) {
+        throw new Error("Asset has no default scene");
       }
 
       this._applyExtensionPostParse(extensions, container);
       this._unregisterExtensions(extensions);
-
-      // TODO: get multiple
-      const variantSets = variantSetParser.getVariantSetForScene(scene);
       debug("glTF global extensions", container.extensions);
-      debug("glTF variant sets", variantSets);
 
-      // TODO: return multiple scenes, default scene index,
-      // variant sets and animations per scene
       return {
         asset,
-        scene,
-        scenes: container.scenes,
-        animations: this._getAnimationLayersForScene(scene),
+        scenes: container.scenes.map<GltfSceneData>(sceneRoot => ({
+          root: sceneRoot,
+          variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
+          animations: this._getAnimationLayersForScene(sceneRoot),
+        })),
+        defaultScene: container.scenes.indexOf(defaultScene),
       };
     } catch (e) {
       this._unregisterExtensions(extensions);

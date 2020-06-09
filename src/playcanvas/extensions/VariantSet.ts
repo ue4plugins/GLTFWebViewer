@@ -4,7 +4,7 @@ import { ExtensionParser } from "./ExtensionParser";
 
 const debug = Debug("VariantSet");
 
-type VariantSetData = any;
+export type VariantSetData = {};
 
 export class VariantSetExtensionParser implements ExtensionParser {
   private _variantSets: {
@@ -29,7 +29,7 @@ export class VariantSetExtensionParser implements ExtensionParser {
   }
 
   public getVariantSetForScene(scene: pc.Entity) {
-    return this._variantSets.find(set => set.scene === scene);
+    return this._variantSets.find(set => set.scene === scene)?.data;
   }
 
   private _parse(scene: pc.Entity, extension: any, gltf: any) {

@@ -2,9 +2,13 @@ import pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
-import { GltfAnimation } from "../types";
+import { GltfAnimation, GltfScene } from "../types";
 import { OrbitCamera } from "./scripts";
-import { PlayCanvasGltfLoader, GltfData } from "./PlayCanvasGltfLoader";
+import {
+  PlayCanvasGltfLoader,
+  GltfData,
+  GltfSceneData,
+} from "./PlayCanvasGltfLoader";
 
 const debug = Debug("PlayCanvasViewer");
 const orbitCameraScriptName = "OrbitCamera";
@@ -21,6 +25,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _loader: PlayCanvasGltfLoader;
   private _scene?: pc.Scene;
   private _gltf?: GltfData;
+  private _activeGltfScene?: GltfSceneData;
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
@@ -60,7 +65,7 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public get animations(): GltfAnimation[] {
-    const animationLayers = this._gltf?.animations;
+    const animationLayers = this._activeGltfScene?.animations;
     if (!animationLayers) {
       return [];
     }
@@ -71,6 +76,17 @@ export class PlayCanvasViewer implements TestableViewer {
         active: false,
       }))
       .filter((_, index) => animationLayers[index].playable);
+  }
+
+  public get sceneHierarchies(): GltfScene[] {
+    const scenes = this._gltf?.scenes;
+    if (!scenes) {
+      return [];
+    }
+    return scenes.map((scene, index) => ({
+      id: index,
+      name: scene.root.name,
+    }));
   }
 
   private _resizeCanvas() {
@@ -133,10 +149,6 @@ export class PlayCanvasViewer implements TestableViewer {
     app.root.addChild(camera);
 
     return camera;
-  }
-
-  private _setSceneHierarchy(entity: pc.Entity) {
-    this._app.root.addChild(entity);
   }
 
   public destroy() {
@@ -209,16 +221,34 @@ export class PlayCanvasViewer implements TestableViewer {
     }
   }
 
+  public setSceneHierarchy(sceneHierarchy: GltfScene) {
+    debug("Set scene hierarchy", sceneHierarchy);
+
+    const gltfScene = this._gltf?.scenes[sceneHierarchy.id];
+    if (!gltfScene) {
+      return;
+    }
+
+    if (this._activeGltfScene) {
+      this._app.root.removeChild(this._activeGltfScene.root);
+    }
+
+    this._activeGltfScene = gltfScene;
+    this._app.root.addChild(gltfScene.root);
+
+    this.focusCameraOnRootEntity();
+  }
+
   public setActiveAnimations(animations: GltfAnimation[]) {
     debug("Set active animations", animations);
 
-    if (!this._gltf) {
+    if (!this._activeGltfScene) {
       return;
     }
 
     const animationIndexes = animations.map(a => a.id);
 
-    this._gltf.animations.forEach((animation, animationIndex) => {
+    this._activeGltfScene.animations.forEach((animation, animationIndex) => {
       const active = animationIndexes.includes(animationIndex);
       if (active && animation.playable) {
         animation.play();
@@ -241,12 +271,14 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public async loadGltf(url: string, fileName?: string) {
+    debug("Load glTF", url, fileName);
+
     this.destroyGltf();
 
     try {
       this._gltf = await this._loader.load(url, fileName);
-      this._setSceneHierarchy(this._gltf.scene);
-      this.focusCameraOnRootEntity();
+      debug("Loaded glTF", this._gltf);
+      this.setSceneHierarchy(this.sceneHierarchies[this._gltf.defaultScene]);
       this._gltfLoaded = true;
     } catch (e) {
       this._gltfLoaded = true;
