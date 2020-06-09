@@ -110,7 +110,7 @@ describe("GltfStore", () => {
   it("should automatically set glTF from url param", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
-    mockLocationSearch("?model=DamagedHelmet");
+    mockLocationSearch("?gltf=DamagedHelmet");
 
     const store = new GltfStore();
     await store.fetchGltfs();
@@ -124,7 +124,7 @@ describe("GltfStore", () => {
   it("should not have glTF if glTF from url param is not found", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
-    mockLocationSearch("?model=none");
+    mockLocationSearch("?gltf=none");
 
     const store = new GltfStore();
     await store.fetchGltfs();

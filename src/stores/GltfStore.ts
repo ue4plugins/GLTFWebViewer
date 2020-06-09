@@ -7,7 +7,7 @@ export class GltfStore {
 
   public constructor() {
     const urlParams = new URLSearchParams(window.location.search);
-    this.defaultGltf = urlParams.get("model");
+    this.defaultGltf = urlParams.get("gltf");
     this.autoPlayAnimations = !urlParams.get("noAnimations");
   }
 

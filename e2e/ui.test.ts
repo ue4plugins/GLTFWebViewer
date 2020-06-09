@@ -9,7 +9,7 @@ describe("UI", () => {
   });
 
   beforeEach(async () => {
-    await page.goto("http://localhost:3001?model=_");
+    await page.goto("http://localhost:3001?gltf=_");
     await page.addStyleTag({
       content: `* { caret-color: transparent !important; }`,
     });

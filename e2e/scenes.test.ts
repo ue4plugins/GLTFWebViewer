@@ -15,9 +15,7 @@ describe("Scenes", () => {
   test.each(scenes.map(toSceneTuple))(
     "scene '%s' renders the same as baseline snapshot",
     async name => {
-      await page.goto(
-        `http://localhost:3001?hideUI=true&model=_&scene=${name}`,
-      );
+      await page.goto(`http://localhost:3001?hideUI=true&gltf=_&scene=${name}`);
       await Promise.all([waitForViewer(), waitForScene()]);
       await page.waitFor(500);
 

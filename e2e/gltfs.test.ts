@@ -19,7 +19,7 @@ describe("glTFs", () => {
     "glTF '%s' renders the same as baseline snapshot",
     async (name, multipleAngles) => {
       await page.goto(
-        `http://localhost:3001?hideUI=true&noAnimations=true&model=${name}`,
+        `http://localhost:3001?hideUI=true&noAnimations=true&gltf=${name}`,
       );
       await Promise.all([waitForViewer(), waitForScene(), waitForGltf()]);
       await page.waitFor(1000);
