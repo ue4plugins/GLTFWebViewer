@@ -1,5 +1,5 @@
 import "jest";
-import { ModelStore } from "../ModelStore";
+import { GltfStore } from "../GltfStore";
 import { models } from "../__fixtures__/models";
 
 const fetchMock = () =>
@@ -22,7 +22,7 @@ const mockLocationSearch = (search: string) =>
     },
   });
 
-describe("ModelStore", () => {
+describe("GltfStore", () => {
   const originalLocation = window.location;
 
   afterAll(() => {
@@ -34,7 +34,7 @@ describe("ModelStore", () => {
   it("should load models", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
-    const store = new ModelStore();
+    const store = new GltfStore();
     await store.fetchModels();
     expect(store.models).toEqual(models);
     expect(window.fetch).toHaveBeenCalledWith("assets/index.json");
@@ -46,7 +46,7 @@ describe("ModelStore", () => {
   it("should have default model", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
-    const store = new ModelStore();
+    const store = new GltfStore();
     await store.fetchModels();
     expect(store.model).toEqual(models[0]);
 
@@ -56,7 +56,7 @@ describe("ModelStore", () => {
   it("should have model after setModel is called", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
-    const store = new ModelStore();
+    const store = new GltfStore();
     await store.fetchModels();
     expect(store.model).toEqual(models[0]);
 
@@ -74,7 +74,7 @@ describe("ModelStore", () => {
 
     expect.assertions(4);
 
-    const store = new ModelStore();
+    const store = new GltfStore();
     try {
       await store.fetchModels();
     } catch (e) {
@@ -93,7 +93,7 @@ describe("ModelStore", () => {
 
     expect.assertions(4);
 
-    const store = new ModelStore();
+    const store = new GltfStore();
     try {
       await store.fetchModels();
     } catch (e) {
@@ -112,7 +112,7 @@ describe("ModelStore", () => {
 
     mockLocationSearch("?model=DamagedHelmet");
 
-    const store = new ModelStore();
+    const store = new GltfStore();
     await store.fetchModels();
 
     expect(store.model).toBeDefined();
@@ -126,7 +126,7 @@ describe("ModelStore", () => {
 
     mockLocationSearch("?model=none");
 
-    const store = new ModelStore();
+    const store = new GltfStore();
     await store.fetchModels();
 
     expect(store.model).toBeUndefined();

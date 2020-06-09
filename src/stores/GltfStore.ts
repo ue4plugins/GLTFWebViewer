@@ -1,7 +1,7 @@
 import { observable, computed, action } from "mobx";
 import { GltfSource, GltfAnimation } from "../playcanvas";
 
-export class ModelStore {
+export class GltfStore {
   private defaultModel: string | null;
   private autoPlayAnimations: boolean;
 

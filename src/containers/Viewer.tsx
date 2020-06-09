@@ -36,8 +36,8 @@ const useStyles = makeStyles(theme => ({
 
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
-  const { modelStore, sceneStore } = useStores();
-  const { model, setModel, activeAnimations, setAnimations } = modelStore;
+  const { gltfStore, sceneStore } = useStores();
+  const { model, setModel, activeAnimations, setAnimations } = gltfStore;
   const { scene, setScenes } = sceneStore;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);

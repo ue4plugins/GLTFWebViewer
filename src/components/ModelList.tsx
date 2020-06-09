@@ -42,8 +42,8 @@ const fuseOptions: FuseOptions<GltfSource> = {
 
 export const ModelList: React.FC = observer(() => {
   const classes = useStyles();
-  const { modelStore } = useStores();
-  const { model: selectedModel, models, setModel, fetchModels } = modelStore;
+  const { gltfStore } = useStores();
+  const { model: selectedModel, models, setModel, fetchModels } = gltfStore;
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
   const [searchTerm, setSearchTerm] = useState("");
   const [fuse, setFuse] = useState<Fuse<GltfSource, typeof fuseOptions>>();

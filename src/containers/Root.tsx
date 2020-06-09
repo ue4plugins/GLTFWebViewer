@@ -58,8 +58,8 @@ const useStyles = makeStyles(theme => ({
 
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
-  const { modelStore } = useStores();
-  const { model, fetchModels, animations } = modelStore;
+  const { gltfStore } = useStores();
+  const { model, fetchModels, animations } = gltfStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {

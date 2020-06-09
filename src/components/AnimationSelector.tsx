@@ -19,8 +19,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export const AnimationSelector: React.FC = observer(() => {
-  const { modelStore } = useStores();
-  const { activeAnimations, animations } = modelStore;
+  const { gltfStore } = useStores();
+  const { activeAnimations, animations } = gltfStore;
   const classes = useStyles();
 
   return (
