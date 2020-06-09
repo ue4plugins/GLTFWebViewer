@@ -1,4 +1,4 @@
-import { GltfSource } from "../../playcanvas";
+import { GltfSource } from "../../types";
 
 export const models: GltfSource[] = [
   {

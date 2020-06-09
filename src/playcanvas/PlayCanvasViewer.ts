@@ -2,8 +2,8 @@ import pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
+import { GltfAnimation } from "../types";
 import { OrbitCamera } from "./scripts";
-import { GltfAnimation } from "./GltfSource";
 import { PlayCanvasGltfLoader } from "./PlayCanvasGltfLoader";
 
 const debug = Debug("playCanvasViewer");

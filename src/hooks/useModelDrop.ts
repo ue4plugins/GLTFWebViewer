@@ -1,7 +1,7 @@
 import path from "path";
 import { useCallback, useState } from "react";
 import { useDropzone, DropzoneRootProps } from "react-dropzone";
-import { GltfSource } from "../playcanvas";
+import { GltfSource } from "../types";
 import { createGltfWithBlobAssets } from "./utility";
 
 function isGltfFile(file: File) {

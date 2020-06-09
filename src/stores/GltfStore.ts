@@ -1,5 +1,5 @@
 import { observable, computed, action } from "mobx";
-import { GltfSource, GltfAnimation } from "../playcanvas";
+import { GltfSource, GltfAnimation } from "../types";
 
 export class GltfStore {
   private defaultModel: string | null;

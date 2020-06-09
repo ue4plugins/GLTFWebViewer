@@ -11,8 +11,8 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores";
-import { GltfSource } from "../playcanvas";
 import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
+import { GltfSource } from "../types";
 import { SearchField } from "./SearchField";
 
 const useStyles = makeStyles(theme => ({

@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import { GltfSource } from "../playcanvas";
+import { GltfSource } from "../types";
 
 const useStyles = makeStyles(theme => ({
   root: {
