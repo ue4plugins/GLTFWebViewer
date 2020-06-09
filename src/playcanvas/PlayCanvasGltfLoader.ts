@@ -139,8 +139,6 @@ export class PlayCanvasGltfLoader {
   public unload(data: GltfData) {
     debug("Unload glTF asset", data);
 
-    data.scenes.forEach(scene => scene.destroy());
-
     this._app.assets.remove(data.asset);
     data.asset.unload();
   }
