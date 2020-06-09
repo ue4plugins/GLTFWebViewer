@@ -269,7 +269,11 @@ export class PlayCanvasViewer implements TestableViewer {
     this._camera.script[orbitCameraScriptName].reset(yaw, pitch, distance);
   }
 
-  public async loadGltf(url: string, fileName?: string) {
+  public async loadGltf(
+    url: string,
+    fileName?: string,
+    preventSetScene = false,
+  ) {
     debug("Load glTF", url, fileName);
 
     this.destroyGltf();
@@ -277,6 +281,9 @@ export class PlayCanvasViewer implements TestableViewer {
     try {
       this._gltf = await this._loader.load(url, fileName);
       debug("Loaded glTF", this._gltf);
+      if (!preventSetScene) {
+        this.setSceneHierarchy(this._gltf.defaultScene);
+      }
       this._gltfLoaded = true;
     } catch (e) {
       this._gltfLoaded = true;

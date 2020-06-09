@@ -136,7 +136,7 @@ export const Viewer: React.FC = observer(() => {
 
     runAsync(async () => {
       debug("Load glTF start", gltf.filePath);
-      await viewer.loadGltf(gltf.filePath, gltf.blobFileName);
+      await viewer.loadGltf(gltf.filePath, gltf.blobFileName, true);
       debug("Load glTF end", gltf.filePath);
 
       debug("Set scene hierachy list", viewer.sceneHierarchies);
