@@ -37,14 +37,7 @@ const useStyles = makeStyles(theme => ({
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore, sceneStore } = useStores();
-  const {
-    gltf,
-    setGltf,
-    sceneHierarchy,
-    setSceneHierarchies,
-    setSceneHierarchy,
-    activeAnimationIds,
-  } = gltfStore;
+  const { gltf, setGltf, setSceneHierarchy, activeAnimationIds } = gltfStore;
   const { scene, setScenes } = sceneStore;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -136,15 +129,12 @@ export const Viewer: React.FC = observer(() => {
 
     runAsync(async () => {
       debug("Load glTF start", gltf.filePath);
-      await viewer.loadGltf(gltf.filePath, gltf.blobFileName, true);
+      await viewer.loadGltf(gltf.filePath, gltf.blobFileName);
       debug("Load glTF end", gltf.filePath);
 
-      debug("Set scene hierachy list", viewer.sceneHierarchies);
-      setSceneHierarchies(viewer.sceneHierarchies);
-
-      if (viewer.defaultSceneHierarchy) {
-        debug("Set scene hierachy", viewer.defaultSceneHierarchy);
-        setSceneHierarchy(viewer.defaultSceneHierarchy);
+      if (viewer.activeSceneHierarchy) {
+        debug("Set scene hierachy", viewer.activeSceneHierarchy);
+        setSceneHierarchy(viewer.activeSceneHierarchy);
       }
     });
 
@@ -152,22 +142,10 @@ export const Viewer: React.FC = observer(() => {
       debug("Destroy glTF");
       viewer.destroyGltf();
 
-      debug("Unset scene hierachy list");
-      setSceneHierarchies([]);
-
       debug("Unset scene hierachy");
       setSceneHierarchy();
     };
-  }, [runAsync, viewer, gltf, setSceneHierarchies, setSceneHierarchy]);
-
-  // PlayCanvasViewer: Set scene hierarchy
-  useEffect(() => {
-    if (!viewer?.initiated || !sceneHierarchy) {
-      return;
-    }
-    debug("Set scene hierarchy", sceneHierarchy);
-    viewer.setSceneHierarchy(sceneHierarchy.id);
-  }, [viewer, sceneHierarchy]);
+  }, [runAsync, viewer, gltf, setSceneHierarchy]);
 
   // PlayCanvasViewer: Set active animations
   useEffect(() => {

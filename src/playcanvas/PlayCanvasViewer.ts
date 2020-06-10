@@ -64,14 +64,12 @@ export class PlayCanvasViewer implements TestableViewer {
     return this._app.scenes?.list() || [];
   }
 
-  public get sceneHierarchies(): GltfScene[] {
-    const scenes = this._gltf?.scenes;
-    if (!scenes) {
-      return [];
+  public get activeSceneHierarchy(): GltfScene | undefined {
+    const scene = this._activeGltfScene;
+    if (!scene) {
+      return undefined;
     }
-    return scenes.map((scene, index) => ({
-      id: index,
-      name: scene.root.name,
+    return {
       animations: scene.animations
         .map((anim, index) => ({
           id: index,
@@ -79,15 +77,7 @@ export class PlayCanvasViewer implements TestableViewer {
           active: false,
         }))
         .filter((_, index) => scene.animations[index].playable),
-    }));
-  }
-
-  public get defaultSceneHierarchy(): GltfScene | undefined {
-    if (!this._gltf) {
-      return undefined;
-    }
-    const { defaultScene } = this._gltf;
-    return this.sceneHierarchies[defaultScene];
+    };
   }
 
   private _resizeCanvas() {
@@ -152,6 +142,19 @@ export class PlayCanvasViewer implements TestableViewer {
     return camera;
   }
 
+  private _setSceneHierarchy(gltfScene: GltfSceneData) {
+    debug("Set scene hierarchy", gltfScene);
+
+    if (this._activeGltfScene) {
+      this._app.root.removeChild(this._activeGltfScene.root);
+    }
+
+    this._activeGltfScene = gltfScene;
+    this._app.root.addChild(gltfScene.root);
+
+    this.focusCameraOnRootEntity();
+  }
+
   public destroy() {
     this.destroyGltf();
     this.destroyScene();
@@ -160,9 +163,10 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public async configure() {
+    debug("Configuring app");
+
     const app = this._app;
 
-    debug("Configuring app");
     return new Promise<void>((resolve, reject) => {
       const url = pc.path.join(app.assets.prefix, "config.json");
 
@@ -216,28 +220,15 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._gltfLoaded = false;
 
+    if (this._activeGltfScene) {
+      this._app.root.removeChild(this._activeGltfScene.root);
+      this._activeGltfScene = undefined;
+    }
+
     if (this._gltf) {
       this._loader.unload(this._gltf);
       this._gltf = undefined;
     }
-  }
-
-  public setSceneHierarchy(sceneId: number) {
-    debug("Set scene hierarchy", sceneId);
-
-    const gltfScene = this._gltf?.scenes[sceneId];
-    if (!gltfScene) {
-      return;
-    }
-
-    if (this._activeGltfScene) {
-      this._app.root.removeChild(this._activeGltfScene.root);
-    }
-
-    this._activeGltfScene = gltfScene;
-    this._app.root.addChild(gltfScene.root);
-
-    this.focusCameraOnRootEntity();
   }
 
   public setActiveAnimations(animationIds: number[]) {
@@ -269,11 +260,7 @@ export class PlayCanvasViewer implements TestableViewer {
     this._camera.script[orbitCameraScriptName].reset(yaw, pitch, distance);
   }
 
-  public async loadGltf(
-    url: string,
-    fileName?: string,
-    preventSetScene = false,
-  ) {
+  public async loadGltf(url: string, fileName?: string) {
     debug("Load glTF", url, fileName);
 
     this.destroyGltf();
@@ -281,9 +268,7 @@ export class PlayCanvasViewer implements TestableViewer {
     try {
       this._gltf = await this._loader.load(url, fileName);
       debug("Loaded glTF", this._gltf);
-      if (!preventSetScene) {
-        this.setSceneHierarchy(this._gltf.defaultScene);
-      }
+      this._setSceneHierarchy(this._gltf.scenes[this._gltf.defaultScene]);
       this._gltfLoaded = true;
     } catch (e) {
       this._gltfLoaded = true;
