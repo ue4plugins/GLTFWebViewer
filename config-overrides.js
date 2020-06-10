@@ -21,9 +21,9 @@ module.exports = {
     // })(config);
 
     return merge(refresh, {
-      // externals: {
-      //   playcanvas: "playcanvas",
-      // },
+      optimization: {
+        minimize: false,
+      },
       plugins: [
         new webpack.DefinePlugin({
           GLTF_FILES: JSON.stringify(gltfSources),
