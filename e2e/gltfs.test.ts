@@ -1,6 +1,6 @@
 import "jest";
-import { waitForGltf, waitForScene, waitForViewer } from "./lib/waiters";
-import { removeIllegalChars } from "./lib/removeIllegalChars";
+import { waitForGltf, waitForScene, waitForViewer } from "./utility/waiters";
+import { removeIllegalChars } from "./utility/removeIllegalChars";
 import { TestGltf, gltfs } from "./__fixtures__/gltfs";
 
 type GltfTuple = [string, boolean];

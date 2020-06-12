@@ -1,6 +1,6 @@
 import "jest";
-import { waitForViewer } from "./lib/waiters";
-import { screenshotElement } from "./lib/screenshotElement";
+import { waitForViewer } from "./utility/waiters";
+import { screenshotElement } from "./utility/screenshotElement";
 
 describe("UI", () => {
   beforeAll(async () => {
