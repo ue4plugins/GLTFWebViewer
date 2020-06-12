@@ -12,7 +12,7 @@ module.exports = {
     // acceleration and it causes PlayCanvas to crash when opening some glTFs
     headless: false,
     args: [
-      "--window-size=1280,1024",
+      "--window-size=600,400",
       "--force-device-scale-factor=1",
       "--mute-audio",
       "--no-sandbox",
