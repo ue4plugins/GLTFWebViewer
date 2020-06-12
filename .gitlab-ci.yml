@@ -10,15 +10,14 @@ variables:
   CI: "true"
 
 stages:
-  # - install_dependencies
-  # - lint
-  # - test
-  - test_e2e
-  # - build
-  # - release
-  # - deploy
+  - install_dependencies
+  - lint
+  - test
+  - build
+  - release
+  - deploy
 
-.install_dependencies:
+install_dependencies:
   tags:
     - linux-docker
   stage: install_dependencies
@@ -28,14 +27,14 @@ stages:
   script:
     - npm ci
 
-.lint:
+lint:
   tags:
     - linux-docker
   stage: lint
   script:
     - npm run lint
 
-.test:
+test:
   tags:
     - linux-docker
   stage: test
@@ -45,7 +44,7 @@ stages:
 test_e2e:
   tags:
     - windows
-  stage: test_e2e
+  stage: test
   before_script:
     - npm ci
   script:
@@ -60,7 +59,7 @@ test_e2e:
 test_e2e_update:
   tags:
     - windows
-  stage: test_e2e
+  stage: test
   when: manual
   before_script:
     - npm ci
@@ -68,7 +67,7 @@ test_e2e_update:
     - npm run test:e2e-update
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
 
-.build:
+build:
   tags:
     - linux-docker
   stage: build
@@ -88,7 +87,7 @@ test_e2e_update:
   only:
     - master
 
-.deploy:
+deploy:
   tags:
     - linux-docker
   stage: deploy
