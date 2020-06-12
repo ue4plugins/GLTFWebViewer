@@ -18,7 +18,7 @@ export const SceneSelector: React.FC = observer(() => {
 
   return (
     <FormControl className={classes.formControl}>
-      <InputLabel id="scene-selector-label">Scene</InputLabel>
+      <InputLabel id="scene-selector-label">Cubemap</InputLabel>
       <Select
         id="scene-select"
         labelId="scene-selector-label"

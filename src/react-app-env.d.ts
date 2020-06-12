@@ -4,10 +4,9 @@
 declare namespace pc {
   interface Scene {
     destroy: () => void;
-    root: Entity | undefined;
   }
 
-  type SceneFile = {
+  type SceneSource = {
     name: string;
     url: string;
   };
@@ -16,8 +15,8 @@ declare namespace pc {
 interface TestableViewer {
   initiated: boolean;
   sceneLoaded: boolean;
-  modelLoaded: boolean;
-  loadModel(path: string): Promise<void>;
+  gltfLoaded: boolean;
+  loadGltf(path: string): Promise<void>;
   loadScene(path: string): Promise<void>;
   resetCamera(yaw?: number, pitch?: number, distance?: number): void;
 }

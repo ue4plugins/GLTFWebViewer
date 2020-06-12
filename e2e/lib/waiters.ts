@@ -10,8 +10,8 @@ export const waitForScene = (timeout = 10000) =>
     timeout,
   });
 
-export const waitForModel = (timeout = 10000) =>
-  page.waitForFunction(() => !!window.viewer?.modelLoaded, {
+export const waitForGltf = (timeout = 20000) =>
+  page.waitForFunction(() => !!window.viewer?.gltfLoaded, {
     polling: 500,
     timeout,
   });

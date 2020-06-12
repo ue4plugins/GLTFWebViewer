@@ -7,22 +7,22 @@ import sceneObject from "./Scene.json";
 export const configResponse = JSON.stringify(configObject);
 export const sceneResponse = JSON.stringify(sceneObject);
 
-export const modelEmbeddedResponse = readFileSync(
+export const gltfEmbeddedResponse = readFileSync(
   join(__dirname, "./ModelEmbedded.gltf"),
 );
 
-export const modelEmbeddedInvalidResponse = readFileSync(
+export const gltfEmbeddedInvalidResponse = readFileSync(
   join(__dirname, "./ModelEmbeddedInvalid.gltf"),
 );
 
-export const modelEmbeddedAnimatedResponse = readFileSync(
+export const gltfEmbeddedAnimatedResponse = readFileSync(
   join(__dirname, "./ModelEmbeddedAnimated.gltf"),
 );
 
-export const modelUnpackedResponse = readFileSync(
+export const gltfUnpackedResponse = readFileSync(
   join(__dirname, "./ModelUnpacked.gltf"),
 );
 
-export const modelUnpackedBinResponse = readFileSync(
+export const gltfUnpackedBinResponse = readFileSync(
   join(__dirname, "./ModelUnpacked.bin"),
 );

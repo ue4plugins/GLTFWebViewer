@@ -1,12 +1,17 @@
-import pc from "playcanvas";
+import pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
+import { GltfScene } from "../types";
 import { OrbitCamera } from "./scripts";
+import {
+  PlayCanvasGltfLoader,
+  GltfData,
+  GltfSceneData,
+} from "./PlayCanvasGltfLoader";
 
-const debug = Debug("playCanvasViewer");
+const debug = Debug("PlayCanvasViewer");
 const orbitCameraScriptName = "OrbitCamera";
-const assetPrefix = "assets/playcanvas/";
 
 type CameraEntity = pc.Entity & {
   script: pc.ScriptComponent & {
@@ -14,43 +19,27 @@ type CameraEntity = pc.Entity & {
   };
 };
 
-type ContainerResource = {
-  model?: pc.Asset;
-  textures: pc.Asset[];
-  animations: pc.Asset[];
-};
-
-export type PlayCanvasViewerOptions = {
-  autoPlayAnimations: boolean;
-};
-
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
   private _camera: CameraEntity;
+  private _loader: PlayCanvasGltfLoader;
   private _scene?: pc.Scene;
-  private _entity?: pc.Entity;
-  private _gltfAsset?: pc.Asset;
-  private _modelAsset?: pc.Asset;
-  private _animationAssets: pc.Asset[] = [];
+  private _gltf?: GltfData;
+  private _activeGltfScene?: GltfSceneData;
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
   );
-  private _autoPlayAnimations: boolean;
   private _initiated = false;
   private _sceneLoaded = false;
-  private _modelLoaded = false;
+  private _gltfLoaded = false;
 
-  public constructor(
-    public canvas: HTMLCanvasElement,
-    { autoPlayAnimations }: PlayCanvasViewerOptions,
-  ) {
+  public constructor(public canvas: HTMLCanvasElement) {
     this._resizeCanvas = this._resizeCanvas.bind(this);
-
-    this._autoPlayAnimations = autoPlayAnimations;
 
     this._app = this._createApp();
     this._camera = this._createCamera(this._app);
+    this._loader = new PlayCanvasGltfLoader(this._app);
 
     this._canvasResizeObserver.observe(this.canvas);
   }
@@ -67,12 +56,28 @@ export class PlayCanvasViewer implements TestableViewer {
     return this._sceneLoaded;
   }
 
-  public get modelLoaded() {
-    return this._modelLoaded;
+  public get gltfLoaded() {
+    return this._gltfLoaded;
   }
 
-  public get scenes(): pc.SceneFile[] {
+  public get scenes(): pc.SceneSource[] {
     return this._app.scenes?.list() || [];
+  }
+
+  public get activeSceneHierarchy(): GltfScene | undefined {
+    const scene = this._activeGltfScene;
+    if (!scene) {
+      return undefined;
+    }
+    return {
+      animations: scene.animations
+        .map((anim, index) => ({
+          id: index,
+          name: anim.name,
+          active: false,
+        }))
+        .filter((_, index) => scene.animations[index].playable),
+    };
   }
 
   private _resizeCanvas() {
@@ -91,7 +96,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     debug("Creating app for target", this.canvas);
     const app = new pc.Application(this.canvas, {
-      assetPrefix,
+      assetPrefix: "assets/playcanvas/",
       mouse: new pc.Mouse(document.body),
       keyboard: new pc.Keyboard(window),
       graphicsDeviceOptions: {
@@ -137,19 +142,33 @@ export class PlayCanvasViewer implements TestableViewer {
     return camera;
   }
 
+  private _setSceneHierarchy(gltfScene: GltfSceneData) {
+    debug("Set scene hierarchy", gltfScene);
+
+    if (this._activeGltfScene) {
+      this._app.root.removeChild(this._activeGltfScene.root);
+    }
+
+    this._activeGltfScene = gltfScene;
+    this._app.root.addChild(gltfScene.root);
+
+    this.focusCameraOnRootEntity();
+  }
+
   public destroy() {
-    this.destroyModel();
+    this.destroyGltf();
     this.destroyScene();
     this._canvasResizeObserver.unobserve(this.canvas);
     this._app.destroy();
   }
 
   public async configure() {
+    debug("Configuring app");
+
     const app = this._app;
 
-    debug("Configuring app");
     return new Promise<void>((resolve, reject) => {
-      const url = pc.path.join(assetPrefix, "config.json");
+      const url = pc.path.join(app.assets.prefix, "config.json");
 
       app.configure(url, error => {
         if (error) {
@@ -169,13 +188,13 @@ export class PlayCanvasViewer implements TestableViewer {
 
     debug("Loading scene", url);
     return new Promise<void>((resolve, reject) => {
-      this._app.scenes.loadScene(url, (error: string, scene: pc.Scene) => {
+      this._app.scenes.loadScene(url, (error, scene) => {
         this._sceneLoaded = true;
         if (error) {
           reject(error);
           return;
         }
-        this._scene = scene;
+        this._scene = (scene as unknown) as pc.Scene;
         resolve();
       });
     });
@@ -196,74 +215,44 @@ export class PlayCanvasViewer implements TestableViewer {
     }
   }
 
-  public destroyModel() {
-    debug("Destroy model", this._entity);
+  public destroyGltf() {
+    debug("Destroy glTF", this._gltf);
 
-    this._modelLoaded = false;
+    this._gltfLoaded = false;
 
-    if (this._entity) {
-      this._entity.destroy();
-      this._entity = undefined;
+    if (this._activeGltfScene) {
+      this._app.root.removeChild(this._activeGltfScene.root);
+      this._activeGltfScene = undefined;
     }
 
-    if (this._gltfAsset) {
-      // If not done in this order,
-      // the entity will be retained by the JS engine.
-      this._app.assets.remove(this._gltfAsset);
-      this._gltfAsset.unload();
-      this._gltfAsset = undefined;
+    if (this._gltf) {
+      this._loader.unload(this._gltf);
+      this._gltf = undefined;
     }
-
-    this._modelAsset = undefined;
-    this._animationAssets = [];
   }
 
-  private _initModel() {
-    debug("Init model");
+  public setActiveAnimations(animationIds: number[]) {
+    debug("Set active animations", animationIds);
 
-    if (this._entity) {
-      // Model already initialized
+    if (!this._activeGltfScene) {
       return;
     }
 
-    if (!this._gltfAsset || !this._modelAsset) {
-      throw new Error("initModel called before registering resources");
-    }
-
-    // Add the loaded model to the hierarchy
-    this._entity = new pc.Entity("gltf");
-    this._entity.addComponent("model", {
-      type: "asset",
-      asset: this._modelAsset,
-      castShadows: true,
-      receiveShadows: true,
-      shadowType: pc.SHADOW_VSM32,
-    });
-    this._entity.addComponent("script");
-    this._app.root.addChild(this._entity);
-
-    debug("Init animations", this._animationAssets);
-
-    if (this._animationAssets.length > 0) {
-      this._entity.addComponent("animation", {
-        assets: this._animationAssets.map(asset => asset.id),
-        speed: 0,
-        active: false,
-      });
-      if (this._entity.animation && this._autoPlayAnimations) {
-        this._entity.animation.speed = 1;
-        this._entity.animation.play(this._animationAssets[0].name, 0);
+    this._activeGltfScene.animations.forEach((animation, animationIndex) => {
+      const active = animationIds.includes(animationIndex);
+      if (active && animation.playable) {
+        animation.play();
+      } else {
+        animation.pause();
       }
-    }
-
-    this.focusCameraOnEntity();
+    });
   }
 
-  public focusCameraOnEntity() {
-    debug("Focus on model", this._entity);
+  public focusCameraOnRootEntity() {
+    debug("Focus on root entity", this._app.root);
 
-    if (this._entity) {
-      this._camera.script[orbitCameraScriptName].focus(this._entity);
+    if (this._app.root) {
+      this._camera.script[orbitCameraScriptName].focus(this._app.root);
     }
   }
 
@@ -271,76 +260,18 @@ export class PlayCanvasViewer implements TestableViewer {
     this._camera.script[orbitCameraScriptName].reset(yaw, pitch, distance);
   }
 
-  private async _loadGltfAsset(url: string, fileName?: string) {
-    debug("Load glTF asset", url, fileName);
+  public async loadGltf(url: string, fileName?: string) {
+    debug("Load glTF", url, fileName);
 
-    return new Promise<pc.Asset | undefined>((resolve, reject) => {
-      // This is necessary because the callback of loadFromUrl is not fired when an
-      // asset request that previously failed is attempted to load again.
-      const timeout = setTimeout(
-        () => reject("Asset request timed out"),
-        10000,
-      );
-
-      const callback: pc.callbacks.LoadAsset = (err, asset) => {
-        clearTimeout(timeout);
-        if (err) {
-          reject(err);
-        } else {
-          resolve(asset);
-        }
-      };
-
-      if (fileName) {
-        // Remove asset prefix in order to prevent it from being prepended
-        // to blob urls
-        this._app.assets.prefix = "";
-        this._app.assets.loadFromUrlAndFilename(
-          url,
-          fileName,
-          "container",
-          callback,
-        );
-        // Add asset prefix again
-        this._app.assets.prefix = assetPrefix;
-      } else {
-        this._app.assets.loadFromUrl(
-          pc.path.join("../..", url),
-          "container",
-          callback,
-        );
-      }
-    });
-  }
-
-  private async _registerGltfResources(asset: pc.Asset) {
-    debug("Register glTF resources", asset.resource);
-
-    const resource = asset.resource as ContainerResource | undefined;
-    if (!resource) {
-      throw new Error("Asset is empty");
-    }
-
-    this._gltfAsset = asset;
-    this._modelAsset = resource.model;
-    this._animationAssets = resource.animations || [];
-  }
-
-  public async loadModel(url: string, fileName?: string) {
-    this.destroyModel();
+    this.destroyGltf();
 
     try {
-      const asset = await this._loadGltfAsset(url, fileName);
-      if (!asset) {
-        throw new Error("Asset not found");
-      }
-
-      await this._registerGltfResources(asset);
-      this._initModel();
-
-      this._modelLoaded = true;
+      this._gltf = await this._loader.load(url, fileName);
+      debug("Loaded glTF", this._gltf);
+      this._setSceneHierarchy(this._gltf.scenes[this._gltf.defaultScene]);
+      this._gltfLoaded = true;
     } catch (e) {
-      this._modelLoaded = true;
+      this._gltfLoaded = true;
       throw e;
     }
   }

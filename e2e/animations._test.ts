@@ -31,7 +31,7 @@ describe("Animations", () => {
     });
     await page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: 1 });
     await page.goto(
-      "http://localhost:3001/?hideUI=true&model=BrainStem#hotreload=false",
+      "http://localhost:3001/?hideUI=true&gltf=BrainStem#hotreload=false",
     );
     await page.setBypassCSP(true);
 

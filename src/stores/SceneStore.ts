@@ -9,10 +9,10 @@ export class SceneStore {
   }
 
   @observable
-  public scenes: pc.SceneFile[] = [];
+  public scenes: pc.SceneSource[] = [];
 
   @observable
-  public scene?: pc.SceneFile;
+  public scene?: pc.SceneSource;
 
   @computed
   public get sceneIndex() {
@@ -21,12 +21,12 @@ export class SceneStore {
   }
 
   @action.bound
-  public setScene(scene?: pc.SceneFile) {
+  public setScene(scene?: pc.SceneSource) {
     this.scene = scene;
   }
 
   @action.bound
-  public setScenes(scenes: pc.SceneFile[]) {
+  public setScenes(scenes: pc.SceneSource[]) {
     this.scenes = scenes;
     if (!this.scene) {
       this.setScene(

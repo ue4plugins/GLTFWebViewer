@@ -1,6 +1,4 @@
-import "jest";
-
-export const scenes: pc.SceneFile[] = [
+export const scenes: pc.SceneSource[] = [
   {
     name: "Helipad",
     url: "894846.json",

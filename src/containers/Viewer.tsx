@@ -14,13 +14,10 @@ import { useStores } from "../stores";
 import {
   useAsyncWithLoadingAndErrorHandling,
   usePreventableCameraInteractions,
-  useModelDrop,
+  useGltfDrop,
 } from "../hooks";
 
-const urlParams = new URLSearchParams(window.location.search);
-const autoPlayAnimations = !urlParams.get("noAnimations");
-
-const debug = Debug("viewer");
+const debug = Debug("Viewer");
 
 const useStyles = makeStyles(theme => ({
   canvas: {
@@ -39,20 +36,20 @@ const useStyles = makeStyles(theme => ({
 
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
-  const { modelStore, sceneStore } = useStores();
-  const { model, setModel } = modelStore;
+  const { gltfStore, sceneStore } = useStores();
+  const { gltf, setGltf, setSceneHierarchy, activeAnimationIds } = gltfStore;
   const { scene, setScenes } = sceneStore;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [viewer, setViewer] = useState<PlayCanvasViewer>();
 
-  const onDropModel = useCallback(setModel, [setModel]);
+  const onDropGltf = useCallback(setGltf, [setGltf]);
   const [
     isDragActive,
     hasDropError,
     setHasDropError,
     getRootProps,
-  ] = useModelDrop(onDropModel);
+  ] = useGltfDrop(onDropGltf);
 
   const [
     isLoading,
@@ -67,15 +64,14 @@ export const Viewer: React.FC = observer(() => {
     showBackdrop,
   );
 
+  // PlayCanvasViewer: Instantiate and configure
   useEffect(() => {
     if (!canvasRef.current) {
       return;
     }
 
     debug("Create viewer");
-    const viewer = new PlayCanvasViewer(canvasRef.current, {
-      autoPlayAnimations,
-    });
+    const viewer = new PlayCanvasViewer(canvasRef.current);
 
     runAsync(async () => {
       debug("Configure viewer start");
@@ -92,6 +88,7 @@ export const Viewer: React.FC = observer(() => {
     };
   }, [runAsync]);
 
+  // SceneStore: Update scene list
   useEffect(() => {
     if (!viewer?.initiated) {
       return;
@@ -105,6 +102,7 @@ export const Viewer: React.FC = observer(() => {
     };
   }, [viewer, setScenes]);
 
+  // PlayCanvasViewer: Load scene
   useEffect(() => {
     if (!viewer?.initiated || !scene) {
       return;
@@ -122,28 +120,49 @@ export const Viewer: React.FC = observer(() => {
     };
   }, [runAsync, viewer, scene]);
 
+  // PlayCanvasViewer: Load glTF
+  // GltfStore: Update scene hierarchy list
   useEffect(() => {
-    if (!viewer?.initiated || !model) {
+    if (!viewer?.initiated || !gltf) {
       return;
     }
 
     runAsync(async () => {
-      debug("Load model start", model.path);
-      await viewer.loadModel(model.path, model.blobFileName);
-      debug("Load model end", model.path);
+      debug("Load glTF start", gltf.filePath);
+      await viewer.loadGltf(gltf.filePath, gltf.blobFileName);
+      debug("Load glTF end", gltf.filePath);
+
+      if (viewer.activeSceneHierarchy) {
+        debug("Set scene hierachy", viewer.activeSceneHierarchy);
+        setSceneHierarchy(viewer.activeSceneHierarchy);
+      }
     });
 
     return () => {
-      debug("Destroy model");
-      viewer.destroyModel();
-    };
-  }, [runAsync, viewer, model]);
+      debug("Destroy glTF");
+      viewer.destroyGltf();
 
+      debug("Unset scene hierachy");
+      setSceneHierarchy();
+    };
+  }, [runAsync, viewer, gltf, setSceneHierarchy]);
+
+  // PlayCanvasViewer: Set active animations
+  useEffect(() => {
+    if (!viewer?.initiated) {
+      return;
+    }
+    debug("Set active animations", activeAnimationIds);
+    viewer.setActiveAnimations(activeAnimationIds);
+  }, [viewer, activeAnimationIds]);
+
+  // Reset error state
   useEffect(() => {
     debug("Reset drop error state");
     setHasDropError(false);
-  }, [model, scene, setHasDropError, viewer]);
+  }, [gltf, scene, setHasDropError, viewer]);
 
+  // Prevent camera interactions
   useEffect(() => {
     debug("Prevent camera interaction", showBackdrop);
     setPreventInteraction(showBackdrop);

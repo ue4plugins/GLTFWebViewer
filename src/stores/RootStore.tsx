@@ -1,9 +1,9 @@
 import React, { createContext, useContext } from "react";
-import { ModelStore } from "./ModelStore";
+import { GltfStore } from "./GltfStore";
 import { SceneStore } from "./SceneStore";
 
 export class RootStore {
-  public modelStore = new ModelStore();
+  public gltfStore = new GltfStore();
   public sceneStore = new SceneStore();
 }
 
