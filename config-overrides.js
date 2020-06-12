@@ -1,6 +1,5 @@
 const { override } = require("customize-cra");
 const { addReactRefresh } = require("customize-cra-react-refresh");
-// const { alias } = require("react-app-rewire-alias");
 const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const WriteJsonPlugin = require("write-json-webpack-plugin");
 const webpack = require("webpack");
@@ -15,10 +14,6 @@ module.exports = {
   },
   webpack: override(config => {
     const refresh = addReactRefresh({ disableRefreshCheck: true })(config);
-
-    // alias({
-    //   playcanvas: "../../playcanvas/engine",
-    // })(config);
 
     return merge(refresh, {
       plugins: [
