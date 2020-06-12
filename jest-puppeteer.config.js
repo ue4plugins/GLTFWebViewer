@@ -8,17 +8,15 @@ module.exports = {
   },
   launch: {
     dumpio: true,
-    // Headless is way less performant when running WebGL and cause PlayCanvas
-    // to crash when opening some glTFs
-    headless: true,
+    // Headless is way less performant when running WebGL because the lack of hardware
+    // acceleration and it causes PlayCanvas to crash when opening some glTFs
+    headless: false,
     args: [
       "--window-size=1280,1024",
       "--force-device-scale-factor=1",
       "--mute-audio",
       "--no-sandbox",
       "--hide-scrollbars",
-      // "--use-gl=swiftshader", // Necessary for GL to work in GitLab CI docker executor
-      // "--allow-no-sandbox-job",
       // "--enable-usermedia-screen-capturing",
       // "--allow-http-screen-capture",
       // "--auto-select-desktop-capture-source=unreal2web",
