@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
-import { Divider } from "@material-ui/core";
+import { Divider, Hidden } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import {
   Sidebar,
@@ -95,7 +95,11 @@ export const Root: React.FC = observer(() => {
           <GltfList />
         </Sidebar>
       )}
-      {showUI && <FpsMonitor />}
+      {showUI && (
+        <Hidden xsDown>
+          <FpsMonitor />
+        </Hidden>
+      )}
     </div>
   );
 });

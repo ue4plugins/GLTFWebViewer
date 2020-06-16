@@ -14,6 +14,9 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: "flex-start",
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(1, 1),
+    },
   },
   hide: {
     display: "none",
