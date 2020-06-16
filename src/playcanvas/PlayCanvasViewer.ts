@@ -41,7 +41,8 @@ export class PlayCanvasViewer implements TestableViewer {
     this._camera = this._createCamera(this._app);
     this._loader = new PlayCanvasGltfLoader(this._app);
 
-    this._canvasResizeObserver.observe(this.canvas);
+    const observeElement = this.canvas.parentElement || this.canvas;
+    this._canvasResizeObserver.observe(observeElement);
   }
 
   public get app() {
