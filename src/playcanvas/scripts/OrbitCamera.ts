@@ -1,3 +1,4 @@
+import * as Hammer from "hammerjs";
 import pc from "@animech-public/playcanvas";
 import { PreventableEvent } from "../PreventableEvent";
 
@@ -54,7 +55,9 @@ export class OrbitCamera extends pc.ScriptType {
   private _lookButtonDown = false;
   private _panButtonDown = false;
   private _lastMousePos = new pc.Vec2();
+  private _lastMouseDelta = new pc.Vec2();
   private _zoomAnimFrame = 0;
+  private _hammer?: HammerManager;
 
   public constructor(args: { app: pc.Application; entity: pc.Entity }) {
     super(args);
@@ -193,6 +196,7 @@ export class OrbitCamera extends pc.ScriptType {
     this.app.mouse.on(pc.EVENT_MOUSEMOVE, this._onMouseMove, this);
     this.app.mouse.on(pc.EVENT_MOUSEWHEEL, this._onMouseWheel, this);
     window.addEventListener("mouseout", this._onMouseOut, false);
+    this._setUpTouch();
 
     this.on("destroy", () => {
       this.app.mouse.off(pc.EVENT_MOUSEDOWN, this._onMouseDown, this);
@@ -200,6 +204,7 @@ export class OrbitCamera extends pc.ScriptType {
       this.app.mouse.off(pc.EVENT_MOUSEMOVE, this._onMouseMove, this);
       this.app.mouse.off(pc.EVENT_MOUSEWHEEL, this._onMouseWheel, this);
       window.removeEventListener("mouseout", this._onMouseOut, false);
+      this._tearDownTouch();
     });
   }
 
@@ -389,12 +394,45 @@ export class OrbitCamera extends pc.ScriptType {
     );
   }
 
-  public _orbit(event: MouseMoveEvent) {
-    this.pitch -= event.dy * this.orbitSensitivity;
-    this.yaw -= event.dx * this.orbitSensitivity;
+  private _dolly(value: number) {
+    if (this._zoomAnimFrame) {
+      cancelAnimationFrame(this._zoomAnimFrame);
+      this._zoomAnimFrame = 0;
+    }
+
+    console.log("dolly", value);
+
+    const curValue = this.distance;
+    const targetValue = this.distanceSensitivity * (this.distance * 0.1);
+
+    const start = Date.now();
+    const duration = 200;
+    const smoothZoom = () => {
+      const elapsed = Date.now() - start;
+      const nextValue =
+        easeInQuad(
+          elapsed,
+          curValue,
+          targetValue > curValue
+            ? targetValue - curValue
+            : curValue - targetValue,
+          duration,
+        ) * 0.01;
+      this.distance -= value * nextValue;
+      if (elapsed >= duration) {
+        return;
+      }
+      this._zoomAnimFrame = requestAnimationFrame(smoothZoom);
+    };
+    this._zoomAnimFrame = requestAnimationFrame(smoothZoom);
   }
 
-  public _pan(event: MouseMoveEvent) {
+  private _orbit(dx: number, dy: number) {
+    this.pitch -= dy * this.orbitSensitivity;
+    this.yaw -= dx * this.orbitSensitivity;
+  }
+
+  private _pan(x: number, y: number) {
     const fromWorldPoint = new pc.Vec3();
     const toWorldPoint = new pc.Vec3();
     const worldDiff = new pc.Vec3();
@@ -403,12 +441,7 @@ export class OrbitCamera extends pc.ScriptType {
     // to work out how far we need to pan the pivotEntity in world space
     const distance = this.distance;
 
-    this._cameraComponent.screenToWorld(
-      event.x,
-      event.y,
-      distance,
-      fromWorldPoint,
-    );
+    this._cameraComponent.screenToWorld(x, y, distance, fromWorldPoint);
     this._cameraComponent.screenToWorld(
       this._lastMousePos.x,
       this._lastMousePos.y,
@@ -468,9 +501,9 @@ export class OrbitCamera extends pc.ScriptType {
 
   private _onMouseMove(event: MouseMoveEvent) {
     if (this._lookButtonDown) {
-      this._orbit(event);
+      this._orbit(event.dx, event.dy);
     } else if (this._panButtonDown) {
-      this._pan(event);
+      this._pan(event.x, event.y);
     }
 
     this._lastMousePos.set(event.x, event.y);
@@ -481,35 +514,82 @@ export class OrbitCamera extends pc.ScriptType {
       return;
     }
 
-    if (this._zoomAnimFrame) {
-      cancelAnimationFrame(this._zoomAnimFrame);
-      this._zoomAnimFrame = 0;
-    }
-
-    const curValue = this.distance;
-    const targetValue = this.distanceSensitivity * (this.distance * 0.1);
-
-    const start = Date.now();
-    const duration = 200;
-    const smoothZoom = () => {
-      const elapsed = Date.now() - start;
-      const nextValue =
-        easeInQuad(
-          elapsed,
-          curValue,
-          targetValue > curValue
-            ? targetValue - curValue
-            : curValue - targetValue,
-          duration,
-        ) * 0.01;
-      this.distance -= event.wheel * nextValue;
-      if (elapsed >= duration) {
-        return;
-      }
-      this._zoomAnimFrame = requestAnimationFrame(smoothZoom);
-    };
-    this._zoomAnimFrame = requestAnimationFrame(smoothZoom);
+    this._dolly(event.wheel);
 
     event.event.preventDefault();
+  }
+
+  private _setUpTouch() {
+    const pinch = new Hammer.Pinch();
+    const pan = new Hammer.Pan({
+      direction: Hammer.DIRECTION_ALL,
+      pointers: 0,
+    });
+    pan.recognizeWith(pinch);
+
+    this._hammer = new Hammer.Manager(this.app.graphicsDevice.canvas, {
+      inputClass: Hammer.TouchInput,
+    });
+    this._hammer.add([pan, pinch]);
+
+    // let cachedTargetDistance: number;
+    this._hammer.on("pinchstart", event => {
+      // cachedTargetDistance = this._distanceInterp.target;
+      event.preventDefault();
+    });
+
+    this._hammer.on("pinch", event => {
+      const { scale } = event;
+      const value = scale > 1 ? 1 : -1;
+
+      let elem = document.querySelector("#test");
+      if (!elem) {
+        elem = document.createElement("span");
+        elem.id = "test";
+        document.body.prepend(elem);
+      }
+      elem.innerHTML = String(value);
+
+      this._dolly(value);
+    });
+
+    this._hammer.on("panstart", event => {
+      const { x, y } = event.center;
+      const { deltaX, deltaY } = event;
+      this._lastMousePos.set(x, y);
+      this._lastMouseDelta.set(deltaX, deltaY);
+
+      // Drag 1 pointer to orbit
+      // Drag 2 pointers to pan
+      this._lookButtonDown = event.pointers.length === 1;
+      this._panButtonDown = event.pointers.length > 1;
+    });
+
+    this._hammer.on("panend", () => {
+      this._lookButtonDown = false;
+      this._panButtonDown = false;
+    });
+
+    this._hammer.on("pan", event => {
+      const { x, y } = event.center;
+      const { deltaX, deltaY } = event;
+
+      if (this._lookButtonDown) {
+        const dx = deltaX - this._lastMouseDelta.x;
+        const dy = deltaY - this._lastMouseDelta.y;
+        this._orbit(dx, dy);
+      } else if (this._panButtonDown) {
+        this._pan(x, y);
+      }
+
+      this._lastMouseDelta.set(deltaX, deltaY);
+      this._lastMousePos.set(x, y);
+    });
+  }
+
+  private _tearDownTouch() {
+    if (this._hammer) {
+      this._hammer.destroy();
+    }
   }
 }
