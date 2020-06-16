@@ -532,9 +532,7 @@ export class OrbitCamera extends pc.ScriptType {
     });
     this._hammer.add([pan, pinch]);
 
-    // let cachedTargetDistance: number;
     this._hammer.on("pinchstart", event => {
-      // cachedTargetDistance = this._distanceInterp.target;
       event.preventDefault();
     });
 
