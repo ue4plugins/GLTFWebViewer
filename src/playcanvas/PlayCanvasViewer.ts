@@ -30,6 +30,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
   );
+  private _observedElement: HTMLElement;
   private _initiated = false;
   private _sceneLoaded = false;
   private _gltfLoaded = false;
@@ -41,8 +42,8 @@ export class PlayCanvasViewer implements TestableViewer {
     this._camera = this._createCamera(this._app);
     this._loader = new PlayCanvasGltfLoader(this._app);
 
-    const observeElement = this.canvas.parentElement || this.canvas;
-    this._canvasResizeObserver.observe(observeElement);
+    this._observedElement = this.canvas.parentElement || this.canvas;
+    this._canvasResizeObserver.observe(this._observedElement);
   }
 
   public get app() {
@@ -159,7 +160,7 @@ export class PlayCanvasViewer implements TestableViewer {
   public destroy() {
     this.destroyGltf();
     this.destroyScene();
-    this._canvasResizeObserver.unobserve(this.canvas);
+    this._canvasResizeObserver.unobserve(this._observedElement);
     this._app.destroy();
   }
 
