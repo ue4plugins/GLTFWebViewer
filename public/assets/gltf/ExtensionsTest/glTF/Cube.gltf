@@ -326,7 +326,6 @@
     "EPIC_interaction_hotspots": {
       "interactions": [
         {
-          "node": 0,
           "animation": 0,
           "image": 0
         }
