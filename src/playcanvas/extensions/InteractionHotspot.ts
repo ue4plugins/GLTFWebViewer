@@ -5,13 +5,14 @@ import { ExtensionParser } from "./ExtensionParser";
 const debug = Debug("InteractionHotspot");
 
 type InteractionHotspotData = {
-  animation: 0;
   image: 0;
+  animation: 0;
 };
 
 export type InteractionHotspot = {
   node: pc.Entity;
   imageSource: string;
+  animation?: pc.AnimComponentLayer;
 };
 
 export class InteractionHotspotExtensionParser implements ExtensionParser {
@@ -38,9 +39,11 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
 
   public getHotspotsForScene(
     scene: pc.Entity,
+    animLayers: pc.AnimComponentLayer[],
     container: pc.ContainerResource,
   ): InteractionHotspot[] {
     const { textures, animations } = container;
+
     return this._hotspots
       .filter(
         hotspot =>
@@ -50,9 +53,12 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
       )
       .map(hotspot => {
         const image = textures[hotspot.data.image].resource as pc.Texture;
+        const animation = animations[hotspot.data.animation]
+          .resource as pc.AnimTrack;
         return {
           node: hotspot.node,
           imageSource: image.getSource().src,
+          animation: animLayers.find(layer => layer.name === animation.name),
         };
       });
   }

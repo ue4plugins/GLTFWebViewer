@@ -184,6 +184,8 @@ export class PlayCanvasViewer implements TestableViewer {
     }
 
     this._hotspotTrackerHandles = hotspots.map(hotspot => {
+      const { animation } = hotspot;
+
       const imageElem = document.createElement("div");
       imageElem.style.width = "100%";
       imageElem.style.height = "100%";
@@ -200,6 +202,16 @@ export class PlayCanvasViewer implements TestableViewer {
       outerElem.style.padding = "5px";
       outerElem.style.borderRadius = "50%";
       outerElem.style.background = "rgba(255, 255, 255, 0.5)";
+      outerElem.addEventListener("click", () => {
+        if (!animation || !animation.playable) {
+          return;
+        }
+        if (animation.playing) {
+          animation.pause();
+        } else {
+          animation.play();
+        }
+      });
 
       outerElem.appendChild(imageElem);
       parentElem.appendChild(outerElem);

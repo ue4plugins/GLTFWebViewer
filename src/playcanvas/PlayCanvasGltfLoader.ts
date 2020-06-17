@@ -125,12 +125,19 @@ export class PlayCanvasGltfLoader {
 
       return {
         asset,
-        scenes: container.scenes.map<GltfSceneData>(sceneRoot => ({
-          root: sceneRoot,
-          variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
-          hotspots: hotspotParser.getHotspotsForScene(sceneRoot, container),
-          animations: this._getAnimationLayersForScene(sceneRoot),
-        })),
+        scenes: container.scenes.map<GltfSceneData>(sceneRoot => {
+          const animationLayers = this._getAnimationLayersForScene(sceneRoot);
+          return {
+            root: sceneRoot,
+            variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
+            hotspots: hotspotParser.getHotspotsForScene(
+              sceneRoot,
+              animationLayers,
+              container,
+            ),
+            animations: animationLayers,
+          };
+        }),
         defaultScene: container.scenes.indexOf(defaultScene),
       };
     } catch (e) {
