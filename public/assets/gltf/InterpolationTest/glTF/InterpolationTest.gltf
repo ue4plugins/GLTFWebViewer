@@ -1282,7 +1282,12 @@
   "nodes": [
     {
       "mesh": 0,
-      "name": "Cube"
+      "name": "Cube",
+      "extensions": {
+        "EPIC_interaction_hotspots": {
+          "interaction": 0
+        }
+      }
     },
     {
       "name": "Light",
@@ -1332,7 +1337,7 @@
       ],
       "extensions": {
         "EPIC_interaction_hotspots": {
-          "interaction": 0
+          "interaction": 1
         }
       }
     },
@@ -1343,12 +1348,7 @@
         3.3401193618774414,
         0,
         0.008944988250732422
-      ],
-      "extensions": {
-        "EPIC_interaction_hotspots": {
-          "interaction": 1
-        }
-      }
+      ]
     },
     {
       "mesh": 3,
