@@ -3,7 +3,7 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { GltfScene } from "../types";
-import { OrbitCamera } from "./scripts";
+import { OrbitCamera, orbitCameraScriptName } from "./scripts";
 import {
   PlayCanvasGltfLoader,
   GltfData,
@@ -11,7 +11,6 @@ import {
 } from "./PlayCanvasGltfLoader";
 
 const debug = Debug("PlayCanvasViewer");
-const orbitCameraScriptName = "OrbitCamera";
 
 type CameraEntity = pc.Entity & {
   script: pc.ScriptComponent & {
@@ -39,6 +38,8 @@ export class PlayCanvasViewer implements TestableViewer {
     this._resizeCanvas = this._resizeCanvas.bind(this);
 
     this._app = this._createApp();
+    pc.registerScript(OrbitCamera, orbitCameraScriptName);
+
     this._camera = this._createCamera(this._app);
     this._loader = new PlayCanvasGltfLoader(this._app);
 
@@ -126,13 +127,12 @@ export class PlayCanvasViewer implements TestableViewer {
   private _createCamera(app: pc.Application) {
     debug("Creating camera");
 
-    pc.registerScript(OrbitCamera, orbitCameraScriptName);
-
     const camera = new pc.Entity("camera") as CameraEntity;
     camera.addComponent("camera", {
       fov: 45.8366,
       clearColor: new pc.Color(0, 0, 0),
     });
+
     camera.addComponent("script");
     camera.script.create(orbitCameraScriptName);
     camera.script[orbitCameraScriptName].inertiaFactor = 0.07;
