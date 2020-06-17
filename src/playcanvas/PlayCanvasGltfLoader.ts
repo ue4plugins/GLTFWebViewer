@@ -5,15 +5,14 @@ import {
   HdriBackdropExtensionParser,
   InteractionHotspotExtensionParser,
   VariantSetExtensionParser,
+  VariantSet,
 } from "./extensions";
 
 const debug = Debug("PlayCanvasGltfLoader");
 
-export type GltfVariantSetData = {};
-
 export type GltfSceneData = {
   root: pc.Entity;
-  variantSet?: GltfVariantSetData;
+  variantSet?: VariantSet;
   animations: pc.AnimComponentLayer[];
 };
 
