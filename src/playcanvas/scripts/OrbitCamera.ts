@@ -388,8 +388,6 @@ export class OrbitCamera extends pc.ScriptType {
       this._zoomAnimFrame = 0;
     }
 
-    console.log("dolly", value);
-
     const curValue = this.distance;
     const targetValue = this.distanceSensitivity * (this.distance * 0.1);
 
