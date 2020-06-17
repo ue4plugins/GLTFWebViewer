@@ -9,6 +9,11 @@ type InteractionHotspotData = {
   image: 0;
 };
 
+export type InteractionHotspot = {
+  node: pc.Entity;
+  imageSource: string;
+};
+
 export class InteractionHotspotExtensionParser implements ExtensionParser {
   private _hotspots: {
     node: pc.Entity;
@@ -27,13 +32,29 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
     registry.node.remove(this.name);
   }
 
-  public postParse(container: pc.ContainerResource) {
-    debug("Post parse hotspot", container);
-    this._hotspots.forEach(hotspot => {
-      const image = container.textures[hotspot.data.image];
-      const animation = container.animations[hotspot.data.animation];
-      debug("Found image and animation", image, animation);
-    });
+  public postParse() {
+    // Ignore
+  }
+
+  public getHotspotsForScene(
+    scene: pc.Entity,
+    container: pc.ContainerResource,
+  ): InteractionHotspot[] {
+    const { textures, animations } = container;
+    return this._hotspots
+      .filter(
+        hotspot =>
+          textures[hotspot.data.image] &&
+          animations[hotspot.data.animation] &&
+          scene.findOne(node => node === hotspot.node),
+      )
+      .map(hotspot => {
+        const image = textures[hotspot.data.image].resource as pc.Texture;
+        return {
+          node: hotspot.node,
+          imageSource: image.getSource().src,
+        };
+      });
   }
 
   private _parse(node: pc.Entity, extension: any, gltf: any) {
@@ -51,19 +72,6 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
     }
 
     debug("Found hotspot", hotspot);
-
-    // TODO: remove this test implementation
-    const child = new pc.Entity();
-    child.rotateLocal(45, 45, 45);
-    child.setLocalScale(2, 2, 2);
-    child.addComponent("model", {
-      type: "box",
-    });
-    const material = child.model!.material as pc.StandardMaterial;
-    material.diffuse.fromString("ff0ff0");
-    material.update();
-
-    node.addChild(child);
 
     this._hotspots.push({
       node,

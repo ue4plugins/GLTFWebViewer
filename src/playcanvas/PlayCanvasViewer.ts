@@ -3,18 +3,26 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { GltfScene } from "../types";
-import { OrbitCamera, orbitCameraScriptName } from "./scripts";
+import {
+  OrbitCamera,
+  orbitCameraScriptName,
+  HotspotTracker,
+  hotspotTrackerScriptName,
+  HotspotTrackerHandle,
+} from "./scripts";
 import {
   PlayCanvasGltfLoader,
   GltfData,
   GltfSceneData,
 } from "./PlayCanvasGltfLoader";
+import { InteractionHotspot } from "./extensions";
 
 const debug = Debug("PlayCanvasViewer");
 
 type CameraEntity = pc.Entity & {
   script: pc.ScriptComponent & {
     [orbitCameraScriptName]: OrbitCamera;
+    [hotspotTrackerScriptName]: HotspotTracker;
   };
 };
 
@@ -25,6 +33,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _scene?: pc.Scene;
   private _gltf?: GltfData;
   private _activeGltfScene?: GltfSceneData;
+  private _hotspotTrackerHandles?: HotspotTrackerHandle[];
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
@@ -38,7 +47,9 @@ export class PlayCanvasViewer implements TestableViewer {
     this._resizeCanvas = this._resizeCanvas.bind(this);
 
     this._app = this._createApp();
+
     pc.registerScript(OrbitCamera, orbitCameraScriptName);
+    pc.registerScript(HotspotTracker, hotspotTrackerScriptName);
 
     this._camera = this._createCamera(this._app);
     this._loader = new PlayCanvasGltfLoader(this._app);
@@ -141,6 +152,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     app.root.addChild(camera);
 
+    camera.script.create(hotspotTrackerScriptName);
     return camera;
   }
 
@@ -154,7 +166,68 @@ export class PlayCanvasViewer implements TestableViewer {
     this._activeGltfScene = gltfScene;
     this._app.root.addChild(gltfScene.root);
 
+    if (gltfScene.hotspots) {
+      this._initHotspots(gltfScene.hotspots);
+    }
+
     this.focusCameraOnRootEntity();
+  }
+
+  private _initHotspots(hotspots: InteractionHotspot[]) {
+    debug("Init hotspots", hotspots);
+
+    this._destroyHotspots();
+
+    const parentElem = this._app.graphicsDevice.canvas.parentElement;
+    if (!parentElem) {
+      return;
+    }
+
+    this._hotspotTrackerHandles = hotspots.map(hotspot => {
+      const imageElem = document.createElement("div");
+      imageElem.style.width = "100%";
+      imageElem.style.height = "100%";
+      imageElem.style.backgroundImage = `url(${hotspot.imageSource})`;
+      imageElem.style.backgroundSize = "cover";
+      imageElem.style.borderRadius = "50%";
+
+      const outerElem = document.createElement("div");
+      outerElem.style.position = "absolute";
+      outerElem.style.top = "0px";
+      outerElem.style.left = "0px";
+      outerElem.style.width = "40px";
+      outerElem.style.height = "40px";
+      outerElem.style.padding = "5px";
+      outerElem.style.borderRadius = "50%";
+      outerElem.style.background = "rgba(255, 255, 255, 0.5)";
+
+      outerElem.appendChild(imageElem);
+      parentElem.appendChild(outerElem);
+
+      const position = hotspot.node.getPosition();
+      return this._camera.script[hotspotTrackerScriptName].track(
+        position,
+        (ev, screen) => {
+          if (ev === "stop") {
+            parentElem.removeChild(outerElem);
+            return;
+          }
+          outerElem.style.top = `${screen.y}px`;
+          outerElem.style.left = `${screen.x}px`;
+        },
+      );
+    });
+  }
+
+  private _destroyHotspots() {
+    debug("Destroy hotspots", this._hotspotTrackerHandles);
+
+    if (this._hotspotTrackerHandles) {
+      this._hotspotTrackerHandles.forEach(handle =>
+        this._camera.script[hotspotTrackerScriptName].untrack(handle),
+      );
+      this._hotspotTrackerHandles = undefined;
+    }
   }
 
   public destroy() {
@@ -225,6 +298,7 @@ export class PlayCanvasViewer implements TestableViewer {
     if (this._activeGltfScene) {
       this._app.root.removeChild(this._activeGltfScene.root);
       this._activeGltfScene = undefined;
+      this._destroyHotspots();
     }
 
     if (this._gltf) {

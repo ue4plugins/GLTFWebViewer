@@ -5,6 +5,7 @@ import {
   HdriBackdropExtensionParser,
   InteractionHotspotExtensionParser,
   VariantSetExtensionParser,
+  InteractionHotspot,
   VariantSet,
 } from "./extensions";
 
@@ -13,6 +14,7 @@ const debug = Debug("PlayCanvasGltfLoader");
 export type GltfSceneData = {
   root: pc.Entity;
   variantSet?: VariantSet;
+  hotspots?: InteractionHotspot[];
   animations: pc.AnimComponentLayer[];
 };
 
@@ -91,9 +93,10 @@ export class PlayCanvasGltfLoader {
     debug("Load glTF asset", url, fileName);
 
     const variantSetParser = new VariantSetExtensionParser();
+    const hotspotParser = new InteractionHotspotExtensionParser();
     const extensions: ExtensionParser[] = [
       new HdriBackdropExtensionParser(),
-      new InteractionHotspotExtensionParser(),
+      hotspotParser,
       variantSetParser,
     ];
 
@@ -125,6 +128,7 @@ export class PlayCanvasGltfLoader {
         scenes: container.scenes.map<GltfSceneData>(sceneRoot => ({
           root: sceneRoot,
           variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
+          hotspots: hotspotParser.getHotspotsForScene(sceneRoot, container),
           animations: this._getAnimationLayersForScene(sceneRoot),
         })),
         defaultScene: container.scenes.indexOf(defaultScene),
