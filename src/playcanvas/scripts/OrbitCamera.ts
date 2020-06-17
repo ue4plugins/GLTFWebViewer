@@ -56,6 +56,7 @@ export class OrbitCamera extends pc.ScriptType {
   private _panButtonDown = false;
   private _lastMousePos = new pc.Vec2();
   private _lastMouseDelta = new pc.Vec2();
+  private _lastStartDistance = 0;
   private _zoomAnimFrame = 0;
   private _hammer?: HammerManager;
 
@@ -186,25 +187,12 @@ export class OrbitCamera extends pc.ScriptType {
       distanceBetween.length(),
     );
 
-    // Disabling the context menu stops the browser displaying a menu when
-    // you right-click the page
-    this.app.mouse.disableContextMenu();
-
-    this.app.keyboard.on(pc.EVENT_KEYDOWN, this._onKeyDown, this);
-    this.app.mouse.on(pc.EVENT_MOUSEDOWN, this._onMouseDown, this);
-    this.app.mouse.on(pc.EVENT_MOUSEUP, this._onMouseUp, this);
-    this.app.mouse.on(pc.EVENT_MOUSEMOVE, this._onMouseMove, this);
-    this.app.mouse.on(pc.EVENT_MOUSEWHEEL, this._onMouseWheel, this);
-    window.addEventListener("mouseout", this._onMouseOut, false);
-    this._setUpTouch();
+    this._setUpMouseEvents();
+    this._setUpTouchEvents();
 
     this.on("destroy", () => {
-      this.app.mouse.off(pc.EVENT_MOUSEDOWN, this._onMouseDown, this);
-      this.app.mouse.off(pc.EVENT_MOUSEUP, this._onMouseUp, this);
-      this.app.mouse.off(pc.EVENT_MOUSEMOVE, this._onMouseMove, this);
-      this.app.mouse.off(pc.EVENT_MOUSEWHEEL, this._onMouseWheel, this);
-      window.removeEventListener("mouseout", this._onMouseOut, false);
-      this._tearDownTouch();
+      this._tearDownMouseEvents();
+      this._tearDownTouchEvents();
     });
   }
 
@@ -519,7 +507,70 @@ export class OrbitCamera extends pc.ScriptType {
     event.event.preventDefault();
   }
 
-  private _setUpTouch() {
+  private _setUpMouseEvents() {
+    // Disabling the context menu stops the browser displaying a menu when
+    // you right-click the page
+    this.app.mouse.disableContextMenu();
+
+    this.app.keyboard.on(pc.EVENT_KEYDOWN, this._onKeyDown, this);
+    this.app.mouse.on(pc.EVENT_MOUSEDOWN, this._onMouseDown, this);
+    this.app.mouse.on(pc.EVENT_MOUSEUP, this._onMouseUp, this);
+    this.app.mouse.on(pc.EVENT_MOUSEMOVE, this._onMouseMove, this);
+    this.app.mouse.on(pc.EVENT_MOUSEWHEEL, this._onMouseWheel, this);
+    window.addEventListener("mouseout", this._onMouseOut, false);
+  }
+
+  private _tearDownMouseEvents() {
+    this.app.mouse.off(pc.EVENT_MOUSEDOWN, this._onMouseDown, this);
+    this.app.mouse.off(pc.EVENT_MOUSEUP, this._onMouseUp, this);
+    this.app.mouse.off(pc.EVENT_MOUSEMOVE, this._onMouseMove, this);
+    this.app.mouse.off(pc.EVENT_MOUSEWHEEL, this._onMouseWheel, this);
+    window.removeEventListener("mouseout", this._onMouseOut, false);
+  }
+
+  private _onTouchPinchStart(event: HammerInput) {
+    this._lastStartDistance = this.distance;
+    event.preventDefault();
+  }
+
+  private _onTouchPinch(event: HammerInput) {
+    this.distance = this._lastStartDistance / event.scale;
+  }
+
+  private _onTouchPanStart(event: HammerInput) {
+    const { x, y } = event.center;
+    const { deltaX, deltaY } = event;
+    this._lastMousePos.set(x, y);
+    this._lastMouseDelta.set(deltaX, deltaY);
+
+    // Drag 1 pointer to orbit
+    // Drag 2 pointers to pan
+    this._lookButtonDown = event.pointers.length === 1;
+    this._panButtonDown = event.pointers.length > 1;
+  }
+
+  private _onTouchPanEnd() {
+    this._lookButtonDown = false;
+    this._panButtonDown = false;
+  }
+
+  private _onTouchPan(event: HammerInput) {
+    const { x, y } = event.center;
+    const { deltaX, deltaY } = event;
+
+    if (this._lookButtonDown) {
+      const dx = deltaX - this._lastMouseDelta.x;
+      const dy = deltaY - this._lastMouseDelta.y;
+      this._orbit(dx, dy);
+    } else if (this._panButtonDown) {
+      this._pan(x, y);
+    }
+
+    this._lastMouseDelta.set(deltaX, deltaY);
+    this._lastMousePos.set(x, y);
+  }
+
+  private _setUpTouchEvents() {
     const pinch = new Hammer.Pinch();
     const pan = new Hammer.Pan({
       direction: Hammer.DIRECTION_ALL,
@@ -532,62 +583,17 @@ export class OrbitCamera extends pc.ScriptType {
     });
     this._hammer.add([pan, pinch]);
 
-    this._hammer.on("pinchstart", event => {
-      event.preventDefault();
-    });
-
-    this._hammer.on("pinch", event => {
-      const { scale } = event;
-      const value = scale > 1 ? 1 : -1;
-
-      let elem = document.querySelector("#test");
-      if (!elem) {
-        elem = document.createElement("span");
-        elem.id = "test";
-        document.body.prepend(elem);
-      }
-      elem.innerHTML = String(value);
-
-      this._dolly(value);
-    });
-
-    this._hammer.on("panstart", event => {
-      const { x, y } = event.center;
-      const { deltaX, deltaY } = event;
-      this._lastMousePos.set(x, y);
-      this._lastMouseDelta.set(deltaX, deltaY);
-
-      // Drag 1 pointer to orbit
-      // Drag 2 pointers to pan
-      this._lookButtonDown = event.pointers.length === 1;
-      this._panButtonDown = event.pointers.length > 1;
-    });
-
-    this._hammer.on("panend", () => {
-      this._lookButtonDown = false;
-      this._panButtonDown = false;
-    });
-
-    this._hammer.on("pan", event => {
-      const { x, y } = event.center;
-      const { deltaX, deltaY } = event;
-
-      if (this._lookButtonDown) {
-        const dx = deltaX - this._lastMouseDelta.x;
-        const dy = deltaY - this._lastMouseDelta.y;
-        this._orbit(dx, dy);
-      } else if (this._panButtonDown) {
-        this._pan(x, y);
-      }
-
-      this._lastMouseDelta.set(deltaX, deltaY);
-      this._lastMousePos.set(x, y);
-    });
+    this._hammer.on("pinchstart", this._onTouchPinchStart.bind(this));
+    this._hammer.on("pinch", this._onTouchPinch.bind(this));
+    this._hammer.on("panstart", this._onTouchPanStart.bind(this));
+    this._hammer.on("panend", this._onTouchPanEnd.bind(this));
+    this._hammer.on("pan", this._onTouchPan.bind(this));
   }
 
-  private _tearDownTouch() {
+  private _tearDownTouchEvents() {
     if (this._hammer) {
       this._hammer.destroy();
+      this._hammer = undefined;
     }
   }
 }
