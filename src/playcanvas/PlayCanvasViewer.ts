@@ -186,6 +186,8 @@ export class PlayCanvasViewer implements TestableViewer {
     this._hotspotTrackerHandles = hotspots.map(hotspot => {
       const { animation } = hotspot;
 
+      let active = false;
+
       const imageElem = document.createElement("div");
       imageElem.style.width = "100%";
       imageElem.style.height = "100%";
@@ -206,10 +208,14 @@ export class PlayCanvasViewer implements TestableViewer {
         if (!animation || !animation.playable) {
           return;
         }
-        if (animation.playing) {
-          animation.pause();
+        if (active) {
+          animation.play("ONCE_REVERSE");
+          active = false;
+          outerElem.style.background = "rgba(255, 255, 255, 0.5)";
         } else {
-          animation.play();
+          animation.play("ONCE");
+          active = true;
+          outerElem.style.background = "rgba(255, 0, 0, 0.5)";
         }
       });
 

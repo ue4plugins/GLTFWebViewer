@@ -135,7 +135,7 @@ export class PlayCanvasGltfLoader {
               animationLayers,
               container,
             ),
-            animations: animationLayers,
+            animations: [],
           };
         }),
         defaultScene: container.scenes.indexOf(defaultScene),
