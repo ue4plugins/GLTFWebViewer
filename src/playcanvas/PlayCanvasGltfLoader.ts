@@ -15,7 +15,7 @@ export type GltfSceneData = {
   root: pc.Entity;
   variantSet?: VariantSet;
   hotspots?: InteractionHotspot[];
-  animations: pc.AnimComponentLayer[];
+  animations: Animation[];
 };
 
 export type GltfData = {
@@ -23,6 +23,45 @@ export type GltfData = {
   scenes: GltfSceneData[];
   defaultScene: number;
 };
+
+export enum AnimationState {
+  Loop = "LOOP",
+  LoopReverse = "LOOP_REVERSE",
+  Once = "ONCE",
+  OnceReverse = "ONCE_REVERSE",
+}
+
+export class Animation {
+  public constructor(
+    private _layer: pc.AnimComponentLayer,
+    private _index: number,
+  ) {}
+
+  public get assetIndex() {
+    return this._index;
+  }
+
+  public get name() {
+    return this._layer.name;
+  }
+
+  public get playable() {
+    return this._layer.playable;
+  }
+
+  public get playing() {
+    return this._layer.playing;
+  }
+
+  public play(state: AnimationState) {
+    this._layer.play(state);
+    console.log(this._layer);
+  }
+
+  public pause() {
+    this._layer.pause();
+  }
+}
 
 export class PlayCanvasGltfLoader {
   public constructor(private _app: pc.Application) {}
@@ -59,61 +98,59 @@ export class PlayCanvasGltfLoader {
     });
   }
 
-  private _addAnimationComponents(
-    nodeAnimations: pc.ContainerResourceAnimationMapping[],
-  ) {
-    nodeAnimations.forEach(({ node, animations }) => {
-      if (animations.length === 0) {
-        return;
-      }
+  private _addAnimationsToScene(
+    scene: pc.Entity,
+    container: pc.ContainerResource,
+  ): Animation[] {
+    const { animations: animationAssets } = container;
+    return container.nodeAnimations
+      .filter(
+        ({ node, animations }) =>
+          animations.length > 0 && scene.findOne(n => n === node),
+      )
+      .map(({ node, animations }) => {
+        const component = node.addComponent("anim") as pc.AnimComponent;
 
-      const component = node.addComponent("anim") as pc.AnimComponent;
+        // Create one layer per animation asset so that the animations can be played simultaneously
+        component.loadStateGraph({
+          layers: animationAssets.map(animationAsset => ({
+            name: (animationAsset.resource as pc.AnimTrack).name,
+            states: [
+              { name: pc.ANIM_STATE_START },
+              { name: AnimationState.Loop, speed: 1, loop: true },
+              { name: AnimationState.LoopReverse, speed: -1, loop: true },
+              { name: AnimationState.Once, speed: 1, loop: false },
+              { name: AnimationState.OnceReverse, speed: -1, loop: false },
+            ],
+            transitions: [],
+          })),
+          parameters: {},
+        });
 
-      // Create one layer per animation asset so that the animations can be played simultaneously
-      component.loadStateGraph({
-        layers: animations.map(animationAsset => ({
-          name: (animationAsset.resource as pc.AnimTrack).name,
-          states: [
-            { name: pc.ANIM_STATE_START },
-            { name: "LOOP", speed: 1, loop: true },
-            { name: "LOOP_REVERSE", speed: -1, loop: true },
-            { name: "ONCE", speed: 1, loop: false },
-            { name: "ONCE_REVERSE", speed: -1, loop: false },
-          ],
-          transitions: [],
-        })),
-        parameters: {},
-      });
+        // Return an instance of Animation per layer
+        return animations
+          .map(index => {
+            const track = animationAssets[index].resource as pc.AnimTrack;
+            return {
+              track,
+              index,
+              layer: component.findAnimationLayer(track.name),
+            };
+          })
+          .filter(({ layer }) => !!layer)
+          .map(({ track, index, layer: layerOrNull }) => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const layer = layerOrNull!;
 
-      // Assign animation tracks to each layer
-      animations.forEach(animationAsset => {
-        const layer = component.findAnimationLayer(
-          (animationAsset.resource as pc.AnimTrack).name,
-        );
-        if (layer) {
-          layer.states.slice(1, layer.states.length).forEach(state => {
-            layer.assignAnimation(state, animationAsset.resource);
+            // Assign animation tracks to all states of each layer
+            layer.states
+              .slice(1, layer.states.length)
+              .forEach(state => layer.assignAnimation(state, track));
+
+            return new Animation(layer, index);
           });
-
-          // This is currently the only public method to set the current state of a layer.
-          // By doing this the animation of a layer can be played by simply running layer.play()
-          // in an application.
-          layer.play("LOOP");
-          layer.pause();
-        }
-      });
-    });
-  }
-
-  private _getAnimationLayersForScene(scene: pc.Entity) {
-    const animationComponents = scene
-      ? ((scene.findComponents("anim") as unknown) as pc.AnimComponent[])
-      : [];
-
-    return animationComponents.reduce<pc.AnimComponentLayer[]>(
-      (acc, component) => [...acc, ...component.data.layers],
-      [],
-    );
+      })
+      .reduce<Animation[]>((acc, anims) => [...acc, ...anims], []);
   }
 
   private _clearExtensions() {
@@ -169,25 +206,26 @@ export class PlayCanvasGltfLoader {
       this._unregisterExtensions(extensions);
       debug("glTF global extensions", container.extensions);
 
-      this._addAnimationComponents(container.nodeAnimations);
-
-      return {
+      const ret = {
         asset,
         scenes: container.scenes.map<GltfSceneData>(sceneRoot => {
-          const animationLayers = this._getAnimationLayersForScene(sceneRoot);
+          const animations = this._addAnimationsToScene(sceneRoot, container);
+          animations.forEach(a => a.play(AnimationState.Loop));
           return {
             root: sceneRoot,
             variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
-            hotspots: hotspotParser.getHotspotsForScene(
-              sceneRoot,
-              animationLayers,
-              container,
-            ),
+            // hotspots: hotspotParser.getHotspotsForScene(
+            //   sceneRoot,
+            //   animations,
+            //   container,
+            // ),
             animations: [],
           };
         }),
         defaultScene: container.scenes.indexOf(defaultScene),
       };
+      console.log(ret);
+      return ret;
     } catch (e) {
       this._unregisterExtensions(extensions);
       throw e;

@@ -1,5 +1,6 @@
 import pc from "@animech-public/playcanvas";
 import Debug from "debug";
+import { Animation } from "../PlayCanvasGltfLoader";
 import { ExtensionParser } from "./ExtensionParser";
 
 const debug = Debug("InteractionHotspot");
@@ -12,7 +13,7 @@ type InteractionHotspotData = {
 export type InteractionHotspot = {
   node: pc.Entity;
   imageSource: string;
-  animation?: pc.AnimComponentLayer;
+  animation?: Animation;
 };
 
 export class InteractionHotspotExtensionParser implements ExtensionParser {
@@ -39,10 +40,10 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
 
   public getHotspotsForScene(
     scene: pc.Entity,
-    animLayers: pc.AnimComponentLayer[],
+    animations: Animation[],
     container: pc.ContainerResource,
   ): InteractionHotspot[] {
-    const { textures, animations } = container;
+    const { textures } = container;
 
     return this._hotspots
       .filter(
@@ -53,12 +54,12 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
       )
       .map(hotspot => {
         const image = textures[hotspot.data.image].resource as pc.Texture;
-        const animation = animations[hotspot.data.animation]
-          .resource as pc.AnimTrack;
         return {
           node: hotspot.node,
           imageSource: image.getSource().src,
-          animation: animLayers.find(layer => layer.name === animation.name),
+          animation: animations.find(
+            animation => animation.assetIndex === hotspot.data.animation,
+          ),
         };
       });
   }

@@ -14,6 +14,7 @@ import {
   PlayCanvasGltfLoader,
   GltfData,
   GltfSceneData,
+  AnimationState,
 } from "./PlayCanvasGltfLoader";
 import { InteractionHotspot } from "./extensions";
 
@@ -209,11 +210,11 @@ export class PlayCanvasViewer implements TestableViewer {
           return;
         }
         if (active) {
-          animation.play("ONCE_REVERSE");
+          animation.play(AnimationState.OnceReverse);
           active = false;
           outerElem.style.background = "rgba(255, 255, 255, 0.5)";
         } else {
-          animation.play("ONCE");
+          animation.play(AnimationState.Once);
           active = true;
           outerElem.style.background = "rgba(255, 0, 0, 0.5)";
         }
@@ -335,7 +336,7 @@ export class PlayCanvasViewer implements TestableViewer {
     this._activeGltfScene.animations.forEach((animation, animationIndex) => {
       const active = animationIds.includes(animationIndex);
       if (active && animation.playable) {
-        animation.play();
+        animation.play(AnimationState.Loop);
       } else {
         animation.pause();
       }
