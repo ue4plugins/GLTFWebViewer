@@ -87,7 +87,7 @@ build:
   only:
     - master
 
-deploy:
+deploy_dev:
   tags:
     - linux-docker
   stage: deploy
@@ -100,3 +100,5 @@ deploy:
     - apt-get install -y lftp
   script:
     - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete $BUILD_FOLDER/ $FTP_DEST_FOLDER/; bye"
+  environment:
+    name: dev
