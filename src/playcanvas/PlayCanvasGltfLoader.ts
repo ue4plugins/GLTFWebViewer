@@ -58,6 +58,52 @@ export class PlayCanvasGltfLoader {
     });
   }
 
+  private _addAnimationComponents(
+    nodeAnimations: pc.ContainerResourceAnimationMapping[],
+  ) {
+    nodeAnimations.forEach(({ node, animations }) => {
+      if (animations.length === 0) {
+        return;
+      }
+
+      const component = node.addComponent("anim") as pc.AnimComponent;
+
+      // Create one layer per animation asset so that the animations can be played simultaneously
+      component.loadStateGraph({
+        layers: animations.map(animationAsset => ({
+          name: (animationAsset.resource as pc.AnimTrack).name,
+          states: [
+            { name: pc.ANIM_STATE_START },
+            { name: "LOOP", speed: 1, loop: true },
+            { name: "LOOP_REVERSE", speed: -1, loop: true },
+            { name: "ONCE", speed: 1, loop: false },
+            { name: "ONCE_REVERSE", speed: -1, loop: false },
+          ],
+          transitions: [],
+        })),
+        parameters: {},
+      });
+
+      // Assign animation tracks to each layer
+      animations.forEach(animationAsset => {
+        const layer = component.findAnimationLayer(
+          (animationAsset.resource as pc.AnimTrack).name,
+        );
+        if (layer) {
+          layer.states.slice(1, layer.states.length).forEach(state => {
+            layer.assignAnimation(state, animationAsset.resource);
+          });
+
+          // This is currently the only public method to set the current state of a layer.
+          // By doing this the animation of a layer can be played by simply running layer.play()
+          // in an application.
+          layer.play("LOOP");
+          layer.pause();
+        }
+      });
+    });
+  }
+
   private _getAnimationLayersForScene(scene: pc.Entity) {
     const animationComponents = scene
       ? ((scene.findComponents("anim") as unknown) as pc.AnimComponent[])
@@ -120,6 +166,8 @@ export class PlayCanvasGltfLoader {
       this._applyExtensionPostParse(extensions, container);
       this._unregisterExtensions(extensions);
       debug("glTF global extensions", container.extensions);
+
+      this._addAnimationComponents(container.nodeAnimations);
 
       return {
         asset,
