@@ -14,9 +14,9 @@ import {
   PlayCanvasGltfLoader,
   GltfData,
   GltfSceneData,
-  AnimationState,
 } from "./PlayCanvasGltfLoader";
 import { InteractionHotspot } from "./extensions";
+import { AnimationState } from "./Animation";
 
 const debug = Debug("PlayCanvasViewer");
 

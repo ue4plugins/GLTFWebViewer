@@ -1,6 +1,6 @@
 import pc from "@animech-public/playcanvas";
 import Debug from "debug";
-import { Animation } from "../PlayCanvasGltfLoader";
+import { Animation } from "../Animation";
 import { ExtensionParser } from "./ExtensionParser";
 
 const debug = Debug("InteractionHotspot");
