@@ -58,7 +58,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
           node: hotspot.node,
           imageSource: image.getSource().src,
           animation: animations.find(
-            animation => animation.assetIndex === hotspot.data.animation,
+            animation => animation.index === hotspot.data.animation,
           ),
         };
       });

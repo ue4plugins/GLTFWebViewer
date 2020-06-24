@@ -33,11 +33,16 @@ export enum AnimationState {
 
 export class Animation {
   public constructor(
+    private _node: pc.Entity,
     private _layer: pc.AnimComponentLayer,
     private _index: number,
   ) {}
 
-  public get assetIndex() {
+  public get node() {
+    return this._node;
+  }
+
+  public get index() {
     return this._index;
   }
 
@@ -98,16 +103,10 @@ export class PlayCanvasGltfLoader {
     });
   }
 
-  private _addAnimationsToScene(
-    scene: pc.Entity,
-    container: pc.ContainerResource,
-  ): Animation[] {
+  private _createAnimations(container: pc.ContainerResource): Animation[] {
     const { animations: animationAssets } = container;
     return container.nodeAnimations
-      .filter(
-        ({ node, animations }) =>
-          animations.length > 0 && scene.findOne(n => n === node),
-      )
+      .filter(({ animations }) => animations.length > 0)
       .map(({ node, animations }) => {
         const component = node.addComponent("anim") as pc.AnimComponent;
 
@@ -127,7 +126,7 @@ export class PlayCanvasGltfLoader {
           parameters: {},
         });
 
-        // Return an instance of Animation per layer
+        // Create one Animation instance per layer
         return animations
           .map(index => {
             const track = animationAssets[index].resource as pc.AnimTrack;
@@ -147,7 +146,7 @@ export class PlayCanvasGltfLoader {
               .slice(1, layer.states.length)
               .forEach(state => layer.assignAnimation(state, track));
 
-            return new Animation(layer, index);
+            return new Animation(node, layer, index);
           });
       })
       .reduce<Animation[]>((acc, anims) => [...acc, ...anims], []);
@@ -206,20 +205,25 @@ export class PlayCanvasGltfLoader {
       this._unregisterExtensions(extensions);
       debug("glTF global extensions", container.extensions);
 
+      const animations = this._createAnimations(container);
+      debug("Created animations", animations);
+      // animations.forEach(a => a.play(AnimationState.Loop));
+
       const ret = {
         asset,
         scenes: container.scenes.map<GltfSceneData>(sceneRoot => {
-          const animations = this._addAnimationsToScene(sceneRoot, container);
-          animations.forEach(a => a.play(AnimationState.Loop));
+          const sceneAnimations = animations.filter(animation =>
+            sceneRoot.findOne(node => node === animation.node),
+          );
           return {
             root: sceneRoot,
             variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
             // hotspots: hotspotParser.getHotspotsForScene(
             //   sceneRoot,
-            //   animations,
+            //   sceneAnimations,
             //   container,
             // ),
-            animations: [],
+            animations: sceneAnimations, // TODO: return non-hotspot animations
           };
         }),
         defaultScene: container.scenes.indexOf(defaultScene),
