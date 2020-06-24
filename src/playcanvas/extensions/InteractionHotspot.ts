@@ -64,6 +64,15 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
       });
   }
 
+  public getHotspotAnimationIndices(): number[] {
+    return this._hotspots
+      .map(({ data }) => data.animation)
+      .filter(
+        (animationIndex, index, animationIndices) =>
+          animationIndices.indexOf(animationIndex) === index,
+      );
+  }
+
   private _parse(node: pc.Entity, extension: any, gltf: any) {
     debug("Parse hotspot", node, extension);
 

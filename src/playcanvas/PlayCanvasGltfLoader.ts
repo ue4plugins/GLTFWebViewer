@@ -165,6 +165,8 @@ export class PlayCanvasGltfLoader {
       const animations = this._createAnimations(container);
       debug("Created animations", animations);
 
+      const hotspotAnimationIndices = hotspotParser.getHotspotAnimationIndices();
+
       return {
         asset,
         scenes: container.scenes.map<GltfSceneData>(sceneRoot => {
@@ -179,7 +181,10 @@ export class PlayCanvasGltfLoader {
               sceneAnimations,
               container,
             ),
-            animations: [], // TODO: return non-hotspot animations
+            animations: sceneAnimations.filter(
+              animation =>
+                hotspotAnimationIndices.indexOf(animation.index) === -1,
+            ),
           };
         }),
         defaultScene: container.scenes.indexOf(defaultScene),
