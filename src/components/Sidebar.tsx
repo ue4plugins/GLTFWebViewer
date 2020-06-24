@@ -21,12 +21,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-type Props = {
+export type SidebarProps = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 };
 
-export const Sidebar: React.FC<Props> = ({ children, isOpen, setIsOpen }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  children,
+  isOpen,
+  setIsOpen,
+}) => {
   const classes = useStyles();
 
   return (

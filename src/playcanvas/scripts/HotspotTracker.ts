@@ -1,11 +1,5 @@
 import pc from "@animech-public/playcanvas";
 
-enum HotspotTrackerEventType {
-  Start = "start",
-  Track = "track",
-  Stop = "stop",
-}
-
 type HotspotTrackerHandleInternal = HotspotTrackerHandle & {
   setScreenPosition(screenPosition: pc.Vec3): void;
 };
@@ -20,6 +14,12 @@ export type HotspotTrackerHandle = {
     worldPos: pc.Vec3,
   ): void;
 };
+
+export enum HotspotTrackerEventType {
+  Start = "start",
+  Track = "track",
+  Stop = "stop",
+}
 
 export const hotspotTrackerScriptName = "HotspotTracker";
 

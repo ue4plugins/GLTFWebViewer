@@ -9,6 +9,7 @@ import {
   HotspotTracker,
   hotspotTrackerScriptName,
   HotspotTrackerHandle,
+  HotspotTrackerEventType,
 } from "./scripts";
 import {
   PlayCanvasGltfLoader,
@@ -27,6 +28,13 @@ type CameraEntity = pc.Entity & {
   };
 };
 
+export type UpdateHotspotHandler = (top: number, left: number) => void;
+export type DestroyHotspotHandler = () => void;
+export type CreateHotspotHandler = (
+  imageSource: string,
+  onToggle: (active: boolean) => void,
+) => [UpdateHotspotHandler, DestroyHotspotHandler];
+
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
   private _camera: CameraEntity;
@@ -44,7 +52,10 @@ export class PlayCanvasViewer implements TestableViewer {
   private _sceneLoaded = false;
   private _gltfLoaded = false;
 
-  public constructor(public canvas: HTMLCanvasElement) {
+  public constructor(
+    public canvas: HTMLCanvasElement,
+    private _onCreateHotspot?: CreateHotspotHandler,
+  ) {
     this._resizeCanvas = this._resizeCanvas.bind(this);
 
     this._app = this._createApp();
@@ -179,60 +190,34 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._destroyHotspots();
 
-    const parentElem = this._app.graphicsDevice.canvas.parentElement;
-    if (!parentElem) {
+    const onCreateHotspot = this._onCreateHotspot;
+    if (!onCreateHotspot) {
       return;
     }
 
     this._hotspotTrackerHandles = hotspots.map(hotspot => {
       const { animation } = hotspot;
 
-      let active = false;
-
-      const imageElem = document.createElement("div");
-      imageElem.style.width = "100%";
-      imageElem.style.height = "100%";
-      imageElem.style.backgroundImage = `url(${hotspot.imageSource})`;
-      imageElem.style.backgroundSize = "cover";
-      imageElem.style.borderRadius = "50%";
-
-      const outerElem = document.createElement("div");
-      outerElem.style.position = "absolute";
-      outerElem.style.top = "0px";
-      outerElem.style.left = "0px";
-      outerElem.style.width = "40px";
-      outerElem.style.height = "40px";
-      outerElem.style.padding = "5px";
-      outerElem.style.borderRadius = "50%";
-      outerElem.style.background = "rgba(255, 255, 255, 0.5)";
-      outerElem.addEventListener("click", () => {
-        if (!animation || !animation.playable) {
-          return;
-        }
-        if (active) {
-          animation.play(AnimationState.OnceReverse);
-          active = false;
-          outerElem.style.background = "rgba(255, 255, 255, 0.5)";
-        } else {
-          animation.play(AnimationState.Once);
-          active = true;
-          outerElem.style.background = "rgba(255, 0, 0, 0.5)";
-        }
-      });
-
-      outerElem.appendChild(imageElem);
-      parentElem.appendChild(outerElem);
+      const [onUpdate, onDelete] = onCreateHotspot(
+        hotspot.imageSource,
+        active => {
+          if (!animation || !animation.playable) {
+            return;
+          }
+          const newState = active
+            ? AnimationState.Once
+            : AnimationState.OnceReverse;
+          animation.play(newState);
+        },
+      );
 
       const position = hotspot.node.getPosition();
       return this._camera.script[hotspotTrackerScriptName].track(
         position,
         (ev, screen) => {
-          if (ev === "stop") {
-            parentElem.removeChild(outerElem);
-            return;
-          }
-          outerElem.style.top = `${screen.y}px`;
-          outerElem.style.left = `${screen.x}px`;
+          ev === HotspotTrackerEventType.Stop
+            ? onDelete()
+            : onUpdate(screen.y, screen.x);
         },
       );
     });
