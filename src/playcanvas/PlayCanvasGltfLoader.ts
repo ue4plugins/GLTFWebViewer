@@ -104,8 +104,8 @@ export class PlayCanvasGltfLoader {
   }
 
   private _createAnimations(container: pc.ContainerResource): Animation[] {
-    const { animations: animationAssets } = container;
-    return container.nodeAnimations
+    const { nodeAnimations, animations: animationAssets } = container;
+    return nodeAnimations
       .filter(({ animations }) => animations.length > 0)
       .map(({ node, animations }) => {
         const component = node.addComponent("anim") as pc.AnimComponent;
@@ -207,7 +207,6 @@ export class PlayCanvasGltfLoader {
 
       const animations = this._createAnimations(container);
       debug("Created animations", animations);
-      // animations.forEach(a => a.play(AnimationState.Loop));
 
       const ret = {
         asset,
