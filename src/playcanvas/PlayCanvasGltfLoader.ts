@@ -60,7 +60,6 @@ export class Animation {
 
   public play(state: AnimationState) {
     this._layer.play(state);
-    console.log(this._layer);
   }
 
   public pause() {
@@ -107,13 +106,13 @@ export class PlayCanvasGltfLoader {
     const { nodeAnimations, animations: animationAssets } = container;
     return nodeAnimations
       .filter(({ animations }) => animations.length > 0)
-      .map(({ node, animations }) => {
+      .map(({ node, animations: animationIndices }) => {
         const component = node.addComponent("anim") as pc.AnimComponent;
 
         // Create one layer per animation asset so that the animations can be played simultaneously
         component.loadStateGraph({
-          layers: animationAssets.map(animationAsset => ({
-            name: (animationAsset.resource as pc.AnimTrack).name,
+          layers: animationIndices.map(index => ({
+            name: (animationAssets[index].resource as pc.AnimTrack).name,
             states: [
               { name: pc.ANIM_STATE_START },
               { name: AnimationState.Loop, speed: 1, loop: true },
@@ -127,7 +126,7 @@ export class PlayCanvasGltfLoader {
         });
 
         // Create one Animation instance per layer
-        return animations
+        return animationIndices
           .map(index => {
             const track = animationAssets[index].resource as pc.AnimTrack;
             return {
@@ -208,7 +207,7 @@ export class PlayCanvasGltfLoader {
       const animations = this._createAnimations(container);
       debug("Created animations", animations);
 
-      const ret = {
+      return {
         asset,
         scenes: container.scenes.map<GltfSceneData>(sceneRoot => {
           const sceneAnimations = animations.filter(animation =>
@@ -217,18 +216,16 @@ export class PlayCanvasGltfLoader {
           return {
             root: sceneRoot,
             variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
-            // hotspots: hotspotParser.getHotspotsForScene(
-            //   sceneRoot,
-            //   sceneAnimations,
-            //   container,
-            // ),
-            animations: sceneAnimations, // TODO: return non-hotspot animations
+            hotspots: hotspotParser.getHotspotsForScene(
+              sceneRoot,
+              sceneAnimations,
+              container,
+            ),
+            animations: [], // TODO: return non-hotspot animations
           };
         }),
         defaultScene: container.scenes.indexOf(defaultScene),
       };
-      console.log(ret);
-      return ret;
     } catch (e) {
       this._unregisterExtensions(extensions);
       throw e;
