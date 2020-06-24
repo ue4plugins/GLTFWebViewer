@@ -58,9 +58,8 @@ export class PlayCanvasGltfLoader {
     });
   }
 
-  private _addAnimationComponents(
-    nodeAnimations: pc.ContainerResourceAnimationMapping[],
-  ) {
+  private _addAnimationComponents(container: pc.ContainerResource) {
+    const { nodeAnimations, animations: animationAssets } = container;
     nodeAnimations.forEach(({ node, animations }) => {
       if (animations.length === 0) {
         return;
@@ -70,8 +69,8 @@ export class PlayCanvasGltfLoader {
 
       // Create one layer per animation asset so that the animations can be played simultaneously
       component.loadStateGraph({
-        layers: animations.map(animationAsset => ({
-          name: (animationAsset.resource as pc.AnimTrack).name,
+        layers: animations.map(animationIndex => ({
+          name: (animationAssets[animationIndex].resource as pc.AnimTrack).name,
           states: [
             { name: pc.ANIM_STATE_START },
             { name: "LOOP", speed: 1, loop: true },
@@ -85,13 +84,12 @@ export class PlayCanvasGltfLoader {
       });
 
       // Assign animation tracks to each layer
-      animations.forEach(animationAsset => {
-        const layer = component.findAnimationLayer(
-          (animationAsset.resource as pc.AnimTrack).name,
-        );
+      animations.forEach(animationIndex => {
+        const track = animationAssets[animationIndex].resource as pc.AnimTrack;
+        const layer = component.findAnimationLayer(track.name);
         if (layer) {
           layer.states.slice(1, layer.states.length).forEach(state => {
-            layer.assignAnimation(state, animationAsset.resource);
+            layer.assignAnimation(state, track);
           });
 
           // This is currently the only public method to set the current state of a layer.
@@ -167,7 +165,7 @@ export class PlayCanvasGltfLoader {
       this._unregisterExtensions(extensions);
       debug("glTF global extensions", container.extensions);
 
-      this._addAnimationComponents(container.nodeAnimations);
+      this._addAnimationComponents(container);
 
       return {
         asset,
