@@ -73,6 +73,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
       );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _parse(node: pc.Entity, extension: any, gltf: any) {
     debug("Parse hotspot", node, extension);
 
