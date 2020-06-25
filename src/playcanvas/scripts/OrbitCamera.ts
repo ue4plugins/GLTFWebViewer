@@ -17,6 +17,8 @@ type MouseMoveEvent = {
   y: number;
 };
 
+export const orbitCameraScriptName = "OrbitCamera";
+
 export class OrbitCamera extends pc.ScriptType {
   /**
    * Inertia Factor. Higher value means that the camera will continue moving after the user has stopped dragging. 0 is fully responsive.
@@ -387,8 +389,6 @@ export class OrbitCamera extends pc.ScriptType {
       cancelAnimationFrame(this._zoomAnimFrame);
       this._zoomAnimFrame = 0;
     }
-
-    console.log("dolly", value);
 
     const curValue = this.distance;
     const targetValue = this.distanceSensitivity * (this.distance * 0.1);

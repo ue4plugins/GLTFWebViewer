@@ -4,12 +4,12 @@ import { ExtensionParser } from "./ExtensionParser";
 
 const debug = Debug("VariantSet");
 
-export type VariantSetData = {};
+export type VariantSet = {};
 
 export class VariantSetExtensionParser implements ExtensionParser {
   private _variantSets: {
     scene: pc.Entity;
-    data: VariantSetData;
+    data: VariantSet;
   }[] = [];
 
   public get name() {
@@ -28,14 +28,14 @@ export class VariantSetExtensionParser implements ExtensionParser {
     // Ignore
   }
 
-  public getVariantSetForScene(scene: pc.Entity) {
+  public getVariantSetForScene(scene: pc.Entity): VariantSet | undefined {
     return this._variantSets.find(set => set.scene === scene)?.data;
   }
 
   private _parse(scene: pc.Entity, extension: any, gltf: any) {
     debug("Parse variant set", scene, extension);
 
-    const variantSets: VariantSetData[] | undefined =
+    const variantSets: VariantSet[] | undefined =
       gltf?.extensions?.[this.name]?.variantSets;
     if (!variantSets) {
       return scene;

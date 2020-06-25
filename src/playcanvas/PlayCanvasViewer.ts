@@ -3,19 +3,29 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { GltfScene } from "../types";
-import { OrbitCamera } from "./scripts";
+import { HotspotRenderer } from "../hotspot";
+import {
+  OrbitCamera,
+  orbitCameraScriptName,
+  HotspotTracker,
+  hotspotTrackerScriptName,
+  HotspotTrackerHandle,
+  HotspotTrackerEventType,
+} from "./scripts";
 import {
   PlayCanvasGltfLoader,
   GltfData,
   GltfSceneData,
 } from "./PlayCanvasGltfLoader";
+import { InteractionHotspot } from "./extensions";
+import { AnimationState } from "./Animation";
 
 const debug = Debug("PlayCanvasViewer");
-const orbitCameraScriptName = "OrbitCamera";
 
 type CameraEntity = pc.Entity & {
   script: pc.ScriptComponent & {
     [orbitCameraScriptName]: OrbitCamera;
+    [hotspotTrackerScriptName]: HotspotTracker;
   };
 };
 
@@ -26,6 +36,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _scene?: pc.Scene;
   private _gltf?: GltfData;
   private _activeGltfScene?: GltfSceneData;
+  private _hotspotTrackerHandles?: HotspotTrackerHandle[];
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
@@ -39,6 +50,10 @@ export class PlayCanvasViewer implements TestableViewer {
     this._resizeCanvas = this._resizeCanvas.bind(this);
 
     this._app = this._createApp();
+
+    pc.registerScript(OrbitCamera, orbitCameraScriptName);
+    pc.registerScript(HotspotTracker, hotspotTrackerScriptName);
+
     this._camera = this._createCamera(this._app);
     this._loader = new PlayCanvasGltfLoader(this._app);
 
@@ -126,13 +141,12 @@ export class PlayCanvasViewer implements TestableViewer {
   private _createCamera(app: pc.Application) {
     debug("Creating camera");
 
-    pc.registerScript(OrbitCamera, orbitCameraScriptName);
-
     const camera = new pc.Entity("camera") as CameraEntity;
     camera.addComponent("camera", {
       fov: 45.8366,
       clearColor: new pc.Color(0, 0, 0),
     });
+
     camera.addComponent("script");
     camera.script.create(orbitCameraScriptName);
     camera.script[orbitCameraScriptName].inertiaFactor = 0.07;
@@ -141,6 +155,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     app.root.addChild(camera);
 
+    camera.script.create(hotspotTrackerScriptName);
     return camera;
   }
 
@@ -154,7 +169,60 @@ export class PlayCanvasViewer implements TestableViewer {
     this._activeGltfScene = gltfScene;
     this._app.root.addChild(gltfScene.root);
 
+    if (gltfScene.hotspots) {
+      this._initHotspots(gltfScene.hotspots);
+    }
+
     this.focusCameraOnRootEntity();
+  }
+
+  private _initHotspots(hotspots: InteractionHotspot[]) {
+    debug("Init hotspots", hotspots);
+
+    this._destroyHotspots();
+
+    const hotspotRootElem = this.canvas.parentElement;
+    if (!hotspotRootElem) {
+      return;
+    }
+
+    this._hotspotTrackerHandles = hotspots.map(hotspot => {
+      const { animation } = hotspot;
+      const renderer = new HotspotRenderer(hotspotRootElem);
+
+      renderer.render({
+        imageSource: hotspot.imageSource,
+        onToggle: active => {
+          if (!animation || !animation.playable) {
+            return;
+          }
+          const newState = active
+            ? AnimationState.Once
+            : AnimationState.OnceReverse;
+          animation.play(newState);
+        },
+      });
+
+      return this._camera.script[hotspotTrackerScriptName].track(
+        hotspot.node.getPosition(),
+        (ev, screen) => {
+          ev === HotspotTrackerEventType.Stop
+            ? renderer.destroy()
+            : renderer.move(screen.x, screen.y);
+        },
+      );
+    });
+  }
+
+  private _destroyHotspots() {
+    debug("Destroy hotspots", this._hotspotTrackerHandles);
+
+    if (this._hotspotTrackerHandles) {
+      this._hotspotTrackerHandles.forEach(handle =>
+        this._camera.script[hotspotTrackerScriptName].untrack(handle),
+      );
+      this._hotspotTrackerHandles = undefined;
+    }
   }
 
   public destroy() {
@@ -225,6 +293,7 @@ export class PlayCanvasViewer implements TestableViewer {
     if (this._activeGltfScene) {
       this._app.root.removeChild(this._activeGltfScene.root);
       this._activeGltfScene = undefined;
+      this._destroyHotspots();
     }
 
     if (this._gltf) {
@@ -243,7 +312,7 @@ export class PlayCanvasViewer implements TestableViewer {
     this._activeGltfScene.animations.forEach((animation, animationIndex) => {
       const active = animationIds.includes(animationIndex);
       if (active && animation.playable) {
-        animation.play();
+        animation.play(AnimationState.Loop);
       } else {
         animation.pause();
       }

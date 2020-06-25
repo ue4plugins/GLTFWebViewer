@@ -17,11 +17,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-type Props = {
+export type GltfMetaProps = {
   gltf: GltfSource;
 };
 
-export const GltfMeta: React.FC<Props> = ({ gltf }) => {
+export const GltfMeta: React.FC<GltfMetaProps> = ({ gltf }) => {
   const classes = useStyles();
 
   return (

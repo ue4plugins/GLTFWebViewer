@@ -23,12 +23,15 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-type Props = {
+export type SidebarToggleProps = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 };
 
-export const SidebarToggle: React.FC<Props> = ({ isOpen, setIsOpen }) => {
+export const SidebarToggle: React.FC<SidebarToggleProps> = ({
+  isOpen,
+  setIsOpen,
+}) => {
   const classes = useStyles();
 
   return (

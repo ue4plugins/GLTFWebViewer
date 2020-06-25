@@ -5,16 +5,18 @@ import {
   HdriBackdropExtensionParser,
   InteractionHotspotExtensionParser,
   VariantSetExtensionParser,
+  InteractionHotspot,
+  VariantSet,
 } from "./extensions";
+import { AnimationState, Animation } from "./Animation";
 
 const debug = Debug("PlayCanvasGltfLoader");
 
-export type GltfVariantSetData = {};
-
 export type GltfSceneData = {
   root: pc.Entity;
-  variantSet?: GltfVariantSetData;
-  animations: pc.AnimComponentLayer[];
+  variantSet?: VariantSet;
+  hotspots?: InteractionHotspot[];
+  animations: Animation[];
 };
 
 export type GltfData = {
@@ -58,15 +60,53 @@ export class PlayCanvasGltfLoader {
     });
   }
 
-  private _getAnimationLayersForScene(scene: pc.Entity) {
-    const animationComponents = scene
-      ? ((scene.findComponents("anim") as unknown) as pc.AnimComponent[])
-      : [];
+  private _createAnimations(container: pc.ContainerResource): Animation[] {
+    const { nodeAnimations, animations: animationAssets } = container;
+    return nodeAnimations
+      .filter(({ animations }) => animations.length > 0)
+      .map(({ node, animations: animationIndices }) => {
+        const component = node.addComponent("anim") as pc.AnimComponent;
 
-    return animationComponents.reduce<pc.AnimComponentLayer[]>(
-      (acc, component) => [...acc, ...component.data.layers],
-      [],
-    );
+        // Create one layer per animation asset so that the animations can be played simultaneously
+        component.loadStateGraph({
+          layers: animationIndices.map(index => ({
+            name: (animationAssets[index].resource as pc.AnimTrack).name,
+            states: [
+              { name: pc.ANIM_STATE_START },
+              { name: AnimationState.Loop, speed: 1, loop: true },
+              { name: AnimationState.LoopReverse, speed: -1, loop: true },
+              { name: AnimationState.Once, speed: 1, loop: false },
+              { name: AnimationState.OnceReverse, speed: -1, loop: false },
+            ],
+            transitions: [],
+          })),
+          parameters: {},
+        });
+
+        // Create one Animation instance per layer
+        return animationIndices
+          .map(index => {
+            const track = animationAssets[index].resource as pc.AnimTrack;
+            return {
+              track,
+              index,
+              layer: component.findAnimationLayer(track.name),
+            };
+          })
+          .filter(({ layer }) => !!layer)
+          .map(({ track, index, layer: layerOrNull }) => {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const layer = layerOrNull!;
+
+            // Assign animation tracks to all states of each layer
+            layer.states
+              .slice(1, layer.states.length)
+              .forEach(state => layer.assignAnimation(state, track));
+
+            return new Animation(node, layer, index);
+          });
+      })
+      .reduce<Animation[]>((acc, anims) => [...acc, ...anims], []);
   }
 
   private _clearExtensions() {
@@ -92,9 +132,10 @@ export class PlayCanvasGltfLoader {
     debug("Load glTF asset", url, fileName);
 
     const variantSetParser = new VariantSetExtensionParser();
+    const hotspotParser = new InteractionHotspotExtensionParser();
     const extensions: ExtensionParser[] = [
       new HdriBackdropExtensionParser(),
-      new InteractionHotspotExtensionParser(),
+      hotspotParser,
       variantSetParser,
     ];
 
@@ -121,13 +162,31 @@ export class PlayCanvasGltfLoader {
       this._unregisterExtensions(extensions);
       debug("glTF global extensions", container.extensions);
 
+      const animations = this._createAnimations(container);
+      debug("Created animations", animations);
+
+      const hotspotAnimationIndices = hotspotParser.getHotspotAnimationIndices();
+
       return {
         asset,
-        scenes: container.scenes.map<GltfSceneData>(sceneRoot => ({
-          root: sceneRoot,
-          variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
-          animations: this._getAnimationLayersForScene(sceneRoot),
-        })),
+        scenes: container.scenes.map<GltfSceneData>(sceneRoot => {
+          const sceneAnimations = animations.filter(animation =>
+            sceneRoot.findOne(node => node === animation.node),
+          );
+          return {
+            root: sceneRoot,
+            variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
+            hotspots: hotspotParser.getHotspotsForScene(
+              sceneRoot,
+              sceneAnimations,
+              container,
+            ),
+            animations: sceneAnimations.filter(
+              animation =>
+                hotspotAnimationIndices.indexOf(animation.index) === -1,
+            ),
+          };
+        }),
         defaultScene: container.scenes.indexOf(defaultScene),
       };
     } catch (e) {

@@ -19,12 +19,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-interface Props {
+export type SearchFieldProps = {
   term: string;
   onChange: (term: string) => void;
-}
+};
 
-export const SearchField: React.FC<Props> = ({ term, onChange }) => {
+export const SearchField: React.FC<SearchFieldProps> = ({ term, onChange }) => {
   const classes = useStyles();
   const [value, setValue] = useState(term);
   const debouncedOnChange = useCallback(
