@@ -3,6 +3,7 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { GltfScene } from "../types";
+import { HotspotRenderer } from "../hotspot";
 import {
   OrbitCamera,
   orbitCameraScriptName,
@@ -28,13 +29,6 @@ type CameraEntity = pc.Entity & {
   };
 };
 
-export type UpdateHotspotHandler = (top: number, left: number) => void;
-export type DestroyHotspotHandler = () => void;
-export type CreateHotspotHandler = (
-  imageSource: string,
-  onToggle: (active: boolean) => void,
-) => [UpdateHotspotHandler, DestroyHotspotHandler];
-
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
   private _camera: CameraEntity;
@@ -52,10 +46,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _sceneLoaded = false;
   private _gltfLoaded = false;
 
-  public constructor(
-    public canvas: HTMLCanvasElement,
-    private _onCreateHotspot?: CreateHotspotHandler,
-  ) {
+  public constructor(public canvas: HTMLCanvasElement) {
     this._resizeCanvas = this._resizeCanvas.bind(this);
 
     this._app = this._createApp();
@@ -190,17 +181,18 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._destroyHotspots();
 
-    const onCreateHotspot = this._onCreateHotspot;
-    if (!onCreateHotspot) {
+    const hotspotRootElem = this.canvas.parentElement;
+    if (!hotspotRootElem) {
       return;
     }
 
     this._hotspotTrackerHandles = hotspots.map(hotspot => {
       const { animation } = hotspot;
+      const renderer = new HotspotRenderer(hotspotRootElem);
 
-      const [onUpdate, onDelete] = onCreateHotspot(
-        hotspot.imageSource,
-        active => {
+      renderer.render({
+        imageSource: hotspot.imageSource,
+        onToggle: active => {
           if (!animation || !animation.playable) {
             return;
           }
@@ -209,15 +201,14 @@ export class PlayCanvasViewer implements TestableViewer {
             : AnimationState.OnceReverse;
           animation.play(newState);
         },
-      );
+      });
 
-      const position = hotspot.node.getPosition();
       return this._camera.script[hotspotTrackerScriptName].track(
-        position,
+        hotspot.node.getPosition(),
         (ev, screen) => {
           ev === HotspotTrackerEventType.Stop
-            ? onDelete()
-            : onUpdate(screen.y, screen.x);
+            ? renderer.destroy()
+            : renderer.move(screen.x, screen.y);
         },
       );
     });
