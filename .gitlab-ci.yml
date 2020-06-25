@@ -1,31 +1,22 @@
 image: node:12.16.3
 
-cache: &default_cache
+cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - node_modules/
-  policy: pull
+    - .npm/
 
 variables:
   CI: "true"
 
 stages:
-  - install_dependencies
   - lint
   - test
   - build
   - release
   - deploy
 
-install_dependencies:
-  tags:
-    - linux-docker
-  stage: install_dependencies
-  cache:
-    <<: *default_cache
-    policy: pull-push
-  script:
-    - npm ci
+before_script: &default_before_script
+  - npm ci --cache .npm --prefer-offline
 
 lint:
   tags:
@@ -45,8 +36,6 @@ test_e2e:
   tags:
     - windows
   stage: test
-  before_script:
-    - npm ci
   script:
     - npm run test:e2e
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
@@ -61,8 +50,6 @@ test_e2e_update:
     - windows
   stage: test
   when: manual
-  before_script:
-    - npm ci
   script:
     - npm run test:e2e-update
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
@@ -96,6 +83,7 @@ deploy_dev:
   dependencies:
     - build
   before_script:
+    - *default_before_script
     - apt-get update -qy
     - apt-get install -y lftp
   script:
