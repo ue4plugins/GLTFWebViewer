@@ -31,10 +31,6 @@ export class Animation {
     return this._layer.playable;
   }
 
-  public get playing() {
-    return this._layer.playing;
-  }
-
   public play(state: AnimationState) {
     this._layer.play(state);
   }
