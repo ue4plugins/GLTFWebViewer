@@ -129,7 +129,7 @@ export class PlayCanvasGltfLoader {
     extensions: ExtensionParser[],
     container: pc.ContainerResource,
   ) {
-    extensions.forEach(e => e.postParse(container));
+    extensions.forEach(e => e.globalPostParse(container));
   }
 
   public async load(url: string, fileName?: string): Promise<GltfData> {

@@ -13,7 +13,7 @@ type ContainerAssetOptions = any;
 /**
  * Function used by ExtensionRegistry to apply extension data to parsed glTF objects.
  */
-export type ExtensionParserCallback<TObject> = (
+export type ExtensionPostParseCallback<TObject> = (
   /**
    * The object to be modified.
    */
@@ -26,10 +26,17 @@ export type ExtensionParserCallback<TObject> = (
 ) => void;
 
 /**
- * Mapping from extension name to ExtensionParserCallbacks.
+ * ExtensionParserCallbacks grouped by call order.
+ */
+export type ExtensionParsersByCallOrder<TObject> = {
+  postParse?: ExtensionPostParseCallback<TObject>;
+};
+
+/**
+ * ExtensionParsersByCallOrder objects grouped by extension name.
  */
 export type ExtensionParsersByName<TObject> = {
-  [extension: string]: ExtensionParserCallback<TObject>;
+  [extension: string]: ExtensionParsersByCallOrder<TObject>;
 };
 
 /**
@@ -45,8 +52,8 @@ export class ExtensionParserCallbackRegistry<TObject> {
     this.removeAll = this.removeAll.bind(this);
     this.find = this.find.bind(this);
     this.index = this.index.bind(this);
-    this.apply = this.apply.bind(this);
-    this.applyAll = this.applyAll.bind(this);
+    this.postParse = this.postParse.bind(this);
+    this.postParseAll = this.postParseAll.bind(this);
   }
 
   /**
@@ -62,7 +69,7 @@ export class ExtensionParserCallbackRegistry<TObject> {
    * @param parser - Function used transform objects that have an extension matching name.
    * @returns Returns true if the parser was successfully added to the registry, false otherwise.
    */
-  public add(name: string, parser: ExtensionParserCallback<TObject>) {
+  public add(name: string, parser: ExtensionParsersByCallOrder<TObject>) {
     if (this._extensions[name]) {
       return false;
     }
@@ -114,10 +121,14 @@ export class ExtensionParserCallbackRegistry<TObject> {
    * @param object - The object to be modified.
    * @param extensionData - Extension data that should be applied to "object".
    */
-  public apply(name: string, object: TObject, extensionData: ExtensionData) {
+  public postParse(
+    name: string,
+    object: TObject,
+    extensionData: ExtensionData,
+  ) {
     const extensionParser = this._extensions[name];
-    if (extensionParser) {
-      extensionParser(object, extensionData);
+    if (extensionParser && extensionParser.postParse) {
+      extensionParser.postParse(object, extensionData);
     }
   }
 
@@ -126,12 +137,15 @@ export class ExtensionParserCallbackRegistry<TObject> {
    * @param object - The object to be modified.
    * @param extensionDataByName - Object containing extension data that should be applied to "object", grouped by extension name.
    */
-  public applyAll(object: TObject, extensionDataByName: ExtensionDataByName) {
+  public postParseAll(
+    object: TObject,
+    extensionDataByName: ExtensionDataByName,
+  ) {
     const extensionParsers = this._extensions;
     Object.keys(extensionDataByName || {}).forEach(extensionId => {
       const extensionParser = extensionParsers[extensionId];
-      if (extensionParser) {
-        extensionParser(object, extensionDataByName[extensionId]);
+      if (extensionParser && extensionParser.postParse) {
+        extensionParser.postParse(object, extensionDataByName[extensionId]);
       }
     });
   }
@@ -140,13 +154,22 @@ export class ExtensionParserCallbackRegistry<TObject> {
 /**
  * Function used by ExtensionRegistry to report global extension data of glTF objects.
  */
-export type GlobalExtensionCallback = (extensionData: ExtensionData) => void;
+export type GlobalExtensionPreParseCallback = (
+  extensionData: ExtensionData,
+) => void;
 
 /**
- * Mapping from extension name to GlobalExtensionCallback.
+ * GlobalExtensionCallback grouped by call order.
+ */
+export type GlobalExtensionParsersByCallOrder = {
+  preParse?: GlobalExtensionPreParseCallback;
+};
+
+/**
+ * GlobalExtensionParsersByCallOrder objects grouped by extension name.
  */
 export type GlobalExtensionCallbacksByName = {
-  [extension: string]: GlobalExtensionCallback;
+  [extension: string]: GlobalExtensionParsersByCallOrder;
 };
 
 /**
@@ -162,7 +185,7 @@ export class GlobalExtensionCallbackRegistry {
     this.removeAll = this.removeAll.bind(this);
     this.find = this.find.bind(this);
     this.index = this.index.bind(this);
-    this.callAll = this.callAll.bind(this);
+    this.preParseAll = this.preParseAll.bind(this);
   }
 
   /**
@@ -178,7 +201,7 @@ export class GlobalExtensionCallbackRegistry {
    * @param callback - Function used transform objects that have an extension matching name.
    * @returns Returns true if the callback was successfully added to the registry, false otherwise.
    */
-  public add(name: string, callback: GlobalExtensionCallback) {
+  public add(name: string, callback: GlobalExtensionParsersByCallOrder) {
     if (this._extensions[name]) {
       return false;
     }
@@ -228,12 +251,12 @@ export class GlobalExtensionCallbackRegistry {
    * Trigger all extension callbacks matching the given extension data.
    * @param extensionDataByName - Object containing global extension data, grouped by extension name.
    */
-  public callAll(extensionDataByName: ExtensionDataByName) {
+  public preParseAll(extensionDataByName: ExtensionDataByName) {
     const extensionCallbacks = this._extensions;
     Object.keys(extensionDataByName || {}).forEach(extensionId => {
       const extensionCallback = extensionCallbacks[extensionId];
-      if (extensionCallback) {
-        extensionCallback(extensionDataByName[extensionId]);
+      if (extensionCallback.preParse) {
+        extensionCallback.preParse(extensionDataByName[extensionId]);
       }
     });
   }
@@ -243,16 +266,12 @@ export class GlobalExtensionCallbackRegistry {
  * Container of extension parsers to be used when parsing glTF files.
  */
 export class ExtensionRegistry {
-  private _nodePostParse = new ExtensionParserCallbackRegistry<pc.Entity>();
-  private _scenePostParse = new ExtensionParserCallbackRegistry<pc.Entity>();
-  private _texturePostParse = new ExtensionParserCallbackRegistry<pc.Texture>();
-  private _materialPostParse = new ExtensionParserCallbackRegistry<
-    pc.Material
-  >();
-  private _animationPostParse = new ExtensionParserCallbackRegistry<
-    pc.AnimTrack
-  >();
-  private _globalPreParse = new GlobalExtensionCallbackRegistry();
+  private _global = new GlobalExtensionCallbackRegistry();
+  private _node = new ExtensionParserCallbackRegistry<pc.Entity>();
+  private _scene = new ExtensionParserCallbackRegistry<pc.Entity>();
+  private _texture = new ExtensionParserCallbackRegistry<pc.Texture>();
+  private _material = new ExtensionParserCallbackRegistry<pc.Material>();
+  private _animation = new ExtensionParserCallbackRegistry<pc.AnimTrack>();
 
   public constructor() {
     this.destroy = this.destroy.bind(this);
@@ -262,43 +281,43 @@ export class ExtensionRegistry {
   /**
    * Registry for handling global extension callbacks.
    */
-  public get globalPreParse() {
-    return this._globalPreParse;
+  public get global() {
+    return this._global;
   }
 
   /**
    * Registry for handling node extension parsers.
    */
-  public get nodePostParse() {
-    return this._nodePostParse;
+  public get node() {
+    return this._node;
   }
 
   /**
    * Registry for handling scene extension parsers.
    */
-  public get scenePostParse() {
-    return this._scenePostParse;
+  public get scene() {
+    return this._scene;
   }
 
   /**
    * Registry for handling texture extension parsers.
    */
-  public get texturePostParse() {
-    return this._texturePostParse;
+  public get texture() {
+    return this._texture;
   }
 
   /**
    * Registry for handling material extension parsers.
    */
-  public get materialPostParse() {
-    return this._materialPostParse;
+  public get material() {
+    return this._material;
   }
 
   /**
    * Registry for handling animation extension parsers.
    */
-  public get animationPostParse() {
-    return this._animationPostParse;
+  public get animation() {
+    return this._animation;
   }
 
   /**
@@ -310,28 +329,39 @@ export class ExtensionRegistry {
       global: {
         preprocess: (gltfData: GltfData) => {
           if (gltfData.extensions) {
-            this.globalPreParse.callAll(gltfData.extensions);
+            this.global.preParseAll(gltfData.extensions);
           }
         },
       },
       node: {
         postprocess: (nodeData: ObjectData, node: pc.Entity) => {
           if (nodeData.extensions) {
-            this.nodePostParse.applyAll(node, nodeData.extensions);
+            this.node.postParseAll(node, nodeData.extensions);
           }
         },
       },
       scene: {
         postprocess: (sceneData: ObjectData, scene: pc.Entity) => {
           if (sceneData.extensions) {
-            this.scenePostParse.applyAll(scene, sceneData.extensions);
+            this.scene.postParseAll(scene, sceneData.extensions);
           }
         },
       },
-      // TODO
-      texture: {},
-      material: {},
-      animation: {},
+      texture: {}, // TODO: can we use postprocess for textures? we possibly need to return a new texture
+      material: {
+        postprocess: (materialData: ObjectData, material: pc.Material) => {
+          if (materialData.extensions) {
+            this.material.postParseAll(material, materialData.extensions);
+          }
+        },
+      },
+      animation: {
+        postprocess: (animationData: ObjectData, animation: pc.AnimTrack) => {
+          if (animationData.extensions) {
+            this.animation.postParseAll(animation, animationData.extensions);
+          }
+        },
+      },
     };
   }
 
@@ -339,23 +369,23 @@ export class ExtensionRegistry {
    * Destroy all registered extension parsers.
    */
   public destroy() {
-    this._nodePostParse.destroy();
-    this._scenePostParse.destroy();
-    this._texturePostParse.destroy();
-    this._materialPostParse.destroy();
-    this._animationPostParse.destroy();
-    this._globalPreParse.destroy();
+    this._node.destroy();
+    this._scene.destroy();
+    this._texture.destroy();
+    this._material.destroy();
+    this._animation.destroy();
+    this._global.destroy();
   }
 
   /**
    * Remove all extension parsers.
    */
   public removeAll() {
-    this._nodePostParse.removeAll();
-    this._scenePostParse.removeAll();
-    this._texturePostParse.removeAll();
-    this._materialPostParse.removeAll();
-    this._animationPostParse.removeAll();
-    this._globalPreParse.removeAll();
+    this._node.removeAll();
+    this._scene.removeAll();
+    this._texture.removeAll();
+    this._material.removeAll();
+    this._animation.removeAll();
+    this._global.removeAll();
   }
 }

@@ -74,24 +74,28 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
   }
 
   public register(registry: ExtensionRegistry) {
-    registry.globalPreParse.add(this.name, this._preParse.bind(this));
-    registry.nodePostParse.add(this.name, this._parse.bind(this));
+    registry.global.add(this.name, {
+      preParse: this._globalPreParse.bind(this),
+    });
+    registry.node.add(this.name, {
+      postParse: this._nodePostParse.bind(this),
+    });
   }
 
   public unregister(registry: ExtensionRegistry) {
-    registry.globalPreParse.remove(this.name);
-    registry.nodePostParse.remove(this.name);
+    registry.global.remove(this.name);
+    registry.node.remove(this.name);
   }
 
-  public postParse() {
+  public globalPostParse() {
     // Ignore
   }
 
-  private _preParse(extensionData: GlobalExtensionData) {
+  private _globalPreParse(extensionData: GlobalExtensionData) {
     this._globalExtensionsData = extensionData;
   }
 
-  private _parse(node: pc.Entity, extensionData: NodeExtensionData) {
+  private _nodePostParse(node: pc.Entity, extensionData: NodeExtensionData) {
     debug("Parse hotspot", node, extensionData);
 
     const hotspot = this._globalExtensionsData?.interactions[
