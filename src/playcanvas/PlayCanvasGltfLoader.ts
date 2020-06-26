@@ -3,10 +3,8 @@ import Debug from "debug";
 import {
   ExtensionRegistry,
   ExtensionParser,
-  // HdriBackdropExtensionParser,
   InteractionHotspotExtensionParser,
   InteractionHotspot,
-  VariantSet,
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
 
@@ -14,7 +12,6 @@ const debug = Debug("PlayCanvasGltfLoader");
 
 export type GltfSceneData = {
   root: pc.Entity;
-  variantSet?: VariantSet;
   hotspots?: InteractionHotspot[];
   animations: Animation[];
 };
@@ -44,20 +41,6 @@ export class PlayCanvasGltfLoader {
       const fileUrl = fileName ? url : pc.path.join("../..", url);
       const assetName = pc.path.getBasename(fileName || fileUrl);
 
-      const options = {
-        node: {
-          postprocess: (nodeData: any, node: pc.Entity) => {
-            if (nodeData.extensions) {
-              this._extensionRegistry.node.applyAll(
-                node,
-                nodeData.extensions,
-                {}, // TODO: really needed?
-              );
-            }
-          },
-        },
-      };
-
       let asset = assets.getByUrl(fileUrl);
       if (!asset) {
         asset = new pc.Asset(
@@ -65,7 +48,7 @@ export class PlayCanvasGltfLoader {
           "container",
           { url: fileUrl, filename: fileName || assetName },
           null,
-          options as any,
+          this._extensionRegistry.containerAssetOptions,
         );
         assets.add(asset);
       }
@@ -179,7 +162,6 @@ export class PlayCanvasGltfLoader {
 
       this._applyExtensionPostParse(extensions, container);
       this._unregisterExtensions(extensions);
-      debug("glTF global extensions", container.extensions);
 
       const animations = this._createAnimations(container);
       debug("Created animations", animations);

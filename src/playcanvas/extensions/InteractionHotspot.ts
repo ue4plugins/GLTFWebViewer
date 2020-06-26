@@ -15,16 +15,14 @@ type NodeExtensionData = {
   interaction: number;
 };
 
+type GlobalExtensionData = {
+  interactions: InteractionData[];
+};
+
 type NodeInteractionDataMap = {
   node: pc.Entity;
   data: InteractionData;
 };
-
-function mapIsDefined(
-  obj: NodeInteractionDataMap | undefined,
-): obj is NodeInteractionDataMap {
-  return obj !== undefined;
-}
 
 export type InteractionHotspot = {
   node: pc.Entity;
@@ -33,31 +31,8 @@ export type InteractionHotspot = {
 };
 
 export class InteractionHotspotExtensionParser implements ExtensionParser {
-  private _nodeExtensionData: {
-    node: pc.Entity;
-    data: NodeExtensionData;
-  }[] = [];
-
-  private _globalExtensionsData?: {
-    interactions: InteractionData[];
-  };
-
-  private get _hotspots(): NodeInteractionDataMap[] {
-    return this._nodeExtensionData
-      .map(({ node, data }) => {
-        const hotspot = this._globalExtensionsData?.interactions[
-          data.interaction
-        ];
-        if (!hotspot) {
-          return undefined;
-        }
-        return {
-          node,
-          data: hotspot,
-        };
-      })
-      .filter(mapIsDefined);
-  }
+  private _globalExtensionsData?: GlobalExtensionData;
+  private _hotspots: NodeInteractionDataMap[] = [];
 
   public get name() {
     return "EPIC_interaction_hotspots";
@@ -99,25 +74,38 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
   }
 
   public register(registry: ExtensionRegistry) {
-    registry.node.add(this.name, this._parse.bind(this));
+    registry.globalPreParse.add(this.name, this._preParse.bind(this));
+    registry.nodePostParse.add(this.name, this._parse.bind(this));
   }
 
   public unregister(registry: ExtensionRegistry) {
-    registry.node.remove(this.name);
+    registry.globalPreParse.remove(this.name);
+    registry.nodePostParse.remove(this.name);
   }
 
-  public postParse(container: pc.ContainerResource) {
-    this._globalExtensionsData = container.extensions?.[this.name];
+  public postParse() {
+    // Ignore
   }
 
-  private _parse(node: pc.Entity, extension: NodeExtensionData) {
-    debug("Parse hotspot", node, extension);
+  private _preParse(extensionData: GlobalExtensionData) {
+    this._globalExtensionsData = extensionData;
+  }
 
-    this._nodeExtensionData.push({
+  private _parse(node: pc.Entity, extensionData: NodeExtensionData) {
+    debug("Parse hotspot", node, extensionData);
+
+    const hotspot = this._globalExtensionsData?.interactions[
+      extensionData.interaction
+    ];
+    if (!hotspot) {
+      return;
+    }
+
+    debug("Found hotspot", hotspot);
+
+    this._hotspots.push({
       node,
-      data: extension,
+      data: hotspot,
     });
-
-    return node;
   }
 }
