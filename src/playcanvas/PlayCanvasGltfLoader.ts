@@ -136,10 +136,7 @@ export class PlayCanvasGltfLoader {
     debug("Load glTF asset", url, fileName);
 
     const hotspotParser = new InteractionHotspotExtensionParser();
-    const extensions: ExtensionParser[] = [
-      // new HdriBackdropExtensionParser(),
-      hotspotParser,
-    ];
+    const extensions: ExtensionParser[] = [hotspotParser];
 
     this._clearExtensions();
     this._registerExtensions(extensions);
