@@ -70,6 +70,7 @@ const ts = {
     "import/no-duplicates": "error",
     "import/no-self-import": "error",
     "import/extensions": "warn",
+    "import/namespace": "off",
     "import/no-unused-modules": "warn",
     "import/no-useless-path-segments": "warn",
     "import/no-default-export": "warn",

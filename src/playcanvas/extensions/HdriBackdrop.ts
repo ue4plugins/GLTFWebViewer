@@ -1,5 +1,6 @@
 import Debug from "debug";
 import { ExtensionParser } from "./ExtensionParser";
+import { ExtensionRegistry } from "./ExtensionRegistry";
 
 const debug = Debug("HdriBackdrop");
 
@@ -23,11 +24,11 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
     return "EPIC_hdri_backdrops";
   }
 
-  public register(registry: pc.GlbExtensionRegistry) {
+  public register(registry: ExtensionRegistry) {
     registry.node.add(this.name, this._parse.bind(this));
   }
 
-  public unregister(registry: pc.GlbExtensionRegistry) {
+  public unregister(registry: ExtensionRegistry) {
     registry.node.remove(this.name);
   }
 

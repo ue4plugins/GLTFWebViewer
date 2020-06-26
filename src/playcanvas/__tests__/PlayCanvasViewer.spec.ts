@@ -2,7 +2,7 @@
 import "jest";
 import xhrMock from "xhr-mock";
 import { MockFunction } from "xhr-mock/lib/types";
-import pc from "@animech-public/playcanvas";
+import * as pc from "@animech-public/playcanvas";
 import { PlayCanvasViewer } from "../PlayCanvasViewer";
 import {
   configResponse,

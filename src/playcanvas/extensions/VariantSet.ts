@@ -1,6 +1,7 @@
-import pc from "@animech-public/playcanvas";
+import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import { ExtensionParser } from "./ExtensionParser";
+import { ExtensionRegistry } from "./ExtensionRegistry";
 
 const debug = Debug("VariantSet");
 
@@ -16,11 +17,11 @@ export class VariantSetExtensionParser implements ExtensionParser {
     return "EPIC_variant_sets";
   }
 
-  public register(registry: pc.GlbExtensionRegistry) {
+  public register(registry: ExtensionRegistry) {
     registry.scene.add(this.name, this._parse.bind(this));
   }
 
-  public unregister(registry: pc.GlbExtensionRegistry) {
+  public unregister(registry: ExtensionRegistry) {
     registry.scene.remove(this.name);
   }
 

@@ -1,10 +1,11 @@
-import pc from "@animech-public/playcanvas";
+import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import {
-  ExtensionParser,
-  HdriBackdropExtensionParser,
-  InteractionHotspotExtensionParser,
-  VariantSetExtensionParser,
+  ExtensionRegistry,
+  // ExtensionParser,
+  // HdriBackdropExtensionParser,
+  // InteractionHotspotExtensionParser,
+  // VariantSetExtensionParser,
   InteractionHotspot,
   VariantSet,
 } from "./extensions";
@@ -26,7 +27,11 @@ export type GltfData = {
 };
 
 export class PlayCanvasGltfLoader {
-  public constructor(private _app: pc.Application) {}
+  private _extensionRegistry: ExtensionRegistry;
+
+  public constructor(private _app: pc.Application) {
+    this._extensionRegistry = new ExtensionRegistry();
+  }
 
   private async _loadAsset(
     url: string,
@@ -35,28 +40,31 @@ export class PlayCanvasGltfLoader {
     debug("Load glTF asset", url, fileName);
 
     return new Promise<pc.Asset | undefined>((resolve, reject) => {
-      const callback: pc.callbacks.LoadAsset = (err, asset) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(asset);
-        }
-      };
+      const { assets } = this._app;
 
-      if (fileName) {
-        this._app.assets.loadFromUrlAndFilename(
-          url,
-          fileName,
+      const fileUrl = fileName ? url : pc.path.join("../..", url);
+      const assetName = pc.path.getBasename(fileName || fileUrl);
+
+      let asset = assets.getByUrl(fileUrl);
+      if (!asset) {
+        asset = new pc.Asset(
+          assetName,
           "container",
-          callback,
+          { url: fileUrl, filename: fileName || assetName },
+          null,
+          {},
         );
-      } else {
-        this._app.assets.loadFromUrl(
-          pc.path.join("../..", url),
-          "container",
-          callback,
-        );
+        assets.add(asset);
       }
+
+      if (asset.resource) {
+        resolve(asset);
+        return;
+      }
+
+      asset.once("load", loadedAsset => resolve(loadedAsset));
+      asset.once("error", err => reject(err));
+      assets.load(asset);
     });
   }
 
@@ -109,38 +117,38 @@ export class PlayCanvasGltfLoader {
       .reduce<Animation[]>((acc, anims) => [...acc, ...anims], []);
   }
 
-  private _clearExtensions() {
-    this._app.glbExtensions.removeAll();
-  }
+  // private _clearExtensions() {
+  //   this._app.glbExtensions.removeAll();
+  // }
 
-  private _registerExtensions(extensions: ExtensionParser[]) {
-    extensions.forEach(e => e.register(this._app.glbExtensions));
-  }
+  // private _registerExtensions(extensions: ExtensionParser[]) {
+  //   extensions.forEach(e => e.register(this._app.glbExtensions));
+  // }
 
-  private _unregisterExtensions(extensions: ExtensionParser[]) {
-    extensions.forEach(e => e.unregister(this._app.glbExtensions));
-  }
+  // private _unregisterExtensions(extensions: ExtensionParser[]) {
+  //   extensions.forEach(e => e.unregister(this._app.glbExtensions));
+  // }
 
-  private _applyExtensionPostParse(
-    extensions: ExtensionParser[],
-    container: pc.ContainerResource,
-  ) {
-    extensions.forEach(e => e.postParse(container));
-  }
+  // private _applyExtensionPostParse(
+  //   extensions: ExtensionParser[],
+  //   container: pc.ContainerResource,
+  // ) {
+  //   extensions.forEach(e => e.postParse(container));
+  // }
 
   public async load(url: string, fileName?: string): Promise<GltfData> {
     debug("Load glTF asset", url, fileName);
 
-    const variantSetParser = new VariantSetExtensionParser();
-    const hotspotParser = new InteractionHotspotExtensionParser();
-    const extensions: ExtensionParser[] = [
-      new HdriBackdropExtensionParser(),
-      hotspotParser,
-      variantSetParser,
-    ];
+    // const variantSetParser = new VariantSetExtensionParser();
+    // const hotspotParser = new InteractionHotspotExtensionParser();
+    // const extensions: ExtensionParser[] = [
+    //   new HdriBackdropExtensionParser(),
+    //   hotspotParser,
+    //   variantSetParser,
+    // ];
 
-    this._clearExtensions();
-    this._registerExtensions(extensions);
+    // this._clearExtensions();
+    // this._registerExtensions(extensions);
 
     try {
       const asset = await this._loadAsset(url, fileName);
@@ -158,39 +166,41 @@ export class PlayCanvasGltfLoader {
         throw new Error("Asset has no default scene");
       }
 
-      this._applyExtensionPostParse(extensions, container);
-      this._unregisterExtensions(extensions);
-      debug("glTF global extensions", container.extensions);
+      // this._applyExtensionPostParse(extensions, container);
+      // this._unregisterExtensions(extensions);
+      // debug("glTF global extensions", container.extensions);
 
       const animations = this._createAnimations(container);
       debug("Created animations", animations);
 
-      const hotspotAnimationIndices = hotspotParser.getHotspotAnimationIndices();
+      // const hotspotAnimationIndices = hotspotParser.getHotspotAnimationIndices();
 
       return {
         asset,
         scenes: container.scenes.map<GltfSceneData>(sceneRoot => {
-          const sceneAnimations = animations.filter(animation =>
-            sceneRoot.findOne(node => node === animation.node),
-          );
+          // const sceneAnimations = animations.filter(animation =>
+          //   sceneRoot.findOne(node => node === animation.node),
+          // );
           return {
             root: sceneRoot,
-            variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
-            hotspots: hotspotParser.getHotspotsForScene(
-              sceneRoot,
-              sceneAnimations,
-              container,
-            ),
-            animations: sceneAnimations.filter(
-              animation =>
-                hotspotAnimationIndices.indexOf(animation.index) === -1,
-            ),
+            // variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
+            // hotspots: hotspotParser.getHotspotsForScene(
+            //   sceneRoot,
+            //   sceneAnimations,
+            //   container,
+            // ),
+            animations: animations,
+            // sceneAnimations.filter(
+            //   animation =>
+            //     hotspotAnimationIndices.indexOf(animation.index) === -1,
+            // ),
           };
         }),
         defaultScene: container.scenes.indexOf(defaultScene),
       };
     } catch (e) {
-      this._unregisterExtensions(extensions);
+      // this._unregisterExtensions(extensions);
+      console.log(e);
       throw e;
     }
   }

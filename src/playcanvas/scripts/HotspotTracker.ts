@@ -1,4 +1,4 @@
-import pc from "@animech-public/playcanvas";
+import * as pc from "@animech-public/playcanvas";
 
 type HotspotTrackerHandleInternal = HotspotTrackerHandle & {
   setScreenPosition(screenPosition: pc.Vec3): void;
