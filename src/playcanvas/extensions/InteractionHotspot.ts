@@ -6,10 +6,25 @@ import { ExtensionRegistry } from "./ExtensionRegistry";
 
 const debug = Debug("InteractionHotspot");
 
-type InteractionHotspotData = {
-  image: 0;
-  animation: 0;
+type InteractionData = {
+  image: number;
+  animation: number;
 };
+
+type NodeExtensionData = {
+  interaction: number;
+};
+
+type NodeInteractionDataMap = {
+  node: pc.Entity;
+  data: InteractionData;
+};
+
+function mapIsDefined(
+  obj: NodeInteractionDataMap | undefined,
+): obj is NodeInteractionDataMap {
+  return obj !== undefined;
+}
 
 export type InteractionHotspot = {
   node: pc.Entity;
@@ -18,25 +33,43 @@ export type InteractionHotspot = {
 };
 
 export class InteractionHotspotExtensionParser implements ExtensionParser {
-  private _hotspots: {
+  private _nodeExtensionData: {
     node: pc.Entity;
-    data: InteractionHotspotData;
+    data: NodeExtensionData;
   }[] = [];
+
+  private _globalExtensionsData?: {
+    interactions: InteractionData[];
+  };
+
+  private get _hotspots(): NodeInteractionDataMap[] {
+    return this._nodeExtensionData
+      .map(({ node, data }) => {
+        const hotspot = this._globalExtensionsData?.interactions[
+          data.interaction
+        ];
+        if (!hotspot) {
+          return undefined;
+        }
+        return {
+          node,
+          data: hotspot,
+        };
+      })
+      .filter(mapIsDefined);
+  }
 
   public get name() {
     return "EPIC_interaction_hotspots";
   }
 
-  public register(registry: ExtensionRegistry) {
-    registry.node.add(this.name, this._parse.bind(this));
-  }
-
-  public unregister(registry: ExtensionRegistry) {
-    registry.node.remove(this.name);
-  }
-
-  public postParse() {
-    // Ignore
+  public get hotspotAnimationIndices(): number[] {
+    return this._hotspots
+      .map(({ data }) => data.animation)
+      .filter(
+        (animationIndex, index, animationIndices) =>
+          animationIndices.indexOf(animationIndex) === index,
+      );
   }
 
   public getHotspotsForScene(
@@ -65,35 +98,24 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
       });
   }
 
-  public getHotspotAnimationIndices(): number[] {
-    return this._hotspots
-      .map(({ data }) => data.animation)
-      .filter(
-        (animationIndex, index, animationIndices) =>
-          animationIndices.indexOf(animationIndex) === index,
-      );
+  public register(registry: ExtensionRegistry) {
+    registry.node.add(this.name, this._parse.bind(this));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private _parse(node: pc.Entity, extension: any, gltf: any) {
+  public unregister(registry: ExtensionRegistry) {
+    registry.node.remove(this.name);
+  }
+
+  public postParse(container: pc.ContainerResource) {
+    this._globalExtensionsData = container.extensions?.[this.name];
+  }
+
+  private _parse(node: pc.Entity, extension: NodeExtensionData) {
     debug("Parse hotspot", node, extension);
 
-    const hotspots: InteractionHotspotData[] | undefined =
-      gltf?.extensions?.[this.name]?.interactions;
-    if (!hotspots) {
-      return node;
-    }
-
-    const hotspot = hotspots[extension.interaction];
-    if (!hotspot) {
-      return node;
-    }
-
-    debug("Found hotspot", hotspot);
-
-    this._hotspots.push({
+    this._nodeExtensionData.push({
       node,
-      data: hotspot,
+      data: extension,
     });
 
     return node;

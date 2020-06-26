@@ -2,10 +2,9 @@ import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import {
   ExtensionRegistry,
-  // ExtensionParser,
+  ExtensionParser,
   // HdriBackdropExtensionParser,
-  // InteractionHotspotExtensionParser,
-  // VariantSetExtensionParser,
+  InteractionHotspotExtensionParser,
   InteractionHotspot,
   VariantSet,
 } from "./extensions";
@@ -45,6 +44,20 @@ export class PlayCanvasGltfLoader {
       const fileUrl = fileName ? url : pc.path.join("../..", url);
       const assetName = pc.path.getBasename(fileName || fileUrl);
 
+      const options = {
+        node: {
+          postprocess: (nodeData: any, node: pc.Entity) => {
+            if (nodeData.extensions) {
+              this._extensionRegistry.node.applyAll(
+                node,
+                nodeData.extensions,
+                {}, // TODO: really needed?
+              );
+            }
+          },
+        },
+      };
+
       let asset = assets.getByUrl(fileUrl);
       if (!asset) {
         asset = new pc.Asset(
@@ -52,7 +65,7 @@ export class PlayCanvasGltfLoader {
           "container",
           { url: fileUrl, filename: fileName || assetName },
           null,
-          {},
+          options as any,
         );
         assets.add(asset);
       }
@@ -117,38 +130,36 @@ export class PlayCanvasGltfLoader {
       .reduce<Animation[]>((acc, anims) => [...acc, ...anims], []);
   }
 
-  // private _clearExtensions() {
-  //   this._app.glbExtensions.removeAll();
-  // }
+  private _clearExtensions() {
+    this._extensionRegistry.removeAll();
+  }
 
-  // private _registerExtensions(extensions: ExtensionParser[]) {
-  //   extensions.forEach(e => e.register(this._app.glbExtensions));
-  // }
+  private _registerExtensions(extensions: ExtensionParser[]) {
+    extensions.forEach(e => e.register(this._extensionRegistry));
+  }
 
-  // private _unregisterExtensions(extensions: ExtensionParser[]) {
-  //   extensions.forEach(e => e.unregister(this._app.glbExtensions));
-  // }
+  private _unregisterExtensions(extensions: ExtensionParser[]) {
+    extensions.forEach(e => e.unregister(this._extensionRegistry));
+  }
 
-  // private _applyExtensionPostParse(
-  //   extensions: ExtensionParser[],
-  //   container: pc.ContainerResource,
-  // ) {
-  //   extensions.forEach(e => e.postParse(container));
-  // }
+  private _applyExtensionPostParse(
+    extensions: ExtensionParser[],
+    container: pc.ContainerResource,
+  ) {
+    extensions.forEach(e => e.postParse(container));
+  }
 
   public async load(url: string, fileName?: string): Promise<GltfData> {
     debug("Load glTF asset", url, fileName);
 
-    // const variantSetParser = new VariantSetExtensionParser();
-    // const hotspotParser = new InteractionHotspotExtensionParser();
-    // const extensions: ExtensionParser[] = [
-    //   new HdriBackdropExtensionParser(),
-    //   hotspotParser,
-    //   variantSetParser,
-    // ];
+    const hotspotParser = new InteractionHotspotExtensionParser();
+    const extensions: ExtensionParser[] = [
+      // new HdriBackdropExtensionParser(),
+      hotspotParser,
+    ];
 
-    // this._clearExtensions();
-    // this._registerExtensions(extensions);
+    this._clearExtensions();
+    this._registerExtensions(extensions);
 
     try {
       const asset = await this._loadAsset(url, fileName);
@@ -166,41 +177,38 @@ export class PlayCanvasGltfLoader {
         throw new Error("Asset has no default scene");
       }
 
-      // this._applyExtensionPostParse(extensions, container);
-      // this._unregisterExtensions(extensions);
-      // debug("glTF global extensions", container.extensions);
+      this._applyExtensionPostParse(extensions, container);
+      this._unregisterExtensions(extensions);
+      debug("glTF global extensions", container.extensions);
 
       const animations = this._createAnimations(container);
       debug("Created animations", animations);
 
-      // const hotspotAnimationIndices = hotspotParser.getHotspotAnimationIndices();
+      const { hotspotAnimationIndices } = hotspotParser;
 
       return {
         asset,
         scenes: container.scenes.map<GltfSceneData>(sceneRoot => {
-          // const sceneAnimations = animations.filter(animation =>
-          //   sceneRoot.findOne(node => node === animation.node),
-          // );
+          const sceneAnimations = animations.filter(animation =>
+            sceneRoot.findOne(node => node === animation.node),
+          );
           return {
             root: sceneRoot,
-            // variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
-            // hotspots: hotspotParser.getHotspotsForScene(
-            //   sceneRoot,
-            //   sceneAnimations,
-            //   container,
-            // ),
-            animations: animations,
-            // sceneAnimations.filter(
-            //   animation =>
-            //     hotspotAnimationIndices.indexOf(animation.index) === -1,
-            // ),
+            hotspots: hotspotParser.getHotspotsForScene(
+              sceneRoot,
+              sceneAnimations,
+              container,
+            ),
+            animations: sceneAnimations.filter(
+              animation =>
+                hotspotAnimationIndices.indexOf(animation.index) === -1,
+            ),
           };
         }),
         defaultScene: container.scenes.indexOf(defaultScene),
       };
     } catch (e) {
-      // this._unregisterExtensions(extensions);
-      console.log(e);
+      this._unregisterExtensions(extensions);
       throw e;
     }
   }
