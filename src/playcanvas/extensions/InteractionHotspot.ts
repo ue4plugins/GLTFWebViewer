@@ -82,7 +82,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
     registry.node.remove(this.name);
   }
 
-  public rootPostParse() {
+  public postParse() {
     // Ignore
   }
 
