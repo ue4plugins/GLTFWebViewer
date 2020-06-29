@@ -1,4 +1,4 @@
-import pc from "@animech-public/playcanvas";
+import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
@@ -48,7 +48,7 @@ export class VariantSetExtensionParser implements ExtensionParser {
   private _scenePostParse(
     scene: pc.Entity,
     extensionData: SceneExtensionData,
-    rootExtensionData: RootExtensionData,
+    rootExtensionData?: RootExtensionData,
   ) {
     debug("Parse variant set", scene, extensionData);
 
