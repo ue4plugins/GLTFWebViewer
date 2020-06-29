@@ -3,6 +3,8 @@ import Debug from "debug";
 import {
   ExtensionRegistry,
   ExtensionParser,
+  VariantSetExtensionParser,
+  VariantSet,
   InteractionHotspotExtensionParser,
   InteractionHotspot,
 } from "./extensions";
@@ -12,6 +14,7 @@ const debug = Debug("PlayCanvasGltfLoader");
 
 export type GltfSceneData = {
   root: pc.Entity;
+  variantSet?: VariantSet;
   hotspots?: InteractionHotspot[];
   animations: Animation[];
 };
@@ -135,8 +138,9 @@ export class PlayCanvasGltfLoader {
   public async load(url: string, fileName?: string): Promise<GltfData> {
     debug("Load glTF asset", url, fileName);
 
+    const variantSetParser = new VariantSetExtensionParser();
     const hotspotParser = new InteractionHotspotExtensionParser();
-    const extensions: ExtensionParser[] = [hotspotParser];
+    const extensions: ExtensionParser[] = [variantSetParser, hotspotParser];
 
     this._clearExtensions();
     this._registerExtensions(extensions);
@@ -173,6 +177,7 @@ export class PlayCanvasGltfLoader {
           );
           return {
             root: sceneRoot,
+            variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
             hotspots: hotspotParser.getHotspotsForScene(
               sceneRoot,
               sceneAnimations,
