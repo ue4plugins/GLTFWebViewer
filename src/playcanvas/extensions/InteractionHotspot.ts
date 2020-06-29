@@ -15,7 +15,7 @@ type NodeExtensionData = {
   interaction: number;
 };
 
-type GlobalExtensionData = {
+type RootExtensionData = {
   interactions: InteractionData[];
 };
 
@@ -31,7 +31,7 @@ export type InteractionHotspot = {
 };
 
 export class InteractionHotspotExtensionParser implements ExtensionParser {
-  private _globalExtensionsData?: GlobalExtensionData;
+  private _rootExtensionsData?: RootExtensionData;
   private _hotspots: NodeInteractionDataMap[] = [];
 
   public get name() {
@@ -74,8 +74,8 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
   }
 
   public register(registry: ExtensionRegistry) {
-    registry.global.add(this.name, {
-      preParse: this._globalPreParse.bind(this),
+    registry.root.add(this.name, {
+      preParse: this._rootPreParse.bind(this),
     });
     registry.node.add(this.name, {
       postParse: this._nodePostParse.bind(this),
@@ -83,22 +83,22 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
   }
 
   public unregister(registry: ExtensionRegistry) {
-    registry.global.remove(this.name);
+    registry.root.remove(this.name);
     registry.node.remove(this.name);
   }
 
-  public globalPostParse() {
+  public rootPostParse() {
     // Ignore
   }
 
-  private _globalPreParse(extensionData: GlobalExtensionData) {
-    this._globalExtensionsData = extensionData;
+  private _rootPreParse(extensionData: RootExtensionData) {
+    this._rootExtensionsData = extensionData;
   }
 
   private _nodePostParse(node: pc.Entity, extensionData: NodeExtensionData) {
     debug("Parse hotspot", node, extensionData);
 
-    const hotspot = this._globalExtensionsData?.interactions[
+    const hotspot = this._rootExtensionsData?.interactions[
       extensionData.interaction
     ];
     if (!hotspot) {

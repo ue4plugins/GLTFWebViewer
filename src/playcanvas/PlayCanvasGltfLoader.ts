@@ -125,11 +125,11 @@ export class PlayCanvasGltfLoader {
     extensions.forEach(e => e.unregister(this._extensionRegistry));
   }
 
-  private _applyExtensionPostParse(
+  private _postParseExtensions(
     extensions: ExtensionParser[],
     container: pc.ContainerResource,
   ) {
-    extensions.forEach(e => e.globalPostParse(container));
+    extensions.forEach(e => e.rootPostParse(container));
   }
 
   public async load(url: string, fileName?: string): Promise<GltfData> {
@@ -157,7 +157,7 @@ export class PlayCanvasGltfLoader {
         throw new Error("Asset has no default scene");
       }
 
-      this._applyExtensionPostParse(extensions, container);
+      this._postParseExtensions(extensions, container);
       this._unregisterExtensions(extensions);
 
       const animations = this._createAnimations(container);

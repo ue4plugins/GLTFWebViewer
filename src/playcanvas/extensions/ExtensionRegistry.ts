@@ -152,31 +152,31 @@ export class ExtensionParserCallbackRegistry<TObject> {
 }
 
 /**
- * Function used by ExtensionRegistry to report global extension data of glTF objects.
+ * Function used by ExtensionRegistry to report root extension data of glTF objects.
  */
-export type GlobalExtensionPreParseCallback = (
+export type RootExtensionPreParseCallback = (
   extensionData: ExtensionData,
 ) => void;
 
 /**
- * GlobalExtensionCallback grouped by call order.
+ * RootExtensionCallback grouped by call order.
  */
-export type GlobalExtensionParsersByCallOrder = {
-  preParse?: GlobalExtensionPreParseCallback;
+export type RootExtensionParsersByCallOrder = {
+  preParse?: RootExtensionPreParseCallback;
 };
 
 /**
- * GlobalExtensionParsersByCallOrder objects grouped by extension name.
+ * RootExtensionParsersByCallOrder objects grouped by extension name.
  */
-export type GlobalExtensionCallbacksByName = {
-  [extension: string]: GlobalExtensionParsersByCallOrder;
+export type RootExtensionCallbacksByName = {
+  [extension: string]: RootExtensionParsersByCallOrder;
 };
 
 /**
- * Container for callbacks to be called when parsing global glTF extension data.
+ * Container for callbacks to be called when parsing root glTF extension data.
  */
-export class GlobalExtensionCallbackRegistry {
-  private _extensions: GlobalExtensionCallbacksByName = {};
+export class RootExtensionCallbackRegistry {
+  private _extensions: RootExtensionCallbacksByName = {};
 
   public constructor() {
     this.destroy = this.destroy.bind(this);
@@ -201,7 +201,7 @@ export class GlobalExtensionCallbackRegistry {
    * @param callback - Function used transform objects that have an extension matching name.
    * @returns Returns true if the callback was successfully added to the registry, false otherwise.
    */
-  public add(name: string, callback: GlobalExtensionParsersByCallOrder) {
+  public add(name: string, callback: RootExtensionParsersByCallOrder) {
     if (this._extensions[name]) {
       return false;
     }
@@ -249,7 +249,7 @@ export class GlobalExtensionCallbackRegistry {
 
   /**
    * Trigger all extension callbacks matching the given extension data.
-   * @param extensionDataByName - Object containing global extension data, grouped by extension name.
+   * @param extensionDataByName - Object containing root extension data, grouped by extension name.
    */
   public preParseAll(extensionDataByName: ExtensionDataByName) {
     const extensionCallbacks = this._extensions;
@@ -266,7 +266,7 @@ export class GlobalExtensionCallbackRegistry {
  * Container of extension parsers to be used when parsing glTF files.
  */
 export class ExtensionRegistry {
-  private _global = new GlobalExtensionCallbackRegistry();
+  private _root = new RootExtensionCallbackRegistry();
   private _node = new ExtensionParserCallbackRegistry<pc.Entity>();
   private _scene = new ExtensionParserCallbackRegistry<pc.Entity>();
   private _texture = new ExtensionParserCallbackRegistry<pc.Texture>();
@@ -279,10 +279,10 @@ export class ExtensionRegistry {
   }
 
   /**
-   * Registry for handling global extension callbacks.
+   * Registry for handling root extension callbacks.
    */
-  public get global() {
-    return this._global;
+  public get root() {
+    return this._root;
   }
 
   /**
@@ -326,10 +326,10 @@ export class ExtensionRegistry {
    */
   public get containerAssetOptions(): ContainerAssetOptions {
     return {
-      global: {
+      root: {
         preprocess: (gltfData: GltfData) => {
           if (gltfData.extensions) {
-            this.global.preParseAll(gltfData.extensions);
+            this.root.preParseAll(gltfData.extensions);
           }
         },
       },
@@ -374,7 +374,7 @@ export class ExtensionRegistry {
     this._texture.destroy();
     this._material.destroy();
     this._animation.destroy();
-    this._global.destroy();
+    this._root.destroy();
   }
 
   /**
@@ -386,6 +386,6 @@ export class ExtensionRegistry {
     this._texture.removeAll();
     this._material.removeAll();
     this._animation.removeAll();
-    this._global.removeAll();
+    this._root.removeAll();
   }
 }
