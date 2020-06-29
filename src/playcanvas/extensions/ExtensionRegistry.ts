@@ -13,7 +13,11 @@ type ContainerAssetOptions = any;
 /**
  * Function used by ExtensionRegistry to apply extension data to parsed glTF objects.
  */
-export type ExtensionPostParseCallback<TObject> = (
+export type ExtensionPostParseCallback<
+  TObject,
+  TExtData = ExtensionData,
+  TRootExtData = ExtensionData
+> = (
   /**
    * The object to be modified.
    */
@@ -22,19 +26,23 @@ export type ExtensionPostParseCallback<TObject> = (
   /**
    * Extension data that should be applied to "object".
    */
-  extensionData: ExtensionData,
+  extensionData: TExtData,
 
   /**
    * Extension data from the glTF root, if there is any.
    */
-  rootExtensionData?: ExtensionData,
+  rootExtensionData?: TRootExtData,
 ) => void;
 
 /**
  * ExtensionParserCallbacks grouped by call order.
  */
-export type ExtensionParsersByCallOrder<TObject> = {
-  postParse?: ExtensionPostParseCallback<TObject>;
+export type ExtensionParsersByCallOrder<
+  TObject,
+  TExtData = ExtensionData,
+  TRootExtData = ExtensionData
+> = {
+  postParse?: ExtensionPostParseCallback<TObject, TExtData, TRootExtData>;
 };
 
 /**
@@ -66,7 +74,10 @@ export class ExtensionParserCallbackRegistry<TObject> {
    * @param parsers - Functions used transform objects that have an extension matching name.
    * @returns Returns true if the parser was successfully added to the registry, false otherwise.
    */
-  public add(name: string, parsers: ExtensionParsersByCallOrder<TObject>) {
+  public add<TExtData, TRootExtData>(
+    name: string,
+    parsers: ExtensionParsersByCallOrder<TObject, TExtData, TRootExtData>,
+  ) {
     if (this._extensions[name]) {
       return false;
     }
