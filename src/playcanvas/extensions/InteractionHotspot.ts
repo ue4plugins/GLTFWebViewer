@@ -31,7 +31,6 @@ export type InteractionHotspot = {
 };
 
 export class InteractionHotspotExtensionParser implements ExtensionParser {
-  private _rootExtensionsData?: RootExtensionData;
   private _hotspots: NodeInteractionDataMap[] = [];
 
   public get name() {
@@ -74,16 +73,12 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
   }
 
   public register(registry: ExtensionRegistry) {
-    registry.root.add(this.name, {
-      preParse: this._rootPreParse.bind(this),
-    });
     registry.node.add(this.name, {
       postParse: this._nodePostParse.bind(this),
     });
   }
 
   public unregister(registry: ExtensionRegistry) {
-    registry.root.remove(this.name);
     registry.node.remove(this.name);
   }
 
@@ -91,16 +86,14 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
     // Ignore
   }
 
-  private _rootPreParse(extensionData: RootExtensionData) {
-    this._rootExtensionsData = extensionData;
-  }
+  private _nodePostParse(
+    node: pc.Entity,
+    extensionData: NodeExtensionData,
+    rootExtensionData?: RootExtensionData,
+  ) {
+    debug("Parse hotspot", node, extensionData, rootExtensionData);
 
-  private _nodePostParse(node: pc.Entity, extensionData: NodeExtensionData) {
-    debug("Parse hotspot", node, extensionData);
-
-    const hotspot = this._rootExtensionsData?.interactions[
-      extensionData.interaction
-    ];
+    const hotspot = rootExtensionData?.interactions[extensionData.interaction];
     if (!hotspot) {
       return;
     }
