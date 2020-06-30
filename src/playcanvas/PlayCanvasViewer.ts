@@ -3,7 +3,7 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { GltfScene } from "../types";
-import { HotspotRenderer } from "../hotspot";
+import { HotspotRenderer } from "../utilities";
 import {
   OrbitCamera,
   orbitCameraScriptName,
