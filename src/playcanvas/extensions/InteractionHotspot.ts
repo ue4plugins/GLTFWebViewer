@@ -8,6 +8,7 @@ const debug = Debug("InteractionHotspot");
 
 type InteractionData = {
   image: number;
+  toggledImage?: number;
   animation: number;
 };
 
@@ -31,6 +32,7 @@ type NodeInteractionDataMap = {
 export type InteractionHotspot = {
   node: pc.Entity;
   imageSource: string;
+  toggledImageSource?: string;
   animation?: Animation;
 };
 
@@ -65,10 +67,17 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
           scene.findOne(node => node === hotspot.node),
       )
       .map(hotspot => {
-        const image = textures[hotspot.data.image].resource as pc.Texture;
+        const image: pc.Texture = textures[hotspot.data.image].resource;
+        const toggledImage: pc.Texture | undefined = hotspot.data.toggledImage
+          ? textures[hotspot.data.toggledImage]?.resource
+          : undefined;
+
         return {
           node: hotspot.node,
           imageSource: image.getSource().src,
+          toggledImageSource: toggledImage
+            ? toggledImage.getSource().src
+            : undefined,
           animation: animations.find(
             ({ index }) => index === hotspot.data.animation,
           ),

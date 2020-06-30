@@ -192,6 +192,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
       renderer.render({
         imageSource: hotspot.imageSource,
+        toggledImageSource: hotspot.toggledImageSource,
         onToggle: active => {
           if (!animation || !animation.playable) {
             return;

@@ -34,33 +34,43 @@ const useStyles = makeStyles(theme => ({
     borderColor: theme.palette.common.white,
     borderRadius: "50%",
     backgroundSize: "cover",
+    transition: theme.transitions.create(["background"], {
+      duration: theme.transitions.duration.standard,
+    }),
   },
 }));
 
 export type HotspotProps = {
   imageSource: string;
+  toggledImageSource?: string;
   onToggle: (active: boolean) => void;
 };
 
-export const Hotspot: React.FC<HotspotProps> = ({ imageSource, onToggle }) => {
+export const Hotspot: React.FC<HotspotProps> = ({
+  imageSource,
+  toggledImageSource,
+  onToggle,
+}) => {
   const classes = useStyles();
-  const [active, setActive] = useState(false);
+  const [toggled, setToggled] = useState(false);
+  const image =
+    toggled && toggledImageSource ? toggledImageSource : imageSource;
 
   return (
     <ButtonBase
       className={clsx(classes.root, {
-        [classes.active]: active,
+        [classes.active]: toggled,
       })}
       aria-label="hotspot"
       disableRipple
       onClick={() => {
-        setActive(!active);
-        onToggle(!active);
+        setToggled(!toggled);
+        onToggle(!toggled);
       }}
     >
       <div
         className={classes.image}
-        style={{ backgroundImage: `url(${imageSource})` }}
+        style={{ backgroundImage: `url(${image})` }}
       />
     </ButtonBase>
   );
