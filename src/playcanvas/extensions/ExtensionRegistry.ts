@@ -202,12 +202,19 @@ export class ExtensionRegistry {
       registry: ExtensionParserCallbackRegistry<T>,
     ) {
       return (objectData: ObjectData, object: T) => {
+        if (!objectData.extensions) {
+          return;
+        }
+
         if (!gltfData) {
-          throw new Error("Gltf data was not loaded before postParse");
+          console.error(
+            "Gltf data was not loaded before postParse, skipping postParse extensions for",
+            objectData,
+          );
+          return;
         }
-        if (objectData.extensions) {
-          registry.postParse(object, objectData.extensions, gltfData);
-        }
+
+        registry.postParse(object, objectData.extensions, gltfData);
       };
     }
 
