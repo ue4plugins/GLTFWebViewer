@@ -5,21 +5,26 @@ import { ExtensionRegistry } from "./ExtensionRegistry";
 const debug = Debug("HdriBackdrop");
 
 type BackdropData = {
-  type: "dome";
-  cubemap: number;
+  mesh: number;
+  cubemap: number[];
   intensity: number;
   size: number;
   projectionCenter: [number, number, number];
-  lightingDistance: number;
-  cameraProjection: boolean;
+  lightingDistanceFactor: number;
+  useCameraProjection: boolean;
 };
 
 type NodeExtensionData = {
   backdrop: number;
 };
 
-type RootExtensionData = {
-  backdrops: BackdropData[];
+type RootData = {
+  textures?: { source: number }[];
+  extensions?: {
+    EPIC_hdri_backdrops?: {
+      backdrops: BackdropData[];
+    };
+  };
 };
 
 type NodeBackdropDataMap = {
@@ -56,11 +61,14 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
   private _nodePostParse(
     node: pc.Entity,
     extensionData: NodeExtensionData,
-    rootExtensionData?: RootExtensionData,
+    rootData: RootData,
   ) {
-    debug("Parse backdrop", node, extensionData, rootExtensionData);
+    debug("Parse backdrop", node, extensionData, rootData);
 
-    const backdrop = rootExtensionData?.backdrops?.[extensionData.backdrop];
+    const backdrop =
+      rootData.extensions?.EPIC_hdri_backdrops?.backdrops?.[
+        extensionData.backdrop
+      ];
     if (!backdrop) {
       return;
     }

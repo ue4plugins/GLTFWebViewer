@@ -1,14 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/* eslint-disable @typescript-eslint/no-explicit-any */
 type ExtensionData = any;
 type ExtensionDataByName = { [extension: string]: ExtensionData };
-type ObjectData = {
-  extensions?: ExtensionDataByName;
-};
-type GltfData = {
-  extensions?: ExtensionDataByName;
-};
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ObjectData = { extensions?: ExtensionDataByName };
+type GltfData = any;
 type ContainerAssetOptions = any;
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 /**
  * Function used by ExtensionRegistry to apply extension data to parsed glTF objects.
@@ -16,22 +12,20 @@ type ContainerAssetOptions = any;
 export type ExtensionPostParseCallback<
   TObject,
   TExtData = ExtensionData,
-  TRootExtData = ExtensionData
+  TGltfData = GltfData
 > = (
   /**
    * The object to be modified.
    */
   object: TObject,
-
   /**
    * Extension data that should be applied to "object".
    */
   extensionData: TExtData,
-
   /**
-   * Extension data from the glTF root, if there is any.
+   * The glTF root.
    */
-  rootExtensionData?: TRootExtData,
+  gltfData: TGltfData,
 ) => void;
 
 /**
@@ -40,9 +34,9 @@ export type ExtensionPostParseCallback<
 export type ExtensionParsersByCallOrder<
   TObject,
   TExtData = ExtensionData,
-  TRootExtData = ExtensionData
+  TGltfData = GltfData
 > = {
-  postParse?: ExtensionPostParseCallback<TObject, TExtData, TRootExtData>;
+  postParse?: ExtensionPostParseCallback<TObject, TExtData, TGltfData>;
 };
 
 /**
@@ -70,8 +64,8 @@ export class ExtensionParserCallbackRegistry<TObject> {
 
   /**
    * Add a new extension parser to the registry.
-   * @param name - The name of the extension.
-   * @param parsers - Functions used transform objects that have an extension matching name.
+   * @param name The name of the extension.
+   * @param parsers Functions used transform objects that have an extension matching name.
    * @returns Returns true if the parser was successfully added to the registry, false otherwise.
    */
   public add<TExtData, TRootExtData>(
@@ -87,7 +81,7 @@ export class ExtensionParserCallbackRegistry<TObject> {
 
   /**
    * Remove an extension parser from the registry.
-   * @param name - The name of the extension.
+   * @param name The name of the extension.
    */
   public remove(name: string) {
     if (!this._extensions[name]) {
@@ -105,7 +99,7 @@ export class ExtensionParserCallbackRegistry<TObject> {
 
   /**
    * Find an extension parser in the registry.
-   * @param name - The name of the extension.
+   * @param name The name of the extension.
    * @returns The found extension parser or undefined.
    */
   public find(name: string) {
@@ -125,13 +119,14 @@ export class ExtensionParserCallbackRegistry<TObject> {
 
   /**
    * Apply all extensions on an object.
-   * @param object - The object to be modified.
-   * @param extensionDataByName - Object containing extension data that should be applied to "object", grouped by extension name.
+   * @param object The object to be modified.
+   * @param extensionDataByName Object containing extension data that should be applied to "object", grouped by extension name.
+   * @param gltfData The glTF root.
    */
   public postParse(
     object: TObject,
     extensionDataByName: ExtensionDataByName = {},
-    rootExtensionDataByName: ExtensionDataByName = {},
+    gltfData: GltfData = {},
   ) {
     const extensionParsers = this._extensions;
     Object.keys(extensionDataByName).forEach(extensionId => {
@@ -140,7 +135,7 @@ export class ExtensionParserCallbackRegistry<TObject> {
         extensionParser.postParse(
           object,
           extensionDataByName[extensionId],
-          rootExtensionDataByName[extensionId],
+          gltfData,
         );
       }
     });
@@ -211,11 +206,7 @@ export class ExtensionRegistry {
           throw new Error("Gltf data was not loaded before postParse");
         }
         if (objectData.extensions) {
-          registry.postParse(
-            object,
-            objectData.extensions,
-            gltfData.extensions,
-          );
+          registry.postParse(object, objectData.extensions, gltfData);
         }
       };
     }

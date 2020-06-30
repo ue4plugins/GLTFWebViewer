@@ -15,8 +15,12 @@ type NodeExtensionData = {
   interaction: number;
 };
 
-type RootExtensionData = {
-  interactions: InteractionData[];
+type RootData = {
+  extensions?: {
+    EPIC_interaction_hotspots?: {
+      interactions: InteractionData[];
+    };
+  };
 };
 
 type NodeInteractionDataMap = {
@@ -89,11 +93,14 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
   private _nodePostParse(
     node: pc.Entity,
     extensionData: NodeExtensionData,
-    rootExtensionData?: RootExtensionData,
+    rootData: RootData,
   ) {
-    debug("Parse hotspot", node, extensionData, rootExtensionData);
+    debug("Parse hotspot", node, extensionData, rootData);
 
-    const hotspot = rootExtensionData?.interactions[extensionData.interaction];
+    const hotspot =
+      rootData.extensions?.EPIC_interaction_hotspots?.interactions[
+        extensionData.interaction
+      ];
     if (!hotspot) {
       return;
     }

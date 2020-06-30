@@ -9,8 +9,12 @@ type SceneExtensionData = {
   variantSet: number;
 };
 
-type RootExtensionData = {
-  variantSets: VariantSet[];
+type RootData = {
+  extensions?: {
+    EPIC_variant_sets?: {
+      variantSets: VariantSet[];
+    };
+  };
 };
 
 type SceneVariantSetDataMap = {
@@ -48,12 +52,14 @@ export class VariantSetExtensionParser implements ExtensionParser {
   private _scenePostParse(
     scene: pc.Entity,
     extensionData: SceneExtensionData,
-    rootExtensionData?: RootExtensionData,
+    rootData: RootData,
   ) {
     debug("Parse variant set", scene, extensionData);
 
     const variantSet =
-      rootExtensionData?.variantSets?.[extensionData.variantSet];
+      rootData.extensions?.EPIC_variant_sets?.variantSets?.[
+        extensionData.variantSet
+      ];
     if (!variantSet) {
       return;
     }
