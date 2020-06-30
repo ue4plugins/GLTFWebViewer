@@ -222,7 +222,7 @@ export class ExtensionRegistry {
       global: { preprocess: (gltf: GltfData) => (gltfData = gltf) },
       node: { postprocess: createPostProcessHandler(this.node) },
       scene: { postprocess: createPostProcessHandler(this.scene) },
-      texture: {}, // TODO: can we use postprocess for textures? we possibly need to return a new texture
+      texture: {}, // TODO: implement when PC has added support for texture extensions
       material: { postprocess: createPostProcessHandler(this.material) },
       animation: { postprocess: createPostProcessHandler(this.animation) },
     };
