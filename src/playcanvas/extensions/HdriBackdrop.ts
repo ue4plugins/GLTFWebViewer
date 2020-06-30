@@ -32,6 +32,10 @@ type NodeBackdropDataMap = {
   data: BackdropData;
 };
 
+function hasNoUndefinedValues<T>(items: (T | undefined)[]): items is T[] {
+  return !items.some(item => item === undefined);
+}
+
 export class HdriBackdropExtensionParser implements ExtensionParser {
   private _backdrops: NodeBackdropDataMap[] = [];
 
@@ -53,8 +57,10 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
     debug("Post parse backdrop", container);
 
     this._backdrops.forEach(backdrop => {
-      const texture = container.textures[backdrop.data.cubemap];
-      debug("Found texture ", texture);
+      const cubemap = backdrop.data.cubemap.map(
+        index => container.textures[index],
+      );
+      debug("Found cubemap ", cubemap);
     });
   }
 
@@ -75,9 +81,22 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
 
     debug("Found backdrop", backdrop);
 
+    // Use image source index since ContainerResource.textures is indexed by images
+    const cubemap = backdrop.cubemap.map(
+      index => rootData.textures?.[index]?.source,
+    );
+    if (!hasNoUndefinedValues(cubemap)) {
+      return;
+    }
+
+    debug("Found cubemap textures", cubemap);
+
     this._backdrops.push({
       node,
-      data: backdrop,
+      data: {
+        ...backdrop,
+        cubemap,
+      },
     });
   }
 }
