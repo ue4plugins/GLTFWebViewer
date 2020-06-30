@@ -16,27 +16,12 @@ export class Configurator<TMeta, TValue> {
     return this._configuration;
   }
 
-  public get configurationData(): TValue[] {
-    return this._configuration.map(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      (valueId, fieldId) => this.manager.getValue(fieldId, valueId)!,
-    );
-  }
-
-  public getField(fieldId: number): Field<TMeta, TValue> | undefined {
-    return this.manager.getField(fieldId);
-  }
-
   public getPossibleValues(fieldId: number): number[] {
     return this.manager.getValues(fieldId)?.map((_, i) => i) || [];
   }
 
   public getValue(fieldId: number): number | undefined {
     return this.configuration[fieldId];
-  }
-
-  public getValueData(fieldId: number): TValue | undefined {
-    return this.configurationData[fieldId];
   }
 
   public setValue(fieldId: number, valueId: number) {
@@ -146,9 +131,18 @@ export const field = fieldManager.getField(0);
 export const value = fieldManager.getValue(0, 1);
 export const values = fieldManager.getValues(0);
 
-export const config = new Configurator(fieldManager);
+export const configurator = new Configurator(fieldManager);
 
-export const configField = config.getField(0);
-export const configPosValues = config.getPossibleValues(0);
-export const configValue = config.getValue(0);
-export const configValueData = config.getValueData(0);
+export const config = configurator.configuration;
+export const configPosValues = configurator.getPossibleValues(0);
+export const configValue = configurator.getValue(0);
+
+export const configData = config.map(
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  (valueId, fieldId) => configurator.manager.getValue(fieldId, valueId)!,
+);
+export const configPosValuesData = configPosValues.map(valueId =>
+  configurator.manager.getValue(0, valueId),
+);
+export const configValueData = configurator.manager.getValue(0, configValue!);
+export const configField = configurator.manager.getField(0);
