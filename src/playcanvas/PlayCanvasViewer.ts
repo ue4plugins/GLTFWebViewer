@@ -11,6 +11,7 @@ import {
   hotspotTrackerScriptName,
   HotspotTrackerHandle,
   HotspotTrackerEventType,
+  HdriBackdrop,
 } from "./scripts";
 import {
   PlayCanvasGltfLoader,
@@ -53,6 +54,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     pc.registerScript(OrbitCamera, orbitCameraScriptName);
     pc.registerScript(HotspotTracker, hotspotTrackerScriptName);
+    pc.registerScript(HdriBackdrop, HdriBackdrop.scriptName ?? undefined);
 
     this._camera = this._createCamera(this._app);
     this._loader = new PlayCanvasGltfLoader(this._app);
@@ -151,7 +153,7 @@ export class PlayCanvasViewer implements TestableViewer {
     camera.script.create(orbitCameraScriptName);
     camera.script[orbitCameraScriptName].inertiaFactor = 0.07;
     camera.script[orbitCameraScriptName].nearClipFactor = 0.002;
-    camera.script[orbitCameraScriptName].farClipFactor = 10;
+    camera.script[orbitCameraScriptName].farClipFactor = 100;
 
     app.root.addChild(camera);
 
