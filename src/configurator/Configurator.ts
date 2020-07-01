@@ -1,11 +1,11 @@
 import { FieldManager } from "./FieldManager";
 import { Field } from "./Field";
 
-export type OnFieldChangeCallback = (valueId: number) => void;
+export type OnValueChangeCallback = (valueId: number) => void;
 
 export class Configurator<TMeta, TValue> {
   private _configuration: number[];
-  private _callbacks: OnFieldChangeCallback[][];
+  private _callbacks: OnValueChangeCallback[][];
 
   public constructor(public readonly manager: FieldManager<TMeta, TValue>) {
     this._configuration = manager.fields.map(field => field.defaultValue);
@@ -16,7 +16,7 @@ export class Configurator<TMeta, TValue> {
     return this._configuration;
   }
 
-  public getPossibleValues(fieldId: number): number[] {
+  public getDomain(fieldId: number): number[] {
     return this.manager.getValues(fieldId)?.map((_, i) => i) || [];
   }
 
@@ -36,10 +36,10 @@ export class Configurator<TMeta, TValue> {
 
     this._configuration[fieldId] = valueId;
 
-    this._onVariantChange(fieldId, valueId);
+    this._onValueChange(fieldId, valueId);
   }
 
-  public onValueChange(field: number, callback: OnFieldChangeCallback) {
+  public onValueChange(field: number, callback: OnValueChangeCallback) {
     const callbacks = this._callbacks[field];
     if (callbacks === undefined) {
       throw new Error(`Invalid variant set ${field}`);
@@ -48,7 +48,7 @@ export class Configurator<TMeta, TValue> {
     callbacks.push(callback);
   }
 
-  public offVariantChange(variantSet: number, callback: OnFieldChangeCallback) {
+  public offVariantChange(variantSet: number, callback: OnValueChangeCallback) {
     const callbacks = this._callbacks[variantSet];
     if (callbacks === undefined) {
       throw new Error(`Invalid variant set ${variantSet}`);
@@ -62,7 +62,7 @@ export class Configurator<TMeta, TValue> {
     callbacks.splice(index, 1);
   }
 
-  private _onVariantChange(fieldId: number, valueId: number) {
+  private _onValueChange(fieldId: number, valueId: number) {
     const callbacks = this._callbacks[fieldId];
     callbacks.forEach(callback => callback(valueId));
   }
@@ -134,11 +134,10 @@ export const values = fieldManager.getValues(0);
 export const configurator = new Configurator(fieldManager);
 
 export const config = configurator.configuration;
-export const configPosValues = configurator.getPossibleValues(0);
+export const configPosValues = configurator.getDomain(0);
 export const configValue = configurator.getValue(0);
 
 export const configData = config.map(
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   (valueId, fieldId) => configurator.manager.getValue(fieldId, valueId)!,
 );
 export const configPosValuesData = configPosValues.map(valueId =>
