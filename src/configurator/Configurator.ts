@@ -1,14 +1,18 @@
 import { FieldManager } from "./FieldManager";
 
 export type OnValueChangeCallback = (valueId: number) => void;
+export type OnConfigurationChangeCallback = (
+  configuration: ReadonlyArray<number>,
+) => void;
 
 export class Configurator<TMeta, TValue> {
   private _configuration: number[];
-  private _callbacks: OnValueChangeCallback[][];
+  private _valueCallbacks: OnValueChangeCallback[][];
+  private _configurationCallbacks: OnConfigurationChangeCallback[] = [];
 
   public constructor(public readonly manager: FieldManager<TMeta, TValue>) {
     this._configuration = manager.fields.map(field => field.defaultValue);
-    this._callbacks = manager.fields.map(_ => []);
+    this._valueCallbacks = manager.fields.map(_ => []);
   }
 
   public get configuration(): ReadonlyArray<number> {
@@ -39,7 +43,7 @@ export class Configurator<TMeta, TValue> {
   }
 
   public onValueChange(field: number, callback: OnValueChangeCallback) {
-    const callbacks = this._callbacks[field];
+    const callbacks = this._valueCallbacks[field];
     if (callbacks === undefined) {
       throw new Error(`Invalid variant set ${field}`);
     }
@@ -47,8 +51,8 @@ export class Configurator<TMeta, TValue> {
     callbacks.push(callback);
   }
 
-  public offVariantChange(variantSet: number, callback: OnValueChangeCallback) {
-    const callbacks = this._callbacks[variantSet];
+  public offValueChange(variantSet: number, callback: OnValueChangeCallback) {
+    const callbacks = this._valueCallbacks[variantSet];
     if (callbacks === undefined) {
       throw new Error(`Invalid variant set ${variantSet}`);
     }
@@ -61,8 +65,28 @@ export class Configurator<TMeta, TValue> {
     callbacks.splice(index, 1);
   }
 
+  public onConfigurationChange(callback: OnConfigurationChangeCallback) {
+    this._configurationCallbacks.push(callback);
+  }
+
+  public offConfigurationChange(callback: OnConfigurationChangeCallback) {
+    const callbacks = this._configurationCallbacks;
+    const index = callbacks.indexOf(callback);
+    if (index === -1) {
+      return;
+    }
+
+    callbacks.splice(index, 1);
+  }
+
   private _onValueChange(fieldId: number, valueId: number) {
-    const callbacks = this._callbacks[fieldId];
+    const callbacks = this._valueCallbacks[fieldId];
     callbacks.forEach(callback => callback(valueId));
+    this._onConfigurationChange();
+  }
+
+  private _onConfigurationChange() {
+    const callbacks = this._configurationCallbacks;
+    callbacks.forEach(callback => callback(this.configuration));
   }
 }
