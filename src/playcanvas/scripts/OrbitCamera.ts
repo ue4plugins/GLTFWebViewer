@@ -317,6 +317,10 @@ export class OrbitCamera extends pc.ScriptType {
     const modelsAabb = new pc.BoundingBox();
     let modelsAdded = 0;
 
+    if (entity.tags.has("ignoreBoundingBox")) {
+      return modelsAabb;
+    }
+
     if (entity.model) {
       const mi = entity.model.meshInstances;
       for (let i = 0; i < mi.length; i += 1) {
