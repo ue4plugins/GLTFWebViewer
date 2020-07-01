@@ -10,6 +10,27 @@ declare namespace pc {
     name: string;
     url: string;
   };
+
+  interface Texture {
+    // NOTE: Actually "string", but set to "any" since all pc.TEXTURETYPE_XXX consts are incorrectly typed as number.
+    type: any;
+    _levels: any[];
+    _prefilteredMips?: boolean;
+  }
+
+  interface GraphicsDevice {
+    gl: WebGLRenderingContext;
+    setFramebuffer(frameBuffer: number): void;
+  }
+
+  interface Vec4 {
+    data: number[];
+  }
+
+  interface RenderTarget {
+    _colorBuffer: pc.Texture;
+    _glFrameBuffer: number;
+  }
 }
 
 interface TestableViewer {
