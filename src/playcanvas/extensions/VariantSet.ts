@@ -1,28 +1,49 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
+import { hasNoUndefinedValues } from "../../utilities/typeGuards";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
 const debug = Debug("VariantSet");
 
 type SceneExtensionData = {
-  variantSet: number;
+  levelVariantSets: number[];
 };
 
 type RootData = {
   extensions?: {
     EPIC_variant_sets?: {
-      variantSets: VariantSet[];
+      levelVariantSets: LevelVariantSet[];
     };
   };
 };
 
 type SceneVariantSetDataMap = {
   scene: pc.Entity;
-  data: VariantSet;
+  data: LevelVariantSet[];
 };
 
-export type VariantSet = {};
+type LevelVariantSet = {
+  name: string;
+  variantSets: VariantSet[];
+};
+
+export type VariantSet = {
+  name: string;
+  default: number;
+  variants: Variant[];
+};
+
+export type Variant = {
+  name: string;
+  thumbnailSource?: string;
+  nodes: {
+    node: pc.Entity;
+    properties: {
+      visible?: boolean;
+    };
+  }[];
+};
 
 export class VariantSetExtensionParser implements ExtensionParser {
   private _variantSets: SceneVariantSetDataMap[] = [];
@@ -31,8 +52,11 @@ export class VariantSetExtensionParser implements ExtensionParser {
     return "EPIC_variant_sets";
   }
 
-  public getVariantSetForScene(scene: pc.Entity): VariantSet | undefined {
-    return this._variantSets.find(set => set.scene === scene)?.data;
+  public getVariantSetsForScene(scene: pc.Entity): VariantSet[] {
+    return this._variantSets
+      .filter(set => set.scene === scene)
+      .reduce<LevelVariantSet[]>((sets, set) => [...sets, ...set.data], [])
+      .reduce<VariantSet[]>((sets, set) => [...sets, ...set.variantSets], []);
   }
 
   public register(registry: ExtensionRegistry) {
@@ -54,21 +78,21 @@ export class VariantSetExtensionParser implements ExtensionParser {
     extensionData: SceneExtensionData,
     rootData: RootData,
   ) {
-    debug("Parse variant set", scene, extensionData);
+    debug("Parse variant sets", scene, extensionData);
 
-    const variantSet =
-      rootData.extensions?.EPIC_variant_sets?.variantSets?.[
-        extensionData.variantSet
-      ];
-    if (!variantSet) {
+    const levelVariantSets = extensionData.levelVariantSets.map(
+      set => rootData.extensions?.EPIC_variant_sets?.levelVariantSets[set],
+    );
+
+    if (!hasNoUndefinedValues(levelVariantSets)) {
       return;
     }
 
-    debug("Found variant set", variantSet);
+    debug("Found variant sets", levelVariantSets);
 
     this._variantSets.push({
       scene,
-      data: variantSet,
+      data: levelVariantSets,
     });
   }
 }

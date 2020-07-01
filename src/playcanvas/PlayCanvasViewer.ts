@@ -169,7 +169,7 @@ export class PlayCanvasViewer implements TestableViewer {
     this._activeGltfScene = gltfScene;
     this._app.root.addChild(gltfScene.root);
 
-    if (gltfScene.hotspots) {
+    if (gltfScene.hotspots.length > 0) {
       this._initHotspots(gltfScene.hotspots);
     }
 
