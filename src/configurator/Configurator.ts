@@ -1,5 +1,4 @@
 import { FieldManager } from "./FieldManager";
-import { Field } from "./Field";
 
 export type OnValueChangeCallback = (valueId: number) => void;
 
@@ -67,81 +66,3 @@ export class Configurator<TMeta, TValue> {
     callbacks.forEach(callback => callback(valueId));
   }
 }
-
-// TODO: remove
-export type VariantSet = {
-  name: string;
-  default: number;
-  variants: Variant[];
-};
-
-export type Variant = {
-  name: string;
-  thumbnailSource?: string;
-  nodes: {
-    node: pc.Entity;
-    properties: {
-      visible?: boolean;
-    };
-  }[];
-};
-
-export type VariantSetField = Field<{ name: string }, Variant>;
-
-export const variantSets: VariantSet[] = [
-  {
-    name: "field 1",
-    default: 0,
-    variants: [
-      {
-        name: "value 1",
-        nodes: [
-          {
-            node: new pc.Entity(),
-            properties: {
-              visible: true,
-            },
-          },
-        ],
-      },
-      {
-        name: "value 2",
-        nodes: [
-          {
-            node: new pc.Entity(),
-            properties: {
-              visible: false,
-            },
-          },
-        ],
-      },
-    ],
-  },
-];
-
-export const fields: VariantSetField[] = variantSets.map(vs => ({
-  name: vs.name,
-  values: vs.variants,
-  defaultValue: vs.default,
-}));
-
-export const fieldManager = new FieldManager(fields);
-
-export const field = fieldManager.getField(0);
-export const value = fieldManager.getValue(0, 1);
-export const values = fieldManager.getValues(0);
-
-export const configurator = new Configurator(fieldManager);
-
-export const config = configurator.configuration;
-export const configPosValues = configurator.getDomain(0);
-export const configValue = configurator.getValue(0);
-
-export const configData = config.map(
-  (valueId, fieldId) => configurator.manager.getValue(fieldId, valueId)!,
-);
-export const configPosValuesData = configPosValues.map(valueId =>
-  configurator.manager.getValue(0, valueId),
-);
-export const configValueData = configurator.manager.getValue(0, configValue!);
-export const configField = configurator.manager.getField(0);
