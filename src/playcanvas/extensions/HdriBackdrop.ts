@@ -1,4 +1,5 @@
 import Debug from "debug";
+import { hasNoUndefinedValues } from "../../utilities/typeGuards";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
@@ -31,10 +32,6 @@ type NodeBackdropDataMap = {
   node: pc.Entity;
   data: BackdropData;
 };
-
-function hasNoUndefinedValues<T>(items: (T | undefined)[]): items is T[] {
-  return !items.some(item => item === undefined);
-}
 
 export class HdriBackdropExtensionParser implements ExtensionParser {
   private _backdrops: NodeBackdropDataMap[] = [];
