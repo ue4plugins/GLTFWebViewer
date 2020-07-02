@@ -18,7 +18,7 @@ import {
   GltfData,
   GltfSceneData,
 } from "./PlayCanvasGltfLoader";
-import { InteractionHotspot, VariantSet } from "./extensions";
+import { InteractionHotspot, VariantSet, VariantNode } from "./extensions";
 import { AnimationState } from "./Animation";
 
 const debug = Debug("PlayCanvasViewer");
@@ -276,14 +276,25 @@ export class PlayCanvasViewer implements TestableViewer {
       return;
     }
 
-    const nodeStates = configuration
-      .map(
-        (valueId, fieldId) =>
-          fieldManager.getValue(fieldId, valueId)?.nodes || [],
-      )
-      .reduce((allNodes, nodes) => [...allNodes, ...nodes], []);
+    this._applyVariantNodeTransforms(
+      configuration
+        .map(
+          (valueId, fieldId) =>
+            fieldManager.getValue(fieldId, valueId)?.nodes || [],
+        )
+        .reduce((allNodes, nodes) => [...allNodes, ...nodes], []),
+    );
+  }
 
-    debug("New configuration node states", nodeStates);
+  private _applyVariantNodeTransforms(nodeTransforms: VariantNode[]) {
+    debug("Apply node transforms", nodeTransforms);
+
+    nodeTransforms.forEach(({ node, properties }) => {
+      if (properties.visible !== undefined) {
+        debug("Set node visibility", node.name, properties.visible);
+        node.enabled = properties.visible;
+      }
+    });
   }
 
   public destroy() {
