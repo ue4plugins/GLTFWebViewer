@@ -188,9 +188,9 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   private _initHotspots(hotspots: InteractionHotspot[]) {
-    debug("Init hotspots", hotspots);
-
     this._destroyHotspots();
+
+    debug("Init hotspots", hotspots);
 
     const hotspotRootElem = this.canvas.parentElement;
     if (!hotspotRootElem) {
@@ -227,20 +227,22 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   private _destroyHotspots() {
+    if (!this._hotspotTrackerHandles) {
+      return;
+    }
+
     debug("Destroy hotspots", this._hotspotTrackerHandles);
 
-    if (this._hotspotTrackerHandles) {
-      this._hotspotTrackerHandles.forEach(handle =>
-        this._camera.script[hotspotTrackerScriptName].untrack(handle),
-      );
-      this._hotspotTrackerHandles = undefined;
-    }
+    this._hotspotTrackerHandles.forEach(handle =>
+      this._camera.script[hotspotTrackerScriptName].untrack(handle),
+    );
+    this._hotspotTrackerHandles = undefined;
   }
 
   private _initConfigurator(sets: VariantSet[]) {
-    debug("Init configurator", sets);
-
     this._destroyConfigurator();
+
+    debug("Init configurator", sets);
 
     const fields: Fields = sets.map(vs => ({
       name: vs.name,
@@ -254,12 +256,14 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   private _destroyConfigurator() {
+    if (!this._configurator) {
+      return;
+    }
+
     debug("Destroy configurator", this._configurator);
 
-    if (this._configurator) {
-      this._configurator.offConfigurationChange(this._onConfigurationChange);
-      this._configurator = undefined;
-    }
+    this._configurator.offConfigurationChange(this._onConfigurationChange);
+    this._configurator = undefined;
   }
 
   private _onConfigurationChange(configuration: readonly number[]) {
@@ -312,6 +316,7 @@ export class PlayCanvasViewer implements TestableViewer {
     this.destroyScene();
 
     debug("Loading scene", url);
+
     return new Promise<void>((resolve, reject) => {
       this._app.scenes.loadScene(url, (error, scene) => {
         this._sceneLoaded = true;
@@ -388,9 +393,9 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public async loadGltf(url: string, fileName?: string) {
-    debug("Load glTF", url, fileName);
-
     this.destroyGltf();
+
+    debug("Load glTF", url, fileName);
 
     try {
       this._gltf = await this._loader.load(url, fileName);
