@@ -205,13 +205,15 @@ export class PlayCanvasViewer implements TestableViewer {
         imageSource: hotspot.imageSource,
         toggledImageSource: hotspot.toggledImageSource,
         onToggle: active => {
+          debug("Toggle hotspot", active);
+
           if (!animation || !animation.playable) {
             return;
           }
-          const newState = active
-            ? AnimationState.Once
-            : AnimationState.OnceReverse;
-          animation.play(newState);
+
+          animation.play(
+            active ? AnimationState.Once : AnimationState.OnceReverse,
+          );
         },
       });
 
