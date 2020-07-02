@@ -4,7 +4,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import { HotspotProps, Hotspot } from "../components";
 import { theme } from "../theme";
 
-export class HotspotRenderer {
+export class HotspotBuilder {
   private _element: HTMLDivElement;
 
   public constructor(private _parentElem: HTMLElement) {

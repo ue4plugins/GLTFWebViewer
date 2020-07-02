@@ -3,7 +3,7 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { GltfScene } from "../types";
-import { HotspotRenderer } from "../utilities";
+import { HotspotBuilder } from "../utilities";
 import {
   OrbitCamera,
   orbitCameraScriptName,
@@ -188,7 +188,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._hotspotTrackerHandles = hotspots.map(hotspot => {
       const { animation } = hotspot;
-      const renderer = new HotspotRenderer(hotspotRootElem);
+      const renderer = new HotspotBuilder(hotspotRootElem);
 
       renderer.render({
         imageSource: hotspot.imageSource,
