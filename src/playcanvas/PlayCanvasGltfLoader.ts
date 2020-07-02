@@ -8,6 +8,7 @@ import {
   InteractionHotspotExtensionParser,
   InteractionHotspot,
   HdriBackdropExtensionParser,
+  LightMapExtensionParser,
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
 
@@ -141,9 +142,11 @@ export class PlayCanvasGltfLoader {
 
     const variantSetParser = new VariantSetExtensionParser();
     const hotspotParser = new InteractionHotspotExtensionParser();
+    const lightMapParser = new LightMapExtensionParser();
     const extensions: ExtensionParser[] = [
       variantSetParser,
       hotspotParser,
+      lightMapParser,
       new HdriBackdropExtensionParser(),
     ];
 
