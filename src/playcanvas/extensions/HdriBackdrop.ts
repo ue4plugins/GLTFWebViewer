@@ -38,11 +38,6 @@ type NodeBackdropDataMap = {
   data: BackdropData;
 };
 
-// TODO: Improve official typings, since models are actually included in pc.ContainerResource
-type ContainerResourceWithModels = pc.ContainerResource & {
-  models: pc.Asset[];
-};
-
 function hasNoUndefinedValues<T>(items: (T | undefined)[]): items is T[] {
   return !items.some(item => item === undefined);
 }
@@ -64,7 +59,7 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
     registry.node.remove(this.name);
   }
 
-  public postParse(container: ContainerResourceWithModels) {
+  public postParse(container: pc.ContainerResource) {
     debug("Post parse backdrop", container);
 
     const app = pc.Application.getApplication();
