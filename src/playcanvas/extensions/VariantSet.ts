@@ -13,19 +13,34 @@ type SceneExtensionData = {
 type RootData = {
   extensions?: {
     EPIC_variant_sets?: {
-      levelVariantSets: LevelVariantSet[];
+      levelVariantSets: LevelVariantSetData[];
     };
   };
 };
 
 type SceneVariantSetDataMap = {
   scene: pc.Entity;
-  data: LevelVariantSet[];
+  data: LevelVariantSetData[];
 };
 
-type LevelVariantSet = {
+type LevelVariantSetData = {
   name: string;
-  variantSets: VariantSet[];
+  variantSets: VariantSetData[];
+};
+
+type VariantSetData = {
+  name: string;
+  default: number;
+  variants: {
+    name: string;
+    thumbnail?: number;
+    nodes: {
+      node: number;
+      properties: {
+        visible?: boolean;
+      };
+    }[];
+  }[];
 };
 
 export type VariantSet = {
@@ -37,12 +52,14 @@ export type VariantSet = {
 export type Variant = {
   name: string;
   thumbnailSource?: string;
-  nodes: {
-    node: pc.Entity;
-    properties: {
-      visible?: boolean;
-    };
-  }[];
+  nodes: VariantNode[];
+};
+
+export type VariantNode = {
+  node: pc.Entity;
+  properties: {
+    visible?: boolean;
+  };
 };
 
 export class VariantSetExtensionParser implements ExtensionParser {
@@ -52,11 +69,35 @@ export class VariantSetExtensionParser implements ExtensionParser {
     return "EPIC_variant_sets";
   }
 
-  public getVariantSetsForScene(scene: pc.Entity): VariantSet[] {
+  public getVariantSetsForScene(
+    scene: pc.Entity,
+    container: pc.ContainerResource,
+  ): VariantSet[] {
+    const { textures, nodes: nodeEntities } = container;
+
     return this._variantSets
       .filter(set => set.scene === scene)
-      .reduce<LevelVariantSet[]>((sets, set) => [...sets, ...set.data], [])
-      .reduce<VariantSet[]>((sets, set) => [...sets, ...set.variantSets], []);
+      .reduce<LevelVariantSetData[]>((sets, set) => [...sets, ...set.data], [])
+      .reduce<VariantSetData[]>(
+        (sets, set) => [...sets, ...set.variantSets],
+        [],
+      )
+      .map<VariantSet>(set => ({
+        ...set,
+        variants: set.variants.map<Variant>(({ name, thumbnail, nodes }) => ({
+          name,
+          thumbnailSource:
+            thumbnail !== undefined
+              ? (textures[thumbnail]?.resource as
+                  | pc.Texture
+                  | undefined)?.getSource().src
+              : undefined,
+          nodes: nodes.map<VariantNode>(({ node, properties }) => ({
+            properties,
+            node: nodeEntities[node],
+          })),
+        })),
+      }));
   }
 
   public register(registry: ExtensionRegistry) {

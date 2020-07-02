@@ -184,7 +184,10 @@ export class PlayCanvasGltfLoader {
           );
           return {
             root: sceneRoot,
-            variantSets: variantSetParser.getVariantSetsForScene(sceneRoot),
+            variantSets: variantSetParser.getVariantSetsForScene(
+              sceneRoot,
+              container,
+            ),
             hotspots: hotspotParser.getHotspotsForScene(
               sceneRoot,
               sceneAnimations,
