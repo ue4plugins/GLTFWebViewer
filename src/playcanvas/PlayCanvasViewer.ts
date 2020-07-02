@@ -63,6 +63,8 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._observedElement = this.canvas.parentElement || this.canvas;
     this._canvasResizeObserver.observe(this._observedElement);
+
+    this._onConfigurationChange = this._onConfigurationChange.bind(this);
   }
 
   public get app() {
@@ -247,18 +249,35 @@ export class PlayCanvasViewer implements TestableViewer {
     }));
 
     this._configurator = new Configurator(new FieldManager(fields));
-
-    // TODO: bind to 3D
-    this._configurator.onConfigurationChange(console.log);
+    this._configurator.onConfigurationChange(this._onConfigurationChange);
+    this._onConfigurationChange(this._configurator.configuration);
   }
 
   private _destroyConfigurator() {
     debug("Destroy configurator", this._configurator);
 
     if (this._configurator) {
-      // TODO: unbind 3D callback
-      this._configurator.offConfigurationChange(console.log);
+      this._configurator.offConfigurationChange(this._onConfigurationChange);
+      this._configurator = undefined;
     }
+  }
+
+  private _onConfigurationChange(configuration: readonly number[]) {
+    debug("Configuration changed", configuration);
+
+    const fieldManager = this._configurator?.manager;
+    if (!fieldManager) {
+      return;
+    }
+
+    const nodeStates = configuration
+      .map(
+        (valueId, fieldId) =>
+          fieldManager.getValue(fieldId, valueId)?.nodes || [],
+      )
+      .reduce((allNodes, nodes) => [...allNodes, ...nodes], []);
+
+    debug("New configuration node states", nodeStates);
   }
 
   public destroy() {
