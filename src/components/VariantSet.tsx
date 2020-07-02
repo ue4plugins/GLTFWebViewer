@@ -28,7 +28,7 @@ export const VariantSet: React.FC<VariantSetProps> = ({
   value = 0,
   domain,
   domainLabels,
-  // domainImages,
+  domainImages,
   onValueChange,
 }) => {
   const classes = useStyles();
@@ -51,7 +51,11 @@ export const VariantSet: React.FC<VariantSetProps> = ({
             <FormControlLabel
               key={domainValue}
               value={domainValue}
-              label={domainLabels[domainValueIndex]}
+              label={
+                domainLabels[domainValueIndex] +
+                " " +
+                domainImages[domainValueIndex]?.split("/").pop()
+              }
               control={<Radio />}
             />
           ))}
