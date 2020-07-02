@@ -161,6 +161,8 @@ export class PlayCanvasGltfLoader {
         throw new Error("Asset is empty");
       }
 
+      debug("Loaded glTF container", container);
+
       const defaultScene = container.scene;
       if (!defaultScene) {
         throw new Error("Asset has no default scene");
