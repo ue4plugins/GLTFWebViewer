@@ -237,42 +237,14 @@
     "EPIC_variant_sets": {
       "levelVariantSets": [
         {
-          "name": "field category",
+          "name": "Variant sets",
           "variantSets": [
             {
-              "name": "field 1",
-              "default": 1,
-              "variants": [
-                {
-                  "name": "value 1.1",
-                  "nodes": [
-                    {
-                      "node": 0,
-                      "properties": {
-                        "visible": true
-                      }
-                    }
-                  ]
-                },
-                {
-                  "name": "value 1.2",
-                  "nodes": [
-                    {
-                      "node": 0,
-                      "properties": {
-                        "visible": false
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "field 2",
+              "name": "Cube visibility",
               "default": 0,
               "variants": [
                 {
-                  "name": "value 2.1",
+                  "name": "Visible",
                   "thumbnail": 0,
                   "nodes": [
                     {
@@ -284,7 +256,7 @@
                   ]
                 },
                 {
-                  "name": "value 2.2",
+                  "name": "Hidden",
                   "thumbnail": 0,
                   "nodes": [
                     {
