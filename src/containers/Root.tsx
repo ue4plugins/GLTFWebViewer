@@ -14,6 +14,7 @@ import {
   AnimationSelector,
 } from "../components";
 import { useStores } from "../stores";
+import { VariantSetList } from "../components/VariantSetList";
 import { Viewer } from "./Viewer";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -59,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { gltf, fetchGltfs, animations } = gltfStore;
+  const { gltf, fetchGltfs, animations, configurator } = gltfStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
@@ -92,6 +93,7 @@ export const Root: React.FC = observer(() => {
               <Divider />
             </>
           )}
+          {configurator && <VariantSetList />}
           <GltfList />
         </Sidebar>
       )}
