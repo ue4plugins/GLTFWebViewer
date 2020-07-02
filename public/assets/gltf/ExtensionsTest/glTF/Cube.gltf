@@ -245,7 +245,6 @@
               "variants": [
                 {
                   "name": "value 1.1",
-                  "thumbnail": 0,
                   "nodes": [
                     {
                       "node": 0,
@@ -257,7 +256,6 @@
                 },
                 {
                   "name": "value 1.2",
-                  "thumbnail": 0,
                   "nodes": [
                     {
                       "node": 0,
