@@ -118,10 +118,12 @@ export function downSampleCubemap(
  *
  * @param textures 6 textures to use as faces for the cubemap
  * @param device Graphics-device
+ * @param mipmaps (Optional) Generate mipmaps for the cubemap
  */
 export function createCubemapFromTextures(
   textures: pc.Texture[],
   device: pc.GraphicsDevice,
+  mipmaps = false,
 ): pc.Texture {
   const width = textures[0].width;
   const height = textures[0].height;
@@ -130,7 +132,7 @@ export function createCubemapFromTextures(
 
   const cubemap = new pc.Texture(device, {
     cubemap: true,
-    mipmaps: false,
+    mipmaps: mipmaps,
     format: format,
     type: type,
     width: width,

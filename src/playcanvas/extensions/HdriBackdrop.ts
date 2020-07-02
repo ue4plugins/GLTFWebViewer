@@ -99,7 +99,7 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
         return;
       }
 
-      const cubemap = createCubemapFromTextures(textures, device);
+      const cubemap = createCubemapFromTextures(textures, device, true);
       const script = node.addComponent("script");
       const backdropScript = script.create(HdriBackdrop);
 
