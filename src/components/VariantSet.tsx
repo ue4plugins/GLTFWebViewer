@@ -5,8 +5,11 @@ import { FieldInputProps } from "./Field";
 import { Variant } from "./Variant";
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    marginBottom: theme.spacing(1),
+  },
   label: {
-    margin: theme.spacing(2, 2, 1),
+    margin: theme.spacing(2, 2),
   },
 }));
 
@@ -37,7 +40,7 @@ export const VariantSet: React.FC<VariantSetProps> = ({
   );
 
   return (
-    <FormControl>
+    <FormControl className={classes.root}>
       <FormLabel className={classes.label} component="legend">
         {label}
       </FormLabel>

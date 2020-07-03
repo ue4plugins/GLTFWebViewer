@@ -93,7 +93,12 @@ export const Root: React.FC = observer(() => {
               <Divider />
             </>
           )}
-          {configurator && <VariantSetList />}
+          {configurator && (
+            <>
+              <VariantSetList />
+              <Divider />
+            </>
+          )}
           <GltfList />
         </Sidebar>
       )}
