@@ -11,7 +11,6 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores";
-import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
 import { GltfSource } from "../types";
 import { SearchField } from "./SearchField";
 
@@ -40,68 +39,79 @@ const fuseOptions: FuseOptions<GltfSource> = {
   keys: ["name"],
 };
 
-export const GltfList: React.FC = observer(() => {
-  const classes = useStyles();
-  const { gltfStore } = useStores();
-  const { gltf: selectedGltf, gltfs, setGltf, fetchGltfs } = gltfStore;
-  const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [fuse, setFuse] = useState<Fuse<GltfSource, typeof fuseOptions>>();
-  const [list, setList] = useState(gltfs);
+export type GltfListProps = {
+  isLoading?: boolean;
+  isError?: boolean;
+  onSelect?: () => void;
+};
 
-  useEffect(() => {
-    runAsync(async () => {
-      await fetchGltfs();
-    });
-  }, [fetchGltfs, runAsync]);
+export const GltfList: React.FC<GltfListProps> = observer(
+  ({ isLoading, isError, onSelect }) => {
+    const classes = useStyles();
+    const { gltfStore } = useStores();
+    const { gltf: selectedGltf, gltfs, setGltf } = gltfStore;
+    const [searchTerm, setSearchTerm] = useState("");
+    const [fuse, setFuse] = useState<Fuse<GltfSource, typeof fuseOptions>>();
+    const [list, setList] = useState(gltfs);
 
-  useEffect(() => {
-    setFuse(gltfs.length > 0 ? new Fuse(gltfs, fuseOptions) : undefined);
-  }, [gltfs]);
+    useEffect(() => {
+      setFuse(gltfs.length > 0 ? new Fuse(gltfs, fuseOptions) : undefined);
+    }, [gltfs]);
 
-  useEffect(() => {
-    setList(
-      searchTerm.length === 0
-        ? gltfs
-        : fuse
-        ? (fuse.search(searchTerm) as Fuse.FuseResultWithScore<
-            GltfSource
-          >[]).map(result => result.item)
-        : [],
-    );
-  }, [fuse, searchTerm, gltfs]);
+    useEffect(() => {
+      setList(
+        searchTerm.length === 0
+          ? gltfs
+          : fuse
+          ? (fuse.search(searchTerm) as Fuse.FuseResultWithScore<
+              GltfSource
+            >[]).map(result => result.item)
+          : [],
+      );
+    }, [fuse, searchTerm, gltfs]);
 
-  return (
-    <>
-      <SearchField term={searchTerm} onChange={setSearchTerm} />
-      <Divider />
-      <List id="gltf-list" className={classes.list}>
-        {isLoading ? (
-          <div className={classes.spinner}>
-            <CircularProgress />
-          </div>
-        ) : isError ? (
-          <Typography
-            className={classes.error}
-            variant="body2"
-            color="textSecondary"
-          >
-            Something went wrong when loading glTF files. Check console for more
-            details.
-          </Typography>
-        ) : (
-          list.map(gltf => (
-            <ListItem
-              onClick={() => setGltf(gltf)}
-              button
-              key={gltf.filePath}
-              selected={selectedGltf && gltf.filePath === selectedGltf.filePath}
+    return (
+      <>
+        <SearchField term={searchTerm} onChange={setSearchTerm} />
+        <Divider />
+        <List id="gltf-list" className={classes.list}>
+          {isLoading ? (
+            <div className={classes.spinner}>
+              <CircularProgress />
+            </div>
+          ) : isError ? (
+            <Typography
+              className={classes.error}
+              variant="body2"
+              color="textSecondary"
             >
-              <ListItemText primary={gltf.name} secondary={gltf.description} />
-            </ListItem>
-          ))
-        )}
-      </List>
-    </>
-  );
-});
+              Something went wrong when loading glTF files. Check console for
+              more details.
+            </Typography>
+          ) : (
+            list.map(gltf => (
+              <ListItem
+                onClick={() => {
+                  setGltf(gltf);
+                  if (onSelect) {
+                    onSelect();
+                  }
+                }}
+                button
+                key={gltf.filePath}
+                selected={
+                  selectedGltf && gltf.filePath === selectedGltf.filePath
+                }
+              >
+                <ListItemText
+                  primary={gltf.name}
+                  secondary={gltf.description}
+                />
+              </ListItem>
+            ))
+          )}
+        </List>
+      </>
+    );
+  },
+);

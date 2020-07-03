@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { makeStyles } from "@material-ui/core/styles";
-import { Divider, Hidden } from "@material-ui/core";
+import { Hidden, Tabs, Tab, makeStyles, Divider } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
-import {
-  Sidebar,
-  FpsMonitor,
-  SidebarToggle,
-  SceneSelector,
-  GltfList,
-  GltfMeta,
-  AnimationSelector,
-  VariantSetList,
-} from "../components";
+import { Sidebar, FpsMonitor, SidebarToggle, GltfMeta } from "../components";
 import { useStores } from "../stores";
+import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
 import { Viewer } from "./Viewer";
+import { Settings } from "./Settings";
+import { Gltf } from "./Gltf";
 
 const urlParams = new URLSearchParams(window.location.search);
 const showUI = !urlParams.get("hideUI");
@@ -57,17 +50,21 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+type ActiveTab = "gltf" | "settings";
+
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { gltf, fetchGltfs, animations, configurator } = gltfStore;
+  const { gltf, fetchGltfs } = gltfStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [activeTab, setActiveTab] = useState<ActiveTab>("gltf");
+  const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
 
   useEffect(() => {
-    if (!showUI) {
-      fetchGltfs();
-    }
-  }, [fetchGltfs]);
+    runAsync(async () => {
+      await fetchGltfs();
+    });
+  }, [fetchGltfs, runAsync]);
 
   return (
     <div className={classes.root}>
@@ -85,21 +82,22 @@ export const Root: React.FC = observer(() => {
       </main>
       {showUI && (
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
-          <SceneSelector />
+          <Tabs
+            value={activeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+            onChange={(_, value) => setActiveTab(value)}
+            aria-label="disabled tabs example"
+          >
+            <Tab label="glTF" value="gltf" />
+            <Tab label="Settings" value="settings" />
+          </Tabs>
           <Divider />
-          {animations.length > 0 && (
-            <>
-              <AnimationSelector />
-              <Divider />
-            </>
+          {activeTab === "settings" && <Settings />}
+          {activeTab === "gltf" && (
+            <Gltf isLoading={isLoading} isError={isError} />
           )}
-          {configurator && (
-            <>
-              <VariantSetList />
-              <Divider />
-            </>
-          )}
-          <GltfList />
         </Sidebar>
       )}
       {showUI && (

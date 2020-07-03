@@ -16,5 +16,5 @@ export const theme = createMuiTheme({
       default: "#fff",
     },
   },
-  sidebarWidth: 300,
+  sidebarWidth: 340,
 });
