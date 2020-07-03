@@ -12,9 +12,9 @@ import {
   GltfList,
   GltfMeta,
   AnimationSelector,
+  VariantSetList,
 } from "../components";
 import { useStores } from "../stores";
-import { VariantSetList } from "../components/VariantSetList";
 import { Viewer } from "./Viewer";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -93,12 +93,7 @@ export const Root: React.FC = observer(() => {
               <Divider />
             </>
           )}
-          {configurator && (
-            <>
-              <VariantSetList />
-              <Divider />
-            </>
-          )}
+          {configurator && <VariantSetList />}
           <GltfList />
         </Sidebar>
       )}

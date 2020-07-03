@@ -1,18 +1,12 @@
 import React, { useCallback } from "react";
-import {
-  RadioGroup,
-  FormLabel,
-  FormControl,
-  FormControlLabel,
-  Radio,
-} from "@material-ui/core";
+import { RadioGroup, FormLabel, FormControl } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { FieldInputProps } from "./Field";
+import { Variant } from "./Variant";
 
 const useStyles = makeStyles(theme => ({
-  formControl: {
-    margin: theme.spacing(1, 2),
-    minWidth: 120,
+  label: {
+    margin: theme.spacing(2, 2, 1),
   },
 }));
 
@@ -28,7 +22,7 @@ export const VariantSet: React.FC<VariantSetProps> = ({
   value = 0,
   domain,
   domainLabels,
-  // domainImages,
+  domainImages,
   onValueChange,
 }) => {
   const classes = useStyles();
@@ -43,16 +37,18 @@ export const VariantSet: React.FC<VariantSetProps> = ({
   );
 
   return (
-    <FormControl className={classes.formControl}>
-      <FormLabel component="legend">{label}</FormLabel>
+    <FormControl>
+      <FormLabel className={classes.label} component="legend">
+        {label}
+      </FormLabel>
       <RadioGroup name={`variant-${id}`} value={value} onChange={onChange}>
         {domain &&
           domain.map((domainValue, domainValueIndex) => (
-            <FormControlLabel
+            <Variant
               key={domainValue}
               value={domainValue}
               label={domainLabels[domainValueIndex]}
-              control={<Radio />}
+              image={domainImages[domainValueIndex]}
             />
           ))}
       </RadioGroup>
