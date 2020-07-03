@@ -1247,11 +1247,11 @@
           "name": "Variant sets",
           "variantSets": [
             {
-              "name": "Cube 1 visibility",
+              "name": "Cube 1 or 2",
               "default": 0,
               "variants": [
                 {
-                  "name": "Visible",
+                  "name": "Cube 1",
                   "thumbnail": 1,
                   "nodes": [
                     {
@@ -1259,11 +1259,17 @@
                       "properties": {
                         "visible": true
                       }
+                    },
+                    {
+                      "node": 4,
+                      "properties": {
+                        "visible": false
+                      }
                     }
                   ]
                 },
                 {
-                  "name": "Hidden",
+                  "name": "Cube 2",
                   "thumbnail": 2,
                   "nodes": [
                     {
@@ -1271,13 +1277,19 @@
                       "properties": {
                         "visible": false
                       }
+                    },
+                    {
+                      "node": 4,
+                      "properties": {
+                        "visible": true
+                      }
                     }
                   ]
                 }
               ]
             },
             {
-              "name": "Cube 2 visibility",
+              "name": "Cube 3 and 4",
               "default": 0,
               "variants": [
                 {
@@ -1285,7 +1297,13 @@
                   "thumbnail": 1,
                   "nodes": [
                     {
-                      "node": 4,
+                      "node": 5,
+                      "properties": {
+                        "visible": true
+                      }
+                    },
+                    {
+                      "node": 6,
                       "properties": {
                         "visible": true
                       }
@@ -1297,7 +1315,13 @@
                   "thumbnail": 2,
                   "nodes": [
                     {
-                      "node": 4,
+                      "node": 5,
+                      "properties": {
+                        "visible": false
+                      }
+                    },
+                    {
+                      "node": 6,
                       "properties": {
                         "visible": false
                       }
