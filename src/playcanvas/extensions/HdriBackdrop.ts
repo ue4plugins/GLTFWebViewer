@@ -94,24 +94,37 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
         return;
       }
 
-      const cubemap = createCubemapFromTextures(textures, device, true);
-      const script = node.addComponent("script");
-      const backdropScript = script.create(HdriBackdrop);
+      const cubemap = new pc.Asset("", "cubemap");
+      cubemap.resource = createCubemapFromTextures(textures, device, true);
 
-      backdropScript.model = model.resource;
-      backdropScript.cubemap = cubemap;
-      backdropScript.intensity = data.intensity;
-      backdropScript.size = data.size;
-      backdropScript.projectionCenter = new pc.Vec3(data.projectionCenter);
-      backdropScript.lightingDistanceFactor = data.lightingDistanceFactor;
-      backdropScript.useCameraProjection = data.useCameraProjection === true;
+      if (!cubemap.resource) {
+        debug("Cubemap could not be created for node ", node.name);
+        return;
+      }
+
+      const script = node.addComponent("script");
+      script.create(HdriBackdrop, {
+        attributes: {
+          model: model,
+          cubemap: cubemap,
+          size: data.size,
+          intensity: data.intensity,
+          projectionCenter: data.projectionCenter,
+          lightingDistanceFactor: data.lightingDistanceFactor,
+          useCameraProjection: data.useCameraProjection,
+        },
+      });
 
       // TODO: Use reflection probe to capture the environment instead of setting the skybox
       // TODO: Do we need to clean up created resources, and if so, when?
 
-      const prefilteredCubemaps = prefilterRgbmCubemap(cubemap, device, {
-        createMipChainInFirstMip: true,
-      });
+      const prefilteredCubemaps = prefilterRgbmCubemap(
+        cubemap.resource,
+        device,
+        {
+          createMipChainInFirstMip: true,
+        },
+      );
 
       // TODO: If the skybox should still be used, handle cases where it's replaced by the user switching scene
       app.setSkybox(null as any);

@@ -1,103 +1,136 @@
 import * as pc from "@animech-public/playcanvas";
 
-type HdriBackdropEntity = pc.Entity & {
-  model: pc.ModelComponent;
-};
+type CubemapAsset = Omit<pc.Asset, "resource"> & { resource: pc.Texture };
+type ModelAsset = Omit<pc.Asset, "resource"> & { resource: pc.Model };
 
-export class HdriBackdrop extends pc.ScriptType {
+interface HdriBackdrop {
   /**
-   * Assign an imported HDR cubemap that will be projected on the ground & backdrop.
+   * Typings for Playcanvas script-attributes attached to the class.
    */
-  public cubemap!: pc.Texture;
+  cubemap?: CubemapAsset | null;
+  model?: ModelAsset | null;
+  size: number;
+  intensity: number;
+  projectionCenter: pc.Vec3;
+  lightingDistanceFactor: number;
+  useCameraProjection: boolean;
 
-  /**
-   * Specify a model to use as a backdrop.
-   */
-  public model!: pc.Model;
+  entity: pc.Entity & {
+    model: pc.ModelComponent;
+  };
+}
 
-  /**
-   * The size of the model used to project the HDR cubemap (Meters).
-   * The supplied model will be scaled to match the size as closely as possible.
-   */
-  public size = 150;
-
-  /**
-   * Emissivity of the backdrop.
-   * Higher values will results brighter ambient lighting sampled from the HDR cubemap (cd/m2).
-   */
-  public intensity = 1;
-
-  /**
-   * Specify the ground area that will be affected by lighting and shadows.
-   * Lit area will have slightly different shading depending on the Intensity and other lighting parameters in the scene.
-   */
-  public lightingDistanceFactor = 0.5;
-
-  /**
-   * Defines the projection point of the HDR cubemap.
-   * Note that the position is relative to the position of the entity this script belongs to.
-   */
-  public projectionCenter = new pc.Vec3(0, 1.7, 0);
-
-  /**
-   * Disables ground tracking, making the HDR cubemap follow the camera.
-   */
-  public useCameraProjection = false;
-
+class HdriBackdrop extends pc.ScriptType {
   private _material = new pc.Material();
   private _worldProjectionCenter = new pc.Vec3();
   private _mapRotationMatrix = new pc.Mat4();
 
   public initialize() {
-    if (!this.cubemap?.cubemap) {
-      throw new Error("Missing or invalid cubemap");
-    }
-
-    if (!this.model) {
-      throw new Error("Missing model");
-    }
-
-    // Ignore the backdrop-model in other scripts when calculating the bounding-box of an entity
     this.entity.tags.add("ignoreBoundingBox");
-
     this.entity.addComponent("model");
 
     this._initializeMaterial();
-    this._setActiveModel(this.model);
-    this._setScaleBasedOnActiveModel();
-
-    // TODO: Fix rotation of entity to only be around the Y-axis
+    this._updateModel();
+    this._updateCubemapUniform();
+    this._updateIntensityUniform();
+    this._updateLightingDistanceUniform();
+    this._updateTransformRelatedUniforms();
 
     // TODO: Recapture sky(?)
-
     // TODO: Allow the model to be switched after creation?
+
+    this.on("attr:cubemap", this._updateCubemapUniform, this);
+    this.on("attr:model", this._updateModel, this);
+    this.on("attr:size", this._updateLightingDistanceUniform, this);
+    this.on("attr:size", this._updateEntityScale, this);
+    this.on("attr:intensity", this._updateIntensityUniform, this);
+    this.on(
+      "attr:lightingDistanceFactor",
+      this._updateLightingDistanceUniform,
+      this,
+    );
   }
 
   public postUpdate() {
     this._restrictCurrentRotationToY();
-    this._updateMaterialUniforms();
+    this._updateTransformRelatedUniforms();
   }
 
-  private _setScaleBasedOnActiveModel() {
-    // Calculate and apply the scale needed to make the model as large as this.size
-    const radius = this._calculateModelRadius(this.model);
-    const scale = this.size / (radius * 2);
+  private _updateModel() {
+    const model = this.model;
+    const entity = this.entity;
+    const modelComponent = entity.model;
 
-    this.entity.setLocalScale(scale, scale, scale);
-  }
-
-  private _calculateModelRadius(model: pc.Model): number {
-    const boundingBox = new pc.BoundingBox();
-    const meshInstances = model.meshInstances;
-
-    if (meshInstances.length > 0) {
-      boundingBox.copy(meshInstances[0].aabb);
-      meshInstances
-        .slice(1)
-        .forEach(meshInstance => boundingBox.add(meshInstance.aabb));
+    if (model) {
+      modelComponent.model = model.resource.clone();
+      modelComponent.meshInstances.forEach(
+        meshInstance => (meshInstance.material = this._material),
+      );
+    } else {
+      modelComponent.model = null as any;
     }
 
-    return boundingBox.halfExtents.length();
+    this._updateEntityScale();
+  }
+
+  private _updateCubemapUniform() {
+    const material = this._material;
+    const uHdriMap = this.cubemap?.resource;
+
+    if (uHdriMap) {
+      material.setParameter("uHdriMap", uHdriMap);
+    } else {
+      material.deleteParameter("uHdriMap");
+    }
+  }
+
+  private _updateLightingDistanceUniform() {
+    const material = this._material;
+    // TODO: Verify that the last constant isn't just a conversion to UE centimeters
+    const uLightingDistance = this.size * this.lightingDistanceFactor * 100.0;
+
+    material.setParameter("uLightingDistance", uLightingDistance);
+  }
+
+  private _updateIntensityUniform() {
+    const material = this._material;
+    const uIntensity = this.intensity;
+
+    material.setParameter("uIntensity", uIntensity);
+  }
+
+  private _updateTransformRelatedUniforms() {
+    const material = this._material;
+
+    const uProjectionCenter = this._calculateProjectionCenterUniform();
+    const uMapRotationMatrix = this._calculateMapRotationMatrixUniform();
+
+    material.setParameter("uProjectionCenter", uProjectionCenter);
+    material.setParameter("uMapRotationMatrix", uMapRotationMatrix);
+  }
+
+  private _updateEntityScale() {
+    const model = this.model;
+
+    if (model) {
+      // Calculate and apply the scale needed to make the model as large as this.size
+      const boundingBox = new pc.BoundingBox();
+      const meshInstances = model.resource.meshInstances;
+
+      if (meshInstances.length > 0) {
+        boundingBox.copy(meshInstances[0].aabb);
+        meshInstances
+          .slice(1)
+          .forEach(meshInstance => boundingBox.add(meshInstance.aabb));
+      }
+
+      const radius = boundingBox.halfExtents.length();
+      const scale = this.size / (radius * 2);
+
+      this.entity.setLocalScale(scale, scale, scale);
+    } else {
+      this.entity.setLocalScale(1, 1, 1);
+    }
   }
 
   private _restrictCurrentRotationToY() {
@@ -107,29 +140,6 @@ export class HdriBackdrop extends pc.ScriptType {
     const yaw = rotation.getAxisAngle(pc.Vec3.UP);
 
     rotation.setFromAxisAngle(pc.Vec3.UP, yaw);
-  }
-
-  private _updateMaterialUniforms() {
-    // TODO: Cache values and only recalculate when needed
-
-    const uHdriMap = this.cubemap;
-    const uIntensity = this.intensity;
-    const uLightingDistance = this._calculateLightingDistanceUniform();
-    const uProjectionCenter = this._calculateProjectionCenterUniform();
-    const uMapRotationMatrix = this._calculateMapRotationMatrixUniform();
-
-    const material = this._material;
-
-    material.setParameter("uHdriMap", uHdriMap);
-    material.setParameter("uIntensity", uIntensity);
-    material.setParameter("uLightingDistance", uLightingDistance);
-    material.setParameter("uProjectionCenter", uProjectionCenter);
-    material.setParameter("uMapRotationMatrix", uMapRotationMatrix);
-  }
-
-  private _calculateLightingDistanceUniform(): number {
-    // TODO: Verify that the last constant isn't just a conversion to UE centimeters
-    return this.size * this.lightingDistanceFactor * 100.0;
   }
 
   private _calculateProjectionCenterUniform(): number[] {
@@ -185,20 +195,6 @@ export class HdriBackdrop extends pc.ScriptType {
     });
 
     this._material.shader = shader;
-  }
-
-  private _setActiveModel(model?: pc.Model | null) {
-    const entity = this.entity as HdriBackdropEntity;
-    const modelComponent = entity.model;
-
-    if (model) {
-      modelComponent.model = model.clone();
-      modelComponent.meshInstances.forEach(
-        meshInstance => (meshInstance.material = this._material),
-      );
-    } else {
-      modelComponent.model = null as any;
-    }
   }
 
   private _getVertexShaderCode(): string {
@@ -288,3 +284,60 @@ export class HdriBackdrop extends pc.ScriptType {
     return shaderCode;
   }
 }
+
+HdriBackdrop.attributes.add("cubemap", {
+  type: "asset",
+  assetType: "cubemap",
+  title: "Cubemap",
+  description:
+    "Assign an imported HDR cubemap that will be projected on the ground & backdrop.",
+});
+
+HdriBackdrop.attributes.add("model", {
+  type: "asset",
+  assetType: "model",
+  title: "Model",
+  description: "Specify a model to use as a backdrop.",
+});
+
+HdriBackdrop.attributes.add("size", {
+  type: "number",
+  default: 150.0,
+  title: "Size",
+  description:
+    "The size of the model used to project the HDR cubemap (Meters). The supplied model will be scaled to match the size as closely as possible.",
+});
+
+HdriBackdrop.attributes.add("intensity", {
+  type: "number",
+  default: 1.0,
+  title: "Intensity",
+  description:
+    "Emissivity of the backdrop. Higher values will results brighter ambient lighting sampled from the HDR cubemap (cd/m2).",
+});
+
+HdriBackdrop.attributes.add("projectionCenter", {
+  type: "vec3",
+  default: [0.0, 1.7, 0.0],
+  title: "Projection Center",
+  description:
+    "Defines the projection point of the HDR cubemap. Note that the position is relative to the position of the entity this script belongs to.",
+});
+
+HdriBackdrop.attributes.add("lightingDistanceFactor", {
+  type: "number",
+  default: 0.5,
+  title: "Lighting Distance Factor",
+  description:
+    "Specify the ground area that will be affected by lighting and shadows. Lit area will have slightly different shading depending on the Intensity and other lighting parameters in the scene.",
+});
+
+HdriBackdrop.attributes.add("useCameraProjection", {
+  type: "boolean",
+  default: false,
+  title: "Use Camera Projection",
+  description:
+    "Disables ground tracking, making the HDR cubemap follow the camera.",
+});
+
+export { HdriBackdrop };
