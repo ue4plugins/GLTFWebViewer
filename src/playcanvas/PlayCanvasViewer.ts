@@ -249,7 +249,7 @@ export class PlayCanvasViewer implements TestableViewer {
     const fields: Fields = sets.map(vs => ({
       name: vs.name,
       values: vs.variants,
-      defaultValue: vs.default,
+      defaultValue: vs.variants.findIndex(variant => variant.active),
     }));
 
     this._configurator = new Configurator(new FieldManager(fields));

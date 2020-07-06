@@ -12,7 +12,7 @@ type SceneExtensionData = {
 
 type RootData = {
   extensions?: {
-    EPIC_variant_sets?: {
+    EPIC_level_variant_sets?: {
       levelVariantSets: LevelVariantSetData[];
     };
   };
@@ -30,9 +30,9 @@ type LevelVariantSetData = {
 
 type VariantSetData = {
   name: string;
-  default: number;
   variants: {
     name: string;
+    active: boolean;
     thumbnail?: number;
     nodes: {
       node: number;
@@ -45,12 +45,12 @@ type VariantSetData = {
 
 export type VariantSet = {
   name: string;
-  default: number;
   variants: Variant[];
 };
 
 export type Variant = {
   name: string;
+  active: boolean;
   thumbnailSource?: string;
   nodes: VariantNode[];
 };
@@ -66,7 +66,7 @@ export class VariantSetExtensionParser implements ExtensionParser {
   private _variantSets: SceneVariantSetDataMap[] = [];
 
   public get name() {
-    return "EPIC_variant_sets";
+    return "EPIC_level_variant_sets";
   }
 
   public getVariantSetsForScene(
@@ -84,19 +84,22 @@ export class VariantSetExtensionParser implements ExtensionParser {
       )
       .map<VariantSet>(set => ({
         ...set,
-        variants: set.variants.map<Variant>(({ name, thumbnail, nodes }) => ({
-          name,
-          thumbnailSource:
-            thumbnail !== undefined
-              ? (textures[thumbnail]?.resource as
-                  | pc.Texture
-                  | undefined)?.getSource().src
-              : undefined,
-          nodes: nodes.map<VariantNode>(({ node, properties }) => ({
-            properties,
-            node: nodeEntities[node],
-          })),
-        })),
+        variants: set.variants.map<Variant>(
+          ({ name, active, thumbnail, nodes }) => ({
+            name,
+            active,
+            thumbnailSource:
+              thumbnail !== undefined
+                ? (textures[thumbnail]?.resource as
+                    | pc.Texture
+                    | undefined)?.getSource().src
+                : undefined,
+            nodes: nodes.map<VariantNode>(({ node, properties }) => ({
+              properties,
+              node: nodeEntities[node],
+            })),
+          }),
+        ),
       }));
   }
 
@@ -122,7 +125,8 @@ export class VariantSetExtensionParser implements ExtensionParser {
     debug("Parse variant sets", scene, extensionData);
 
     const levelVariantSets = extensionData.levelVariantSets.map(
-      set => rootData.extensions?.EPIC_variant_sets?.levelVariantSets[set],
+      set =>
+        rootData.extensions?.EPIC_level_variant_sets?.levelVariantSets[set],
     );
 
     if (!hasNoUndefinedValues(levelVariantSets)) {
