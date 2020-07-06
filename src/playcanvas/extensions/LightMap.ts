@@ -9,10 +9,9 @@ const extensionName = "EPIC_lightmap_textures";
 type LightmapData = {
   name?: string;
 
-  valueScale: number[];
-  valueOffset: number[];
-  coordinateScale: number[];
-  coordinateOffset: number[];
+  lightmapScale: number[];
+  lightmapAdd: number[];
+  coordinateScaleBias: number[];
 
   texture?: {
     index: number;
@@ -186,10 +185,12 @@ export class LightMapExtensionParser implements ExtensionParser {
     // TODO: remove this if-clause once the typings for pc.MeshInstance
     // have been modified to contain setParameter.
     if ("setParameter" in target) {
-      target.setParameter("lm_coordinateOffset", lightmapData.coordinateOffset);
-      target.setParameter("lm_coordinateScale", lightmapData.coordinateScale);
-      target.setParameter("lm_valueOffset", lightmapData.valueOffset);
-      target.setParameter("lm_valueScale", lightmapData.valueScale);
+      target.setParameter(
+        "lm_coordinateScaleBias",
+        lightmapData.coordinateScaleBias,
+      );
+      target.setParameter("lm_lightmapAdd", lightmapData.lightmapAdd);
+      target.setParameter("lm_lightmapScale", lightmapData.lightmapScale);
     }
   }
 
@@ -203,14 +204,13 @@ export class LightMapExtensionParser implements ExtensionParser {
       uniform sampler2D texture_lightMap;
       #endif
 
-      uniform vec2 lm_coordinateOffset;
-      uniform vec2 lm_coordinateScale;
-      uniform vec4 lm_valueOffset;
-      uniform vec4 lm_valueScale;
+      uniform vec4 lm_coordinateScaleBias;
+      uniform vec4 lm_lightmapAdd;
+      uniform vec4 lm_lightmapScale;
       
       vec2 getLightmapUV0(vec2 uv)
       {
-        return (uv * lm_coordinateScale + lm_coordinateOffset) * vec2(1.0, 0.5);
+        return (uv * lm_coordinateScaleBias.xy + lm_coordinateScaleBias.zw) * vec2(1.0, 0.5);
       }
 
       vec2 getLightmapUV1(vec2 uv)
@@ -233,10 +233,10 @@ export class LightMapExtensionParser implements ExtensionParser {
         logL += lightmap1.w * (1.0 / 255.0) - (0.5 / 255.0);
       
         // Range scale logL
-        logL = logL * lm_valueScale.w + lm_valueOffset.w;
+        logL = logL * lm_lightmapScale.w + lm_lightmapAdd.w;
           
         // Range scale uvw
-        vec3 uvw = lightmap0.rgb * lightmap0.rgb * lm_valueScale.rgb + lm_valueOffset.rgb;
+        vec3 uvw = lightmap0.rgb * lightmap0.rgb * lm_lightmapScale.rgb + lm_lightmapAdd.rgb;
       
         // logL -> L
         const float logBlackPoint = 0.01858136;
