@@ -1,6 +1,6 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
-import { HdriBackdrop } from "../scripts";
+import { HdriBackdrop as HdriBackdropScript } from "../scripts";
 import {
   createCubemapFromTextures,
   prefilterRgbmCubemap,
@@ -33,7 +33,7 @@ type RootData = {
   };
 };
 
-type NodeBackdropDataMap = {
+type NodeBackdropDefinition = {
   node: pc.Entity;
   data: BackdropData;
 };
@@ -42,8 +42,15 @@ function hasNoUndefinedValues<T>(items: (T | undefined)[]): items is T[] {
   return !items.some(item => item === undefined);
 }
 
+export type HdriBackdrop = {
+  node: pc.Entity;
+  script: HdriBackdropScript;
+  cubemap: pc.Texture;
+  skyboxCubemaps: pc.Texture[];
+};
+
 export class HdriBackdropExtensionParser implements ExtensionParser {
-  private _backdrops: NodeBackdropDataMap[] = [];
+  private _nodeBackdrops: NodeBackdropDefinition[] = [];
 
   public get name() {
     return "EPIC_hdri_backdrops";
@@ -59,77 +66,72 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
     registry.node.remove(this.name);
   }
 
-  public postParse(container: pc.ContainerResource) {
-    debug("Post parse backdrop", container);
-
+  public getBackdropsForScene(
+    scene: pc.Entity,
+    container: pc.ContainerResource,
+  ): HdriBackdrop[] {
     const app = pc.Application.getApplication();
     if (!app) {
-      return;
+      throw new Error("Couldn't find current application");
     }
 
     const device = app.graphicsDevice;
 
-    this._backdrops.forEach(({ data, node }) => {
-      const textures: pc.Texture[] = data.cubemap
-        .map(index => container.textures[index])
-        .map(asset => asset?.resource)
-        .filter(texture => !!texture);
+    return this._nodeBackdrops
+      .filter(nodeBackdrop => scene.findOne(node => node === nodeBackdrop.node))
+      .map(({ data, node }) => {
+        const textures = this._findCubemapTextures(data, container);
+        if (!textures) {
+          debug("Invalid or missing cubemap textures for node ", node.name);
+          return null;
+        }
 
-      debug("Found cubemap textures ", textures);
+        const modelAsset = container.models[data.mesh];
+        if (!modelAsset) {
+          debug("Model is missing for node ", node.name);
+          return null;
+        }
 
-      if (textures.length !== 6) {
-        debug("Invalid number of cubemap textures for node ", node.name);
-        return;
-      }
+        // TODO: Share cubemaps between multiple backdrops that use the same textures
+        const cubemap = createCubemapFromTextures(textures, device, true);
+        if (!cubemap) {
+          debug("Cubemap could not be created for node ", node.name);
+          return null;
+        }
 
-      // TODO: The texture-type should ideally be handled automatically by
-      // creating a handler for the EPIC_texture_hdr extension (where rgbm encoding can be set per texture)
-      textures.forEach(texture => (texture.type = pc.TEXTURETYPE_RGBM as any));
+        const cubemapAsset = new pc.Asset("", "cubemap");
+        cubemapAsset.resource = cubemap;
 
-      const model = container.models[data.mesh];
-      debug("Found model ", model);
+        const script = node.addComponent("script").create(HdriBackdropScript, {
+          enabled: false, // Since there can be more than one backdrop, we need to enable the correct one later
+          attributes: {
+            model: modelAsset,
+            cubemap: cubemapAsset,
+            size: data.size,
+            intensity: data.intensity,
+            projectionCenter: data.projectionCenter,
+            lightingDistanceFactor: data.lightingDistanceFactor,
+            useCameraProjection: data.useCameraProjection,
+          },
+        });
 
-      if (!model) {
-        debug("Model is missing for node ", node.name);
-        return;
-      }
-
-      const cubemap = new pc.Asset("", "cubemap");
-      cubemap.resource = createCubemapFromTextures(textures, device, true);
-
-      if (!cubemap.resource) {
-        debug("Cubemap could not be created for node ", node.name);
-        return;
-      }
-
-      const script = node.addComponent("script");
-      script.create(HdriBackdrop, {
-        attributes: {
-          model: model,
-          cubemap: cubemap,
-          size: data.size,
-          intensity: data.intensity,
-          projectionCenter: data.projectionCenter,
-          lightingDistanceFactor: data.lightingDistanceFactor,
-          useCameraProjection: data.useCameraProjection,
-        },
-      });
-
-      // TODO: Use reflection probe to capture the environment instead of setting the skybox
-      // TODO: Do we need to clean up created resources, and if so, when?
-
-      const prefilteredCubemaps = prefilterRgbmCubemap(
-        cubemap.resource,
-        device,
-        {
+        // TODO: Use reflection probe to capture the environment instead of setting the skybox
+        const skyboxCubemaps = prefilterRgbmCubemap(cubemap, device, {
           createMipChainInFirstMip: true,
-        },
-      );
+        });
 
-      // TODO: If the skybox should still be used, handle cases where it's replaced by the user switching scene
-      app.setSkybox(null as any);
-      app.scene.setSkybox([null as any, ...prefilteredCubemaps]);
-    });
+        return {
+          node,
+          script,
+          cubemap,
+          skyboxCubemaps,
+        };
+      })
+      .filter((backdrop): backdrop is HdriBackdrop => backdrop !== null);
+  }
+
+  public postParse(_container: pc.ContainerResource) {
+    // Ignore
   }
 
   private _nodePostParse(
@@ -159,12 +161,32 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
 
     debug("Found cubemap textures", cubemap);
 
-    this._backdrops.push({
+    this._nodeBackdrops.push({
       node,
       data: {
         ...backdrop,
         cubemap,
       },
     });
+  }
+
+  private _findCubemapTextures(
+    data: BackdropData,
+    container: pc.ContainerResource,
+  ): pc.Texture[] | null {
+    if (data?.cubemap?.length !== 6) {
+      return null;
+    }
+
+    const textures = data.cubemap
+      .map(index => container.textures[index])
+      .map(asset => asset?.resource)
+      .filter(texture => !!texture);
+
+    // TODO: The texture-type should ideally be handled automatically by
+    // creating a handler for the EPIC_texture_hdr extension (where rgbm encoding can be set per texture)
+    textures.forEach(texture => (texture.type = pc.TEXTURETYPE_RGBM));
+
+    return textures.length === 6 ? textures : null;
   }
 }

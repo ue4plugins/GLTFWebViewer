@@ -11,14 +11,14 @@ import {
   hotspotTrackerScriptName,
   HotspotTrackerHandle,
   HotspotTrackerEventType,
-  HdriBackdrop,
+  HdriBackdrop as HdriBackdropScript,
 } from "./scripts";
 import {
   PlayCanvasGltfLoader,
   GltfData,
   GltfSceneData,
 } from "./PlayCanvasGltfLoader";
-import { InteractionHotspot } from "./extensions";
+import { InteractionHotspot, HdriBackdrop } from "./extensions";
 import { AnimationState } from "./Animation";
 
 const debug = Debug("PlayCanvasViewer");
@@ -38,6 +38,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _gltf?: GltfData;
   private _activeGltfScene?: GltfSceneData;
   private _hotspotTrackerHandles?: HotspotTrackerHandle[];
+  private _backdrops?: HdriBackdrop[];
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
@@ -54,7 +55,10 @@ export class PlayCanvasViewer implements TestableViewer {
 
     pc.registerScript(OrbitCamera, orbitCameraScriptName);
     pc.registerScript(HotspotTracker, hotspotTrackerScriptName);
-    pc.registerScript(HdriBackdrop, HdriBackdrop.scriptName ?? undefined);
+    pc.registerScript(
+      HdriBackdropScript,
+      HdriBackdropScript.scriptName ?? undefined,
+    );
 
     this._camera = this._createCamera(this._app);
     this._loader = new PlayCanvasGltfLoader(this._app);
@@ -175,6 +179,10 @@ export class PlayCanvasViewer implements TestableViewer {
       this._initHotspots(gltfScene.hotspots);
     }
 
+    if (gltfScene.backdrops && gltfScene.backdrops.length > 0) {
+      this._initBackdrops(gltfScene.backdrops);
+    }
+
     this.focusCameraOnRootEntity();
   }
 
@@ -228,6 +236,52 @@ export class PlayCanvasViewer implements TestableViewer {
     }
   }
 
+  private _initBackdrops(backdrops: HdriBackdrop[]) {
+    debug("Init backdrops", backdrops);
+
+    this._destroyBackdrops();
+
+    const app = this._app;
+    const originalSkyboxAsset = app.assets.get(app._skyboxLast ?? 0);
+
+    const onBackdropEnabled = (backdrop: HdriBackdrop) => {
+      // TODO: Prevent the user from switching between scenes / skyboxes when backdrops are used
+      // TODO: Add support for using reflection probes instead of skyboxes
+      app.scene.setSkybox([null as any, ...backdrop.skyboxCubemaps]);
+    };
+
+    const onBackdropDisabled = (_backdrop: HdriBackdrop) => {
+      app.setSkybox(originalSkyboxAsset);
+    };
+
+    backdrops.forEach(backdrop => {
+      backdrop.script.on("enable", () => onBackdropEnabled(backdrop));
+      backdrop.script.on("disable", () => onBackdropDisabled(backdrop));
+    });
+
+    // TODO: Calculate which backdrop to use (if there are more than one)
+    const activeBackdrop = backdrops[0];
+    if (activeBackdrop) {
+      activeBackdrop.script.enabled = true;
+    }
+
+    this._backdrops = backdrops;
+  }
+
+  private _destroyBackdrops() {
+    debug("Destroy backdrops", this._backdrops);
+
+    if (this._backdrops) {
+      this._backdrops.forEach(backdrop => {
+        // Destroy manually created resources
+        backdrop.cubemap.destroy();
+        backdrop.skyboxCubemaps.forEach(cubemap => cubemap.destroy());
+      });
+
+      this._backdrops = undefined;
+    }
+  }
+
   public destroy() {
     this.destroyGltf();
     this.destroyScene();
@@ -257,6 +311,12 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public async loadScene(url: string) {
+    // NOTE: When using backdrops, they provide their own "scene" / lighting.
+    // TODO: Prevent the user from selecting scenes in the UI when backdrop(s) are present.
+    if (this._backdrops) {
+      return Promise.resolve();
+    }
+
     this.destroyScene();
 
     debug("Loading scene", url);
@@ -297,6 +357,7 @@ export class PlayCanvasViewer implements TestableViewer {
       this._app.root.removeChild(this._activeGltfScene.root);
       this._activeGltfScene = undefined;
       this._destroyHotspots();
+      this._destroyBackdrops();
     }
 
     if (this._gltf) {

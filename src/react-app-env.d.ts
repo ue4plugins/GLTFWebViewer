@@ -2,6 +2,10 @@
 /// <reference types="react-scripts" />
 
 declare namespace pc {
+  interface Application {
+    _skyboxLast: number | null;
+  }
+
   interface Scene {
     destroy: () => void;
   }
