@@ -92,6 +92,14 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
           return null;
         }
 
+        // TODO: The texture-type of the cubemap textures should ideally be set automatically
+        // by creating a parser for the EPIC_texture_hdrencoding extension.
+        // Playcanvas currently lacks support for handling texture-extensions, so for now we'll
+        // assume that the textures are *meant* to be RGBM-encoded, and we set that type manually.
+        // Once we have a working parser for EPIC_texture_hdrencoding, we can (optionally) handle
+        // multiple HDR-formats, and properly display warnings for unsupported encodings.
+        textures.forEach(texture => (texture.type = pc.TEXTURETYPE_RGBM));
+
         // TODO: Share cubemaps between multiple backdrops that use the same textures
         const cubemap = createCubemapFromTextures(textures, device, true);
         if (!cubemap) {
@@ -182,10 +190,6 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
       .map(index => container.textures[index])
       .map(asset => asset?.resource)
       .filter(texture => !!texture);
-
-    // TODO: The texture-type should ideally be handled automatically by
-    // creating a handler for the EPIC_texture_hdr extension (where rgbm encoding can be set per texture)
-    textures.forEach(texture => (texture.type = pc.TEXTURETYPE_RGBM));
 
     return textures.length === 6 ? textures : null;
   }
