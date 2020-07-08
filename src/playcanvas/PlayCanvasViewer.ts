@@ -259,7 +259,9 @@ export class PlayCanvasViewer implements TestableViewer {
       backdrop.script.on("disable", () => onBackdropDisabled(backdrop));
     });
 
-    // TODO: Calculate which backdrop to use (if there are more than one)
+    // TODO: Handle multiple backdrops in an imported gltf file,
+    // and activate the "best" one based on proximity or other conditions.
+    // TODO: Handle dynamic switching between backdrops based on *some* condition.
     const activeBackdrop = backdrops[0];
     if (activeBackdrop) {
       activeBackdrop.script.enabled = true;
