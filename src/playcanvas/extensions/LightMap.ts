@@ -4,7 +4,6 @@ import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
 const debug = Debug("LightMap");
-const extensionName = "EPIC_lightmap_textures";
 
 type LightmapData = {
   name?: string;
@@ -26,7 +25,7 @@ type NodeExtensionData = {
 type RootData = {
   textures?: { source: number }[];
   extensions?: {
-    [extensionName]?: {
+    EPIC_lightmap_textures?: {
       lightmaps: LightmapData[];
     };
   };
@@ -47,7 +46,7 @@ export class LightMapExtensionParser implements ExtensionParser {
   private _materialMappings: MaterialMapping[] = [];
 
   public get name() {
-    return extensionName;
+    return "EPIC_lightmap_textures";
   }
 
   public register(registry: ExtensionRegistry) {
@@ -113,7 +112,9 @@ export class LightMapExtensionParser implements ExtensionParser {
     debug("Parse lightmap", node, extensionData, rootData);
 
     const lightmap =
-      rootData.extensions?.[extensionName]?.lightmaps?.[extensionData.lightmap];
+      rootData.extensions?.EPIC_lightmap_textures?.lightmaps?.[
+        extensionData.lightmap
+      ];
 
     if (!lightmap) {
       debug(
