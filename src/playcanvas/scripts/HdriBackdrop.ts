@@ -110,23 +110,10 @@ class HdriBackdrop extends pc.ScriptType {
   }
 
   private _updateEntityScale() {
-    const model = this.model;
+    const radius = this._calculateModelSphereRadius(this.model?.resource);
 
-    if (model) {
-      // Calculate and apply the scale needed to make the model as large as this.size
-      const boundingBox = new pc.BoundingBox();
-      const meshInstances = model.resource.meshInstances;
-
-      if (meshInstances.length > 0) {
-        boundingBox.copy(meshInstances[0].aabb);
-        meshInstances
-          .slice(1)
-          .forEach(meshInstance => boundingBox.add(meshInstance.aabb));
-      }
-
-      const radius = boundingBox.halfExtents.length();
+    if (radius > 0) {
       const scale = this.size / (radius * 2);
-
       this.entity.setLocalScale(scale, scale, scale);
     } else {
       this.entity.setLocalScale(1, 1, 1);
@@ -195,6 +182,45 @@ class HdriBackdrop extends pc.ScriptType {
     });
 
     this._material.shader = shader;
+  }
+
+  private _calculateModelSphereRadius(model?: pc.Model): number {
+    const meshInstances = model?.meshInstances;
+
+    if (!meshInstances || meshInstances.length < 1) {
+      return 0;
+    }
+
+    const boundingBox = new pc.BoundingBox();
+
+    // Find center of the meshes using a normal bounding-box
+    boundingBox.copy(meshInstances[0].aabb);
+    meshInstances
+      .slice(1)
+      .forEach(meshInstance => boundingBox.add(meshInstance.aabb));
+
+    const positions: number[] = [];
+    const tmpVec1 = new pc.Vec3();
+    const tmpVec2 = new pc.Vec3();
+    let radiusSquared = 1;
+
+    // Calculate the sphere radius using the distance of each vertex from the center
+    meshInstances.forEach(meshInstance => {
+      const vertexCount = meshInstance.mesh.getPositions(positions);
+
+      for (let idx = 0; idx < vertexCount; idx += 3) {
+        tmpVec1.set(
+          positions[idx * 3 + 0],
+          positions[idx * 3 + 1],
+          positions[idx * 3 + 2],
+        );
+
+        tmpVec2.sub2(tmpVec1, boundingBox.center);
+        radiusSquared = Math.max(radiusSquared, tmpVec2.lengthSq());
+      }
+    });
+
+    return Math.sqrt(radiusSquared);
   }
 
   private _getVertexShaderCode(): string {
