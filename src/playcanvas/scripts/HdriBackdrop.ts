@@ -160,8 +160,10 @@ class HdriBackdrop extends pc.ScriptType {
     const rotation = this.entity.getRotation();
     const yaw = rotation.getAxisAngle(pc.Vec3.UP);
 
-    // TODO: Do we need to flip yaw to match the direction in UE?
-    this._mapRotationMatrix.setFromAxisAngle(pc.Vec3.UP, yaw);
+    // NOTE: In UE, a complete revolution of the backdrop only requires a rotation of 57.3 degrees.
+    const mapRotation = yaw * (360 / 57.3);
+
+    this._mapRotationMatrix.setFromAxisAngle(pc.Vec3.UP, mapRotation);
 
     return (this._mapRotationMatrix.data as unknown) as number[];
   }
