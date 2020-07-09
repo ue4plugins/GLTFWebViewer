@@ -254,6 +254,8 @@ class HdriBackdrop extends pc.ScriptType {
         vec3 projectionDirection = normalize(vWorldVertexPosition - uProjectionCenter);
         vec3 sampleDirection =  (vec4(projectionDirection, 1.0) * uMapRotationMatrix).xyz;
 
+        sampleDirection.x *= -1.0;  // Same flip in x is used by skybox.vert in the Playcanvas engine
+
         vec3 hdriMapRgb = textureCubeRGBM(uHdriMap, sampleDirection).xyz;
         vec3 poweredIn = pow(in_, vec3(4.0));
             
