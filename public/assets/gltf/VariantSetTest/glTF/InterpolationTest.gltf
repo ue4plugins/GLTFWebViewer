@@ -1002,6 +1002,19 @@
         "metallicFactor": 0,
         "roughnessFactor": 0.5
       }
+    },
+    {
+      "name": "Blue material",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0.800000011920929,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.5
+      }
     }
   ],
   "meshes": [
@@ -1326,6 +1339,76 @@
                       "node": 6,
                       "properties": {
                         "visible": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Materials",
+              "variants": [
+                {
+                  "name": "Make cube 3 blue",
+                  "active": false,
+                  "thumbnail": 1,
+                  "nodes": [
+                    {
+                      "node": 5,
+                      "properties": {
+                        "materials": [
+                          {
+                            "material": 10,
+                            "index": 0
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Make cube 4 blue",
+                  "active": false,
+                  "thumbnail": 2,
+                  "nodes": [
+                    {
+                      "node": 6,
+                      "properties": {
+                        "materials": [
+                          {
+                            "material": 10,
+                            "index": 0
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Restore default materials",
+                  "active": true,
+                  "thumbnail": 1,
+                  "nodes": [
+                    {
+                      "node": 5,
+                      "properties": {
+                        "materials": [
+                          {
+                            "material": 5,
+                            "index": 0
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "node": 6,
+                      "properties": {
+                        "materials": [
+                          {
+                            "material": 6,
+                            "index": 0
+                          }
+                        ]
                       }
                     }
                   ]
