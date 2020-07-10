@@ -208,7 +208,7 @@
       "nodes": [0],
       "extensions": {
         "EPIC_variant_sets": {
-          "variantSet": 0
+          "levelVariantSets": [0]
         }
       }
     }
@@ -235,10 +235,41 @@
   ],
   "extensions": {
     "EPIC_variant_sets": {
-      "variantSets": [
+      "levelVariantSets": [
         {
-          "prop1": true,
-          "prop2": false
+          "name": "Variant sets",
+          "variantSets": [
+            {
+              "name": "Cube visibility",
+              "default": 0,
+              "variants": [
+                {
+                  "name": "Visible",
+                  "thumbnail": 0,
+                  "nodes": [
+                    {
+                      "node": 0,
+                      "properties": {
+                        "visible": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Hidden",
+                  "thumbnail": 0,
+                  "nodes": [
+                    {
+                      "node": 0,
+                      "properties": {
+                        "visible": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },

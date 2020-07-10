@@ -1,1 +1,1 @@
-export * from "./HotspotRenderer";
+export * from "./HotspotBuilder";

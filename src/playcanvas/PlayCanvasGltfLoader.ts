@@ -16,9 +16,9 @@ const debug = Debug("PlayCanvasGltfLoader");
 
 export type GltfSceneData = {
   root: pc.Entity;
-  variantSet?: VariantSet;
-  hotspots?: InteractionHotspot[];
-  backdrops?: HdriBackdrop[];
+  variantSets: VariantSet[];
+  hotspots: InteractionHotspot[];
+  backdrops: HdriBackdrop[];
   animations: Animation[];
 };
 
@@ -187,7 +187,10 @@ export class PlayCanvasGltfLoader {
           );
           return {
             root: sceneRoot,
-            variantSet: variantSetParser.getVariantSetForScene(sceneRoot),
+            variantSets: variantSetParser.getVariantSetsForScene(
+              sceneRoot,
+              container,
+            ),
             hotspots: hotspotParser.getHotspotsForScene(
               sceneRoot,
               sceneAnimations,
