@@ -50,7 +50,6 @@ export class LightMapExtensionParser implements ExtensionParser {
   }
 
   public register(registry: ExtensionRegistry) {
-    this._reset();
     registry.node.add(this.name, {
       postParse: this._nodePostParse.bind(this),
     });
@@ -58,7 +57,6 @@ export class LightMapExtensionParser implements ExtensionParser {
 
   public unregister(registry: ExtensionRegistry) {
     registry.node.remove(this.name);
-    this._reset();
   }
 
   public postParse(container: pc.ContainerResource) {
@@ -129,11 +127,6 @@ export class LightMapExtensionParser implements ExtensionParser {
       node: node,
       lightmapData: lightmap,
     });
-  }
-
-  private _reset() {
-    this._lightmaps = [];
-    this._materialMappings = [];
   }
 
   private _getOrCreateLightmapMaterial(
