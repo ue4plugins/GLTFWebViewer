@@ -6,13 +6,11 @@ import { ExtensionRegistry } from "./ExtensionRegistry";
 const debug = Debug("LightMap");
 
 type LightmapData = {
-  name?: string;
-
-  lightmapScale: number[];
   lightmapAdd: number[];
+  lightmapScale: number[];
   coordinateScaleBias: number[];
 
-  texture?: {
+  texture: {
     index: number;
     texCoord?: number;
   };
@@ -31,9 +29,8 @@ type RootData = {
   };
 };
 
-type NodeLightmapDataMap = {
+type NodeLightmapData = LightmapData & {
   node: pc.Entity;
-  lightmapData: LightmapData;
 };
 
 type MaterialMapping = {
@@ -41,8 +38,21 @@ type MaterialMapping = {
   extended: pc.StandardMaterial;
 };
 
+type NodeLightmap = {
+  node: pc.Entity;
+  meshInstances: pc.MeshInstance[];
+
+  texture: pc.Texture;
+  texCoord: number;
+
+  lightmapAdd: number[];
+  lightmapScale: number[];
+  coordinateScaleBias: number[];
+};
+
 export class LightMapExtensionParser implements ExtensionParser {
-  private _lightmaps: NodeLightmapDataMap[] = [];
+  private _nodeLightmapDatas: NodeLightmapData[] = [];
+  private _nodeLightmaps: NodeLightmap[] = [];
   private _materialMappings: MaterialMapping[] = [];
 
   public get name() {
@@ -59,44 +69,113 @@ export class LightMapExtensionParser implements ExtensionParser {
     registry.node.remove(this.name);
   }
 
-  public postParse(container: pc.ContainerResource) {
-    debug("Post parse lightmap", container);
+  public findNodeLightmap(node: pc.Entity): NodeLightmap | null {
+    return (
+      this._nodeLightmaps.find(nodeLightmap => nodeLightmap.node === node) ??
+      null
+    );
+  }
 
-    this._lightmaps.forEach(({ node, lightmapData }) => {
+  public getExtendedMaterial(
+    nodeLightmap: NodeLightmap,
+    sourceMaterial: pc.StandardMaterial,
+  ): pc.StandardMaterial | null {
+    if (!nodeLightmap) {
+      return null;
+    }
+
+    return (
+      this._materialMappings.find(
+        mapping =>
+          mapping.original === sourceMaterial &&
+          mapping.extended.lightMap === nodeLightmap.texture &&
+          mapping.extended.lightMapUv === nodeLightmap.texCoord,
+      )?.extended ?? null
+    );
+  }
+
+  public getOrCreateExtendedMaterial(
+    nodeLightmap: NodeLightmap,
+    sourceMaterial: pc.StandardMaterial,
+  ): pc.StandardMaterial {
+    let material = this.getExtendedMaterial(nodeLightmap, sourceMaterial);
+
+    if (!material) {
+      const { texture, texCoord } = nodeLightmap;
+      material = sourceMaterial.clone();
+
+      material.lightMap = texture;
+      material.lightMapUv = texCoord;
+      material.chunks.lightmapSinglePS = this._createLightmapSinglePS();
+      material.update();
+
+      this._materialMappings.push({
+        original: sourceMaterial,
+        extended: material,
+      });
+    }
+
+    return material;
+  }
+
+  public postParse(container: pc.ContainerResource) {
+    debug("Post parse lightmap");
+
+    this._nodeLightmapDatas.forEach(data => {
+      const {
+        node,
+        lightmapScale,
+        lightmapAdd,
+        coordinateScaleBias,
+        texture: { texCoord, index },
+      } = data;
+
+      if (
+        !coordinateScaleBias ||
+        !lightmapAdd ||
+        !lightmapScale ||
+        index === undefined
+      ) {
+        debug(`Node '${node.name}' has invalid data`, data);
+        return;
+      }
+
       const meshInstances = node.model?.meshInstances;
       if (!meshInstances) {
-        // TODO: report error
         debug(`Node '${node.name}' is missing a model or mesh-instances`);
         return;
       }
 
-      meshInstances.forEach(meshInstance => {
-        if (!(meshInstance.material instanceof pc.StandardMaterial)) {
-          // TODO: report error?
-          debug(
-            `Material '${meshInstance.material.name}' is NOT a StandardMaterial`,
-          );
-          return;
-        }
+      const texture = container.textures[index]?.resource;
+      if (!texture) {
+        debug(`Node '${node.name}' is using an invalid lightmap texture`);
+        return;
+      }
 
-        const material = this._getOrCreateLightmapMaterial(
-          lightmapData,
-          meshInstance.material,
-          container,
+      const nodeLightmap: NodeLightmap = {
+        node,
+        meshInstances,
+        texture,
+        texCoord: texCoord ?? 0,
+        lightmapAdd,
+        lightmapScale,
+        coordinateScaleBias,
+      };
+
+      meshInstances.forEach(instance => {
+        const sourceMaterial = instance.material as pc.StandardMaterial;
+        const material = this.getOrCreateExtendedMaterial(
+          nodeLightmap,
+          sourceMaterial,
         );
 
-        if (!material) {
-          // TODO: report error
-          debug(
-            `Unable to create a light-map material from source-material '${meshInstance.material.name}'`,
-          );
-          return;
-        }
-
-        meshInstance.material = material;
-
-        this._setShaderUniforms(lightmapData, meshInstance);
+        instance.material = material;
+        instance.setParameter("lm_coordinateScaleBias", coordinateScaleBias);
+        instance.setParameter("lm_lightmapAdd", lightmapAdd);
+        instance.setParameter("lm_lightmapScale", lightmapScale);
       });
+
+      this._nodeLightmaps.push(nodeLightmap);
 
       // TODO: cleanup of created resources when the scene or model is changed?
     });
@@ -123,69 +202,10 @@ export class LightMapExtensionParser implements ExtensionParser {
 
     debug("Found lightmap", lightmap);
 
-    this._lightmaps.push({
+    this._nodeLightmapDatas.push({
       node: node,
-      lightmapData: lightmap,
+      ...lightmap,
     });
-  }
-
-  private _getOrCreateLightmapMaterial(
-    lightmapData: LightmapData,
-    originalMaterial: pc.StandardMaterial,
-    container: pc.ContainerResource,
-  ): pc.StandardMaterial | null {
-    if (!lightmapData.texture) {
-      return null;
-    }
-
-    const texCoord = lightmapData.texture.texCoord ?? 0;
-    const texture = container.textures[lightmapData.texture.index]?.resource;
-
-    if (!texture) {
-      return null;
-    }
-
-    // Try to re-use an existing material if possible
-    const materialMapping = this._materialMappings.find(
-      mapping =>
-        mapping.original === originalMaterial &&
-        mapping.extended.lightMap === texture &&
-        mapping.extended.lightMapUv === texCoord,
-    );
-
-    if (materialMapping !== undefined) {
-      return materialMapping.extended;
-    }
-
-    const material = originalMaterial.clone();
-
-    material.lightMap = texture;
-    material.lightMapUv = texCoord;
-    material.chunks.lightmapSinglePS = this._createLightmapSinglePS();
-    material.update();
-
-    this._materialMappings.push({
-      original: originalMaterial,
-      extended: material,
-    });
-
-    return material;
-  }
-
-  private _setShaderUniforms(
-    lightmapData: LightmapData,
-    target: pc.MeshInstance | pc.Material,
-  ): void {
-    // TODO: remove this if-clause once the typings for pc.MeshInstance
-    // have been modified to contain setParameter.
-    if ("setParameter" in target) {
-      target.setParameter(
-        "lm_coordinateScaleBias",
-        lightmapData.coordinateScaleBias,
-      );
-      target.setParameter("lm_lightmapAdd", lightmapData.lightmapAdd);
-      target.setParameter("lm_lightmapScale", lightmapData.lightmapScale);
-    }
   }
 
   private _createLightmapSinglePS(): string {

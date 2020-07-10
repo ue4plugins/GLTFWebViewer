@@ -10,6 +10,10 @@ declare namespace pc {
     name: string;
     url: string;
   };
+
+  interface MeshInstance {
+    setParameter: Material["setParameter"];
+  }
 }
 
 interface TestableViewer {
