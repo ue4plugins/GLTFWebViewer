@@ -2,8 +2,9 @@ import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
-import { GltfScene } from "../types";
-import { HotspotRenderer } from "../utilities";
+import { GltfScene, GltfVariantSetConfigurator } from "../types";
+import { HotspotBuilder } from "../utilities";
+import { FieldManager, Configurator } from "../configurator";
 import {
   OrbitCamera,
   orbitCameraScriptName,
@@ -17,7 +18,7 @@ import {
   GltfData,
   GltfSceneData,
 } from "./PlayCanvasGltfLoader";
-import { InteractionHotspot } from "./extensions";
+import { InteractionHotspot, VariantSet, VariantNode } from "./extensions";
 import { AnimationState } from "./Animation";
 
 const debug = Debug("PlayCanvasViewer");
@@ -29,6 +30,8 @@ type CameraEntity = pc.Entity & {
   };
 };
 
+type Fields = GltfVariantSetConfigurator["manager"]["fields"];
+
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
   private _camera: CameraEntity;
@@ -36,6 +39,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _scene?: pc.Scene;
   private _gltf?: GltfData;
   private _activeGltfScene?: GltfSceneData;
+  private _configurator?: GltfVariantSetConfigurator;
   private _hotspotTrackerHandles?: HotspotTrackerHandle[];
   private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
   private _canvasResizeObserver = new ResizeObserver(
@@ -59,6 +63,8 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._observedElement = this.canvas.parentElement || this.canvas;
     this._canvasResizeObserver.observe(this._observedElement);
+
+    this._onConfigurationChange = this._onConfigurationChange.bind(this);
   }
 
   public get app() {
@@ -94,6 +100,7 @@ export class PlayCanvasViewer implements TestableViewer {
           active: false,
         }))
         .filter((_, index) => scene.animations[index].playable),
+      configurator: this._configurator,
     };
   }
 
@@ -169,17 +176,21 @@ export class PlayCanvasViewer implements TestableViewer {
     this._activeGltfScene = gltfScene;
     this._app.root.addChild(gltfScene.root);
 
-    if (gltfScene.hotspots) {
+    if (gltfScene.hotspots.length > 0) {
       this._initHotspots(gltfScene.hotspots);
+    }
+
+    if (gltfScene.variantSets.length > 0) {
+      this._initConfigurator(gltfScene.variantSets);
     }
 
     this.focusCameraOnRootEntity();
   }
 
   private _initHotspots(hotspots: InteractionHotspot[]) {
-    debug("Init hotspots", hotspots);
-
     this._destroyHotspots();
+
+    debug("Init hotspots", hotspots);
 
     const hotspotRootElem = this.canvas.parentElement;
     if (!hotspotRootElem) {
@@ -188,19 +199,21 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._hotspotTrackerHandles = hotspots.map(hotspot => {
       const { animation } = hotspot;
-      const renderer = new HotspotRenderer(hotspotRootElem);
+      const renderer = new HotspotBuilder(hotspotRootElem);
 
       renderer.render({
         imageSource: hotspot.imageSource,
         toggledImageSource: hotspot.toggledImageSource,
         onToggle: active => {
+          debug("Toggle hotspot", active);
+
           if (!animation || !animation.playable) {
             return;
           }
-          const newState = active
-            ? AnimationState.Once
-            : AnimationState.OnceReverse;
-          animation.play(newState);
+
+          animation.play(
+            active ? AnimationState.Once : AnimationState.OnceReverse,
+          );
         },
       });
 
@@ -216,14 +229,85 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   private _destroyHotspots() {
+    if (!this._hotspotTrackerHandles) {
+      return;
+    }
+
     debug("Destroy hotspots", this._hotspotTrackerHandles);
 
-    if (this._hotspotTrackerHandles) {
-      this._hotspotTrackerHandles.forEach(handle =>
-        this._camera.script[hotspotTrackerScriptName].untrack(handle),
-      );
-      this._hotspotTrackerHandles = undefined;
+    this._hotspotTrackerHandles.forEach(handle =>
+      this._camera.script[hotspotTrackerScriptName].untrack(handle),
+    );
+    this._hotspotTrackerHandles = undefined;
+  }
+
+  private _initConfigurator(sets: VariantSet[]) {
+    this._destroyConfigurator();
+
+    debug("Init configurator", sets);
+
+    const fields: Fields = sets.map(vs => ({
+      name: vs.name,
+      values: vs.variants,
+      defaultValue: vs.variants.findIndex(variant => variant.active),
+    }));
+
+    this._configurator = new Configurator(new FieldManager(fields));
+    this._configurator.onConfigurationChange(this._onConfigurationChange);
+    this._onConfigurationChange(this._configurator.configuration);
+  }
+
+  private _destroyConfigurator() {
+    if (!this._configurator) {
+      return;
     }
+
+    debug("Destroy configurator", this._configurator);
+
+    this._configurator.offConfigurationChange(this._onConfigurationChange);
+    this._configurator = undefined;
+  }
+
+  private _onConfigurationChange(configuration: readonly number[]) {
+    debug("Configuration changed", configuration);
+
+    const fieldManager = this._configurator?.manager;
+    if (!fieldManager) {
+      return;
+    }
+
+    this._applyVariantNodeTransforms(
+      configuration
+        .map(
+          (valueId, fieldId) =>
+            fieldManager.getValue(fieldId, valueId)?.nodes || [],
+        )
+        .reduce((allNodes, nodes) => [...allNodes, ...nodes], []),
+    );
+  }
+
+  private _applyVariantNodeTransforms(nodeTransforms: VariantNode[]) {
+    debug("Apply node transforms", nodeTransforms);
+
+    nodeTransforms.forEach(({ node, properties }) => {
+      if (properties.visible !== undefined) {
+        debug("Set node visibility", node.name, properties.visible);
+        node.enabled = properties.visible;
+      }
+      if (properties.materials !== undefined) {
+        const meshInstances = node.model?.meshInstances;
+        if (!meshInstances) {
+          return;
+        }
+
+        debug("Set node materials", node.name, properties.materials);
+        properties.materials.forEach(({ index, material }) => {
+          if (meshInstances[index]) {
+            meshInstances[index].material = material;
+          }
+        });
+      }
+    });
   }
 
   public destroy() {
@@ -258,6 +342,7 @@ export class PlayCanvasViewer implements TestableViewer {
     this.destroyScene();
 
     debug("Loading scene", url);
+
     return new Promise<void>((resolve, reject) => {
       this._app.scenes.loadScene(url, (error, scene) => {
         this._sceneLoaded = true;
@@ -295,6 +380,7 @@ export class PlayCanvasViewer implements TestableViewer {
       this._app.root.removeChild(this._activeGltfScene.root);
       this._activeGltfScene = undefined;
       this._destroyHotspots();
+      this._destroyConfigurator();
     }
 
     if (this._gltf) {
@@ -333,9 +419,9 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   public async loadGltf(url: string, fileName?: string) {
-    debug("Load glTF", url, fileName);
-
     this.destroyGltf();
+
+    debug("Load glTF", url, fileName);
 
     try {
       this._gltf = await this._loader.load(url, fileName);
