@@ -7,3 +7,6 @@ export * from "./SceneSelector";
 export * from "./SearchField";
 export * from "./Sidebar";
 export * from "./SidebarToggle";
+export * from "./Variant";
+export * from "./VariantSet";
+export * from "./VariantSetList";

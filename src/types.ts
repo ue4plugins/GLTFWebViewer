@@ -1,3 +1,6 @@
+import { Configurator } from "./configurator";
+import { Variant } from "./playcanvas/extensions";
+
 export type GltfSource = {
   filePath: string;
   blobFileName?: string;
@@ -13,6 +16,14 @@ export type GltfAnimation = {
   active: boolean;
 };
 
+export type GltfVariantSetMeta = { name: string };
+export type GltfVariant = Variant;
+export type GltfVariantSetConfigurator = Configurator<
+  GltfVariantSetMeta,
+  GltfVariant
+>;
+
 export type GltfScene = {
   animations: GltfAnimation[];
+  configurator?: GltfVariantSetConfigurator;
 };

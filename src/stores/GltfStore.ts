@@ -1,5 +1,10 @@
 import { observable, computed, action } from "mobx";
-import { GltfSource, GltfAnimation, GltfScene } from "../types";
+import {
+  GltfSource,
+  GltfAnimation,
+  GltfScene,
+  GltfVariantSetConfigurator,
+} from "../types";
 
 export class GltfStore {
   private defaultGltf: string | null;
@@ -28,6 +33,11 @@ export class GltfStore {
   @computed
   public get activeAnimationIds(): number[] {
     return this.animations.filter(a => a.active).map(a => a.id);
+  }
+
+  @computed
+  public get configurator(): GltfVariantSetConfigurator | undefined {
+    return this.sceneHierarchy?.configurator;
   }
 
   @action.bound
