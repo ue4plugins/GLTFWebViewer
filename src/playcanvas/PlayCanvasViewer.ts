@@ -294,6 +294,19 @@ export class PlayCanvasViewer implements TestableViewer {
         debug("Set node visibility", node.name, properties.visible);
         node.enabled = properties.visible;
       }
+      if (properties.materials !== undefined) {
+        const meshInstances = node.model?.meshInstances;
+        if (!meshInstances) {
+          return;
+        }
+
+        debug("Set node materials", node.name, properties.materials);
+        properties.materials.forEach(({ index, material }) => {
+          if (meshInstances[index]) {
+            meshInstances[index].material = material;
+          }
+        });
+      }
     });
   }
 

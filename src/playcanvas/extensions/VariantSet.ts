@@ -36,11 +36,19 @@ type VariantSetData = {
     thumbnail?: number;
     nodes: {
       node: number;
-      properties: {
-        visible?: boolean;
-      };
+      properties: VariantNodePropertiesData;
     }[];
   }[];
+};
+
+type VariantMaterialData = {
+  index: number;
+  material: number;
+};
+
+type VariantNodePropertiesData = {
+  visible?: boolean;
+  materials?: VariantMaterialData[];
 };
 
 export type VariantSet = {
@@ -59,7 +67,18 @@ export type VariantNode = {
   node: pc.Entity;
   properties: {
     visible?: boolean;
+    materials?: VariantMaterial[];
   };
+};
+
+export type VariantMaterial = {
+  index: number;
+  material: pc.Material;
+};
+
+export type VariantNodeProperties = {
+  visible?: boolean;
+  materials?: VariantMaterial[];
 };
 
 export class VariantSetExtensionParser implements ExtensionParser {
@@ -95,8 +114,11 @@ export class VariantSetExtensionParser implements ExtensionParser {
                     | undefined)?.getSource().src
                 : undefined,
             nodes: nodes.map<VariantNode>(({ node, properties }) => ({
-              properties,
               node: nodeEntities[node],
+              properties: this._parseVariantNodeProperties(
+                properties,
+                container,
+              ),
             })),
           }),
         ),
@@ -139,5 +161,28 @@ export class VariantSetExtensionParser implements ExtensionParser {
       scene,
       data: levelVariantSets,
     });
+  }
+
+  private _parseVariantNodeProperties(
+    { visible, materials }: VariantNodePropertiesData,
+    container: pc.ContainerResource,
+  ): VariantNodeProperties {
+    return {
+      visible,
+      materials: materials
+        ?.map(data => this._parseVariantMaterial(data, container))
+        .filter((material): material is VariantMaterial => material !== null),
+    };
+  }
+
+  private _parseVariantMaterial(
+    data: VariantMaterialData,
+    container: pc.ContainerResource,
+  ): VariantMaterial | null {
+    const material = container.materials[data.material]?.resource as
+      | pc.Material
+      | undefined;
+
+    return material ? { ...data, material } : null;
   }
 }
