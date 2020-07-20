@@ -346,15 +346,8 @@ export class PlayCanvasViewer implements TestableViewer {
     backdrops.forEach(backdrop => {
       backdrop.script.on("enable", () => onBackdropEnabled(backdrop));
       backdrop.script.on("disable", () => onBackdropDisabled(backdrop));
+      backdrop.script.enabled = true;
     });
-
-    // TODO: Handle multiple backdrops in an imported gltf file,
-    // and activate the "best" one based on proximity or other conditions.
-    // TODO: Handle dynamic switching between backdrops based on *some* condition.
-    const activeBackdrop = backdrops[0];
-    if (activeBackdrop) {
-      activeBackdrop.script.enabled = true;
-    }
 
     this._backdrops = backdrops;
   }
