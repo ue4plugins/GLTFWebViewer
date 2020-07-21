@@ -16,6 +16,10 @@ declare namespace pc {
     url: string;
   };
 
+  interface MeshInstance {
+    setParameter: Material["setParameter"];
+  }
+
   interface Texture {
     // NOTE: Actually "string", but set to "any" since all pc.TEXTURETYPE_XXX consts are incorrectly typed as number.
     type: any;
