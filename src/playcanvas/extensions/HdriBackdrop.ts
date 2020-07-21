@@ -5,6 +5,7 @@ import {
   createCubemapFromTextures,
   prefilterRgbmCubemap,
 } from "../utilities/CubemapUtilities";
+import { hasNoUndefinedValues } from "../../utilities/typeGuards";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
@@ -37,10 +38,6 @@ type NodeBackdropDefinition = {
   node: pc.Entity;
   data: BackdropData;
 };
-
-function hasNoUndefinedValues<T>(items: (T | undefined)[]): items is T[] {
-  return !items.some(item => item === undefined);
-}
 
 export type HdriBackdrop = {
   node: pc.Entity;
