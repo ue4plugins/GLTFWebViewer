@@ -1,10 +1,7 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import { HdriBackdrop as HdriBackdropScript } from "../scripts";
-import {
-  createCubemapFromTextures,
-  prefilterRgbmCubemap,
-} from "../utilities/CubemapUtilities";
+import { createCubemapFromTextures, prefilterRgbmCubemap } from "../utilities";
 import { hasNoUndefinedValues } from "../../utilities/typeGuards";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
