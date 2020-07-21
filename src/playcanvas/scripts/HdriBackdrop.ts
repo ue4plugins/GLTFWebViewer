@@ -37,7 +37,6 @@ class HdriBackdrop extends pc.ScriptType {
     this._updateTransformRelatedUniforms();
 
     // TODO: Recapture sky(?)
-    // TODO: Allow the model to be switched after creation?
 
     this.on("attr:cubemap", this._updateCubemapUniform, this);
     this.on("attr:model", this._updateModel, this);
