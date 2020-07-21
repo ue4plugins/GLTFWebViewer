@@ -8,6 +8,7 @@ import {
   InteractionHotspotExtensionParser,
   InteractionHotspot,
   HdriBackdropExtensionParser,
+  HdriBackdrop,
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
 
@@ -17,6 +18,7 @@ export type GltfSceneData = {
   root: pc.Entity;
   variantSets: VariantSet[];
   hotspots: InteractionHotspot[];
+  backdrops: HdriBackdrop[];
   animations: Animation[];
 };
 
@@ -141,10 +143,11 @@ export class PlayCanvasGltfLoader {
 
     const variantSetParser = new VariantSetExtensionParser();
     const hotspotParser = new InteractionHotspotExtensionParser();
+    const backdropParser = new HdriBackdropExtensionParser();
     const extensions: ExtensionParser[] = [
       variantSetParser,
       hotspotParser,
-      new HdriBackdropExtensionParser(),
+      backdropParser,
     ];
 
     this._clearExtensions();
@@ -191,6 +194,10 @@ export class PlayCanvasGltfLoader {
             hotspots: hotspotParser.getHotspotsForScene(
               sceneRoot,
               sceneAnimations,
+              container,
+            ),
+            backdrops: backdropParser.getBackdropsForScene(
+              sceneRoot,
               container,
             ),
             animations: sceneAnimations.filter(
