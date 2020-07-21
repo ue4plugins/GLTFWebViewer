@@ -11,7 +11,7 @@ import {
   getBinaryFiles,
   getEmptyGltfFiles,
 } from "../__fixtures__/files";
-import { readFile } from "../utility";
+import { readFile } from "../utilities";
 
 function createDataTransferEvent(type: string, files: File[]) {
   const event = new Event(type, { bubbles: true });

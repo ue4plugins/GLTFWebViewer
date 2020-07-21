@@ -2,7 +2,7 @@ import path from "path";
 import { useCallback, useState } from "react";
 import { useDropzone, DropzoneRootProps } from "react-dropzone";
 import { GltfSource } from "../types";
-import { createGltfWithBlobAssets } from "./utility";
+import { createGltfWithBlobAssets } from "./utilities";
 
 function isGltfFile(file: File) {
   return !!path.extname(file.name).match(/\.(gltf|glb)$/);
