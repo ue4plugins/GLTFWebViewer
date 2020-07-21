@@ -336,7 +336,7 @@ export class PlayCanvasViewer implements TestableViewer {
     const onBackdropEnabled = (backdrop: HdriBackdrop) => {
       // TODO: Prevent the user from switching between scenes / skyboxes when backdrops are used
       // TODO: Add support for using reflection probes instead of skyboxes
-      app.scene.setSkybox([null as any, ...backdrop.skyboxCubemaps]);
+      app.scene.setSkybox([null, ...backdrop.skyboxCubemaps]);
     };
 
     const onBackdropDisabled = (_backdrop: HdriBackdrop) => {

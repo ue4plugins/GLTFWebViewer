@@ -7,7 +7,8 @@ declare namespace pc {
   }
 
   interface Scene {
-    destroy: () => void;
+    destroy(): void;
+    setSkybox(textures: (pc.Texture | null)[]): void;
   }
 
   type SceneSource = {
