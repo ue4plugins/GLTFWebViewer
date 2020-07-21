@@ -73,7 +73,7 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
 
     return this._nodeBackdrops
       .filter(nodeBackdrop => scene.findOne(node => node === nodeBackdrop.node))
-      .map(({ data, node }) => {
+      .map<HdriBackdrop | null>(({ data, node }) => {
         const textures = this._findCubemapTextures(data, container);
         if (!textures) {
           debug("Invalid or missing cubemap textures for node ", node.name);
@@ -163,8 +163,11 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
 
     debug("Found cubemap textures", cubemap);
 
+    const backdropNode = new pc.Entity(node.name + "_backdrop");
+    node.addChild(backdropNode);
+
     this._nodeBackdrops.push({
-      node,
+      node: backdropNode,
       data: {
         ...backdrop,
         cubemap,
