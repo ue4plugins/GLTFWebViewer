@@ -1,7 +1,11 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import { HdriBackdrop as HdriBackdropScript } from "../scripts";
-import { createCubemapFromTextures, prefilterRgbmCubemap } from "../utilities";
+import {
+  createCubemapFromTextures,
+  prefilterRgbmCubemap,
+  getImageIndex,
+} from "../utilities";
 import { hasNoUndefinedValues } from "../../utilities/typeGuards";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
@@ -153,13 +157,15 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
 
     debug("Found backdrop", backdrop);
 
-    // Use image source index since ContainerResource.textures is indexed by images
-    const cubemap = backdrop.cubemap.map(
-      index => rootData.textures?.[index]?.source,
+    // Convert texture index to image index since ContainerResource.textures
+    // is indexed by images
+    const cubemap = backdrop.cubemap.map(index =>
+      getImageIndex(index, rootData),
     );
     if (!hasNoUndefinedValues(cubemap)) {
       return;
     }
+    backdrop.cubemap = cubemap;
 
     debug("Found cubemap textures", cubemap);
 
@@ -168,10 +174,7 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
 
     this._nodeBackdrops.push({
       node: backdropNode,
-      data: {
-        ...backdrop,
-        cubemap,
-      },
+      data: backdrop,
     });
   }
 
