@@ -67,6 +67,7 @@ class HdriBackdrop extends pc.ScriptType {
         meshInstance => (meshInstance.material = this._material),
       );
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       modelComponent.model = null as any;
     }
 
