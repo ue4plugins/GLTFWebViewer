@@ -125,10 +125,7 @@ export function createCubemapFromTextures(
   device: pc.GraphicsDevice,
   mipmaps = false,
 ): pc.Texture {
-  const width = textures[0].width;
-  const height = textures[0].height;
-  const format = textures[0].format;
-  const type = textures[0].type;
+  const { width, height, format, type } = textures[0];
 
   const cubemap = new pc.Texture(device, {
     cubemap: true,
