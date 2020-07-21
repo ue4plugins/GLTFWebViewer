@@ -3,10 +3,10 @@ import * as pc from "@animech-public/playcanvas";
 type CubemapAsset = Omit<pc.Asset, "resource"> & { resource: pc.Texture };
 type ModelAsset = Omit<pc.Asset, "resource"> & { resource: pc.Model };
 
+/**
+ * Typings for Playcanvas script-attributes attached to the class.
+ */
 interface HdriBackdrop {
-  /**
-   * Typings for Playcanvas script-attributes attached to the class.
-   */
   cubemap?: CubemapAsset | null;
   model?: ModelAsset | null;
   size: number;
