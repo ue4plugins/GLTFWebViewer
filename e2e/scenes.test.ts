@@ -1,6 +1,5 @@
 import "jest";
-import { waitForScene, waitForViewer } from "./utility/waiters";
-import { removeIllegalChars } from "./utility/removeIllegalChars";
+import { waitForScene, waitForViewer, removeIllegalChars } from "./utilities";
 import { scenes } from "./__fixtures__/scenes";
 
 type SceneTuple = [string];

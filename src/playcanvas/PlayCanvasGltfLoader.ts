@@ -5,9 +5,12 @@ import {
   ExtensionParser,
   VariantSetExtensionParser,
   VariantSet,
+  VariantMaterialResolver,
   InteractionHotspotExtensionParser,
   InteractionHotspot,
   HdriBackdropExtensionParser,
+  LightMapExtensionParser,
+  HdriBackdrop,
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
 
@@ -17,6 +20,7 @@ export type GltfSceneData = {
   root: pc.Entity;
   variantSets: VariantSet[];
   hotspots: InteractionHotspot[];
+  backdrops: HdriBackdrop[];
   animations: Animation[];
 };
 
@@ -141,10 +145,14 @@ export class PlayCanvasGltfLoader {
 
     const variantSetParser = new VariantSetExtensionParser();
     const hotspotParser = new InteractionHotspotExtensionParser();
+    const lightMapParser = new LightMapExtensionParser();
+    const backdropParser = new HdriBackdropExtensionParser();
+
     const extensions: ExtensionParser[] = [
       variantSetParser,
       hotspotParser,
-      new HdriBackdropExtensionParser(),
+      lightMapParser,
+      backdropParser,
     ];
 
     this._clearExtensions();
@@ -187,10 +195,15 @@ export class PlayCanvasGltfLoader {
             variantSets: variantSetParser.getVariantSetsForScene(
               sceneRoot,
               container,
+              this._createVariantMaterialResolver(lightMapParser),
             ),
             hotspots: hotspotParser.getHotspotsForScene(
               sceneRoot,
               sceneAnimations,
+              container,
+            ),
+            backdrops: backdropParser.getBackdropsForScene(
+              sceneRoot,
               container,
             ),
             animations: sceneAnimations.filter(
@@ -212,5 +225,28 @@ export class PlayCanvasGltfLoader {
 
     this._app.assets.remove(data.asset);
     data.asset.unload();
+  }
+
+  private _createVariantMaterialResolver(
+    lightMapParser: LightMapExtensionParser,
+  ): VariantMaterialResolver {
+    return (sourceMaterial: pc.StandardMaterial, node: pc.Entity) => {
+      // NOTE: Lightmapped nodes use cloned modified materials to be able to render the lightmaps.
+      // Material variants use the original materials from the gltf file, and if we would use such
+      // a material on a lightmapped node, the lightmap would no longer be rendered.
+      // We therefore try to find the modified version of the source material for this node.
+      // If no such material exists, we create a modified version of the source-material that
+      // is compatible with this exact node.
+      // TODO: Can we do this without using this type of "plumbing" between extension parsers?
+      const nodeLightmap = lightMapParser.findNodeLightmap(node);
+      if (nodeLightmap) {
+        return lightMapParser.getOrCreateExtendedMaterial(
+          nodeLightmap,
+          sourceMaterial,
+        );
+      }
+
+      return sourceMaterial;
+    };
   }
 }
