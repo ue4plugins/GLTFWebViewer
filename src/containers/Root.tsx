@@ -13,6 +13,7 @@ import {
   GltfMeta,
   AnimationSelector,
   VariantSetList,
+  CameraSelector,
 } from "../components";
 import { useStores } from "../stores";
 import { Viewer } from "./Viewer";
@@ -60,7 +61,7 @@ const useStyles = makeStyles(theme => ({
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { gltf, fetchGltfs, animations, configurator } = gltfStore;
+  const { gltf, fetchGltfs, animations, configurator, cameras } = gltfStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
@@ -87,6 +88,12 @@ export const Root: React.FC = observer(() => {
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
           <SceneSelector />
           <Divider />
+          {cameras.length > 1 && (
+            <>
+              <CameraSelector />
+              <Divider />
+            </>
+          )}
           {animations.length > 0 && (
             <>
               <AnimationSelector />

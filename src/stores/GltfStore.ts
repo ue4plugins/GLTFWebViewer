@@ -4,6 +4,7 @@ import {
   GltfAnimation,
   GltfScene,
   GltfVariantSetConfigurator,
+  GltfCamera,
 } from "../types";
 
 export class GltfStore {
@@ -25,9 +26,12 @@ export class GltfStore {
   @observable
   public sceneHierarchy?: GltfScene;
 
+  @observable
+  public camera?: GltfCamera;
+
   @computed
   public get animations(): GltfAnimation[] {
-    return this.sceneHierarchy?.animations || [];
+    return this.sceneHierarchy?.animations ?? [];
   }
 
   @computed
@@ -40,9 +44,19 @@ export class GltfStore {
     return this.sceneHierarchy?.configurator;
   }
 
+  @computed
+  public get cameras(): GltfCamera[] {
+    return this.sceneHierarchy?.cameras ?? [];
+  }
+
   @action.bound
   public setGltf(gltf?: GltfSource) {
     this.gltf = gltf;
+  }
+
+  @action.bound
+  public setCamera(camera?: GltfCamera) {
+    this.camera = camera;
   }
 
   @action.bound
@@ -70,8 +84,11 @@ export class GltfStore {
   @action.bound
   public setSceneHierarchy(sceneHierarchy?: GltfScene) {
     this.sceneHierarchy = sceneHierarchy;
-    if (this.sceneHierarchy && this.autoPlayAnimations) {
-      this.sceneHierarchy.animations.forEach(a => (a.active = true));
+    if (this.sceneHierarchy) {
+      this.camera = this.sceneHierarchy.cameras[0];
+      if (this.autoPlayAnimations) {
+        this.sceneHierarchy.animations.forEach(a => (a.active = true));
+      }
     }
   }
 }

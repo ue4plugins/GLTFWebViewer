@@ -13,6 +13,7 @@ import {
   HdriBackdrop,
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
+import { CameraEntity, convertToCameraEntity } from "./Camera";
 
 const debug = Debug("PlayCanvasGltfLoader");
 
@@ -22,6 +23,7 @@ export type GltfSceneData = {
   hotspots: InteractionHotspot[];
   backdrops: HdriBackdrop[];
   animations: Animation[];
+  cameras: CameraEntity[];
 };
 
 export type GltfData = {
@@ -182,6 +184,11 @@ export class PlayCanvasGltfLoader {
       const animations = this._createAnimations(container);
       debug("Created animations", animations);
 
+      const cameraEntities = container.cameras.map(component =>
+        convertToCameraEntity(component.node as pc.Entity),
+      );
+      debug("Created camera entities", cameraEntities);
+
       const { hotspotAnimationIndices } = hotspotParser;
 
       return {
@@ -209,6 +216,9 @@ export class PlayCanvasGltfLoader {
             animations: sceneAnimations.filter(
               animation =>
                 hotspotAnimationIndices.indexOf(animation.index) === -1,
+            ),
+            cameras: cameraEntities.filter(cameraEntity =>
+              sceneRoot.findOne(node => node === cameraEntity),
             ),
           };
         }),

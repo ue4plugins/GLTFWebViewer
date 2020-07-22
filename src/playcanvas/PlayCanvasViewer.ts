@@ -26,21 +26,16 @@ import {
   HdriBackdrop,
 } from "./extensions";
 import { AnimationState } from "./Animation";
+import { CameraEntity, OrbitCameraEntity, isOrbitCameraEntity } from "./Camera";
 
 const debug = Debug("PlayCanvasViewer");
-
-type CameraEntity = pc.Entity & {
-  script: pc.ScriptComponent & {
-    [orbitCameraScriptName]: OrbitCamera;
-    [hotspotTrackerScriptName]: HotspotTracker;
-  };
-};
 
 type Fields = GltfVariantSetConfigurator["manager"]["fields"];
 
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
-  private _camera: CameraEntity;
+  private _activeCamera: CameraEntity;
+  private _defaultCamera: OrbitCameraEntity;
   private _loader: PlayCanvasGltfLoader;
   private _scene?: pc.Scene;
   private _gltf?: GltfData;
@@ -69,7 +64,9 @@ export class PlayCanvasViewer implements TestableViewer {
       HdriBackdropScript.scriptName ?? undefined,
     );
 
-    this._camera = this._createCamera(this._app);
+    this._defaultCamera = this._createDefaultCamera(this._app);
+    this._activeCamera = this._defaultCamera;
+
     this._loader = new PlayCanvasGltfLoader(this._app);
 
     this._observedElement = this.canvas.parentElement || this.canvas;
@@ -112,6 +109,11 @@ export class PlayCanvasViewer implements TestableViewer {
         }))
         .filter((_, index) => scene.animations[index].playable),
       configurator: this._configurator,
+      cameras: scene.cameras.map((camera, index) => ({
+        id: index,
+        name: camera.name,
+        orbit: isOrbitCameraEntity(camera),
+      })),
     };
   }
 
@@ -156,12 +158,11 @@ export class PlayCanvasViewer implements TestableViewer {
     return app;
   }
 
-  private _createCamera(app: pc.Application) {
-    debug("Creating camera");
+  private _createDefaultCamera(app: pc.Application): OrbitCameraEntity {
+    debug("Creating default camera");
 
-    const camera = new pc.Entity("camera") as CameraEntity;
+    const camera = new pc.Entity("Default camera") as OrbitCameraEntity;
     camera.addComponent("camera", {
-      fov: 45.8366,
       clearColor: new pc.Color(0, 0, 0),
     });
 
@@ -171,9 +172,10 @@ export class PlayCanvasViewer implements TestableViewer {
     camera.script[orbitCameraScriptName].nearClipFactor = 0.002;
     camera.script[orbitCameraScriptName].farClipFactor = 100;
 
+    camera.script.create(hotspotTrackerScriptName);
+
     app.root.addChild(camera);
 
-    camera.script.create(hotspotTrackerScriptName);
     return camera;
   }
 
@@ -186,6 +188,9 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._activeGltfScene = gltfScene;
     this._app.root.addChild(gltfScene.root);
+
+    // Add default camera to start of camera list
+    gltfScene.cameras.unshift(this._defaultCamera);
 
     if (gltfScene.hotspots.length > 0) {
       this._initHotspots(gltfScene.hotspots);
@@ -232,7 +237,8 @@ export class PlayCanvasViewer implements TestableViewer {
         },
       });
 
-      return this._camera.script[hotspotTrackerScriptName].track(
+      // TODO: update when camera changes
+      return this._activeCamera.script[hotspotTrackerScriptName].track(
         hotspot.node.getPosition(),
         (ev, screen) => {
           ev === HotspotTrackerEventType.Stop
@@ -251,7 +257,8 @@ export class PlayCanvasViewer implements TestableViewer {
     debug("Destroy hotspots", this._hotspotTrackerHandles);
 
     this._hotspotTrackerHandles.forEach(handle =>
-      this._camera.script[hotspotTrackerScriptName].untrack(handle),
+      // TODO: update when camera changes
+      this._activeCamera.script[hotspotTrackerScriptName].untrack(handle),
     );
     this._hotspotTrackerHandles = undefined;
   }
@@ -469,16 +476,38 @@ export class PlayCanvasViewer implements TestableViewer {
     });
   }
 
+  public setActiveCamera(cameraId: number) {
+    debug("Set active camera", cameraId);
+
+    if (!this._activeGltfScene) {
+      return;
+    }
+
+    this._activeGltfScene.cameras.forEach((camera, cameraIndex) => {
+      if (cameraIndex === cameraId) {
+        camera.camera.enabled = true;
+      } else {
+        camera.camera.enabled = false;
+      }
+    });
+  }
+
   public focusCameraOnRootEntity() {
     debug("Focus on root entity", this._app.root);
 
-    if (this._app.root) {
-      this._camera.script[orbitCameraScriptName].focus(this._app.root);
+    if (this._app.root && isOrbitCameraEntity(this._activeCamera)) {
+      this._activeCamera.script[orbitCameraScriptName].focus(this._app.root);
     }
   }
 
   public resetCamera(yaw?: number, pitch?: number, distance?: number) {
-    this._camera.script[orbitCameraScriptName].reset(yaw, pitch, distance);
+    if (this._app.root && isOrbitCameraEntity(this._activeCamera)) {
+      this._activeCamera.script[orbitCameraScriptName].reset(
+        yaw,
+        pitch,
+        distance,
+      );
+    }
   }
 
   public async loadGltf(url: string, fileName?: string) {

@@ -1,4 +1,5 @@
 export * from "./AnimationSelector";
+export * from "./CameraSelector";
 export * from "./FpsMonitor";
 export * from "./GltfList";
 export * from "./GltfMeta";

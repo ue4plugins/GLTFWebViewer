@@ -37,7 +37,13 @@ const useStyles = makeStyles(theme => ({
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore, sceneStore } = useStores();
-  const { gltf, setGltf, setSceneHierarchy, activeAnimationIds } = gltfStore;
+  const {
+    gltf,
+    setGltf,
+    setSceneHierarchy,
+    activeAnimationIds,
+    camera,
+  } = gltfStore;
   const { scene, setScenes } = sceneStore;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -155,6 +161,15 @@ export const Viewer: React.FC = observer(() => {
     debug("Set active animations", activeAnimationIds);
     viewer.setActiveAnimations(activeAnimationIds);
   }, [viewer, activeAnimationIds]);
+
+  // PlayCanvasViewer: Set active camera
+  useEffect(() => {
+    if (!viewer?.initiated || !camera) {
+      return;
+    }
+    debug("Set active camera", camera);
+    viewer.setActiveCamera(camera.id);
+  }, [viewer, camera]);
 
   // Reset error state
   useEffect(() => {

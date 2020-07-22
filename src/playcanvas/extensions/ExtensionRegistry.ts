@@ -148,6 +148,7 @@ export class ExtensionParserCallbackRegistry<TObject> {
 export class ExtensionRegistry {
   private _node = new ExtensionParserCallbackRegistry<pc.Entity>();
   private _scene = new ExtensionParserCallbackRegistry<pc.Entity>();
+  private _camera = new ExtensionParserCallbackRegistry<pc.CameraComponent>();
   private _texture = new ExtensionParserCallbackRegistry<pc.Texture>();
   private _material = new ExtensionParserCallbackRegistry<pc.Material>();
   private _animation = new ExtensionParserCallbackRegistry<pc.AnimTrack>();
@@ -168,6 +169,13 @@ export class ExtensionRegistry {
    */
   public get scene() {
     return this._scene;
+  }
+
+  /**
+   * Registry for handling camera extension parsers.
+   */
+  public get camera() {
+    return this._camera;
   }
 
   /**
@@ -222,6 +230,7 @@ export class ExtensionRegistry {
       global: { preprocess: (gltf: GltfData) => (gltfData = gltf) },
       node: { postprocess: createPostProcessHandler(this.node) },
       scene: { postprocess: createPostProcessHandler(this.scene) },
+      camera: { postprocess: createPostProcessHandler(this.camera) },
       texture: {}, // TODO: implement when PC has added support for texture extensions
       material: { postprocess: createPostProcessHandler(this.material) },
       animation: { postprocess: createPostProcessHandler(this.animation) },
@@ -234,6 +243,7 @@ export class ExtensionRegistry {
   public removeAll() {
     this._node.removeAll();
     this._scene.removeAll();
+    this._camera.removeAll();
     this._texture.removeAll();
     this._material.removeAll();
     this._animation.removeAll();
