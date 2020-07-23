@@ -20,9 +20,15 @@ import {
 const debug = Debug("Viewer");
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    height: "100%",
+    backgroundColor: theme.palette.common.black,
+  },
   canvas: {
-    position: "relative",
-    maxWidth: "100%",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translateY(-50%) translateX(-50%)",
   },
   backdrop: {
     position: "absolute",
@@ -184,7 +190,7 @@ export const Viewer: React.FC = observer(() => {
   }, [showBackdrop, setPreventInteraction]);
 
   return (
-    <div {...getRootProps()}>
+    <div className={classes.root} {...getRootProps()}>
       <canvas className={classes.canvas} ref={canvasRef} />
       <Backdrop className={classes.backdrop} open={showBackdrop}>
         {isDragActive ? (

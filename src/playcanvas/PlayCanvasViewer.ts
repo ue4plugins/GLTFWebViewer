@@ -95,6 +95,11 @@ export class PlayCanvasViewer implements TestableViewer {
     return this._app.scenes?.list() || [];
   }
 
+  public get activeCamera(): pc.CameraComponent | undefined {
+    const cameras = this._app.systems.camera.cameras;
+    return cameras[cameras.length - 1];
+  }
+
   public get activeSceneHierarchy(): GltfScene | undefined {
     const scene = this._activeGltfScene;
     if (!scene) {
@@ -118,10 +123,30 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   private _resizeCanvas() {
-    this._app.resizeCanvas(
-      this.canvas.parentElement?.clientWidth,
-      this.canvas.parentElement?.clientHeight,
-    );
+    const app = this._app;
+
+    if (!this.canvas.parentElement) {
+      app.resizeCanvas();
+      return;
+    }
+
+    const { clientWidth, clientHeight } = this.canvas.parentElement;
+    const aspectRatioMode = this.activeCamera?.aspectRatioMode;
+    const aspectRatio = this.activeCamera?.aspectRatio;
+
+    if (aspectRatioMode === pc.ASPECT_MANUAL && aspectRatio !== undefined) {
+      const elemAspectRatio = clientWidth / clientHeight;
+      app.resizeCanvas(
+        aspectRatio > elemAspectRatio
+          ? clientWidth
+          : clientHeight / aspectRatio,
+        aspectRatio > elemAspectRatio
+          ? clientWidth * aspectRatio
+          : clientHeight,
+      );
+    } else {
+      app.resizeCanvas(clientWidth, clientHeight);
+    }
   }
 
   private _createApp() {
@@ -144,13 +169,6 @@ export class PlayCanvasViewer implements TestableViewer {
         use3dPhysics: false,
       },
     });
-
-    app.setCanvasFillMode(pc.FILLMODE_NONE);
-    app.setCanvasResolution(pc.RESOLUTION_AUTO);
-    app.resizeCanvas(
-      this.canvas.parentElement?.clientWidth,
-      this.canvas.parentElement?.clientHeight,
-    );
 
     debug("Starting app");
     app.start();
@@ -395,6 +413,10 @@ export class PlayCanvasViewer implements TestableViewer {
         }
         app.preload(() => {
           this._initiated = true;
+
+          // Override fill mode from config
+          app.setCanvasFillMode(pc.FILLMODE_NONE);
+
           resolve();
         });
       });
@@ -490,6 +512,9 @@ export class PlayCanvasViewer implements TestableViewer {
         camera.camera.enabled = false;
       }
     });
+
+    // Resize since new camera aspect ratio might affect canvas size
+    this._resizeCanvas();
   }
 
   public focusCameraOnRootEntity() {
