@@ -47,7 +47,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
   );
-  private _observedElement: HTMLElement;
+  private _observedElement?: HTMLElement;
   private _initiated = false;
   private _sceneLoaded = false;
   private _gltfLoaded = false;
@@ -69,8 +69,11 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._loader = new PlayCanvasGltfLoader(this._app);
 
-    this._observedElement = this.canvas.parentElement || this.canvas;
-    this._canvasResizeObserver.observe(this._observedElement);
+    this._observedElement =
+      this.canvas.parentElement?.parentElement ?? undefined;
+    if (this._observedElement) {
+      this._canvasResizeObserver.observe(this._observedElement);
+    }
 
     this._onConfigurationChange = this._onConfigurationChange.bind(this);
   }
@@ -119,24 +122,25 @@ export class PlayCanvasViewer implements TestableViewer {
 
   private _resizeCanvas() {
     const app = this._app;
+    const sizeElem = this.canvas.parentElement?.parentElement;
 
-    if (!this.canvas.parentElement) {
+    if (!sizeElem) {
       app.resizeCanvas();
       return;
     }
 
-    const { clientWidth, clientHeight } = this.canvas.parentElement;
+    const { clientWidth, clientHeight } = sizeElem;
     const cameraComponent = this._activeCamera?.camera;
     const aspectRatioMode = cameraComponent?.aspectRatioMode;
     const aspectRatio = cameraComponent?.aspectRatio;
 
     if (aspectRatioMode === pc.ASPECT_MANUAL && aspectRatio !== undefined) {
-      const elemAspectRatio = clientWidth / clientHeight;
+      const sizeElemAspectRatio = clientWidth / clientHeight;
       app.resizeCanvas(
-        aspectRatio > elemAspectRatio
+        aspectRatio > sizeElemAspectRatio
           ? clientWidth
           : clientHeight / aspectRatio,
-        aspectRatio > elemAspectRatio
+        aspectRatio > sizeElemAspectRatio
           ? clientWidth * aspectRatio
           : clientHeight,
       );
@@ -206,10 +210,6 @@ export class PlayCanvasViewer implements TestableViewer {
     // Add default camera to start of camera list
     gltfScene.cameras.unshift(this._defaultCamera);
 
-    if (gltfScene.hotspots.length > 0) {
-      this._initHotspots(gltfScene.hotspots);
-    }
-
     if (gltfScene.variantSets.length > 0) {
       this._initConfigurator(gltfScene.variantSets);
     }
@@ -221,20 +221,17 @@ export class PlayCanvasViewer implements TestableViewer {
     this.focusCameraOnRootEntity();
   }
 
-  private _initHotspots(hotspots: InteractionHotspot[]) {
-    this._destroyHotspots();
-
+  private _initHotspots(hotspots: InteractionHotspot[], camera: CameraEntity) {
     debug("Init hotspots", hotspots);
 
-    const hotspotRootElem = this.canvas.parentElement;
-    const camera = this._activeCamera;
-    if (!hotspotRootElem || !camera) {
+    const canvasWrapperElem = this.canvas.parentElement;
+    if (!canvasWrapperElem) {
       return;
     }
 
     this._hotspotTrackerHandles = hotspots.map(hotspot => {
       const { animation } = hotspot;
-      const renderer = new HotspotBuilder(hotspotRootElem);
+      const renderer = new HotspotBuilder(canvasWrapperElem);
 
       renderer.render({
         imageSource: hotspot.imageSource,
@@ -252,7 +249,6 @@ export class PlayCanvasViewer implements TestableViewer {
         },
       });
 
-      // TODO: update when camera changes, call from setActiveCamera instead
       return camera.script[hotspotTrackerScriptName].track(
         hotspot.node.getPosition(),
         (ev, screen) => {
@@ -264,7 +260,7 @@ export class PlayCanvasViewer implements TestableViewer {
     });
   }
 
-  private _destroyHotspots() {
+  private _destroyHotspots(camera: CameraEntity) {
     if (!this._hotspotTrackerHandles) {
       return;
     }
@@ -272,8 +268,7 @@ export class PlayCanvasViewer implements TestableViewer {
     debug("Destroy hotspots", this._hotspotTrackerHandles);
 
     this._hotspotTrackerHandles.forEach(handle =>
-      // TODO: update when camera changes, , call from setActiveCamera as well
-      this._activeCamera?.script[hotspotTrackerScriptName].untrack(handle),
+      camera.script[hotspotTrackerScriptName].untrack(handle),
     );
     this._hotspotTrackerHandles = undefined;
   }
@@ -391,7 +386,9 @@ export class PlayCanvasViewer implements TestableViewer {
   public destroy() {
     this.destroyGltf();
     this.destroyScene();
-    this._canvasResizeObserver.unobserve(this._observedElement);
+    if (this._observedElement) {
+      this._canvasResizeObserver.unobserve(this._observedElement);
+    }
     this._app.destroy();
   }
 
@@ -467,9 +464,12 @@ export class PlayCanvasViewer implements TestableViewer {
     if (this._activeGltfScene) {
       this._app.root.removeChild(this._activeGltfScene.root);
       this._activeGltfScene = undefined;
-      this._destroyHotspots();
       this._destroyConfigurator();
       this._destroyBackdrops();
+    }
+
+    if (this._activeCamera) {
+      this._destroyHotspots(this._activeCamera);
     }
 
     if (this._gltf) {
@@ -510,9 +510,19 @@ export class PlayCanvasViewer implements TestableViewer {
       }
     });
 
+    // Destroy hotspots for previous camera
+    if (this._activeCamera) {
+      this._destroyHotspots(this._activeCamera);
+    }
+
     this._activeCamera = this._activeGltfScene.cameras.find(
       camera => camera.camera.enabled,
     );
+
+    // Init hotspots for new camera
+    if (this._activeGltfScene.hotspots.length > 0 && this._activeCamera) {
+      this._initHotspots(this._activeGltfScene.hotspots, this._activeCamera);
+    }
 
     // Resize since new camera aspect ratio might affect canvas size
     this._resizeCanvas();

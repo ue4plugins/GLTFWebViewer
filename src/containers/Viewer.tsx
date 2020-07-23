@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.common.black,
     outline: "none",
   },
-  canvas: {
+  canvasWrapper: {
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -192,7 +192,9 @@ export const Viewer: React.FC = observer(() => {
 
   return (
     <div className={classes.root} {...getRootProps()}>
-      <canvas className={classes.canvas} ref={canvasRef} />
+      <div className={classes.canvasWrapper}>
+        <canvas ref={canvasRef} />
+      </div>
       <Backdrop className={classes.backdrop} open={showBackdrop}>
         {isDragActive ? (
           <Typography variant="h5" color="inherit">
