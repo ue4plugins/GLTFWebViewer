@@ -61,7 +61,14 @@ const useStyles = makeStyles(theme => ({
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { gltf, fetchGltfs, animations, configurator, cameras } = gltfStore;
+  const {
+    gltf,
+    fetchGltfs,
+    animations,
+    configurator,
+    cameras,
+    hasBackdrops,
+  } = gltfStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
@@ -86,8 +93,12 @@ export const Root: React.FC = observer(() => {
       </main>
       {showUI && (
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
-          <SceneSelector />
-          <Divider />
+          {!hasBackdrops && (
+            <>
+              <SceneSelector />
+              <Divider />
+            </>
+          )}
           {cameras.length > 1 && (
             <>
               <CameraSelector />

@@ -49,6 +49,11 @@ export class GltfStore {
     return this.sceneHierarchy?.cameras ?? [];
   }
 
+  @computed
+  public get hasBackdrops(): boolean {
+    return this.sceneHierarchy?.hasBackdrops ?? false;
+  }
+
   @action.bound
   public setGltf(gltf?: GltfSource) {
     this.gltf = gltf;

@@ -117,6 +117,7 @@ export class PlayCanvasViewer implements TestableViewer {
         name: camera.name,
         orbit: isOrbitCameraEntity(camera),
       })),
+      hasBackdrops: scene.backdrops.length > 0,
     };
   }
 
@@ -349,7 +350,6 @@ export class PlayCanvasViewer implements TestableViewer {
     const originalSkyboxAsset = app.assets.get(app._skyboxLast ?? 0);
 
     const onBackdropEnabled = (backdrop: HdriBackdrop) => {
-      // TODO: Prevent the user from switching between scenes / skyboxes when backdrops are used
       // TODO: Add support for using reflection probes instead of skyboxes
       app.scene.setSkybox([null, ...backdrop.skyboxCubemaps]);
     };
@@ -417,7 +417,6 @@ export class PlayCanvasViewer implements TestableViewer {
 
   public async loadScene(url: string) {
     // NOTE: When using backdrops, they provide their own "scene" / lighting.
-    // TODO: Prevent the user from selecting scenes in the UI when backdrop(s) are present.
     if (this._backdrops) {
       return Promise.resolve();
     }

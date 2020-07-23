@@ -33,4 +33,5 @@ export type GltfScene = {
   animations: GltfAnimation[];
   configurator?: GltfVariantSetConfigurator;
   cameras: GltfCamera[];
+  hasBackdrops: boolean;
 };
