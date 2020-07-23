@@ -1246,18 +1246,61 @@
       "rotation": [0.7071068286895752, 0, 0, 0.7071068286895752],
       "scale": [4.218648433685303, 1, 0.3652837574481964],
       "translation": [0, -1.7941787242889404, 1.0036747455596924]
+    },
+    {
+      "name": "PerspectiveCamera_SceneComponent",
+      "translation": [5.0999999, 7.89999986, 5.0999999],
+      "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
+      "children": [13]
+    },
+    {
+      "name": "PerspectiveCamera",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "camera": 0
+    },
+    {
+      "name": "OrthographicCamera_SceneComponent",
+      "translation": [2, 4.82499981, 2],
+      "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
+      "children": [15]
+    },
+    {
+      "name": "OrthographicCamera",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "camera": 1
     }
   ],
   "scene": 0,
   "scenes": [
     {
       "name": "Scene",
-      "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14]
     }
   ],
   "textures": [
     {
       "source": 0
+    }
+  ],
+  "cameras": [
+    {
+      "name": "PerspectiveCamera",
+      "type": "perspective",
+      "perspective": {
+        "yfov": 1.60615218,
+        "zfar": 20971.5195,
+        "znear": 0.099999994
+      }
+    },
+    {
+      "name": "OrthographicCamera",
+      "type": "orthographic",
+      "orthographic": {
+        "xmag": 10,
+        "ymag": 10.2399998,
+        "zfar": 30971.5195,
+        "znear": 0
+      }
     }
   ]
 }
