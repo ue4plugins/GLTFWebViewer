@@ -195,7 +195,7 @@
   ],
   "cameras": [
     {
-      "name": "PerspectiveCamera2",
+      "name": "PerspectiveCamera3",
       "type": "perspective",
       "perspective": {
         "yfov": 1.60615218,
@@ -214,10 +214,10 @@
       }
     },
     {
-      "name": "OrthographicCamera2",
+      "name": "OrthographicCamera3",
       "type": "orthographic",
       "orthographic": {
-        "ymag": 6.8499999,
+        "ymag": 10.2399998,
         "zfar": 20971.5195,
         "znear": 0
       }
@@ -233,17 +233,17 @@
       }
     },
     {
-      "name": "OrthographicCamera3",
+      "name": "OrthographicCamera2",
       "type": "orthographic",
       "orthographic": {
-        "xmag": 3,
-        "ymag": 1,
+        "xmag": 1,
+        "ymag": 0.333333313,
         "zfar": 20971.5195,
         "znear": 0
       }
     },
     {
-      "name": "PerspectiveCamera3",
+      "name": "PerspectiveCamera2",
       "type": "perspective",
       "perspective": {
         "aspectRatio": 3,
@@ -393,25 +393,25 @@
       "children": [72]
     },
     {
-      "name": "PerspectiveCamera2_SceneComponent",
+      "name": "PerspectiveCamera3_SceneComponent",
       "translation": [2.0999999, 3.89999986, 2.0999999],
       "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
       "children": [13]
     },
     {
-      "name": "PerspectiveCamera2_CameraComponent",
+      "name": "PerspectiveCamera3_CameraComponent",
       "children": [14, 15, 16]
     },
     {
-      "name": "PerspectiveCamera2",
+      "name": "PerspectiveCamera3",
       "rotation": [-0, -0.707106769, 0, 0.707106709],
       "camera": 0
     },
     {
-      "name": "PerspectiveCamera2_StaticMeshComponent_0"
+      "name": "PerspectiveCamera3_StaticMeshComponent_0"
     },
     {
-      "name": "PerspectiveCamera2_DrawFrustumComponent_0"
+      "name": "PerspectiveCamera3_DrawFrustumComponent_0"
     },
     {
       "name": "PerspectiveCamera1_SceneComponent",
@@ -435,25 +435,25 @@
       "name": "PerspectiveCamera1_DrawFrustumComponent_0"
     },
     {
-      "name": "OrthographicCamera2_SceneComponent",
+      "name": "OrthographicCamera3_SceneComponent",
       "translation": [2, 4.82499981, 2],
       "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
       "children": [23]
     },
     {
-      "name": "OrthographicCamera2_CameraComponent",
+      "name": "OrthographicCamera3_CameraComponent",
       "children": [24, 25, 26]
     },
     {
-      "name": "OrthographicCamera2",
+      "name": "OrthographicCamera3",
       "rotation": [-0, -0.707106769, 0, 0.707106709],
       "camera": 2
     },
     {
-      "name": "OrthographicCamera2_StaticMeshComponent_0"
+      "name": "OrthographicCamera3_StaticMeshComponent_0"
     },
     {
-      "name": "OrthographicCamera2_DrawFrustumComponent_0"
+      "name": "OrthographicCamera3_DrawFrustumComponent_0"
     },
     {
       "name": "OrthographicCamera1_SceneComponent",
@@ -477,46 +477,46 @@
       "name": "OrthographicCamera1_DrawFrustumComponent_0"
     },
     {
-      "name": "OrthographicCamera3_SceneComponent",
+      "name": "OrthographicCamera2_SceneComponent",
       "translation": [0, 5.0999999, 0],
       "rotation": [0, -0, -0.707106769, 0.707106709],
       "children": [33]
     },
     {
-      "name": "OrthographicCamera3_CameraComponent",
+      "name": "OrthographicCamera2_CameraComponent",
       "children": [34, 35, 36]
     },
     {
-      "name": "OrthographicCamera3",
+      "name": "OrthographicCamera2",
       "rotation": [-0, -0.707106769, 0, 0.707106709],
       "camera": 4
     },
     {
-      "name": "OrthographicCamera3_StaticMeshComponent_0"
+      "name": "OrthographicCamera2_StaticMeshComponent_0"
     },
     {
-      "name": "OrthographicCamera3_DrawFrustumComponent_0"
+      "name": "OrthographicCamera2_DrawFrustumComponent_0"
     },
     {
-      "name": "PerspectiveCamera3_SceneComponent",
+      "name": "PerspectiveCamera2_SceneComponent",
       "translation": [0, 3, 0],
       "rotation": [0, -0, -0.707106769, 0.707106709],
       "children": [38]
     },
     {
-      "name": "PerspectiveCamera3_CameraComponent",
+      "name": "PerspectiveCamera2_CameraComponent",
       "children": [39, 40, 41]
     },
     {
-      "name": "PerspectiveCamera3",
+      "name": "PerspectiveCamera2",
       "rotation": [-0, -0.707106769, 0, 0.707106709],
       "camera": 5
     },
     {
-      "name": "PerspectiveCamera3_StaticMeshComponent_0"
+      "name": "PerspectiveCamera2_StaticMeshComponent_0"
     },
     {
-      "name": "PerspectiveCamera3_DrawFrustumComponent_0"
+      "name": "PerspectiveCamera2_DrawFrustumComponent_0"
     },
     {
       "name": "DefaultPhysicsVolume_0_BrushComponent0"
@@ -566,13 +566,13 @@
       "scale": [0.5, 0.5, 0.5]
     },
     {
-      "name": "SpotLight2_14_LightComponent0",
+      "name": "SpotLight2_LightComponent0",
       "translation": [0, 0.5, 0],
       "rotation": [0, -0, -0.707106769, 0.707106709],
       "children": [52, 53, 54, 77]
     },
     {
-      "name": "SpotLight2_14",
+      "name": "SpotLight2",
       "rotation": [-0, -0.707106769, 0, 0.707106709],
       "extensions": {
         "KHR_lights_punctual": {
@@ -581,20 +581,20 @@
       }
     },
     {
-      "name": "SpotLight2_14_ArrowComponent0"
+      "name": "SpotLight2_ArrowComponent0"
     },
     {
-      "name": "SpotLight2_14_BillboardComponent_0",
+      "name": "SpotLight2_BillboardComponent_0",
       "scale": [0.5, 0.5, 0.5]
     },
     {
-      "name": "SpotLight3_16_LightComponent0",
+      "name": "SpotLight3_LightComponent0",
       "translation": [0, 0.5, 0],
       "rotation": [0, -0, -0.707106769, 0.707106709],
       "children": [56, 57, 58, 78]
     },
     {
-      "name": "SpotLight3_16",
+      "name": "SpotLight3",
       "rotation": [-0, -0.707106769, 0, 0.707106709],
       "extensions": {
         "KHR_lights_punctual": {
@@ -603,19 +603,19 @@
       }
     },
     {
-      "name": "SpotLight3_16_ArrowComponent0"
+      "name": "SpotLight3_ArrowComponent0"
     },
     {
-      "name": "SpotLight3_16_BillboardComponent_0",
+      "name": "SpotLight3_BillboardComponent_0",
       "scale": [0.5, 0.5, 0.5]
     },
     {
-      "name": "PointLight1_12_LightComponent0",
+      "name": "PointLight1_LightComponent0",
       "translation": [0, 0.5, 0],
       "children": [60, 61]
     },
     {
-      "name": "PointLight1_12",
+      "name": "PointLight1",
       "rotation": [-0, -0.707106769, 0, 0.707106709],
       "extensions": {
         "KHR_lights_punctual": {
@@ -624,7 +624,7 @@
       }
     },
     {
-      "name": "PointLight1_12_BillboardComponent_0",
+      "name": "PointLight1_BillboardComponent_0",
       "scale": [0.5, 0.5, 0.5]
     },
     {
@@ -646,12 +646,12 @@
       "scale": [0.5, 0.5, 0.5]
     },
     {
-      "name": "PointLight3_15_LightComponent0",
+      "name": "PointLight3_LightComponent0",
       "translation": [0, 0.5, 0],
       "children": [66, 67]
     },
     {
-      "name": "PointLight3_15",
+      "name": "PointLight3",
       "rotation": [-0, -0.707106769, 0, 0.707106709],
       "extensions": {
         "KHR_lights_punctual": {
@@ -660,7 +660,7 @@
       }
     },
     {
-      "name": "PointLight3_15_BillboardComponent_0",
+      "name": "PointLight3_BillboardComponent_0",
       "scale": [0.5, 0.5, 0.5]
     },
     {
@@ -808,7 +808,7 @@
           "outerConeAngle": 0.785398185
         },
         {
-          "name": "SpotLight2_14",
+          "name": "SpotLight2",
           "type": "spot",
           "color": [1.04398894, 0.983291209, 1.03594124],
           "intensity": 160,
@@ -817,7 +817,7 @@
           "outerConeAngle": 0.785398185
         },
         {
-          "name": "SpotLight3_16",
+          "name": "SpotLight3",
           "type": "spot",
           "color": [0.825071275, 0.994935989, 1.56562638],
           "intensity": 160,
@@ -826,7 +826,7 @@
           "outerConeAngle": 0.785398185
         },
         {
-          "name": "PointLight1_12",
+          "name": "PointLight1",
           "type": "point",
           "color": [1, 0, 0],
           "intensity": 160,
@@ -840,7 +840,7 @@
           "range": 0.706999958
         },
         {
-          "name": "PointLight3_15",
+          "name": "PointLight3",
           "type": "point",
           "color": [0, 0, 1],
           "intensity": 160,
