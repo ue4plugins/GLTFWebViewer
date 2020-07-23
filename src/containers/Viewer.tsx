@@ -23,6 +23,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     height: "100%",
     backgroundColor: theme.palette.common.black,
+    outline: "none",
   },
   canvas: {
     position: "absolute",
