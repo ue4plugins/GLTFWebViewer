@@ -217,8 +217,6 @@ export class PlayCanvasViewer implements TestableViewer {
     if (gltfScene.backdrops.length > 0) {
       this._initBackdrops(gltfScene.backdrops);
     }
-
-    this.focusCameraOnRootEntity();
   }
 
   private _initHotspots(hotspots: InteractionHotspot[], camera: CameraEntity) {
@@ -526,6 +524,8 @@ export class PlayCanvasViewer implements TestableViewer {
 
     // Resize since new camera aspect ratio might affect canvas size
     this._resizeCanvas();
+
+    this.focusCameraOnRootEntity();
   }
 
   public focusCameraOnRootEntity() {
