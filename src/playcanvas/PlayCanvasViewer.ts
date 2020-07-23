@@ -34,7 +34,7 @@ type Fields = GltfVariantSetConfigurator["manager"]["fields"];
 
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
-  private _activeCamera: CameraEntity;
+  private _activeCamera?: CameraEntity;
   private _defaultCamera: OrbitCameraEntity;
   private _loader: PlayCanvasGltfLoader;
   private _scene?: pc.Scene;
@@ -95,11 +95,6 @@ export class PlayCanvasViewer implements TestableViewer {
     return this._app.scenes?.list() || [];
   }
 
-  public get activeCamera(): pc.CameraComponent | undefined {
-    const cameras = this._app.systems.camera.cameras;
-    return cameras[cameras.length - 1];
-  }
-
   public get activeSceneHierarchy(): GltfScene | undefined {
     const scene = this._activeGltfScene;
     if (!scene) {
@@ -131,8 +126,9 @@ export class PlayCanvasViewer implements TestableViewer {
     }
 
     const { clientWidth, clientHeight } = this.canvas.parentElement;
-    const aspectRatioMode = this.activeCamera?.aspectRatioMode;
-    const aspectRatio = this.activeCamera?.aspectRatio;
+    const cameraComponent = this._activeCamera?.camera;
+    const aspectRatioMode = cameraComponent?.aspectRatioMode;
+    const aspectRatio = cameraComponent?.aspectRatio;
 
     if (aspectRatioMode === pc.ASPECT_MANUAL && aspectRatio !== undefined) {
       const elemAspectRatio = clientWidth / clientHeight;
@@ -231,7 +227,8 @@ export class PlayCanvasViewer implements TestableViewer {
     debug("Init hotspots", hotspots);
 
     const hotspotRootElem = this.canvas.parentElement;
-    if (!hotspotRootElem) {
+    const camera = this._activeCamera;
+    if (!hotspotRootElem || !camera) {
       return;
     }
 
@@ -255,8 +252,8 @@ export class PlayCanvasViewer implements TestableViewer {
         },
       });
 
-      // TODO: update when camera changes
-      return this._activeCamera.script[hotspotTrackerScriptName].track(
+      // TODO: update when camera changes, call from setActiveCamera instead
+      return camera.script[hotspotTrackerScriptName].track(
         hotspot.node.getPosition(),
         (ev, screen) => {
           ev === HotspotTrackerEventType.Stop
@@ -275,8 +272,8 @@ export class PlayCanvasViewer implements TestableViewer {
     debug("Destroy hotspots", this._hotspotTrackerHandles);
 
     this._hotspotTrackerHandles.forEach(handle =>
-      // TODO: update when camera changes
-      this._activeCamera.script[hotspotTrackerScriptName].untrack(handle),
+      // TODO: update when camera changes, , call from setActiveCamera as well
+      this._activeCamera?.script[hotspotTrackerScriptName].untrack(handle),
     );
     this._hotspotTrackerHandles = undefined;
   }
@@ -513,6 +510,10 @@ export class PlayCanvasViewer implements TestableViewer {
       }
     });
 
+    this._activeCamera = this._activeGltfScene.cameras.find(
+      camera => camera.camera.enabled,
+    );
+
     // Resize since new camera aspect ratio might affect canvas size
     this._resizeCanvas();
   }
@@ -520,13 +521,21 @@ export class PlayCanvasViewer implements TestableViewer {
   public focusCameraOnRootEntity() {
     debug("Focus on root entity", this._app.root);
 
-    if (this._app.root && isOrbitCameraEntity(this._activeCamera)) {
+    if (
+      this._app.root &&
+      this._activeCamera &&
+      isOrbitCameraEntity(this._activeCamera)
+    ) {
       this._activeCamera.script[orbitCameraScriptName].focus(this._app.root);
     }
   }
 
   public resetCamera(yaw?: number, pitch?: number, distance?: number) {
-    if (this._app.root && isOrbitCameraEntity(this._activeCamera)) {
+    if (
+      this._app.root &&
+      this._activeCamera &&
+      isOrbitCameraEntity(this._activeCamera)
+    ) {
       this._activeCamera.script[orbitCameraScriptName].reset(
         yaw,
         pitch,
