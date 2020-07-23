@@ -801,11 +801,13 @@
         {
           "name": "SpotLight1",
           "type": "spot",
-          "color": [2.91841531, 0.533953309, -0.0349923074],
+          "color": [2.91841531, 0.533953309, 0],
           "intensity": 160,
           "range": 0.706999958,
-          "innerConeAngle": 0.785398185,
-          "outerConeAngle": 0.785398185
+          "spot": {
+            "innerConeAngle": 0.785398185,
+            "outerConeAngle": 0.785398185
+          }
         },
         {
           "name": "SpotLight2",
@@ -813,8 +815,10 @@
           "color": [1.04398894, 0.983291209, 1.03594124],
           "intensity": 160,
           "range": 0.706999958,
-          "innerConeAngle": 0.785398185,
-          "outerConeAngle": 0.785398185
+          "spot": {
+            "innerConeAngle": 0.785398185,
+            "outerConeAngle": 0.785398185
+          }
         },
         {
           "name": "SpotLight3",
@@ -822,8 +826,10 @@
           "color": [0.825071275, 0.994935989, 1.56562638],
           "intensity": 160,
           "range": 0.706999958,
-          "innerConeAngle": 0.785398185,
-          "outerConeAngle": 0.785398185
+          "spot": {
+            "innerConeAngle": 0.785398185,
+            "outerConeAngle": 0.785398185
+          }
         },
         {
           "name": "PointLight1",
