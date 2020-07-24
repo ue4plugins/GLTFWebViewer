@@ -6,6 +6,7 @@ import { Variant } from "./Variant";
 
 const useStyles = makeStyles(theme => ({
   root: {
+    display: "flex",
     marginBottom: theme.spacing(1),
   },
   label: {

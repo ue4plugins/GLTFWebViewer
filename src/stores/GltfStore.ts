@@ -75,14 +75,12 @@ export class GltfStore {
 
     this.gltfs = gltfs;
 
-    if (!this.gltf) {
-      this.setGltf(
-        gltfs.length > 0
-          ? this.defaultGltf
-            ? gltfs.find(m => m.name === this.defaultGltf)
-            : gltfs[0]
-          : undefined,
-      );
+    if (!this.gltf && gltfs.length > 0) {
+      if (this.defaultGltf) {
+        this.setGltf(gltfs.find(m => m.name === this.defaultGltf));
+      } else if (gltfs.length === 1) {
+        this.setGltf(gltfs[0]);
+      }
     }
   }
 

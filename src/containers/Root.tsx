@@ -88,7 +88,6 @@ export const Root: React.FC = observer(() => {
             textColor="primary"
             variant="fullWidth"
             onChange={(_, value) => setActiveTab(value)}
-            aria-label="disabled tabs example"
           >
             <Tab label="glTF" value="gltf" />
             <Tab label="Settings" value="settings" />

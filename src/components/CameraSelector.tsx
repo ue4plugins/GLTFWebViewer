@@ -6,8 +6,8 @@ import { useStores } from "../stores";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
+    display: "flex",
     margin: theme.spacing(1, 2),
-    minWidth: 120,
   },
 }));
 
