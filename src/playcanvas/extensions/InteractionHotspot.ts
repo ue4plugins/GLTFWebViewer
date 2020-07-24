@@ -57,19 +57,19 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
     animations: Animation[],
     container: pc.ContainerResource,
   ): InteractionHotspot[] {
-    const { textures } = container;
+    const { images } = container;
 
     return this._hotspots
       .filter(
         hotspot =>
-          textures[hotspot.data.image] &&
+          images[hotspot.data.image] &&
           animations[hotspot.data.animation] &&
           scene.findOne(node => node === hotspot.node),
       )
       .map(hotspot => {
-        const image: pc.Texture = textures[hotspot.data.image].resource;
+        const image: pc.Texture = images[hotspot.data.image].resource;
         const toggledImage: pc.Texture | undefined = hotspot.data.toggledImage
-          ? textures[hotspot.data.toggledImage]?.resource
+          ? images[hotspot.data.toggledImage]?.resource
           : undefined;
 
         return {

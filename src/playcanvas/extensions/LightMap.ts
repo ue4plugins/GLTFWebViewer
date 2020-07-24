@@ -1,6 +1,5 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
-import { getImageIndex } from "../utilities";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
@@ -202,14 +201,6 @@ export class LightMapExtensionParser implements ExtensionParser {
     }
 
     debug("Found lightmap", lightmap);
-
-    // Convert texture index to image index since ContainerResource.textures
-    // is indexed by images
-    const imageIndex = getImageIndex(lightmap.texture.index, rootData);
-    if (imageIndex === undefined) {
-      return;
-    }
-    lightmap.texture.index = imageIndex;
 
     this._nodeLightmapDatas.push({
       node: node,

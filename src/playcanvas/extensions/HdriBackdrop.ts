@@ -1,12 +1,7 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import { HdriBackdrop as HdriBackdropScript } from "../scripts";
-import {
-  createCubemapFromTextures,
-  prefilterRgbmCubemap,
-  getImageIndex,
-} from "../utilities";
-import { hasNoUndefinedValues } from "../../utilities/typeGuards";
+import { createCubemapFromTextures, prefilterRgbmCubemap } from "../utilities";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
@@ -156,18 +151,6 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
     }
 
     debug("Found backdrop", backdrop);
-
-    // Convert texture index to image index since ContainerResource.textures
-    // is indexed by images
-    const cubemap = backdrop.cubemap.map(index =>
-      getImageIndex(index, rootData),
-    );
-    if (!hasNoUndefinedValues(cubemap)) {
-      return;
-    }
-    backdrop.cubemap = cubemap;
-
-    debug("Found cubemap textures", cubemap);
 
     const backdropNode = new pc.Entity(node.name + "_backdrop");
     node.addChild(backdropNode);
