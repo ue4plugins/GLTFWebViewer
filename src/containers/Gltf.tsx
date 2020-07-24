@@ -67,6 +67,9 @@ export const Gltf: React.FC<GltfProps> = observer(listProps => {
           )}
           <div className={classes.sectionSingle}>
             <div className={classes.meta}>
+              <Typography variant="caption" color="textSecondary">
+                File
+              </Typography>
               <Typography variant="h6">{gltf?.name}</Typography>
               {gltf?.creator && (
                 <Typography variant="caption">
