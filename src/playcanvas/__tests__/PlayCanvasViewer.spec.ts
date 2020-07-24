@@ -231,6 +231,7 @@ describe("PlayCanvasViewer", () => {
       const transformBefore = camera.entity.getLocalTransform().clone().data;
 
       await viewer.loadGltf(gltfEmbeddedUrl);
+      viewer.setActiveCamera(0);
       await waitForAnimationFrame();
 
       const transformAfter = camera.entity.getLocalTransform().clone().data;
@@ -244,6 +245,7 @@ describe("PlayCanvasViewer", () => {
       ) as pc.CameraComponent;
 
       await viewer.loadGltf(gltfEmbeddedUrl);
+      viewer.setActiveCamera(0);
       await waitForAnimationFrame();
 
       const transformBefore = camera.entity.getLocalTransform().clone().data;

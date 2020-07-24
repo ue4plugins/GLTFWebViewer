@@ -26,21 +26,16 @@ import {
   HdriBackdrop,
 } from "./extensions";
 import { AnimationState } from "./Animation";
+import { CameraEntity, OrbitCameraEntity, isOrbitCameraEntity } from "./Camera";
 
 const debug = Debug("PlayCanvasViewer");
-
-type CameraEntity = pc.Entity & {
-  script: pc.ScriptComponent & {
-    [orbitCameraScriptName]: OrbitCamera;
-    [hotspotTrackerScriptName]: HotspotTracker;
-  };
-};
 
 type Fields = GltfVariantSetConfigurator["manager"]["fields"];
 
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
-  private _camera: CameraEntity;
+  private _activeCamera?: CameraEntity;
+  private _defaultCamera: OrbitCameraEntity;
   private _loader: PlayCanvasGltfLoader;
   private _scene?: pc.Scene;
   private _gltf?: GltfData;
@@ -52,7 +47,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
   );
-  private _observedElement: HTMLElement;
+  private _observedElement?: HTMLElement;
   private _initiated = false;
   private _sceneLoaded = false;
   private _gltfLoaded = false;
@@ -69,11 +64,16 @@ export class PlayCanvasViewer implements TestableViewer {
       HdriBackdropScript.scriptName ?? undefined,
     );
 
-    this._camera = this._createCamera(this._app);
+    this._defaultCamera = this._createDefaultCamera(this._app);
+    this._activeCamera = this._defaultCamera;
+
     this._loader = new PlayCanvasGltfLoader(this._app);
 
-    this._observedElement = this.canvas.parentElement || this.canvas;
-    this._canvasResizeObserver.observe(this._observedElement);
+    this._observedElement =
+      this.canvas.parentElement?.parentElement ?? undefined;
+    if (this._observedElement) {
+      this._canvasResizeObserver.observe(this._observedElement);
+    }
 
     this._onConfigurationChange = this._onConfigurationChange.bind(this);
   }
@@ -112,14 +112,42 @@ export class PlayCanvasViewer implements TestableViewer {
         }))
         .filter((_, index) => scene.animations[index].playable),
       configurator: this._configurator,
+      cameras: scene.cameras.map((camera, index) => ({
+        id: index,
+        name: camera.name,
+        orbit: isOrbitCameraEntity(camera),
+      })),
+      hasBackdrops: scene.backdrops.length > 0,
     };
   }
 
   private _resizeCanvas() {
-    this._app.resizeCanvas(
-      this.canvas.parentElement?.clientWidth,
-      this.canvas.parentElement?.clientHeight,
-    );
+    const app = this._app;
+    const sizeElem = this.canvas.parentElement?.parentElement;
+
+    if (!sizeElem) {
+      app.resizeCanvas();
+      return;
+    }
+
+    const { clientWidth, clientHeight } = sizeElem;
+    const cameraComponent = this._activeCamera?.camera;
+    const aspectRatioMode = cameraComponent?.aspectRatioMode;
+    const aspectRatio = cameraComponent?.aspectRatio;
+
+    if (aspectRatioMode === pc.ASPECT_MANUAL && aspectRatio !== undefined) {
+      const sizeElemAspectRatio = clientWidth / clientHeight;
+      app.resizeCanvas(
+        aspectRatio > sizeElemAspectRatio
+          ? clientWidth
+          : clientHeight / aspectRatio,
+        aspectRatio > sizeElemAspectRatio
+          ? clientWidth * aspectRatio
+          : clientHeight,
+      );
+    } else {
+      app.resizeCanvas(clientWidth, clientHeight);
+    }
   }
 
   private _createApp() {
@@ -143,25 +171,17 @@ export class PlayCanvasViewer implements TestableViewer {
       },
     });
 
-    app.setCanvasFillMode(pc.FILLMODE_NONE);
-    app.setCanvasResolution(pc.RESOLUTION_AUTO);
-    app.resizeCanvas(
-      this.canvas.parentElement?.clientWidth,
-      this.canvas.parentElement?.clientHeight,
-    );
-
     debug("Starting app");
     app.start();
 
     return app;
   }
 
-  private _createCamera(app: pc.Application) {
-    debug("Creating camera");
+  private _createDefaultCamera(app: pc.Application): OrbitCameraEntity {
+    debug("Creating default camera");
 
-    const camera = new pc.Entity("camera") as CameraEntity;
+    const camera = new pc.Entity("Default camera") as OrbitCameraEntity;
     camera.addComponent("camera", {
-      fov: 45.8366,
       clearColor: new pc.Color(0, 0, 0),
     });
 
@@ -171,9 +191,10 @@ export class PlayCanvasViewer implements TestableViewer {
     camera.script[orbitCameraScriptName].nearClipFactor = 0.002;
     camera.script[orbitCameraScriptName].farClipFactor = 100;
 
+    camera.script.create(hotspotTrackerScriptName);
+
     app.root.addChild(camera);
 
-    camera.script.create(hotspotTrackerScriptName);
     return camera;
   }
 
@@ -187,9 +208,8 @@ export class PlayCanvasViewer implements TestableViewer {
     this._activeGltfScene = gltfScene;
     this._app.root.addChild(gltfScene.root);
 
-    if (gltfScene.hotspots.length > 0) {
-      this._initHotspots(gltfScene.hotspots);
-    }
+    // Add default camera to start of camera list
+    gltfScene.cameras.unshift(this._defaultCamera);
 
     if (gltfScene.variantSets.length > 0) {
       this._initConfigurator(gltfScene.variantSets);
@@ -198,23 +218,19 @@ export class PlayCanvasViewer implements TestableViewer {
     if (gltfScene.backdrops.length > 0) {
       this._initBackdrops(gltfScene.backdrops);
     }
-
-    this.focusCameraOnRootEntity();
   }
 
-  private _initHotspots(hotspots: InteractionHotspot[]) {
-    this._destroyHotspots();
-
+  private _initHotspots(hotspots: InteractionHotspot[], camera: CameraEntity) {
     debug("Init hotspots", hotspots);
 
-    const hotspotRootElem = this.canvas.parentElement;
-    if (!hotspotRootElem) {
+    const canvasWrapperElem = this.canvas.parentElement;
+    if (!canvasWrapperElem) {
       return;
     }
 
     this._hotspotTrackerHandles = hotspots.map(hotspot => {
       const { animation } = hotspot;
-      const renderer = new HotspotBuilder(hotspotRootElem);
+      const renderer = new HotspotBuilder(canvasWrapperElem);
 
       renderer.render({
         imageSource: hotspot.imageSource,
@@ -232,7 +248,7 @@ export class PlayCanvasViewer implements TestableViewer {
         },
       });
 
-      return this._camera.script[hotspotTrackerScriptName].track(
+      return camera.script[hotspotTrackerScriptName].track(
         hotspot.node.getPosition(),
         (ev, screen) => {
           ev === HotspotTrackerEventType.Stop
@@ -243,7 +259,7 @@ export class PlayCanvasViewer implements TestableViewer {
     });
   }
 
-  private _destroyHotspots() {
+  private _destroyHotspots(camera: CameraEntity) {
     if (!this._hotspotTrackerHandles) {
       return;
     }
@@ -251,7 +267,7 @@ export class PlayCanvasViewer implements TestableViewer {
     debug("Destroy hotspots", this._hotspotTrackerHandles);
 
     this._hotspotTrackerHandles.forEach(handle =>
-      this._camera.script[hotspotTrackerScriptName].untrack(handle),
+      camera.script[hotspotTrackerScriptName].untrack(handle),
     );
     this._hotspotTrackerHandles = undefined;
   }
@@ -334,7 +350,6 @@ export class PlayCanvasViewer implements TestableViewer {
     const originalSkyboxAsset = app.assets.get(app._skyboxLast ?? 0);
 
     const onBackdropEnabled = (backdrop: HdriBackdrop) => {
-      // TODO: Prevent the user from switching between scenes / skyboxes when backdrops are used
       // TODO: Add support for using reflection probes instead of skyboxes
       app.scene.setSkybox([null, ...backdrop.skyboxCubemaps]);
     };
@@ -369,7 +384,9 @@ export class PlayCanvasViewer implements TestableViewer {
   public destroy() {
     this.destroyGltf();
     this.destroyScene();
-    this._canvasResizeObserver.unobserve(this._observedElement);
+    if (this._observedElement) {
+      this._canvasResizeObserver.unobserve(this._observedElement);
+    }
     this._app.destroy();
   }
 
@@ -388,6 +405,10 @@ export class PlayCanvasViewer implements TestableViewer {
         }
         app.preload(() => {
           this._initiated = true;
+
+          // Override fill mode from config
+          app.setCanvasFillMode(pc.FILLMODE_NONE);
+
           resolve();
         });
       });
@@ -396,7 +417,6 @@ export class PlayCanvasViewer implements TestableViewer {
 
   public async loadScene(url: string) {
     // NOTE: When using backdrops, they provide their own "scene" / lighting.
-    // TODO: Prevent the user from selecting scenes in the UI when backdrop(s) are present.
     if (this._backdrops) {
       return Promise.resolve();
     }
@@ -441,9 +461,12 @@ export class PlayCanvasViewer implements TestableViewer {
     if (this._activeGltfScene) {
       this._app.root.removeChild(this._activeGltfScene.root);
       this._activeGltfScene = undefined;
-      this._destroyHotspots();
       this._destroyConfigurator();
       this._destroyBackdrops();
+    }
+
+    if (this._activeCamera) {
+      this._destroyHotspots(this._activeCamera);
     }
 
     if (this._gltf) {
@@ -469,16 +492,65 @@ export class PlayCanvasViewer implements TestableViewer {
     });
   }
 
+  public setActiveCamera(cameraId: number) {
+    debug("Set active camera", cameraId);
+
+    if (!this._activeGltfScene) {
+      return;
+    }
+
+    this._activeGltfScene.cameras.forEach((camera, cameraIndex) => {
+      if (cameraIndex === cameraId) {
+        camera.camera.enabled = true;
+      } else {
+        camera.camera.enabled = false;
+      }
+    });
+
+    // Destroy hotspots for previous camera
+    if (this._activeCamera) {
+      this._destroyHotspots(this._activeCamera);
+    }
+
+    this._activeCamera = this._activeGltfScene.cameras.find(
+      camera => camera.camera.enabled,
+    );
+
+    // Init hotspots for new camera
+    if (this._activeGltfScene.hotspots.length > 0 && this._activeCamera) {
+      this._initHotspots(this._activeGltfScene.hotspots, this._activeCamera);
+    }
+
+    // Resize since new camera aspect ratio might affect canvas size
+    this._resizeCanvas();
+
+    this.focusCameraOnRootEntity();
+  }
+
   public focusCameraOnRootEntity() {
     debug("Focus on root entity", this._app.root);
 
-    if (this._app.root) {
-      this._camera.script[orbitCameraScriptName].focus(this._app.root);
+    if (
+      this._app.root &&
+      this._activeCamera &&
+      isOrbitCameraEntity(this._activeCamera)
+    ) {
+      this._activeCamera.script[orbitCameraScriptName].focus(this._app.root);
     }
   }
 
   public resetCamera(yaw?: number, pitch?: number, distance?: number) {
-    this._camera.script[orbitCameraScriptName].reset(yaw, pitch, distance);
+    if (
+      this._app.root &&
+      this._activeCamera &&
+      isOrbitCameraEntity(this._activeCamera)
+    ) {
+      this._activeCamera.script[orbitCameraScriptName].reset(
+        yaw,
+        pitch,
+        distance,
+      );
+    }
   }
 
   public async loadGltf(url: string, fileName?: string) {

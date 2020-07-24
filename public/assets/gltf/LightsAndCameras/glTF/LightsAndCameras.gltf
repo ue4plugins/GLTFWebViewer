@@ -1,0 +1,867 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "Unreal Engine 4.25 glTF Exporter 0.1"
+  },
+  "scene": 0,
+  "accessors": [
+    {
+      "name": "EnviroBoxSharp_Positions",
+      "bufferView": 0,
+      "count": 24,
+      "type": "VEC3",
+      "componentType": 5126,
+      "min": [-0.5, -3.0616168e-17, -0.5],
+      "max": [0.5, 1, 0.5]
+    },
+    {
+      "name": "EnviroBoxSharp_Normals",
+      "bufferView": 1,
+      "count": 24,
+      "type": "VEC3",
+      "componentType": 5126
+    },
+    {
+      "name": "EnviroBoxSharp_Tangents",
+      "bufferView": 2,
+      "count": 24,
+      "type": "VEC4",
+      "componentType": 5126
+    },
+    {
+      "name": "EnviroBoxSharp_UV0s",
+      "bufferView": 3,
+      "count": 24,
+      "type": "VEC2",
+      "componentType": 5126
+    },
+    {
+      "name": "EnviroBoxSharp_UV1s",
+      "bufferView": 4,
+      "count": 24,
+      "type": "VEC2",
+      "componentType": 5126
+    },
+    {
+      "name": "EnviroBoxSharp_Indices",
+      "bufferView": 5,
+      "count": 36,
+      "type": "SCALAR",
+      "componentType": 5123
+    },
+    {
+      "name": "TranslateArrowHandle_Positions",
+      "bufferView": 6,
+      "count": 203,
+      "type": "VEC3",
+      "componentType": 5126,
+      "min": [-0.000573043828, -0.0416126288, -0.0413680151],
+      "max": [0.488297254, 0.0411224924, 0.0413680151]
+    },
+    {
+      "name": "TranslateArrowHandle_Normals",
+      "bufferView": 7,
+      "count": 203,
+      "type": "VEC3",
+      "componentType": 5126
+    },
+    {
+      "name": "TranslateArrowHandle_Tangents",
+      "bufferView": 8,
+      "count": 203,
+      "type": "VEC4",
+      "componentType": 5126
+    },
+    {
+      "name": "TranslateArrowHandle_UV0s",
+      "bufferView": 9,
+      "count": 203,
+      "type": "VEC2",
+      "componentType": 5126
+    },
+    {
+      "name": "TranslateArrowHandle_UV1s",
+      "bufferView": 10,
+      "count": 203,
+      "type": "VEC2",
+      "componentType": 5126
+    },
+    {
+      "name": "TranslateArrowHandle_Indices_Section0",
+      "bufferView": 11,
+      "count": 258,
+      "type": "SCALAR",
+      "componentType": 5123
+    },
+    {
+      "name": "TranslateArrowHandle_Indices_Section1",
+      "bufferView": 11,
+      "byteOffset": 516,
+      "count": 258,
+      "type": "SCALAR",
+      "componentType": 5123
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "LightsAndCameras.bin",
+      "byteLength": 13816
+    }
+  ],
+  "bufferViews": [
+    {
+      "name": "EnviroBoxSharp_Positions",
+      "buffer": 0,
+      "byteLength": 288,
+      "target": 34962
+    },
+    {
+      "name": "EnviroBoxSharp_Normals",
+      "buffer": 0,
+      "byteLength": 288,
+      "byteOffset": 288,
+      "target": 34962
+    },
+    {
+      "name": "EnviroBoxSharp_Tangents",
+      "buffer": 0,
+      "byteLength": 384,
+      "byteOffset": 576,
+      "target": 34962
+    },
+    {
+      "name": "EnviroBoxSharp_UV0s",
+      "buffer": 0,
+      "byteLength": 192,
+      "byteOffset": 960,
+      "target": 34962
+    },
+    {
+      "name": "EnviroBoxSharp_UV1s",
+      "buffer": 0,
+      "byteLength": 192,
+      "byteOffset": 1152,
+      "target": 34962
+    },
+    {
+      "name": "EnviroBoxSharp_Indices",
+      "buffer": 0,
+      "byteLength": 72,
+      "byteOffset": 1344,
+      "target": 34963
+    },
+    {
+      "name": "TranslateArrowHandle_Positions",
+      "buffer": 0,
+      "byteLength": 2436,
+      "byteOffset": 1416,
+      "target": 34962
+    },
+    {
+      "name": "TranslateArrowHandle_Normals",
+      "buffer": 0,
+      "byteLength": 2436,
+      "byteOffset": 3852,
+      "target": 34962
+    },
+    {
+      "name": "TranslateArrowHandle_Tangents",
+      "buffer": 0,
+      "byteLength": 3248,
+      "byteOffset": 6288,
+      "target": 34962
+    },
+    {
+      "name": "TranslateArrowHandle_UV0s",
+      "buffer": 0,
+      "byteLength": 1624,
+      "byteOffset": 9536,
+      "target": 34962
+    },
+    {
+      "name": "TranslateArrowHandle_UV1s",
+      "buffer": 0,
+      "byteLength": 1624,
+      "byteOffset": 11160,
+      "target": 34962
+    },
+    {
+      "name": "TranslateArrowHandle_Indices",
+      "buffer": 0,
+      "byteLength": 1032,
+      "byteOffset": 12784,
+      "target": 34963
+    }
+  ],
+  "cameras": [
+    {
+      "name": "PerspectiveCamera3",
+      "type": "perspective",
+      "perspective": {
+        "yfov": 1.60615218,
+        "zfar": 20971.5195,
+        "znear": 0.099999994
+      }
+    },
+    {
+      "name": "PerspectiveCamera1",
+      "type": "perspective",
+      "perspective": {
+        "aspectRatio": 1,
+        "yfov": 0.959931076,
+        "zfar": 20971.5195,
+        "znear": 0.099999994
+      }
+    },
+    {
+      "name": "OrthographicCamera3",
+      "type": "orthographic",
+      "orthographic": {
+        "ymag": 10.2399998,
+        "zfar": 20971.5195,
+        "znear": 0
+      }
+    },
+    {
+      "name": "OrthographicCamera1",
+      "type": "orthographic",
+      "orthographic": {
+        "xmag": 4,
+        "ymag": 4,
+        "zfar": 20971.5195,
+        "znear": 0
+      }
+    },
+    {
+      "name": "OrthographicCamera2",
+      "type": "orthographic",
+      "orthographic": {
+        "xmag": 1,
+        "ymag": 0.333333313,
+        "zfar": 20971.5195,
+        "znear": 0
+      }
+    },
+    {
+      "name": "PerspectiveCamera2",
+      "type": "perspective",
+      "perspective": {
+        "aspectRatio": 3,
+        "yfov": 0.536321044,
+        "zfar": 20971.5195,
+        "znear": 0.099999994
+      }
+    }
+  ],
+  "images": [
+    {
+      "uri": "WorldGridMaterial_BaseColor.png"
+    },
+    {
+      "uri": "WorldGridMaterial_MetallicRoughness.png"
+    },
+    {
+      "uri": "WorldGridMaterial_Normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "name": "WorldGridMaterial",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      },
+      "normalTexture": {
+        "index": 2
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "EnviroBoxSharp",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3,
+            "TEXCOORD_1": 4
+          },
+          "indices": 5,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "TranslateArrowHandle",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 6,
+            "NORMAL": 7,
+            "TANGENT": 8,
+            "TEXCOORD_0": 9,
+            "TEXCOORD_1": 10
+          },
+          "indices": 11,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 6,
+            "NORMAL": 7,
+            "TANGENT": 8,
+            "TEXCOORD_0": 9,
+            "TEXCOORD_1": 10
+          },
+          "indices": 12,
+          "material": 0
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Brush_1_BrushComponent0",
+      "translation": [-0.899999976, 0.199999988, 1.10000002]
+    },
+    {
+      "name": "InstancedFoliageActor_0_RootComponent0"
+    },
+    {
+      "name": "SpotBox1_StaticMeshComponent0",
+      "translation": [1, 0.199999988, -1],
+      "mesh": 0,
+      "children": [47]
+    },
+    {
+      "name": "SpotBox2_StaticMeshComponent0",
+      "translation": [1, 0.199999988, 0],
+      "mesh": 0,
+      "children": [51]
+    },
+    {
+      "name": "SpotBox3_StaticMeshComponent0",
+      "translation": [1, 0.199999988, 1],
+      "mesh": 0,
+      "children": [55]
+    },
+    {
+      "name": "PointBox1_StaticMeshComponent0",
+      "translation": [0, 0.199999988, -1],
+      "mesh": 0,
+      "children": [59]
+    },
+    {
+      "name": "PointBox2_StaticMeshComponent0",
+      "translation": [0, 0.199999988, 0],
+      "mesh": 0,
+      "children": [62]
+    },
+    {
+      "name": "PointBox3_StaticMeshComponent0",
+      "translation": [0, 0.199999988, 1],
+      "mesh": 0,
+      "children": [65]
+    },
+    {
+      "name": "Box_StaticMeshComponent0",
+      "scale": [4, 4, 4],
+      "mesh": 0
+    },
+    {
+      "name": "DirectionalBox1_StaticMeshComponent0",
+      "translation": [-1, 0.199999988, -1],
+      "mesh": 0,
+      "children": [43]
+    },
+    {
+      "name": "DirectionalBox2_StaticMeshComponent0",
+      "translation": [-1, 0.199999988, 0],
+      "mesh": 0,
+      "children": [68]
+    },
+    {
+      "name": "DirectionalBox3_StaticMeshComponent0",
+      "translation": [-1, 0.199999988, 1],
+      "mesh": 0,
+      "children": [72]
+    },
+    {
+      "name": "PerspectiveCamera3_SceneComponent",
+      "translation": [2.0999999, 3.89999986, 2.0999999],
+      "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
+      "children": [13]
+    },
+    {
+      "name": "PerspectiveCamera3_CameraComponent",
+      "children": [14, 15, 16]
+    },
+    {
+      "name": "PerspectiveCamera3",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "camera": 0
+    },
+    {
+      "name": "PerspectiveCamera3_StaticMeshComponent_0"
+    },
+    {
+      "name": "PerspectiveCamera3_DrawFrustumComponent_0"
+    },
+    {
+      "name": "PerspectiveCamera1_SceneComponent",
+      "translation": [0, 4, 0],
+      "rotation": [0, -0, -0.707106769, 0.707106709],
+      "children": [18]
+    },
+    {
+      "name": "PerspectiveCamera1_CameraComponent",
+      "children": [19, 20, 21]
+    },
+    {
+      "name": "PerspectiveCamera1",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "camera": 1
+    },
+    {
+      "name": "PerspectiveCamera1_StaticMeshComponent_0"
+    },
+    {
+      "name": "PerspectiveCamera1_DrawFrustumComponent_0"
+    },
+    {
+      "name": "OrthographicCamera3_SceneComponent",
+      "translation": [2, 4.82499981, 2],
+      "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
+      "children": [23]
+    },
+    {
+      "name": "OrthographicCamera3_CameraComponent",
+      "children": [24, 25, 26]
+    },
+    {
+      "name": "OrthographicCamera3",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "camera": 2
+    },
+    {
+      "name": "OrthographicCamera3_StaticMeshComponent_0"
+    },
+    {
+      "name": "OrthographicCamera3_DrawFrustumComponent_0"
+    },
+    {
+      "name": "OrthographicCamera1_SceneComponent",
+      "translation": [0, 6.0999999, 0],
+      "rotation": [0, -0, -0.707106769, 0.707106709],
+      "children": [28]
+    },
+    {
+      "name": "OrthographicCamera1_CameraComponent",
+      "children": [29, 30, 31]
+    },
+    {
+      "name": "OrthographicCamera1",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "camera": 3
+    },
+    {
+      "name": "OrthographicCamera1_StaticMeshComponent_0"
+    },
+    {
+      "name": "OrthographicCamera1_DrawFrustumComponent_0"
+    },
+    {
+      "name": "OrthographicCamera2_SceneComponent",
+      "translation": [0, 5.0999999, 0],
+      "rotation": [0, -0, -0.707106769, 0.707106709],
+      "children": [33]
+    },
+    {
+      "name": "OrthographicCamera2_CameraComponent",
+      "children": [34, 35, 36]
+    },
+    {
+      "name": "OrthographicCamera2",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "camera": 4
+    },
+    {
+      "name": "OrthographicCamera2_StaticMeshComponent_0"
+    },
+    {
+      "name": "OrthographicCamera2_DrawFrustumComponent_0"
+    },
+    {
+      "name": "PerspectiveCamera2_SceneComponent",
+      "translation": [0, 3, 0],
+      "rotation": [0, -0, -0.707106769, 0.707106709],
+      "children": [38]
+    },
+    {
+      "name": "PerspectiveCamera2_CameraComponent",
+      "children": [39, 40, 41]
+    },
+    {
+      "name": "PerspectiveCamera2",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "camera": 5
+    },
+    {
+      "name": "PerspectiveCamera2_StaticMeshComponent_0"
+    },
+    {
+      "name": "PerspectiveCamera2_DrawFrustumComponent_0"
+    },
+    {
+      "name": "DefaultPhysicsVolume_0_BrushComponent0"
+    },
+    {
+      "name": "DirectionalLights1_LightComponent0",
+      "translation": [0, 0.5, 0],
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "children": [44, 45, 46, 79]
+    },
+    {
+      "name": "DirectionalLights1",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "extensions": {
+        "KHR_lights_punctual": {
+          "light": 0
+        }
+      }
+    },
+    {
+      "name": "DirectionalLights1_ArrowComponent0"
+    },
+    {
+      "name": "DirectionalLights1_BillboardComponent_0",
+      "scale": [0.5, 0.5, 0.5]
+    },
+    {
+      "name": "SpotLight1_LightComponent0",
+      "translation": [0, 0.5, 0],
+      "rotation": [0, -0, -0.707106769, 0.707106709],
+      "children": [48, 49, 50, 76]
+    },
+    {
+      "name": "SpotLight1",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "extensions": {
+        "KHR_lights_punctual": {
+          "light": 1
+        }
+      }
+    },
+    {
+      "name": "SpotLight1_ArrowComponent0"
+    },
+    {
+      "name": "SpotLight1_BillboardComponent_0",
+      "scale": [0.5, 0.5, 0.5]
+    },
+    {
+      "name": "SpotLight2_LightComponent0",
+      "translation": [0, 0.5, 0],
+      "rotation": [0, -0, -0.707106769, 0.707106709],
+      "children": [52, 53, 54, 77]
+    },
+    {
+      "name": "SpotLight2",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "extensions": {
+        "KHR_lights_punctual": {
+          "light": 2
+        }
+      }
+    },
+    {
+      "name": "SpotLight2_ArrowComponent0"
+    },
+    {
+      "name": "SpotLight2_BillboardComponent_0",
+      "scale": [0.5, 0.5, 0.5]
+    },
+    {
+      "name": "SpotLight3_LightComponent0",
+      "translation": [0, 0.5, 0],
+      "rotation": [0, -0, -0.707106769, 0.707106709],
+      "children": [56, 57, 58, 78]
+    },
+    {
+      "name": "SpotLight3",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "extensions": {
+        "KHR_lights_punctual": {
+          "light": 3
+        }
+      }
+    },
+    {
+      "name": "SpotLight3_ArrowComponent0"
+    },
+    {
+      "name": "SpotLight3_BillboardComponent_0",
+      "scale": [0.5, 0.5, 0.5]
+    },
+    {
+      "name": "PointLight1_LightComponent0",
+      "translation": [0, 0.5, 0],
+      "children": [60, 61]
+    },
+    {
+      "name": "PointLight1",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "extensions": {
+        "KHR_lights_punctual": {
+          "light": 4
+        }
+      }
+    },
+    {
+      "name": "PointLight1_BillboardComponent_0",
+      "scale": [0.5, 0.5, 0.5]
+    },
+    {
+      "name": "PointLight2_LightComponent0",
+      "translation": [0, 0.5, 0],
+      "children": [63, 64]
+    },
+    {
+      "name": "PointLight2",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "extensions": {
+        "KHR_lights_punctual": {
+          "light": 5
+        }
+      }
+    },
+    {
+      "name": "PointLight2_BillboardComponent_0",
+      "scale": [0.5, 0.5, 0.5]
+    },
+    {
+      "name": "PointLight3_LightComponent0",
+      "translation": [0, 0.5, 0],
+      "children": [66, 67]
+    },
+    {
+      "name": "PointLight3",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "extensions": {
+        "KHR_lights_punctual": {
+          "light": 6
+        }
+      }
+    },
+    {
+      "name": "PointLight3_BillboardComponent_0",
+      "scale": [0.5, 0.5, 0.5]
+    },
+    {
+      "name": "DirectionalLights2_LightComponent0",
+      "translation": [0, 0.5, 0],
+      "children": [69, 70, 71, 80]
+    },
+    {
+      "name": "DirectionalLights2",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "extensions": {
+        "KHR_lights_punctual": {
+          "light": 7
+        }
+      }
+    },
+    {
+      "name": "DirectionalLights2_ArrowComponent0"
+    },
+    {
+      "name": "DirectionalLights2_BillboardComponent_0",
+      "scale": [0.5, 0.5, 0.5]
+    },
+    {
+      "name": "DirectionalLights3_LightComponent0",
+      "translation": [0, 0.5, 0],
+      "rotation": [0, -0, -0.707106769, 0.707106709],
+      "children": [73, 74, 75, 81]
+    },
+    {
+      "name": "DirectionalLights3",
+      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "extensions": {
+        "KHR_lights_punctual": {
+          "light": 8
+        }
+      }
+    },
+    {
+      "name": "DirectionalLights3_ArrowComponent0"
+    },
+    {
+      "name": "DirectionalLights3_BillboardComponent_0",
+      "scale": [0.5, 0.5, 0.5]
+    },
+    {
+      "name": "SpotArrow1_StaticMeshComponent0",
+      "mesh": 1
+    },
+    {
+      "name": "SpotArrow2_StaticMeshComponent0",
+      "mesh": 1
+    },
+    {
+      "name": "SpotArrow3_StaticMeshComponent0",
+      "mesh": 1
+    },
+    {
+      "name": "DirectionalArrow1_StaticMeshComponent0",
+      "mesh": 1
+    },
+    {
+      "name": "DirectionalArrow2_StaticMeshComponent0",
+      "mesh": 1
+    },
+    {
+      "name": "DirectionalArrow3_StaticMeshComponent0",
+      "mesh": 1
+    }
+  ],
+  "samplers": [
+    {
+      "name": "WorldGridMaterial_BaseColor",
+      "minFilter": 9987,
+      "magFilter": 9729
+    },
+    {
+      "name": "WorldGridMaterial_MetallicRoughness",
+      "minFilter": 9987,
+      "magFilter": 9729
+    },
+    {
+      "name": "WorldGridMaterial_Normal",
+      "minFilter": 9987,
+      "magFilter": 9729
+    }
+  ],
+  "scenes": [
+    {
+      "name": "LightsAndCameras",
+      "nodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        17,
+        22,
+        27,
+        32,
+        37,
+        42
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "name": "WorldGridMaterial_BaseColor",
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "name": "WorldGridMaterial_MetallicRoughness",
+      "sampler": 1,
+      "source": 1
+    },
+    {
+      "name": "WorldGridMaterial_Normal",
+      "sampler": 2,
+      "source": 2
+    }
+  ],
+  "extensions": {
+    "KHR_lights_punctual": {
+      "lights": [
+        {
+          "name": "DirectionalLights1",
+          "type": "directional"
+        },
+        {
+          "name": "SpotLight1",
+          "type": "spot",
+          "color": [2.91841531, 0.533953309, 0],
+          "intensity": 160,
+          "range": 0.706999958,
+          "spot": {
+            "innerConeAngle": 0.785398185,
+            "outerConeAngle": 0.785398185
+          }
+        },
+        {
+          "name": "SpotLight2",
+          "type": "spot",
+          "color": [1.04398894, 0.983291209, 1.03594124],
+          "intensity": 160,
+          "range": 0.706999958,
+          "spot": {
+            "innerConeAngle": 0.785398185,
+            "outerConeAngle": 0.785398185
+          }
+        },
+        {
+          "name": "SpotLight3",
+          "type": "spot",
+          "color": [0.825071275, 0.994935989, 1.56562638],
+          "intensity": 160,
+          "range": 0.706999958,
+          "spot": {
+            "innerConeAngle": 0.785398185,
+            "outerConeAngle": 0.785398185
+          }
+        },
+        {
+          "name": "PointLight1",
+          "type": "point",
+          "color": [1, 0, 0],
+          "intensity": 160,
+          "range": 0.706999958
+        },
+        {
+          "name": "PointLight2",
+          "type": "point",
+          "color": [0, 1, 0],
+          "intensity": 160,
+          "range": 0.706999958
+        },
+        {
+          "name": "PointLight3",
+          "type": "point",
+          "color": [0, 0, 1],
+          "intensity": 160,
+          "range": 0.706999958
+        },
+        {
+          "name": "DirectionalLights2",
+          "type": "directional"
+        },
+        {
+          "name": "DirectionalLights3",
+          "type": "directional"
+        }
+      ]
+    }
+  },
+  "extensionsUsed": ["KHR_lights_punctual"]
+}

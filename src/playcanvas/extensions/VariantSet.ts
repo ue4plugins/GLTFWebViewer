@@ -1,7 +1,6 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import { hasNoUndefinedValues } from "../../utilities/typeGuards";
-import { getImageIndex } from "../utilities";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
@@ -166,18 +165,6 @@ export class VariantSetExtensionParser implements ExtensionParser {
     }
 
     debug("Found variant sets", levelVariantSets);
-
-    // Convert thumbnail texture indexes to image indexes since
-    // ContainerResource.textures is indexed by images
-    levelVariantSets.forEach(({ variantSets }) => {
-      variantSets.forEach(({ variants }) => {
-        variants.forEach(variant => {
-          if (variant.thumbnail) {
-            variant.thumbnail = getImageIndex(variant.thumbnail, rootData);
-          }
-        });
-      });
-    });
 
     this._variantSets.push({
       scene,

@@ -13,6 +13,7 @@ import {
   HdriBackdrop,
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
+import { CameraEntity, convertToCameraEntity } from "./Camera";
 
 const debug = Debug("PlayCanvasGltfLoader");
 
@@ -22,6 +23,7 @@ export type GltfSceneData = {
   hotspots: InteractionHotspot[];
   backdrops: HdriBackdrop[];
   animations: Animation[];
+  cameras: CameraEntity[];
 };
 
 export type GltfData = {
@@ -73,10 +75,14 @@ export class PlayCanvasGltfLoader {
   }
 
   private _createAnimations(container: pc.ContainerResource): Animation[] {
-    const { nodeAnimations, animations: animationAssets } = container;
+    const { nodes, nodeAnimations, animations: animationAssets } = container;
     return nodeAnimations
-      .filter(({ animations }) => animations.length > 0)
-      .map(({ node, animations: animationIndices }) => {
+      .map<Animation[]>((animationIndices, nodeIndex) => {
+        if (animationIndices.length === 0) {
+          return [];
+        }
+
+        const node = nodes[nodeIndex];
         const component = node.addComponent("anim") as pc.AnimComponent;
 
         // Create one layer per animation asset so that the animations can be played simultaneously
@@ -106,7 +112,7 @@ export class PlayCanvasGltfLoader {
             };
           })
           .filter(({ layer }) => !!layer)
-          .map(({ track, index, layer: layerOrNull }) => {
+          .map<Animation>(({ track, index, layer: layerOrNull }) => {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const layer = layerOrNull!;
 
@@ -182,6 +188,11 @@ export class PlayCanvasGltfLoader {
       const animations = this._createAnimations(container);
       debug("Created animations", animations);
 
+      const cameraEntities = container.cameras.map(component =>
+        convertToCameraEntity(component.node as pc.Entity),
+      );
+      debug("Created camera entities", cameraEntities);
+
       const { hotspotAnimationIndices } = hotspotParser;
 
       return {
@@ -209,6 +220,9 @@ export class PlayCanvasGltfLoader {
             animations: sceneAnimations.filter(
               animation =>
                 hotspotAnimationIndices.indexOf(animation.index) === -1,
+            ),
+            cameras: cameraEntities.filter(cameraEntity =>
+              sceneRoot.findOne(node => node === cameraEntity),
             ),
           };
         }),

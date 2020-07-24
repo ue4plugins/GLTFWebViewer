@@ -20,9 +20,16 @@ import {
 const debug = Debug("Viewer");
 
 const useStyles = makeStyles(theme => ({
-  canvas: {
-    position: "relative",
-    maxWidth: "100%",
+  root: {
+    height: "100%",
+    backgroundColor: theme.palette.common.black,
+    outline: "none",
+  },
+  canvasWrapper: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translateY(-50%) translateX(-50%)",
   },
   backdrop: {
     position: "absolute",
@@ -37,7 +44,13 @@ const useStyles = makeStyles(theme => ({
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore, sceneStore } = useStores();
-  const { gltf, setGltf, setSceneHierarchy, activeAnimationIds } = gltfStore;
+  const {
+    gltf,
+    setGltf,
+    setSceneHierarchy,
+    activeAnimationIds,
+    camera,
+  } = gltfStore;
   const { scene, setScenes } = sceneStore;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -156,6 +169,15 @@ export const Viewer: React.FC = observer(() => {
     viewer.setActiveAnimations(activeAnimationIds);
   }, [viewer, activeAnimationIds]);
 
+  // PlayCanvasViewer: Set active camera
+  useEffect(() => {
+    if (!viewer?.initiated || !camera) {
+      return;
+    }
+    debug("Set active camera", camera);
+    viewer.setActiveCamera(camera.id);
+  }, [viewer, camera]);
+
   // Reset error state
   useEffect(() => {
     debug("Reset drop error state");
@@ -169,8 +191,10 @@ export const Viewer: React.FC = observer(() => {
   }, [showBackdrop, setPreventInteraction]);
 
   return (
-    <div {...getRootProps()}>
-      <canvas className={classes.canvas} ref={canvasRef} />
+    <div className={classes.root} {...getRootProps()}>
+      <div className={classes.canvasWrapper}>
+        <canvas ref={canvasRef} />
+      </div>
       <Backdrop className={classes.backdrop} open={showBackdrop}>
         {isDragActive ? (
           <Typography variant="h5" color="inherit">

@@ -16,6 +16,12 @@ export type GltfAnimation = {
   active: boolean;
 };
 
+export type GltfCamera = {
+  id: number;
+  name: string;
+  orbit: boolean;
+};
+
 export type GltfVariantSetMeta = { name: string };
 export type GltfVariant = Variant;
 export type GltfVariantSetConfigurator = Configurator<
@@ -26,4 +32,6 @@ export type GltfVariantSetConfigurator = Configurator<
 export type GltfScene = {
   animations: GltfAnimation[];
   configurator?: GltfVariantSetConfigurator;
+  cameras: GltfCamera[];
+  hasBackdrops: boolean;
 };
