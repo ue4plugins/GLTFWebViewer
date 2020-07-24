@@ -88,12 +88,12 @@ export class GltfStore {
 
   @action.bound
   public setSceneHierarchy(sceneHierarchy?: GltfScene) {
-    this.sceneHierarchy = sceneHierarchy;
     if (sceneHierarchy) {
       this.camera = sceneHierarchy.cameras[0];
       if (this.autoPlayAnimations) {
         sceneHierarchy.animations.forEach(a => (a.active = true));
       }
     }
+    this.sceneHierarchy = sceneHierarchy;
   }
 }
