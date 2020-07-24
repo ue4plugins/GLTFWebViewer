@@ -11,43 +11,38 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export type SceneSelectorProps = {
-  disabled?: boolean;
-};
+export const SceneSelector: React.FC = observer(() => {
+  const { sceneStore, gltfStore } = useStores();
+  const { sceneIndex, scenes, setScene } = sceneStore;
+  const { hasBackdrops } = gltfStore;
+  const classes = useStyles();
 
-export const SceneSelector: React.FC<SceneSelectorProps> = observer(
-  ({ disabled }) => {
-    const { sceneStore } = useStores();
-    const { sceneIndex, scenes, setScene } = sceneStore;
-    const classes = useStyles();
-
-    return (
-      <FormControl className={classes.formControl}>
-        <InputLabel id="scene-selector-label">Cubemap</InputLabel>
-        <Select
-          id="scene-select"
-          labelId="scene-selector-label"
-          value={sceneIndex > -1 ? sceneIndex.toString() : ""}
-          onChange={e => {
-            const idx = parseInt(e.target.value as string, 10);
-            setScene(scenes[idx]);
-          }}
-          inputProps={{
-            name: "scene-select-input",
-            id: "scene-select-input",
-          }}
-          MenuProps={{
-            id: "scene-select-list",
-          }}
-          disabled={disabled}
-        >
-          {scenes.map((scene, i) => (
-            <MenuItem key={scene.name} value={i.toString()}>
-              {scene.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    );
-  },
-);
+  return (
+    <FormControl className={classes.formControl}>
+      <InputLabel id="scene-selector-label">Cubemap</InputLabel>
+      <Select
+        id="scene-select"
+        labelId="scene-selector-label"
+        value={sceneIndex > -1 ? sceneIndex.toString() : ""}
+        onChange={e => {
+          const idx = parseInt(e.target.value as string, 10);
+          setScene(scenes[idx]);
+        }}
+        inputProps={{
+          name: "scene-select-input",
+          id: "scene-select-input",
+        }}
+        MenuProps={{
+          id: "scene-select-list",
+        }}
+        disabled={hasBackdrops}
+      >
+        {scenes.map((scene, i) => (
+          <MenuItem key={scene.name} value={i.toString()}>
+            {scene.name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+});

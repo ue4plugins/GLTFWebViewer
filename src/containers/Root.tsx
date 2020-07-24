@@ -10,9 +10,6 @@ import { Viewer } from "./Viewer";
 import { Settings } from "./Settings";
 import { Gltf } from "./Gltf";
 
-const urlParams = new URLSearchParams(window.location.search);
-const showUI = !urlParams.get("hideUI");
-
 const useStyles = makeStyles(theme => ({
   "@global": {
     html: {
@@ -54,8 +51,9 @@ type ActiveTab = "gltf" | "settings";
 
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
-  const { gltfStore } = useStores();
+  const { gltfStore, settingsStore } = useStores();
   const { fetchGltfs } = gltfStore;
+  const { showUI, showFpsMeter } = settingsStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState<ActiveTab>("gltf");
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
@@ -98,7 +96,7 @@ export const Root: React.FC = observer(() => {
           )}
         </Sidebar>
       )}
-      {showUI && (
+      {showUI && showFpsMeter && (
         <Hidden xsDown>
           <FpsMonitor />
         </Hidden>
