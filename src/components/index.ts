@@ -2,7 +2,6 @@ export * from "./AnimationSelector";
 export * from "./CameraSelector";
 export * from "./FpsMonitor";
 export * from "./GltfList";
-export * from "./GltfMeta";
 export * from "./Hotspot";
 export * from "./SceneSelector";
 export * from "./SearchField";

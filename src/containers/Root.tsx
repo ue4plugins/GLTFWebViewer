@@ -3,7 +3,7 @@ import clsx from "clsx";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Hidden, Tabs, Tab, makeStyles, Divider } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
-import { Sidebar, FpsMonitor, SidebarToggle, GltfMeta } from "../components";
+import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
 import { useStores } from "../stores";
 import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
 import { Viewer } from "./Viewer";
@@ -55,7 +55,7 @@ type ActiveTab = "gltf" | "settings";
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { gltf, fetchGltfs } = gltfStore;
+  const { fetchGltfs } = gltfStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState<ActiveTab>("gltf");
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
@@ -78,7 +78,6 @@ export const Root: React.FC = observer(() => {
         {showUI && (
           <SidebarToggle isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
         )}
-        {showUI && gltf && <GltfMeta gltf={gltf} />}
       </main>
       {showUI && (
         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
