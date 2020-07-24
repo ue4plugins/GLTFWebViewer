@@ -75,10 +75,14 @@ export class PlayCanvasGltfLoader {
   }
 
   private _createAnimations(container: pc.ContainerResource): Animation[] {
-    const { nodeAnimations, animations: animationAssets } = container;
+    const { nodes, nodeAnimations, animations: animationAssets } = container;
     return nodeAnimations
-      .filter(({ animations }) => animations.length > 0)
-      .map(({ node, animations: animationIndices }) => {
+      .map<Animation[]>((animationIndices, nodeIndex) => {
+        if (animationIndices.length === 0) {
+          return [];
+        }
+
+        const node = nodes[nodeIndex];
         const component = node.addComponent("anim") as pc.AnimComponent;
 
         // Create one layer per animation asset so that the animations can be played simultaneously
@@ -108,7 +112,7 @@ export class PlayCanvasGltfLoader {
             };
           })
           .filter(({ layer }) => !!layer)
-          .map(({ track, index, layer: layerOrNull }) => {
+          .map<Animation>(({ track, index, layer: layerOrNull }) => {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const layer = layerOrNull!;
 
