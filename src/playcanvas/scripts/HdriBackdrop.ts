@@ -124,9 +124,9 @@ class HdriBackdrop extends pc.ScriptType {
     // TODO: Should we optimize or cache this since it's performed per frame?
 
     const rotation = this.entity.getRotation();
-    const yaw = rotation.getAxisAngle(pc.Vec3.UP);
+    const yaw = rotation.getAxisAngle(pc.Vec3.UP.clone());
 
-    rotation.setFromAxisAngle(pc.Vec3.UP, yaw);
+    rotation.setFromAxisAngle(pc.Vec3.UP.clone(), yaw);
   }
 
   private _calculateProjectionCenterUniform(): number[] {
@@ -158,12 +158,12 @@ class HdriBackdrop extends pc.ScriptType {
 
   private _calculateMapRotationMatrixUniform(): number[] {
     const rotation = this.entity.getRotation();
-    const yaw = rotation.getAxisAngle(pc.Vec3.UP);
+    const yaw = rotation.getAxisAngle(pc.Vec3.UP.clone());
 
     // NOTE: In UE, a complete revolution of the backdrop only requires a rotation of 57.3 degrees.
     const mapRotation = yaw * (360 / 57.3);
 
-    this._mapRotationMatrix.setFromAxisAngle(pc.Vec3.UP, mapRotation);
+    this._mapRotationMatrix.setFromAxisAngle(pc.Vec3.UP.clone(), mapRotation);
 
     return (this._mapRotationMatrix.data as unknown) as number[];
   }
