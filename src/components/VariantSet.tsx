@@ -7,10 +7,10 @@ import { Variant } from "./Variant";
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(1.5),
   },
   label: {
-    margin: theme.spacing(1, 2),
+    margin: theme.spacing(0, 2),
   },
 }));
 
