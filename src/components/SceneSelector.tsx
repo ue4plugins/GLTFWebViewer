@@ -1,13 +1,18 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Select, InputLabel, FormControl, MenuItem } from "@material-ui/core";
+import {
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStores } from "../stores";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   formControl: {
     display: "flex",
-    margin: theme.spacing(1, 2),
   },
 }));
 
@@ -18,31 +23,28 @@ export const SceneSelector: React.FC = observer(() => {
   const classes = useStyles();
 
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel id="scene-selector-label">Cubemap</InputLabel>
-      <Select
+    <FormControl className={classes.formControl} component="fieldset">
+      <FormLabel component="legend">Cubemap</FormLabel>
+      <RadioGroup
+        aria-label="scene"
         id="scene-select"
-        labelId="scene-selector-label"
+        name="scene-select"
         value={sceneIndex > -1 ? sceneIndex.toString() : ""}
         onChange={e => {
           const idx = parseInt(e.target.value as string, 10);
           setScene(scenes[idx]);
         }}
-        inputProps={{
-          name: "scene-select-input",
-          id: "scene-select-input",
-        }}
-        MenuProps={{
-          id: "scene-select-list",
-        }}
-        disabled={hasBackdrops}
       >
         {scenes.map((scene, i) => (
-          <MenuItem key={scene.name} value={i.toString()}>
-            {scene.name}
-          </MenuItem>
+          <FormControlLabel
+            key={scene.name}
+            value={i.toString()}
+            control={<Radio />}
+            label={scene.name}
+            disabled={hasBackdrops}
+          />
         ))}
-      </Select>
+      </RadioGroup>
     </FormControl>
   );
 });
