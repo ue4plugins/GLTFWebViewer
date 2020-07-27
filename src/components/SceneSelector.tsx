@@ -31,8 +31,7 @@ export const SceneSelector: React.FC = observer(() => {
         name="scene-select"
         value={sceneIndex > -1 ? sceneIndex.toString() : ""}
         onChange={e => {
-          const idx = parseInt(e.target.value as string, 10);
-          setScene(scenes[idx]);
+          setScene(scenes[parseInt(e.target.value, 10)]);
         }}
       >
         {scenes.map((scene, i) => (
