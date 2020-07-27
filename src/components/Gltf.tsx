@@ -21,13 +21,22 @@ export const Gltf: React.FC = observer(() => {
   const { gltfStore } = useStores();
   const { animations, configurator, gltf, cameras } = gltfStore;
 
+  if (!gltf) {
+    return null;
+  }
+
   return (
     <>
       <div className={classes.meta}>
         <Typography variant="h6">{gltf?.name}</Typography>
-        {gltf?.creator && (
-          <Typography variant="caption">
-            By{" "}
+        {gltf.description && (
+          <Typography variant="caption" component="div">
+            Description: {gltf.description}
+          </Typography>
+        )}
+        {gltf.creator && (
+          <Typography variant="caption" component="div">
+            Creator:{" "}
             {gltf.creatorUrl ? (
               <a
                 href={gltf.creatorUrl}
