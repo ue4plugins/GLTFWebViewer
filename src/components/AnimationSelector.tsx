@@ -23,7 +23,7 @@ export const AnimationSelector: React.FC = observer(() => {
 
   return (
     <FormControl className={classes.formControl} component="fieldset">
-      <FormLabel component="legend">Animation</FormLabel>
+      <FormLabel component="legend">Animations</FormLabel>
       <FormGroup aria-label="animations" id="animation-select">
         {animations.length > 1 && (
           <FormControlLabel
