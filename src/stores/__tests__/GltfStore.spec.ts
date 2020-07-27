@@ -43,12 +43,12 @@ describe("GltfStore", () => {
     spy.mockRestore();
   });
 
-  it("should have default glTF", async () => {
+  it("should not have default glTF", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMock);
 
     const store = new GltfStore();
     await store.fetchGltfs();
-    expect(store.gltf).toEqual(gltfs[0]);
+    expect(store.gltf).toBeUndefined();
 
     spy.mockRestore();
   });
@@ -58,11 +58,6 @@ describe("GltfStore", () => {
 
     const store = new GltfStore();
     await store.fetchGltfs();
-    expect(store.gltf).toEqual(gltfs[0]);
-
-    store.setGltf(undefined);
-    expect(store.gltf).toBeUndefined();
-
     store.setGltf(store.gltfs[5]);
     expect(store.gltf).toBe(store.gltfs[5]);
 
