@@ -1,13 +1,18 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Select, InputLabel, FormControl, MenuItem } from "@material-ui/core";
+import {
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStores } from "../stores";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   formControl: {
     display: "flex",
-    margin: theme.spacing(1, 2),
   },
 }));
 
@@ -17,30 +22,26 @@ export const CameraSelector: React.FC = observer(() => {
   const classes = useStyles();
 
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel id="camera-selector-label">Camera</InputLabel>
-      <Select
+    <FormControl className={classes.formControl} component="fieldset">
+      <FormLabel component="legend">Camera</FormLabel>
+      <RadioGroup
+        aria-label="camera"
         id="camera-select"
-        labelId="camera-selector-label"
-        value={camera !== undefined ? camera.id : -1}
+        name="camera-select"
+        value={camera !== undefined ? camera.id.toString() : ""}
         onChange={e => {
-          setCamera(cameras.find(c => c.id === (e.target.value as number)));
-        }}
-        inputProps={{
-          name: "camera-select-input",
-          id: "camera-select-input",
-        }}
-        MenuProps={{
-          id: "camera-select-list",
+          setCamera(cameras.find(c => c.id === parseInt(e.target.value, 10)));
         }}
       >
         {cameras.map(camera => (
-          <MenuItem key={camera.id} value={camera.id}>
-            {camera.name}
-            {camera.orbit && " (orbital)"}
-          </MenuItem>
+          <FormControlLabel
+            key={camera.id}
+            value={camera.id.toString()}
+            control={<Radio />}
+            label={camera.name + (camera.orbit ? " (orbital)" : "")}
+          />
         ))}
-      </Select>
+      </RadioGroup>
     </FormControl>
   );
 });
