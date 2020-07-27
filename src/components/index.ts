@@ -3,6 +3,7 @@ export * from "./CameraSelector";
 export * from "./FpsMonitor";
 export * from "./GltfList";
 export * from "./Hotspot";
+export * from "./InputGroup";
 export * from "./SceneSelector";
 export * from "./SearchField";
 export * from "./Sidebar";

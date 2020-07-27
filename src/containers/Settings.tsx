@@ -4,28 +4,20 @@ import {
   FormControlLabel,
   Checkbox,
   FormGroup,
-  makeStyles,
   FormLabel,
 } from "@material-ui/core";
-import { SceneSelector } from "../components";
+import { InputGroup, SceneSelector } from "../components";
 import { useStores } from "../stores";
 
-const useStyles = makeStyles(theme => ({
-  group: {
-    margin: theme.spacing(2, 2, 1, 2),
-  },
-}));
-
 export const Settings: React.FC = observer(() => {
-  const classes = useStyles();
   const { settingsStore } = useStores();
   const { showFpsMeter, toggleFpsMeter } = settingsStore;
   return (
     <>
-      <div className={classes.group}>
+      <InputGroup>
         <SceneSelector />
-      </div>
-      <div className={classes.group}>
+      </InputGroup>
+      <InputGroup>
         <FormLabel component="legend">User interface</FormLabel>
         <FormGroup row>
           <FormControlLabel
@@ -39,7 +31,7 @@ export const Settings: React.FC = observer(() => {
             label="Show FPS meter"
           />
         </FormGroup>
-      </div>
+      </InputGroup>
     </>
   );
 });
