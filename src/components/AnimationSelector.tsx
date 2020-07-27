@@ -1,20 +1,18 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import {
-  Select,
-  InputLabel,
   FormControl,
-  MenuItem,
-  ListItemText,
   Checkbox,
+  FormLabel,
+  FormControlLabel,
+  FormGroup,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStores } from "../stores";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   formControl: {
     display: "flex",
-    margin: theme.spacing(1, 2),
   },
 }));
 
@@ -24,39 +22,39 @@ export const AnimationSelector: React.FC = observer(() => {
   const classes = useStyles();
 
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel id="animation-selector-label">Animation</InputLabel>
-      <Select
-        id="animation-select"
-        labelId="animation-selector-label"
-        multiple
-        value={activeAnimationIds}
-        onChange={e => {
-          const active = e.target.value as number[];
-          animations.forEach(a => {
-            a.active = active.includes(a.id);
-          });
-        }}
-        renderValue={values =>
-          `${(values as number[]).length}/${animations.length} active`
-        }
-        inputProps={{
-          name: "animation-select-input",
-          id: "animation-select-input",
-        }}
-        MenuProps={{
-          id: "animation-select-list",
-        }}
-      >
+    <FormControl className={classes.formControl} component="fieldset">
+      <FormLabel component="legend">Animation</FormLabel>
+      <FormGroup aria-label="animations" id="animation-select">
+        {animations.length > 1 && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={activeAnimationIds.length === animations.length}
+                onChange={e => {
+                  animations.forEach(
+                    animation => (animation.active = e.target.checked),
+                  );
+                }}
+              />
+            }
+            label="All"
+          />
+        )}
         {animations.map(animation => (
-          <MenuItem key={animation.id} value={animation.id}>
-            <Checkbox
-              checked={activeAnimationIds.some(id => id === animation.id)}
-            />
-            <ListItemText primary={animation.name} />
-          </MenuItem>
+          <FormControlLabel
+            key={animation.id}
+            control={
+              <Checkbox
+                checked={activeAnimationIds.some(id => id === animation.id)}
+                onChange={e => {
+                  animation.active = e.target.checked;
+                }}
+              />
+            }
+            label={animation.name}
+          />
         ))}
-      </Select>
+      </FormGroup>
     </FormControl>
   );
 });
