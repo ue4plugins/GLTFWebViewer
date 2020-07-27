@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { RadioGroup, FormLabel, FormControl } from "@material-ui/core";
+import { RadioGroup, FormControl, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { FieldInputProps } from "./Field";
 import { Variant } from "./Variant";
@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
   },
   label: {
-    margin: theme.spacing(2, 2),
+    margin: theme.spacing(1, 2),
   },
 }));
 
@@ -42,9 +42,13 @@ export const VariantSet: React.FC<VariantSetProps> = ({
 
   return (
     <FormControl className={classes.root}>
-      <FormLabel className={classes.label} component="legend">
+      <Typography
+        className={classes.label}
+        variant="caption"
+        color="textSecondary"
+      >
         {label}
-      </FormLabel>
+      </Typography>
       <RadioGroup name={`variant-${id}`} value={value} onChange={onChange}>
         {domain &&
           domain.map((domainValue, domainValueIndex) => (

@@ -4,22 +4,16 @@ import {
   useRadioGroup,
   ListItem,
   ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Checkbox,
 } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   input: {
     position: "absolute",
     opacity: 0,
     pointerEvents: "none",
-  },
-  image: {
-    flex: "0 0 auto",
-    height: 42,
-    width: 42,
-    marginRight: 12,
-    borderRadius: theme.shape.borderRadius,
-    background: "red",
-    backgroundSize: "cover",
   },
 }));
 
@@ -55,6 +49,15 @@ export const Variant: React.FC<VariantProps> = ({
       : checkedProp;
   const name = typeof nameProp === "undefined" ? radioGroup?.name : nameProp;
 
+  const _onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (onChange) {
+      onChange(e);
+    }
+    if (radioGroup?.onChange) {
+      radioGroup.onChange(e, e.target.value);
+    }
+  };
+
   return (
     <label>
       <input
@@ -63,26 +66,24 @@ export const Variant: React.FC<VariantProps> = ({
         className={classes.input}
         id={id}
         name={name}
-        onChange={e => {
-          if (onChange) {
-            onChange(e);
-          }
-          if (radioGroup?.onChange) {
-            radioGroup.onChange(e, e.target.value);
-          }
-        }}
+        onChange={_onChange}
         tabIndex={tabIndex}
         type="radio"
         value={value}
       />
-      <ListItem button selected={checked}>
-        {image && (
-          <span
-            className={classes.image}
-            style={{ backgroundImage: `url(${image})` }}
-          />
-        )}
+      <ListItem button>
+        <ListItemAvatar>
+          <Avatar src={image} />
+        </ListItemAvatar>
         <ListItemText primary={label} />
+        <Checkbox
+          edge="end"
+          checked={checked}
+          onChange={e => {
+            e.target.value = value?.toString() ?? "";
+            _onChange(e);
+          }}
+        />
       </ListItem>
     </label>
   );

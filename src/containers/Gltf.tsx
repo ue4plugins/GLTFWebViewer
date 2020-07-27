@@ -8,6 +8,7 @@ import {
   VariantSetList,
   GltfList,
   CameraSelector,
+  InputGroup,
 } from "../components";
 import { useStores } from "../stores";
 
@@ -17,17 +18,17 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     overflow: "hidden",
   },
-  sectionSingle: {
+  viewSingle: {
     overflow: "auto",
   },
-  sectionNone: {
+  viewNone: {
     margin: theme.spacing(2),
   },
   backButton: {
     margin: theme.spacing(1.5, 1),
   },
   meta: {
-    margin: theme.spacing(2),
+    margin: theme.spacing(2, 2, 3, 2),
   },
 }));
 
@@ -40,24 +41,24 @@ export const Gltf: React.FC<GltfProps> = observer(listProps => {
   const classes = useStyles();
   const { gltfStore } = useStores();
   const { animations, configurator, gltfs, gltf, cameras } = gltfStore;
-  const [section, setSection] = useState<"list" | "single" | "none">("list");
+  const [view, setView] = useState<"list" | "single" | "none">("list");
 
   useEffect(() => {
-    setSection(gltf ? "single" : gltfs.length === 0 ? "none" : "list");
+    setView(gltf ? "single" : gltfs.length === 0 ? "none" : "list");
   }, [gltf, gltfs]);
 
   return (
     <div className={classes.root}>
-      {section === "list" ? (
-        <GltfList {...listProps} onSelect={() => setSection("single")} />
-      ) : section === "single" ? (
+      {view === "list" ? (
+        <GltfList {...listProps} onSelect={() => setView("single")} />
+      ) : view === "single" ? (
         <>
           {gltfs.length > 1 && (
             <>
               <div className={classes.backButton}>
                 <Button
                   startIcon={<ArrowBack />}
-                  onClick={() => setSection("list")}
+                  onClick={() => setView("list")}
                 >
                   Show all files
                 </Button>
@@ -65,11 +66,8 @@ export const Gltf: React.FC<GltfProps> = observer(listProps => {
               <Divider />
             </>
           )}
-          <div className={classes.sectionSingle}>
+          <div className={classes.viewSingle}>
             <div className={classes.meta}>
-              <Typography variant="caption" color="textSecondary">
-                File
-              </Typography>
               <Typography variant="h6">{gltf?.name}</Typography>
               {gltf?.creator && (
                 <Typography variant="caption">
@@ -88,31 +86,22 @@ export const Gltf: React.FC<GltfProps> = observer(listProps => {
                 </Typography>
               )}
             </div>
-            <Divider />
             {cameras.length > 1 && (
-              <>
+              <InputGroup>
                 <CameraSelector />
-                <Divider />
-              </>
+              </InputGroup>
             )}
-
             {animations.length > 0 && (
-              <>
+              <InputGroup>
                 <AnimationSelector />
-                <Divider />
-              </>
+              </InputGroup>
             )}
-            {configurator && (
-              <>
-                <VariantSetList />
-                <Divider />
-              </>
-            )}
+            {configurator && <VariantSetList />}
           </div>
         </>
       ) : (
         <Typography
-          className={classes.sectionNone}
+          className={classes.viewNone}
           variant="body2"
           color="textSecondary"
         >
