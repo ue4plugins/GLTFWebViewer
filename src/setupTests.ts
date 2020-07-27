@@ -6,6 +6,17 @@ import "@testing-library/jest-dom/extend-expect";
 import "jest";
 import "jest-webgl-canvas-mock";
 
+// Patch jest-webgl-canvas-mock with canvas prop
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const WebGLRenderingContext = (window as any).WebGLRenderingContext;
+Object.defineProperties(WebGLRenderingContext.prototype, {
+  canvas: {
+    get: function() {
+      return this._canvas;
+    },
+  },
+});
+
 const orgWarn = console.warn;
 const orgLog = console.log;
 
