@@ -180,7 +180,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _createDefaultCamera(app: pc.Application): OrbitCameraEntity {
     debug("Creating default camera");
 
-    const camera = new pc.Entity("Default camera") as OrbitCameraEntity;
+    const camera = new pc.Entity("Default") as OrbitCameraEntity;
     camera.addComponent("camera", {
       clearColor: new pc.Color(0, 0, 0),
     });
