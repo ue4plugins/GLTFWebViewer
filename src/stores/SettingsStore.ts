@@ -10,7 +10,7 @@ export class SettingsStore {
   public showUI: boolean;
 
   @observable
-  public showFpsMeter = true;
+  public showFpsMeter = false;
 
   @action.bound
   public toggleFpsMeter(show: boolean) {
