@@ -43,16 +43,8 @@ describe("UI", () => {
   });
 
   it("should have a scene list", async () => {
+    await page.click("#settings-tab");
     await page.click("#scene-select");
-    await page.waitFor(500);
-    expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
-
-    const item = (await page.$$("#scene-select-list .MuiListItem-button"))[1];
-    if (!item) {
-      throw new Error("Missing item");
-    }
-
-    await item.click();
     await page.waitFor(500);
     expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
   });

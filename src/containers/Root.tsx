@@ -86,8 +86,8 @@ export const Root: React.FC = observer(() => {
             variant="fullWidth"
             onChange={(_, value) => setActiveTab(value)}
           >
-            <Tab label="glTF" value="gltf" />
-            <Tab label="Settings" value="settings" />
+            <Tab id="gltf-tab" label="glTF" value="gltf" />
+            <Tab id="settings-tab" label="Settings" value="settings" />
           </Tabs>
           <Divider />
           {activeTab === "settings" && <SettingsView />}
