@@ -1,6 +1,7 @@
 export * from "./AnimationSelector";
 export * from "./CameraSelector";
 export * from "./FpsMonitor";
+export * from "./Gltf";
 export * from "./GltfList";
 export * from "./Hotspot";
 export * from "./InputGroup";

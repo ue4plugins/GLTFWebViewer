@@ -9,7 +9,7 @@ import {
 import { InputGroup, SceneSelector } from "../components";
 import { useStores } from "../stores";
 
-export const Settings: React.FC = observer(() => {
+export const SettingsView: React.FC = observer(() => {
   const { settingsStore } = useStores();
   const { showFpsMeter, toggleFpsMeter } = settingsStore;
   return (

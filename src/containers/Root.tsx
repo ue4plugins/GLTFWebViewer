@@ -7,8 +7,8 @@ import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
 import { useStores } from "../stores";
 import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
 import { Viewer } from "./Viewer";
-import { Settings } from "./Settings";
-import { Gltf } from "./Gltf";
+import { SettingsView } from "./SettingsView";
+import { GltfView } from "./GltfView";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -90,9 +90,9 @@ export const Root: React.FC = observer(() => {
             <Tab label="Settings" value="settings" />
           </Tabs>
           <Divider />
-          {activeTab === "settings" && <Settings />}
+          {activeTab === "settings" && <SettingsView />}
           {activeTab === "gltf" && (
-            <Gltf isLoading={isLoading} isError={isError} />
+            <GltfView isLoading={isLoading} isError={isError} />
           )}
         </Sidebar>
       )}
