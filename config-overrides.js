@@ -1,3 +1,4 @@
+const path = require("path");
 const { override } = require("customize-cra");
 const { addReactRefresh } = require("customize-cra-react-refresh");
 const { GenerateSW } = require("workbox-webpack-plugin");
@@ -8,6 +9,8 @@ const webpack = require("webpack");
 const merge = require("webpack-merge");
 const assetIndex = require("./scripts/assetIndex");
 
+const buildSubDir = "viewer";
+
 module.exports = {
   jest: config => {
     config.testEnvironment = "jest-environment-jsdom-sixteen";
@@ -15,6 +18,8 @@ module.exports = {
     return config;
   },
   webpack: override(config => {
+    config = addReactRefresh({ disableRefreshCheck: true })(config);
+
     // Disable some default plugins
     config.plugins = config.plugins.filter(
       plugin =>
@@ -23,11 +28,7 @@ module.exports = {
         ),
     );
 
-    const configWithRefresh = addReactRefresh({ disableRefreshCheck: true })(
-      config,
-    );
-
-    return merge(configWithRefresh, {
+    return merge(config, {
       plugins: [
         new webpack.DefinePlugin({
           GLTF_FILES: JSON.stringify(assetIndex),
@@ -41,6 +42,10 @@ module.exports = {
           pretty: true,
         }),
       ],
+      output: {
+        filename: path.join(buildSubDir, config.output.filename),
+        chunkFilename: path.join(buildSubDir, config.output.chunkFilename),
+      },
     });
   }),
 };
