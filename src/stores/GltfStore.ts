@@ -66,7 +66,7 @@ export class GltfStore {
 
   @action.bound
   public async fetchGltfs() {
-    const res = await fetch("assets/index.json");
+    const res = await fetch("index.json");
     const gltfs = (await res.json()) as GltfSource[] | undefined;
 
     if (!gltfs || gltfs.length === 0) {

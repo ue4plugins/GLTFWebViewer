@@ -37,7 +37,7 @@ describe("GltfStore", () => {
     const store = new GltfStore();
     await store.fetchGltfs();
     expect(store.gltfs).toEqual(gltfs);
-    expect(window.fetch).toHaveBeenCalledWith("assets/index.json");
+    expect(window.fetch).toHaveBeenCalledWith("index.json");
     expect(window.fetch).toHaveBeenCalledTimes(1);
 
     spy.mockRestore();
