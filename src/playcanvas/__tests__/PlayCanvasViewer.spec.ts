@@ -37,10 +37,8 @@ const createRequestHandler = (body: any) => {
   return jest.fn(handler);
 };
 
-// const waitForAnimationFrame = () =>
-//   new Promise<void>(resolve => {
-//     requestAnimationFrame(() => resolve());
-//   });
+// NOTE: Tests that required rendering (requestAnimationFrame) no longer work as of this commit:
+// https://github.com/playcanvas/engine/commit/fe4a5434925b9a5d2e6f3fe6fc36f01335344034#diff-a26a2598bdafd578365f1adb7aca0ed8
 
 describe("PlayCanvasViewer", () => {
   const configHandler = createRequestHandler(configResponse);
@@ -220,54 +218,5 @@ describe("PlayCanvasViewer", () => {
       const camera = viewer.app.root.findComponent("camera");
       expect(camera || undefined).toBeDefined();
     });
-
-    // Disabled camera tests since rendering (waitForAnimationFrame) stopped working
-    // in this commit:
-    // https://github.com/playcanvas/engine/commit/fe4a5434925b9a5d2e6f3fe6fc36f01335344034#diff-a26a2598bdafd578365f1adb7aca0ed8
-
-    // it("should focus camera after loading glTF", async () => {
-    //   const viewer = await createAndConfigureViewer();
-    //   const camera = viewer.app.root.findComponent(
-    //     "camera",
-    //   ) as pc.CameraComponent;
-    //   expect(camera || undefined).toBeDefined();
-    //   const transformBefore = camera.entity.getLocalTransform().clone().data;
-    //   await viewer.loadGltf(gltfEmbeddedUrl);
-    //   viewer.setActiveCamera(0);
-    //   await waitForAnimationFrame();
-    //   const transformAfter = camera.entity.getLocalTransform().clone().data;
-    //   expect(transformAfter).not.toEqual(transformBefore);
-    // });
-
-    // it("should be able to focus on entity", async () => {
-    //   const viewer = await createAndConfigureViewer();
-    //   const camera = viewer.app.root.findComponent(
-    //     "camera",
-    //   ) as pc.CameraComponent;
-    //   await viewer.loadGltf(gltfEmbeddedUrl);
-    //   viewer.setActiveCamera(0);
-    //   await waitForAnimationFrame();
-    //   const transformBefore = camera.entity.getLocalTransform().clone().data;
-    //   viewer.resetCamera(0, 0, 0);
-    //   await waitForAnimationFrame();
-    //   viewer.focusCameraOnRootEntity();
-    //   await waitForAnimationFrame();
-    //   const transformAfter = camera.entity.getLocalTransform().clone().data;
-    //   expect(transformAfter).toEqual(transformBefore);
-    // });
-
-    // it("should be able to reset camera placement props", async () => {
-    //   const viewer = await createAndConfigureViewer();
-    //   const camera = viewer.app.root.findComponent(
-    //     "camera",
-    //   ) as pc.CameraComponent;
-    //   await viewer.loadGltf(gltfEmbeddedUrl);
-    //   await waitForAnimationFrame();
-    //   const transformBefore = camera.entity.getLocalTransform().clone().data;
-    //   viewer.resetCamera(1, 1, 1);
-    //   await waitForAnimationFrame();
-    //   const transformAfter = camera.entity.getLocalTransform().clone().data;
-    //   expect(transformAfter).not.toEqual(transformBefore);
-    // });
   });
 });
