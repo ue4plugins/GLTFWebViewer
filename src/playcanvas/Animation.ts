@@ -32,12 +32,24 @@ export class Animation {
   }
 
   public play(state: AnimationState) {
+    const currentTime = (() => {
+      switch (state) {
+        case AnimationState.Loop:
+        case AnimationState.Once:
+          return 0;
+        case AnimationState.LoopReverse:
+          return (
+            this._layer.activeStateCurrentTime % this._layer.activeStateDuration
+          );
+        case AnimationState.OnceReverse:
+          return this._layer.activeStateCurrentTime;
+      }
+    })();
     this._layer.play(state);
-
-    // Start from the end for reversed non-looping animations
-    if (state === AnimationState.OnceReverse) {
-      this._layer.activeStateCurrentTime = this._layer.activeStateDuration;
-    }
+    this._layer.activeStateCurrentTime = Math.min(
+      currentTime,
+      this._layer.activeStateDuration,
+    );
   }
 
   public pause() {
