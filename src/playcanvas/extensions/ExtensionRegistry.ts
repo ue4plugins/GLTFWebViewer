@@ -6,6 +6,8 @@ type GltfData = any;
 type ContainerAssetOptions = any;
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
+type TextureAsset = Omit<pc.Asset, "resource"> & { resource: pc.Texture };
+
 /**
  * Function used by ExtensionRegistry to apply extension data to parsed glTF objects.
  */
@@ -231,7 +233,14 @@ export class ExtensionRegistry {
       node: { postprocess: createPostProcessHandler(this.node) },
       scene: { postprocess: createPostProcessHandler(this.scene) },
       camera: { postprocess: createPostProcessHandler(this.camera) },
-      texture: {}, // TODO: implement when PC has added support for texture extensions
+      texture: {
+        postprocess: (objectData: ObjectData, object: TextureAsset) => {
+          if (!objectData.extensions) {
+            return;
+          }
+          this.texture.postParse(object.resource, objectData.extensions);
+        },
+      },
       material: { postprocess: createPostProcessHandler(this.material) },
       animation: { postprocess: createPostProcessHandler(this.animation) },
     };
