@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 import { join } from "path";
 import { readFileSync } from "fs";
-import configObject from "../../../public/assets/playcanvas/config.json";
+import configObject from "../../../public/viewer/playcanvas/config.json";
 import sceneObject from "./Scene.json";
 
 export const configResponse = JSON.stringify(configObject);

@@ -159,7 +159,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     debug("Creating app for target", this.canvas);
     const app = new pc.Application(this.canvas, {
-      assetPrefix: "assets/playcanvas/",
+      assetPrefix: "viewer/playcanvas/",
       mouse: new pc.Mouse(document.body),
       keyboard: new pc.Keyboard(window),
       graphicsDeviceOptions: {
