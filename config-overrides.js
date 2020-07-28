@@ -1,5 +1,6 @@
 const { override } = require("customize-cra");
 const { addReactRefresh } = require("customize-cra-react-refresh");
+const { GenerateSW } = require("workbox-webpack-plugin");
 const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const WriteJsonPlugin = require("write-json-webpack-plugin");
 const webpack = require("webpack");
@@ -13,9 +14,16 @@ module.exports = {
     return config;
   },
   webpack: override(config => {
-    const refresh = addReactRefresh({ disableRefreshCheck: true })(config);
+    // Disable generating service worker
+    config.plugins = config.plugins.filter(
+      plugin => !(plugin instanceof GenerateSW),
+    );
 
-    return merge(refresh, {
+    const configWithRefresh = addReactRefresh({ disableRefreshCheck: true })(
+      config,
+    );
+
+    return merge(configWithRefresh, {
       plugins: [
         new webpack.DefinePlugin({
           GLTF_FILES: JSON.stringify(gltfSources),
