@@ -33,6 +33,11 @@ export class Animation {
 
   public play(state: AnimationState) {
     this._layer.play(state);
+
+    // Start from the end for reversed non-looping animations
+    if (state === AnimationState.OnceReverse) {
+      this._layer.activeStateCurrentTime = this._layer.activeStateDuration;
+    }
   }
 
   public pause() {
