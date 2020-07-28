@@ -22,7 +22,6 @@ type NodeExtensionData = {
 };
 
 type RootData = {
-  textures?: { source: number }[];
   extensions?: {
     EPIC_hdri_backdrops?: {
       backdrops: BackdropData[];

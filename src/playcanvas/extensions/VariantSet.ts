@@ -11,7 +11,6 @@ type SceneExtensionData = {
 };
 
 type RootData = {
-  textures?: { source: number }[];
   extensions?: {
     EPIC_level_variant_sets?: {
       levelVariantSets: LevelVariantSetData[];

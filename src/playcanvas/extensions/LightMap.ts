@@ -21,7 +21,6 @@ type NodeExtensionData = {
 };
 
 type RootData = {
-  textures?: { source: number }[];
   extensions?: {
     EPIC_lightmap_textures?: {
       lightmaps: LightmapData[];
