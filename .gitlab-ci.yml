@@ -9,30 +9,30 @@ variables:
   CI: "true"
 
 stages:
-  - lint
-  - test
+  # - lint
+  # - test
   - build
-  - release
-  - deploy
+  # - release
+  # - deploy
 
 before_script: &default_before_script
   - npm ci --cache .npm --prefer-offline
 
-lint:
+.lint:
   tags:
     - linux-docker
   stage: lint
   script:
     - npm run lint
 
-test:
+.test:
   tags:
     - linux-docker
   stage: test
   script:
     - npm run test
 
-test_e2e:
+.test_e2e:
   tags:
     - windows
   stage: test
@@ -45,7 +45,7 @@ test_e2e:
       - ./e2e/__image_snapshots__/__diff_output__
     expire_in: 30 days
 
-test_e2e_update:
+.test_e2e_update:
   tags:
     - windows
   stage: test
@@ -92,7 +92,7 @@ build_clean:
   only:
     - master
 
-deploy_dev:
+.deploy_dev:
   tags:
     - linux-docker
   stage: deploy
