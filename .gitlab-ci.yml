@@ -62,7 +62,7 @@ build:
     - npm run build
   artifacts:
     paths:
-      - $BUILD_FOLDER
+      - build
     expire_in: 1 week
 
 .release:
@@ -87,6 +87,6 @@ deploy_dev:
     - apt-get update -qy
     - apt-get install -y lftp
   script:
-    - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete $BUILD_FOLDER/ $FTP_DEST_FOLDER/; bye"
+    - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete build/ $FTP_DEST_FOLDER/; bye"
   environment:
     name: dev
