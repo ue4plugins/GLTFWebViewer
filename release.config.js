@@ -53,6 +53,7 @@ module.exports = {
       "@semantic-release/gitlab",
       {
         gitlabUrl: "http://animechgitlab",
+        assets: ["./build"],
       },
     ],
   ],
