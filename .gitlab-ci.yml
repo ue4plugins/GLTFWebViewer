@@ -80,8 +80,8 @@ build_clean:
   tags:
     - linux-docker
   stage: build_clean
-  # only:
-  #   - master
+  only:
+    - master
   dependencies:
     - build
   script:
