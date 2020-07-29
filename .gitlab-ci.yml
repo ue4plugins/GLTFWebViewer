@@ -13,6 +13,7 @@ stages:
   - test
   - build
   - build_clean
+  - release
   - deploy
 
 .npm_install: &npm_install
@@ -89,6 +90,17 @@ build_clean:
     paths:
       - build
     expire_in: 1 week
+
+release:
+  tags:
+    - linux-docker
+  stage: release
+  only:
+    - master
+  before_script:
+    - *npm_install
+  script:
+    - npx semantic-release
 
 deploy_dev:
   tags:

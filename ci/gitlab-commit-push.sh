@@ -5,9 +5,9 @@ commit_msg=$1
 origin_url=`git remote get-url origin`
 url_regex='(.*)://(.*@)(.*)'
 [[ $origin_url =~ $url_regex ]]
-auth_url="${BASH_REMATCH[1]}://$BUILDSERVER_USERNAME:$BUILDSERVER_PASSWORD@${BASH_REMATCH[3]}"
-git config --global user.email "$BUILDSERVER_USERNAME@animech.com"
-git config --global user.name $BUILDSERVER_USERNAME
+auth_url="${BASH_REMATCH[1]}://gitlab-ci-token:$GITLAB_TOKEN@${BASH_REMATCH[3]}"
+git config --global user.email "buildserver@animech.com"
+git config --global user.name "buildserver"
 echo "Creating commit with message: '$commit_msg'"
 git add .
 git commit -a -m "$commit_msg"
