@@ -75,6 +75,7 @@ build_clean:
   #   - master
   dependencies:
     - build
+  before_script: # Overrides default before_script with npm ci
   script:
     - rm -rf build/assets/ build/index.json
   artifacts:
@@ -100,8 +101,7 @@ build_clean:
     - master
   dependencies:
     - build
-  before_script:
-    - *default_before_script
+  before_script: # Overrides default before_script with npm ci
     - apt-get update -qy
     - apt-get install -y lftp
   script:
