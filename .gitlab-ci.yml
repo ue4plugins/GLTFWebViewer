@@ -9,12 +9,12 @@ variables:
   CI: "true"
 
 stages:
-  # - lint
-  # - test
+  - lint
+  - test
   - build
   - build_clean
-  # - release
-  # - deploy
+  - release
+  - deploy
 
 .npm_install: &npm_install
   - npm ci --cache .npm --prefer-offline
