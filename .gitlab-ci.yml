@@ -12,6 +12,7 @@ stages:
   # - lint
   # - test
   - build
+  - build_clean
   # - release
   # - deploy
 
@@ -69,18 +70,17 @@ build:
 build_clean:
   tags:
     - linux-docker
-  stage: build
-  only:
-    - master
+  stage: build_clean
+  # only:
+  #   - master
   dependencies:
     - build
+  script:
+    - rm -rf build/assets/ build/index.json
   artifacts:
     name: "build clean"
     paths:
       - build
-    exclude:
-      - build/assets
-      - build/index.json
     expire_in: 1 week
 
 .release:
