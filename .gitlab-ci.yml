@@ -85,8 +85,11 @@ release:
     - build
   before_script:
     - *npm_install
+    - apt-get update -qy
+    - apt-get install -y zip
   script:
     - rm -rf build/assets/ build/index.json
+    - zip -r release.zip build
     - npx semantic-release
   artifacts:
     paths:
