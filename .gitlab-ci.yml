@@ -12,7 +12,6 @@ stages:
   - lint
   - test
   - build
-  - build_clean
   - release
   - deploy
 
@@ -76,31 +75,23 @@ build:
       - build
     expire_in: 1 week
 
-build_clean:
-  tags:
-    - linux-docker
-  stage: build_clean
-  only:
-    - master
-  dependencies:
-    - build
-  script:
-    - rm -rf build/assets/ build/index.json
-  artifacts:
-    paths:
-      - build
-    expire_in: 1 week
-
 release:
   tags:
     - linux-docker
   stage: release
   only:
     - master
+  dependencies:
+    - build
   before_script:
     - *npm_install
   script:
+    - rm -rf build/assets/ build/index.json
     - npx semantic-release
+  artifacts:
+    paths:
+      - build
+    expire_in: 1 week
 
 deploy_dev:
   tags:
