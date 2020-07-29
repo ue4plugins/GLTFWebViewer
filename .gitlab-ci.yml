@@ -62,7 +62,6 @@ build:
   script:
     - npm run build
   artifacts:
-    name: "build"
     paths:
       - build
     expire_in: 1 week
@@ -79,7 +78,6 @@ build_clean:
   script:
     - rm -rf build/assets/ build/index.json
   artifacts:
-    name: "build clean"
     paths:
       - build
     expire_in: 1 week
