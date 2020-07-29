@@ -16,13 +16,15 @@ stages:
   # - release
   # - deploy
 
-before_script: &default_before_script
+.npm_install: &npm_install
   - npm ci --cache .npm --prefer-offline
 
 .lint:
   tags:
     - linux-docker
   stage: lint
+  before_script:
+    - *npm_install
   script:
     - npm run lint
 
@@ -30,6 +32,8 @@ before_script: &default_before_script
   tags:
     - linux-docker
   stage: test
+  before_script:
+    - *npm_install
   script:
     - npm run test
 
@@ -37,6 +41,8 @@ before_script: &default_before_script
   tags:
     - windows
   stage: test
+  before_script:
+    - *npm_install
   script:
     - npm run test:e2e
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
@@ -51,6 +57,8 @@ before_script: &default_before_script
     - windows
   stage: test
   when: manual
+  before_script:
+    - *npm_install
   script:
     - npm run test:e2e-update
     - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
@@ -59,6 +67,8 @@ build:
   tags:
     - linux-docker
   stage: build
+  before_script:
+    - *npm_install
   script:
     - npm run build
   artifacts:
@@ -74,7 +84,6 @@ build_clean:
   #   - master
   dependencies:
     - build
-  before_script: # Overrides default before_script with npm ci
   script:
     - rm -rf build/assets/ build/index.json
   artifacts:
@@ -99,7 +108,7 @@ build_clean:
     - master
   dependencies:
     - build
-  before_script: # Overrides default before_script with npm ci
+  before_script:
     - apt-get update -qy
     - apt-get install -y lftp
   script:
