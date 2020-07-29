@@ -61,8 +61,26 @@ build:
   script:
     - npm run build
   artifacts:
+    name: "build"
     paths:
       - build
+    expire_in: 1 week
+
+build_clean:
+  tags:
+    - linux-docker
+  stage: build
+  only:
+    - master
+  dependencies:
+    - build
+  artifacts:
+    name: "build clean"
+    paths:
+      - build
+    exclude:
+      - build/assets
+      - build/index.json
     expire_in: 1 week
 
 .release:
