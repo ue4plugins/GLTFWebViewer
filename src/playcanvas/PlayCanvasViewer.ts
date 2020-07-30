@@ -26,7 +26,12 @@ import {
   HdriBackdrop,
 } from "./extensions";
 import { AnimationState } from "./Animation";
-import { CameraEntity, OrbitCameraEntity, isOrbitCameraEntity } from "./Camera";
+import {
+  CameraEntity,
+  OrbitCameraEntity,
+  isOrbitCameraEntity,
+  convertToCameraEntity,
+} from "./Camera";
 
 const debug = Debug("PlayCanvasViewer");
 
@@ -180,18 +185,19 @@ export class PlayCanvasViewer implements TestableViewer {
   private _createDefaultCamera(app: pc.Application): OrbitCameraEntity {
     debug("Creating default camera");
 
-    const camera = new pc.Entity("Default") as OrbitCameraEntity;
-    camera.addComponent("camera", {
-      clearColor: new pc.Color(0, 0, 0),
+    const camera = convertToCameraEntity(
+      new pc.Entity("Default"),
+    ) as OrbitCameraEntity;
+
+    camera.addComponent("camera");
+
+    const script = camera.script.create(OrbitCamera, {
+      enabled: false, // This is enabled later for the active camera
+      attributes: {}, // TODO: use this instead of props below
     });
-
-    camera.addComponent("script");
-    camera.script.create(orbitCameraScriptName);
-    camera.script[orbitCameraScriptName].inertiaFactor = 0.07;
-    camera.script[orbitCameraScriptName].nearClipFactor = 0.002;
-    camera.script[orbitCameraScriptName].farClipFactor = 100;
-
-    camera.script.create(hotspotTrackerScriptName);
+    script.inertiaFactor = 0.07;
+    script.nearClipFactor = 0.002;
+    script.farClipFactor = 100;
 
     app.root.addChild(camera);
 
