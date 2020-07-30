@@ -20,6 +20,8 @@ interface HdriBackdrop {
   };
 }
 
+const hdriBackdropScriptName = "HdriBackdrop";
+
 class HdriBackdrop extends pc.ScriptType {
   private _material = new pc.Material();
   private _worldProjectionCenter = new pc.Vec3();
@@ -370,4 +372,4 @@ HdriBackdrop.attributes.add("useCameraProjection", {
     "Disables ground tracking, making the HDR cubemap follow the camera.",
 });
 
-export { HdriBackdrop };
+export { hdriBackdropScriptName, HdriBackdrop };
