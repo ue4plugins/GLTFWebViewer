@@ -7,6 +7,9 @@ cache:
 
 variables:
   CI: "true"
+  BUILD_NAME: "$CI_PROJECT_TITLE-$CI_COMMIT_BRANCH-$(date +'%Y%m%d')-build"
+  RELEASE_DIR: "release"
+  RELEASE_NAME: "$CI_PROJECT_TITLE-$CI_COMMIT_BRANCH-$(date +'%Y%m%d')-release"
 
 stages:
   - lint
@@ -71,6 +74,7 @@ build:
   script:
     - npm run build
   artifacts:
+    name: "$BUILD_NAME"
     paths:
       - build
     expire_in: 1 week
@@ -89,9 +93,10 @@ release:
     - apt-get install -y zip
   script:
     - rm -rf build/assets/ build/index.json
-    - zip -r release.zip build
+    - zip -r "$RELEASE_DIR/$RELEASE_NAME.zip" build
     - npx semantic-release
   artifacts:
+    name: "$RELEASE_NAME"
     paths:
       - build
     expire_in: 1 week
