@@ -464,7 +464,7 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _onKeyDown(event: KeyDownEvent) {
-    if (event.event.prevent) {
+    if (event.event.prevent || !this.enabled) {
       return;
     }
     if (event.key === pc.KEY_SPACE && this._focusEntity) {
@@ -474,12 +474,15 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _onMouseOut() {
+    if (!this.enabled) {
+      return;
+    }
     this._lookButtonDown = false;
     this._panButtonDown = false;
   }
 
   private _onMouseDown(event: MouseDownEvent) {
-    if (event.event.prevent === true) {
+    if (event.event.prevent || !this.enabled) {
       return;
     }
     switch (event.button) {
@@ -496,6 +499,9 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _onMouseUp(event: MouseUpEvent) {
+    if (!this.enabled) {
+      return;
+    }
     switch (event.button) {
       case pc.MOUSEBUTTON_LEFT:
         this._lookButtonDown = false;
@@ -509,6 +515,9 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _onMouseMove(event: MouseMoveEvent) {
+    if (!this.enabled) {
+      return;
+    }
     if (this._lookButtonDown) {
       this._orbit(event.dx, event.dy);
     } else if (this._panButtonDown) {
@@ -519,7 +528,7 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _onMouseWheel(event: MouseWheelEvent) {
-    if (event.event.prevent === true) {
+    if (event.event.prevent || !this.enabled) {
       return;
     }
 
@@ -550,15 +559,25 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _onTouchPinchStart(event: HammerInput) {
+    if (!this.enabled) {
+      return;
+    }
     this._lastStartDistance = this.distance;
     event.preventDefault();
   }
 
   private _onTouchPinch(event: HammerInput) {
+    if (!this.enabled) {
+      return;
+    }
     this.distance = this._lastStartDistance / event.scale;
   }
 
   private _onTouchPanStart(event: HammerInput) {
+    if (!this.enabled) {
+      return;
+    }
+
     const { x, y } = event.center;
     const { deltaX, deltaY } = event;
     this._lastMousePos.set(x, y);
@@ -571,11 +590,18 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _onTouchPanEnd() {
+    if (!this.enabled) {
+      return;
+    }
     this._lookButtonDown = false;
     this._panButtonDown = false;
   }
 
   private _onTouchPan(event: HammerInput) {
+    if (!this.enabled) {
+      return;
+    }
+
     const { x, y } = event.center;
     const { deltaX, deltaY } = event;
 
