@@ -35,11 +35,11 @@ export class OrbitCamera extends pc.ScriptType {
   /**
    * Factor to use when calculating near clip based on the camera distance from a focused object.
    */
-  public nearClipFactor = 0.1;
+  public nearClipFactor?: number;
   /**
    * Factor to use when calculating far clip based on the camera distance from a focused object.
    */
-  public farClipFactor = 5;
+  public farClipFactor?: number;
 
   private _cameraComponent!: pc.CameraComponent;
   private _distanceMin = 0;
@@ -247,8 +247,12 @@ export class OrbitCamera extends pc.ScriptType {
 
     this.distance = distance;
 
-    this._cameraComponent.nearClip = distance * this.nearClipFactor;
-    this._cameraComponent.farClip = distance * this.farClipFactor;
+    if (this.nearClipFactor) {
+      this._cameraComponent.nearClip = distance * this.nearClipFactor;
+    }
+    if (this.farClipFactor) {
+      this._cameraComponent.farClip = distance * this.farClipFactor;
+    }
 
     this._removeInertia();
 
