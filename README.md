@@ -4,7 +4,7 @@ Web viewer app for the Unreal Engine glTF Exporter Plugin. This project was boot
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/en/) 12.0.0 or greater
+- [Node.js](https://nodejs.org/en/) 12.0.0 or greater 
 
 ## Installation
 
