@@ -23,7 +23,7 @@ export class OrbitCamera extends pc.ScriptType {
   /**
    * Inertia Factor. Higher value means that the camera will continue moving after the user has stopped dragging. 0 is fully responsive.
    */
-  public inertiaFactor = 0;
+  public inertiaFactor = 0.07;
   /**
    * How fast the camera moves around the orbit. Higher is faster.
    */

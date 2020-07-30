@@ -195,7 +195,6 @@ export class PlayCanvasViewer implements TestableViewer {
       enabled: false, // This is enabled later for the active camera
       attributes: {}, // TODO: use this instead of props below
     });
-    script.inertiaFactor = 0.07;
     script.nearClipFactor = 0.002;
     script.farClipFactor = 100;
 
