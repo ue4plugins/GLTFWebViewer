@@ -251,6 +251,44 @@
         "zfar": 20971.5195,
         "znear": 0.099999994
       }
+    },
+    {
+      "name": "OrbitalPerspectiveCamera1",
+      "type": "perspective",
+      "perspective": {
+        "yfov": 1.60615218,
+        "zfar": 20971.5195,
+        "znear": 0.099999994
+      },
+      "extensions": {
+        "EPIC_orbital_cameras": {
+          "name": "OrbitalPerspective1",
+          "focus": 8,
+          "maxDistance": 5,
+          "minDistance": 3,
+          "maxAngle": 45,
+          "minAngle": -45
+        }
+      }
+    },
+    {
+      "name": "OrbitalOrthographicCamera1",
+      "type": "orthographic",
+      "orthographic": {
+        "ymag": 10.2399998,
+        "zfar": 20971.5195,
+        "znear": 0
+      },
+      "extensions": {
+        "EPIC_orbital_cameras": {
+          "name": "OrbitalPerspective1",
+          "focus": 8,
+          "maxDistance": 0,
+          "minDistance": 0,
+          "maxAngle": 45,
+          "minAngle": -45
+        }
+      }
     }
   ],
   "images": [
@@ -729,6 +767,17 @@
     {
       "name": "DirectionalArrow3_StaticMeshComponent0",
       "mesh": 1
+    },
+    {
+      "name": "OrbitalPerspectiveCamera1",
+      "translation": [2, 5, 2],
+      "camera": 6
+    },
+    {
+      "name": "OrbitalOrthographicCamera1",
+      "translation": [2.0999999, 3.89999986, 2.0999999],
+      "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
+      "camera": 7
     }
   ],
   "samplers": [
@@ -770,7 +819,9 @@
         27,
         32,
         37,
-        42
+        42,
+        82,
+        83
       ]
     }
   ],
@@ -863,5 +914,5 @@
       ]
     }
   },
-  "extensionsUsed": ["KHR_lights_punctual"]
+  "extensionsUsed": ["KHR_lights_punctual", "EPIC_orbital_cameras"]
 }
