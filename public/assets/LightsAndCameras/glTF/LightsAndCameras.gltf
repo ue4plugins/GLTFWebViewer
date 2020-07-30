@@ -264,7 +264,7 @@
         "EPIC_orbital_cameras": {
           "name": "OrbitalPerspective1",
           "focus": 8,
-          "maxDistance": 5,
+          "maxDistance": 8,
           "minDistance": 3,
           "maxAngle": 45,
           "minAngle": -45
@@ -770,12 +770,11 @@
     },
     {
       "name": "OrbitalPerspectiveCamera1",
-      "translation": [2, 5, 2],
+      "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
       "camera": 6
     },
     {
       "name": "OrbitalOrthographicCamera1",
-      "translation": [2.0999999, 3.89999986, 2.0999999],
       "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
       "camera": 7
     }
