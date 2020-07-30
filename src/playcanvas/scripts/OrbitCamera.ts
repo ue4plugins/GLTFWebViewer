@@ -164,6 +164,17 @@ export class OrbitCamera extends pc.ScriptType {
     this._pivotPoint.copy(value);
   }
 
+  /**
+   * Property to get and set the focus entity that the camera orbits around. Used if this.focus() is
+   * called with empty argument.
+   */
+  public get focusEntity(): pc.Entity | undefined {
+    return this._focusEntity;
+  }
+  public set focusEntity(value: pc.Entity | undefined) {
+    this._focusEntity = value;
+  }
+
   public initialize() {
     const { camera } = this.entity;
     if (!camera) {
@@ -213,8 +224,14 @@ export class OrbitCamera extends pc.ScriptType {
    * Moves the camera to look at an entity and all its children so they are all in the view.
    * @param focusEntity
    */
-  public focus(focusEntity: pc.Entity) {
-    this._focusEntity = focusEntity;
+  public focus(focusEntity?: pc.Entity) {
+    if (focusEntity) {
+      this._focusEntity = focusEntity;
+    } else if (this._focusEntity) {
+      focusEntity = this._focusEntity;
+    } else {
+      throw new Error("No focusEntity is specified");
+    }
 
     // Calculate an bounding box that encompasses all the models to frame in the camera view
     const aabb = this._buildAabb(focusEntity);
