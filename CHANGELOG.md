@@ -1,3 +1,17 @@
+## [1.1.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.0.3...v1.1.0) (2020-07-30)
+
+
+### Features
+
+* **OrbitCamera:** add extension parser for orbit cameras ([1d5834f](http://animech[secure]/clients/epic/gltf-web-viewer/commit/1d5834f24dc3aef199aaf97067fb1695564606f4))
+* **OrbitCamera:** add focusEntity prop as a way of storing a focus entity for later use without triggering the focus method ([a34bd90](http://animech[secure]/clients/epic/gltf-web-viewer/commit/a34bd90f766eb2806744ead6dc651307638f5e83))
+
+
+### Bug Fixes
+
+* **OrbitCamera:** only calculate near and/or far clip if nearClipFactor and/or farClipFactor are defined ([ee11fe5](http://animech[secure]/clients/epic/gltf-web-viewer/commit/ee11fe57138c6f1d41913f37d3167501629f792b))
+* **OrbitCamera:** prevent all mouse, touch and keyboard events when script is disabled ([fe9bbfd](http://animech[secure]/clients/epic/gltf-web-viewer/commit/fe9bbfd51f2fd5a052bc93c23bd23b954e14f81c))
+
 ### [1.0.3](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.0.2...v1.0.3) (2020-07-30)
 
 
