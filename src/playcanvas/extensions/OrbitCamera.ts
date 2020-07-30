@@ -7,7 +7,6 @@ import { ExtensionRegistry } from "./ExtensionRegistry";
 const debug = Debug("OrbitCamera");
 
 type NodeExtensionData = {
-  name: string;
   focus: number;
   maxDistance: number;
   minDistance: number;
