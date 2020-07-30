@@ -21,7 +21,7 @@ type OrbitCameraScriptFocusMap = {
 };
 
 export class OrbitCameraExtensionParser implements ExtensionParser {
-  private _focus: OrbitCameraScriptFocusMap[] = [];
+  private _focusNodes: OrbitCameraScriptFocusMap[] = [];
 
   public get name() {
     return "EPIC_orbital_cameras";
@@ -40,7 +40,7 @@ export class OrbitCameraExtensionParser implements ExtensionParser {
   public postParse(container: pc.ContainerResource) {
     debug("Post parse orbit camera");
 
-    this._focus.forEach(
+    this._focusNodes.forEach(
       ({ script, node: nodeIndex }) =>
         (script.focusEntity = container.nodes[nodeIndex]),
     );
@@ -55,9 +55,7 @@ export class OrbitCameraExtensionParser implements ExtensionParser {
     const script = camera.entity.script ?? camera.entity.addComponent("script");
     const orbitCameraScript = script.create(OrbitCamera, {
       enabled: false, // This is enabled later for the active camera
-      attributes: {}, // TODO: use this instead of props below
     });
-
     orbitCameraScript.pitchAngleMax = extensionData.maxAngle;
     orbitCameraScript.pitchAngleMin = extensionData.minAngle;
     orbitCameraScript.distanceMax = extensionData.maxDistance;
@@ -65,7 +63,7 @@ export class OrbitCameraExtensionParser implements ExtensionParser {
 
     debug("Added orbit camera script", camera, orbitCameraScript);
 
-    this._focus.push({
+    this._focusNodes.push({
       script: orbitCameraScript,
       node: extensionData.focus,
     });

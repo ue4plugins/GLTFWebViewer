@@ -2,7 +2,7 @@ import {
   hotspotTrackerScriptName,
   HotspotTracker,
   orbitCameraScriptName,
-  OrbitCamera as OrbitCameraScript,
+  OrbitCamera,
 } from "./scripts";
 
 export type CameraEntity = pc.Entity & {
@@ -14,14 +14,14 @@ export type CameraEntity = pc.Entity & {
 
 export type OrbitCameraEntity = CameraEntity & {
   script: CameraEntity["script"] & {
-    [orbitCameraScriptName]: OrbitCameraScript;
+    [orbitCameraScriptName]: OrbitCamera;
   };
 };
 
 export function convertToCameraEntity(entity: pc.Entity): CameraEntity {
-  const script = entity.script ?? entity.addComponent("script");
-  if (!script.has(hotspotTrackerScriptName)) {
-    script.create(hotspotTrackerScriptName);
+  const scriptComponent = entity.script ?? entity.addComponent("script");
+  if (!scriptComponent.has(hotspotTrackerScriptName)) {
+    scriptComponent.create(hotspotTrackerScriptName);
   }
   return entity as CameraEntity;
 }

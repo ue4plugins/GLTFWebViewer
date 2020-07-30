@@ -4,7 +4,7 @@ type CubemapAsset = Omit<pc.Asset, "resource"> & { resource: pc.Texture };
 type ModelAsset = Omit<pc.Asset, "resource"> & { resource: pc.Model };
 
 /**
- * Typings for Playcanvas script-attributes attached to the class.
+ * Typings for PlayCanvas script-attributes attached to the class.
  */
 interface HdriBackdrop {
   cubemap?: CubemapAsset | null;
