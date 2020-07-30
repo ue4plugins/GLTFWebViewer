@@ -506,10 +506,10 @@ export class PlayCanvasViewer implements TestableViewer {
     }
 
     this._activeGltfScene.cameras.forEach((camera, cameraIndex) => {
-      if (cameraIndex === cameraId) {
-        camera.camera.enabled = true;
-      } else {
-        camera.camera.enabled = false;
+      const enabled = cameraIndex === cameraId;
+      camera.camera.enabled = enabled;
+      if (isOrbitCameraEntity(camera)) {
+        camera.script[orbitCameraScriptName].enabled = enabled;
       }
     });
 

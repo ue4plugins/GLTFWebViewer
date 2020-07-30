@@ -12,6 +12,7 @@ import {
   LightMapExtensionParser,
   HdriBackdrop,
   HdrEncodingExtensionParser,
+  OrbitCameraExtensionParser,
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
 import { CameraEntity, convertToCameraEntity } from "./Camera";
@@ -160,6 +161,7 @@ export class PlayCanvasGltfLoader {
       hotspotParser,
       lightMapParser,
       backdropParser,
+      new OrbitCameraExtensionParser(),
       new HdrEncodingExtensionParser(),
     ];
 
