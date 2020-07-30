@@ -19,8 +19,10 @@ export type OrbitCameraEntity = CameraEntity & {
 };
 
 export function convertToCameraEntity(entity: pc.Entity): CameraEntity {
-  const scriptComponent = entity.script ?? entity.addComponent("script");
-  scriptComponent.create(hotspotTrackerScriptName);
+  const script = entity.script ?? entity.addComponent("script");
+  if (!script.has(hotspotTrackerScriptName)) {
+    script.create(hotspotTrackerScriptName);
+  }
   return entity as CameraEntity;
 }
 
