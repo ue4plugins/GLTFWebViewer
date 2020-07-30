@@ -527,22 +527,16 @@ export class PlayCanvasViewer implements TestableViewer {
       this._initHotspots(this._activeGltfScene.hotspots, this._activeCamera);
     }
 
+    // Set focus for orbit cameras
+    if (this._activeCamera && isOrbitCameraEntity(this._activeCamera)) {
+      const orbitCamera = this._activeCamera.script[orbitCameraScriptName];
+      const focusEntity = orbitCamera.focusEntity ?? this._app.root;
+      debug("Focus camera on entity", focusEntity);
+      orbitCamera.focus(focusEntity);
+    }
+
     // Resize since new camera aspect ratio might affect canvas size
     this._resizeCanvas();
-
-    this.focusCameraOnRootEntity();
-  }
-
-  public focusCameraOnRootEntity() {
-    debug("Focus on root entity", this._app.root);
-
-    if (
-      this._app.root &&
-      this._activeCamera &&
-      isOrbitCameraEntity(this._activeCamera)
-    ) {
-      this._activeCamera.script[orbitCameraScriptName].focus(this._app.root);
-    }
   }
 
   public resetCamera(yaw?: number, pitch?: number, distance?: number) {
