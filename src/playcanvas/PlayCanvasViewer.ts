@@ -195,11 +195,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _createDefaultCamera(app: pc.Application): OrbitCameraEntity {
     debug("Creating default camera");
 
-    const camera = convertToCameraEntity(
-      new pc.Entity("Default"),
-    ) as OrbitCameraEntity;
-
-    camera.addComponent("camera");
+    const camera = convertToCameraEntity(new pc.Entity("Default"));
 
     const script = camera.script.create(OrbitCamera, {
       enabled: false, // This is enabled later for the active camera
@@ -209,7 +205,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     app.root.addChild(camera);
 
-    return camera;
+    return camera as OrbitCameraEntity;
   }
 
   private async _setSceneHierarchy(gltfScene: GltfSceneData) {

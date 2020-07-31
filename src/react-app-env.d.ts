@@ -48,6 +48,7 @@ declare namespace pc {
   interface Entity {
     addComponent(type: "script", data?: any): pc.ScriptComponent;
     addComponent(type: "model", data?: any): pc.ModelComponent;
+    addComponent(type: "camera", data?: any): pc.CameraComponent;
   }
 
   interface ScriptComponent {
