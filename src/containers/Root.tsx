@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     position: "relative",
     flexGrow: 1,
     height: "100%",
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.common.black,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,

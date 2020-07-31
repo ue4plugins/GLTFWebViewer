@@ -22,7 +22,6 @@ const debug = Debug("Viewer");
 const useStyles = makeStyles(theme => ({
   root: {
     height: "100%",
-    backgroundColor: theme.palette.common.black,
     outline: "none",
   },
   canvasWrapper: {
@@ -35,6 +34,7 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     zIndex: 3,
     color: theme.palette.common.white,
+    backgroundColor: "rgba(0, 0, 0, 0.9)",
   },
   error: {
     maxWidth: 300,
