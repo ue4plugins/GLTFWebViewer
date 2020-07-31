@@ -1,18 +1,16 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import {
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-} from "@material-ui/core";
+import { FormControl, FormLabel, RadioGroup } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStores } from "../stores";
+import { Variant } from "./Variant";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   formControl: {
     display: "flex",
+  },
+  label: {
+    margin: theme.spacing(2, 2, 0.5, 2),
   },
 }));
 
@@ -23,7 +21,9 @@ export const CameraSelector: React.FC = observer(() => {
 
   return (
     <FormControl className={classes.formControl} component="fieldset">
-      <FormLabel component="legend">Camera</FormLabel>
+      <FormLabel className={classes.label} component="legend">
+        Camera
+      </FormLabel>
       <RadioGroup
         aria-label="camera"
         id="camera-select"
@@ -34,11 +34,11 @@ export const CameraSelector: React.FC = observer(() => {
         }}
       >
         {cameras.map(camera => (
-          <FormControlLabel
+          <Variant
             key={camera.id}
             value={camera.id.toString()}
-            control={<Radio />}
             label={camera.name + (camera.orbit ? " (orbital)" : "")}
+            image={camera.previewSource}
           />
         ))}
       </RadioGroup>

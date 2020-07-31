@@ -6,7 +6,7 @@ import {
   ListItemText,
   ListItemAvatar,
   Avatar,
-  Checkbox,
+  Radio,
 } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
@@ -76,7 +76,7 @@ export const Variant: React.FC<VariantProps> = ({
           <Avatar src={image} />
         </ListItemAvatar>
         <ListItemText primary={label} />
-        <Checkbox
+        <Radio
           edge="end"
           checked={checked}
           onChange={e => {

@@ -52,7 +52,7 @@ export const Gltf: React.FC = observer(() => {
         )}
       </div>
       {cameras.length > 1 && (
-        <InputGroup>
+        <InputGroup fullWidth>
           <CameraSelector />
         </InputGroup>
       )}

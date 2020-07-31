@@ -41,7 +41,7 @@ export const VariantSet: React.FC<VariantSetProps> = ({
   );
 
   return (
-    <FormControl className={classes.root}>
+    <FormControl className={classes.root} component="fieldset">
       <Typography
         className={classes.label}
         variant="caption"
