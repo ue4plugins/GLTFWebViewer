@@ -1,3 +1,12 @@
+## [1.2.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.1.0...v1.2.0) (2020-07-31)
+
+
+### Features
+
+* add camera previews to UI ([d982e1a](http://animech[secure]/clients/epic/gltf-web-viewer/commit/d982e1af0d7c576a91f38764b551ffca76e6997d))
+* implement previews for cameras ([e405acd](http://animech[secure]/clients/epic/gltf-web-viewer/commit/e405acdbbf20a637ebd3077eb695cc72f881d7f0))
+* update background color of viewport and backdrop to better disguise the absence of a canvas when rendering camera previews ([65e1563](http://animech[secure]/clients/epic/gltf-web-viewer/commit/65e1563e09110c74157069d9a77dff726cdb2a8c))
+
 ## [1.1.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.0.3...v1.1.0) (2020-07-30)
 
 
