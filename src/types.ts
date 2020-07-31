@@ -20,6 +20,7 @@ export type GltfCamera = {
   id: number;
   name: string;
   orbit: boolean;
+  previewSource?: string;
 };
 
 export type GltfVariantSetMeta = { name: string };

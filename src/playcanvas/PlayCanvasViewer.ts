@@ -38,6 +38,11 @@ const debug = Debug("PlayCanvasViewer");
 
 type Fields = GltfVariantSetConfigurator["manager"]["fields"];
 
+const waitForAnimationFrame = () =>
+  new Promise<void>(resolve => {
+    requestAnimationFrame(() => resolve());
+  });
+
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
   private _activeCamera?: CameraEntity;
@@ -49,11 +54,15 @@ export class PlayCanvasViewer implements TestableViewer {
   private _configurator?: GltfVariantSetConfigurator;
   private _hotspotTrackerHandles?: HotspotTrackerHandle[];
   private _backdrops?: HdriBackdrop[];
-  private _debouncedCanvasResize = debounce(() => this._resizeCanvas(), 10);
+  private _cameraPreviews?: string[];
+  private _debouncedCanvasResize = debounce(
+    () => this._resizeCanvas(this._activeCamera),
+    10,
+  );
   private _canvasResizeObserver = new ResizeObserver(
     this._debouncedCanvasResize,
   );
-  private _observedElement?: HTMLElement;
+  private _canvasSizeElem?: HTMLElement;
   private _initiated = false;
   private _sceneLoaded = false;
   private _gltfLoaded = false;
@@ -72,10 +81,10 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._loader = new PlayCanvasGltfLoader(this._app);
 
-    this._observedElement =
+    this._canvasSizeElem =
       this.canvas.parentElement?.parentElement ?? undefined;
-    if (this._observedElement) {
-      this._canvasResizeObserver.observe(this._observedElement);
+    if (this._canvasSizeElem) {
+      this._canvasResizeObserver.observe(this._canvasSizeElem);
     }
 
     this._onConfigurationChange = this._onConfigurationChange.bind(this);
@@ -115,18 +124,21 @@ export class PlayCanvasViewer implements TestableViewer {
         }))
         .filter((_, index) => scene.animations[index].playable),
       configurator: this._configurator,
-      cameras: scene.cameras.map((camera, index) => ({
-        id: index,
-        name: camera.name,
-        orbit: isOrbitCameraEntity(camera),
-      })),
+      cameras: scene.cameras.map((camera, index) => {
+        return {
+          id: index,
+          name: camera.name,
+          orbit: isOrbitCameraEntity(camera),
+          previewSource: this._cameraPreviews?.[index],
+        };
+      }),
       hasBackdrops: scene.backdrops.length > 0,
     };
   }
 
-  private _resizeCanvas() {
+  private _resizeCanvas(camera?: CameraEntity) {
     const app = this._app;
-    const sizeElem = this.canvas.parentElement?.parentElement;
+    const sizeElem = this._canvasSizeElem;
 
     if (!sizeElem) {
       app.resizeCanvas();
@@ -134,7 +146,7 @@ export class PlayCanvasViewer implements TestableViewer {
     }
 
     const { clientWidth, clientHeight } = sizeElem;
-    const cameraComponent = this._activeCamera?.camera;
+    const cameraComponent = camera?.camera;
     const aspectRatioMode = cameraComponent?.aspectRatioMode;
     const aspectRatio = cameraComponent?.aspectRatio;
 
@@ -200,7 +212,7 @@ export class PlayCanvasViewer implements TestableViewer {
     return camera;
   }
 
-  private _setSceneHierarchy(gltfScene: GltfSceneData) {
+  private async _setSceneHierarchy(gltfScene: GltfSceneData) {
     debug("Set scene hierarchy", gltfScene);
 
     if (this._activeGltfScene) {
@@ -213,6 +225,11 @@ export class PlayCanvasViewer implements TestableViewer {
     // Add default camera to start of camera list
     gltfScene.cameras.unshift(this._defaultCamera);
 
+    // Cameras are only shown in UI if there are more than one
+    if (gltfScene.cameras.length > 1) {
+      await this._initCameraPreviews(gltfScene.cameras, 80, 80);
+    }
+
     if (gltfScene.variantSets.length > 0) {
       this._initConfigurator(gltfScene.variantSets);
     }
@@ -220,6 +237,69 @@ export class PlayCanvasViewer implements TestableViewer {
     if (gltfScene.backdrops.length > 0) {
       this._initBackdrops(gltfScene.backdrops);
     }
+  }
+
+  private async _initCameraPreviews(
+    cameras: CameraEntity[],
+    width: number,
+    height: number,
+  ) {
+    debug("Init camera previews", cameras, width, height);
+
+    // Set canvas size by resizing the canvas wrapper element, which
+    // will trigger this._resizeCanvas(). Hide canvas to prevent flicker
+    // when changing cameras.
+    const sizeElem = this._canvasSizeElem;
+    if (sizeElem) {
+      sizeElem.style.width = `${width}px`;
+      sizeElem.style.height = `${height}px`;
+      sizeElem.style.visibility = "hidden";
+    }
+
+    const previews: string[] = [];
+
+    for (const camera of cameras) {
+      const { camera: cameraComponent } = camera;
+      const orbitCamera = isOrbitCameraEntity(camera)
+        ? camera.script[orbitCameraScriptName]
+        : null;
+      const { enabled: prevEnabled } = cameraComponent;
+
+      // Enable the camera and script
+      cameraComponent.enabled = true;
+      if (orbitCamera) {
+        orbitCamera.enabled = true;
+        this._focusOrbitCamera(orbitCamera);
+      }
+
+      // Resize canvas to get correct aspect ratio given
+      // the current camera
+      this._resizeCanvas(camera);
+
+      // Wait for frame to render and save screenshot
+      await waitForAnimationFrame();
+      previews.push(this.canvas.toDataURL());
+
+      // Reset camera to previous state
+      if (orbitCamera) {
+        orbitCamera.enabled = prevEnabled;
+      }
+      cameraComponent.enabled = prevEnabled;
+    }
+
+    this._cameraPreviews = previews;
+
+    // Reset canvas size and visibility
+    if (sizeElem) {
+      sizeElem.style.width = "";
+      sizeElem.style.height = "";
+      sizeElem.style.visibility = "visible";
+    }
+  }
+
+  private _destroyCameraPreviews() {
+    debug("Destroy camera previews", this._cameraPreviews);
+    this._cameraPreviews = undefined;
   }
 
   private _initHotspots(hotspots: InteractionHotspot[], camera: CameraEntity) {
@@ -383,11 +463,17 @@ export class PlayCanvasViewer implements TestableViewer {
     }
   }
 
+  private _focusOrbitCamera(orbitCamera: OrbitCamera) {
+    const focusEntity = orbitCamera.focusEntity ?? this._app.root;
+    debug("Focus camera on entity", focusEntity);
+    orbitCamera.focus(focusEntity);
+  }
+
   public destroy() {
     this.destroyGltf();
     this.destroyScene();
-    if (this._observedElement) {
-      this._canvasResizeObserver.unobserve(this._observedElement);
+    if (this._canvasSizeElem) {
+      this._canvasResizeObserver.unobserve(this._canvasSizeElem);
     }
     this._app.destroy();
   }
@@ -465,6 +551,7 @@ export class PlayCanvasViewer implements TestableViewer {
       this._activeGltfScene = undefined;
       this._destroyConfigurator();
       this._destroyBackdrops();
+      this._destroyCameraPreviews();
     }
 
     if (this._activeCamera) {
@@ -525,14 +612,11 @@ export class PlayCanvasViewer implements TestableViewer {
 
     // Set focus for orbit cameras
     if (this._activeCamera && isOrbitCameraEntity(this._activeCamera)) {
-      const orbitCamera = this._activeCamera.script[orbitCameraScriptName];
-      const focusEntity = orbitCamera.focusEntity ?? this._app.root;
-      debug("Focus camera on entity", focusEntity);
-      orbitCamera.focus(focusEntity);
+      this._focusOrbitCamera(this._activeCamera.script[orbitCameraScriptName]);
     }
 
     // Resize since new camera aspect ratio might affect canvas size
-    this._resizeCanvas();
+    this._resizeCanvas(this._activeCamera);
   }
 
   public resetCamera(yaw?: number, pitch?: number, distance?: number) {
@@ -557,7 +641,7 @@ export class PlayCanvasViewer implements TestableViewer {
     try {
       this._gltf = await this._loader.load(url, fileName);
       debug("Loaded glTF", this._gltf);
-      this._setSceneHierarchy(this._gltf.scenes[this._gltf.defaultScene]);
+      await this._setSceneHierarchy(this._gltf.scenes[this._gltf.defaultScene]);
       this._gltfLoaded = true;
     } catch (e) {
       this._gltfLoaded = true;
