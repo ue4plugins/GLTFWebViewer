@@ -451,7 +451,7 @@
       "sampler": 3,
       "source": 3,
       "extensions": {
-        "EPIC_texture_hdrencoding": {
+        "EPIC_texture_hdr_encoding": {
           "encoding": "RGBM"
         }
       }
@@ -461,7 +461,7 @@
       "sampler": 3,
       "source": 4,
       "extensions": { 
-        "EPIC_texture_hdrencoding": {
+        "EPIC_texture_hdr_encoding": {
           "encoding": "RGBM"
         }
       }
@@ -471,7 +471,7 @@
       "sampler": 3,
       "source": 5,
       "extensions": {
-        "EPIC_texture_hdrencoding": {
+        "EPIC_texture_hdr_encoding": {
           "encoding": "RGBM"
         }
       }
@@ -481,7 +481,7 @@
       "sampler": 3,
       "source": 6,
       "extensions": {
-        "EPIC_texture_hdrencoding": {
+        "EPIC_texture_hdr_encoding": {
           "encoding": "RGBM"
         }
       }
@@ -491,7 +491,7 @@
       "sampler": 3,
       "source": 7,
       "extensions": {
-        "EPIC_texture_hdrencoding": {
+        "EPIC_texture_hdr_encoding": {
           "encoding": "RGBM"
         }
       }
@@ -501,7 +501,7 @@
       "sampler": 3,
       "source": 8,
       "extensions": {
-        "EPIC_texture_hdrencoding": {
+        "EPIC_texture_hdr_encoding": {
           "encoding": "RGBM"
         }
       }
@@ -547,5 +547,5 @@
       ]
     }
   },
-  "extensionsUsed": ["EPIC_hdri_backdrops"]
+  "extensionsUsed": ["EPIC_hdri_backdrops", "EPIC_texture_hdr_encoding"]
 }

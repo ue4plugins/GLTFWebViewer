@@ -13,7 +13,7 @@ type TextureExtensionData = {
 
 export class HdrEncodingExtensionParser implements ExtensionParser {
   public get name() {
-    return "EPIC_texture_hdrencoding";
+    return "EPIC_texture_hdr_encoding";
   }
 
   public register(registry: ExtensionRegistry) {
