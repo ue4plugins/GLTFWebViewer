@@ -1,3 +1,10 @@
+### [1.2.3](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.2.2...v1.2.3) (2020-08-10)
+
+
+### Bug Fixes
+
+* **lightmap-extension:** adapt shader-code to account for the changes to uv's in recent versions of PC ([e392029](http://animech[secure]/clients/epic/gltf-web-viewer/commit/e392029014501876b0270d0f880da7dccfd9db4b))
+
 ### [1.2.2](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.2.1...v1.2.2) (2020-08-10)
 
 
