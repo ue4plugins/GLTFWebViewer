@@ -1,3 +1,10 @@
+### [1.2.2](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.2.1...v1.2.2) (2020-08-10)
+
+
+### Bug Fixes
+
+* **HdriBackdrop:** fix incorrect scaling of backdrops that have a radius less than 1.0 ([7ec3415](http://animech[secure]/clients/epic/gltf-web-viewer/commit/7ec3415c4ab70c3e3e01aa31813cd7b3ccfdbe54))
+
 ### [1.2.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.2.0...v1.2.1) (2020-08-01)
 
 
