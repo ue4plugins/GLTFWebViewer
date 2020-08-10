@@ -235,10 +235,22 @@ export class LightMapExtensionParser implements ExtensionParser {
 
   private _getHighQualityShaderCode(): string {
     return `
+      vec2 flipY(vec2 uv)
+      {
+        return vec2(uv.x, 1.0 - uv.y);
+      }
+
       vec3 getLightMapColorHQ()
       {
-        vec4 lightmap0 = $texture2DSAMPLE(texture_lightMap, getLightmapUV0($UV)).rgba;
-        vec4 lightmap1 = $texture2DSAMPLE(texture_lightMap, getLightmapUV1($UV)).rgba;
+        // NOTE: Mesh Uv's are flipped in Y(V) compared to UE4, and
+        // we therefore need to temporarily flip them (again) while
+        // performing scale- and bias-calculations.
+        vec2 flippedUv = flipY($UV);
+        vec2 lightmapUv0 = flipY(getLightmapUV0(flippedUv));
+        vec2 lightmapUv1 = flipY(getLightmapUV1(flippedUv));
+
+        vec4 lightmap0 = $texture2DSAMPLE(texture_lightMap, lightmapUv0).rgba;
+        vec4 lightmap1 = $texture2DSAMPLE(texture_lightMap, lightmapUv1).rgba;
       
         float logL = lightmap0.w;
       
