@@ -206,7 +206,7 @@ class HdriBackdrop extends pc.ScriptType {
     const positions: number[] = [];
     const tmpVec1 = new pc.Vec3();
     const tmpVec2 = new pc.Vec3();
-    let radiusSquared = 1;
+    let radiusSquared = 0;
 
     // Calculate the sphere radius using the distance of each vertex from the center
     meshInstances.forEach(meshInstance => {
