@@ -1,3 +1,10 @@
+## [1.3.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.2.3...v1.3.0) (2020-08-11)
+
+
+### Features
+
+* **lightmap-extension:** prevent gamma-correction when sampling from lightmaps (they're already linear) ([a8c3de6](http://animech[secure]/clients/epic/gltf-web-viewer/commit/a8c3de6c400ed3e450b6d2b15615d965475f9fa3))
+
 ### [1.2.3](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.2.2...v1.2.3) (2020-08-10)
 
 
