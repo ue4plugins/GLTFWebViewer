@@ -249,8 +249,8 @@ export class LightMapExtensionParser implements ExtensionParser {
         vec2 lightmapUv0 = flipY(getLightmapUV0(flippedUv));
         vec2 lightmapUv1 = flipY(getLightmapUV1(flippedUv));
 
-        vec4 lightmap0 = $texture2DSAMPLE(texture_lightMap, lightmapUv0).rgba;
-        vec4 lightmap1 = $texture2DSAMPLE(texture_lightMap, lightmapUv1).rgba;
+        vec4 lightmap0 = texture2D(texture_lightMap, lightmapUv0).rgba;
+        vec4 lightmap1 = texture2D(texture_lightMap, lightmapUv1).rgba;
       
         float logL = lightmap0.w;
       
