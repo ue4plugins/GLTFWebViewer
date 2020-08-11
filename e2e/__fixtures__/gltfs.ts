@@ -21,6 +21,10 @@ export const gltfs: TestGltf[] = [
     multipleAngles: true,
   },
   {
+    name: "Lightmap Test",
+    multipleAngles: true,
+  },
+  {
     name: "Mazda MX-5",
     multipleAngles: true,
   },
