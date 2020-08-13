@@ -14,6 +14,8 @@ import {
   HotspotTrackerEventType,
   HdriBackdrop as HdriBackdropScript,
   hdriBackdropScriptName,
+  NodeLightmap,
+  nodeLightmapScriptName,
 } from "./scripts";
 import {
   PlayCanvasGltfLoader,
@@ -75,6 +77,7 @@ export class PlayCanvasViewer implements TestableViewer {
     pc.registerScript(OrbitCamera, orbitCameraScriptName);
     pc.registerScript(HotspotTracker, hotspotTrackerScriptName);
     pc.registerScript(HdriBackdropScript, hdriBackdropScriptName);
+    pc.registerScript(NodeLightmap, nodeLightmapScriptName);
 
     this._defaultCamera = this._createDefaultCamera(this._app);
     this._activeCamera = this._defaultCamera;
