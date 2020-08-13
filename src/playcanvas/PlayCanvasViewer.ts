@@ -412,16 +412,14 @@ export class PlayCanvasViewer implements TestableViewer {
       }
       if (properties.materials !== undefined) {
         const meshInstances = node.model?.meshInstances;
-        if (!meshInstances) {
-          return;
+        if (meshInstances) {
+          debug("Set node materials", node.name, properties.materials);
+          properties.materials.forEach(({ index, material }) => {
+            if (meshInstances[index]) {
+              meshInstances[index].material = material;
+            }
+          });
         }
-
-        debug("Set node materials", node.name, properties.materials);
-        properties.materials.forEach(({ index, material }) => {
-          if (meshInstances[index]) {
-            meshInstances[index].material = material;
-          }
-        });
       }
     });
 
