@@ -10,7 +10,7 @@
     "EPIC_reflection_probes",
     "EPIC_lightmap_textures",
     "EPIC_cameras_orbital",
-    "EPIC_texture_hdr"
+    "EPIC_texture_hdr_encoding"
   ],
   "accessors": [
     {
@@ -218,8 +218,8 @@
       "sampler": 0,
       "source": 0,
       "extensions": {
-        "EPIC_texture_hdr": {
-          "encodig": "rgbm"
+        "EPIC_texture_hdr_encoding": {
+          "encoding": "RGBM"
         }
       }
     },
@@ -227,8 +227,8 @@
       "sampler": 0,
       "source": 1,
       "extensions": {
-        "EPIC_texture_hdr": {
-          "encodig": "rgbm"
+        "EPIC_texture_hdr_encoding": {
+          "encoding": "RGBM"
         }
       }
     }
