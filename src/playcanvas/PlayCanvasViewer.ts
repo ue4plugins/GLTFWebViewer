@@ -424,6 +424,24 @@ export class PlayCanvasViewer implements TestableViewer {
         });
       }
     });
+
+    // Update lightmaps for all affected nodes, in case materials or models have changed.
+    nodeTransforms.forEach(variantNode => {
+      const nodeLightmap = variantNode.node.script?.NodeLightmap;
+      if (!nodeLightmap) {
+        return;
+      }
+
+      if (variantNode.isActiveByDefault) {
+        nodeLightmap.applyLightmapToModel();
+      } else {
+        // TODO: In UE, lightmaps are visible on non-default meshes that have been
+        // switched via mesh variants, even though it looks "incorrect" most of the time.
+        // We have currently elected to hide lightmaps when a mesh / model is switched,
+        // but we may wish to change this behavior later to match UE.
+        nodeLightmap.removeLightmapFromModel();
+      }
+    });
   }
 
   private _initBackdrops(backdrops: HdriBackdrop[]) {
