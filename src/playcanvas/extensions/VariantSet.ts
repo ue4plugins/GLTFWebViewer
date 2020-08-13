@@ -49,6 +49,7 @@ type VariantMaterialData = {
 type VariantNodePropertiesData = {
   visible?: boolean;
   materials?: VariantMaterialData[];
+  mesh?: number;
 };
 
 export type VariantSet = {
@@ -65,10 +66,8 @@ export type Variant = {
 
 export type VariantNode = {
   node: pc.Entity;
-  properties: {
-    visible?: boolean;
-    materials?: VariantMaterial[];
-  };
+  properties: VariantNodeProperties;
+  isActiveByDefault: boolean;
 };
 
 export type VariantMaterial = {
@@ -79,6 +78,7 @@ export type VariantMaterial = {
 export type VariantNodeProperties = {
   visible?: boolean;
   materials?: VariantMaterial[];
+  model?: pc.Model;
 };
 
 export type VariantMaterialResolver = (
@@ -96,7 +96,6 @@ export class VariantSetExtensionParser implements ExtensionParser {
   public getVariantSetsForScene(
     scene: pc.Entity,
     container: pc.ContainerResource,
-    materialResolver?: VariantMaterialResolver,
   ): VariantSet[] {
     const { textures, nodes: nodeEntities } = container;
 
@@ -121,11 +120,10 @@ export class VariantSetExtensionParser implements ExtensionParser {
                 : undefined,
             nodes: nodes.map<VariantNode>(({ node, properties }) => ({
               node: nodeEntities[node],
+              isActiveByDefault: active,
               properties: this._parseVariantNodeProperties(
-                nodeEntities[node],
                 properties,
                 container,
-                materialResolver,
               ),
             })),
           }),
@@ -172,33 +170,24 @@ export class VariantSetExtensionParser implements ExtensionParser {
   }
 
   private _parseVariantNodeProperties(
-    node: pc.Entity,
-    { visible, materials }: VariantNodePropertiesData,
+    { visible, materials, mesh }: VariantNodePropertiesData,
     container: pc.ContainerResource,
-    materialResolver?: VariantMaterialResolver,
   ): VariantNodeProperties {
     return {
       visible,
       materials: materials
-        ?.map(data =>
-          this._parseVariantMaterial(node, data, container, materialResolver),
-        )
+        ?.map(data => this._parseVariantMaterial(data, container))
         .filter((material): material is VariantMaterial => material !== null),
+      model: mesh !== undefined ? container.models[mesh]?.resource : undefined,
     };
   }
 
   private _parseVariantMaterial(
-    node: pc.Entity,
     data: VariantMaterialData,
     container: pc.ContainerResource,
-    materialResolver?: VariantMaterialResolver,
   ): VariantMaterial | null {
-    let material: pc.StandardMaterial | null =
+    const material: pc.StandardMaterial | null =
       container.materials[data.material]?.resource ?? null;
-
-    if (material && materialResolver) {
-      material = materialResolver(material, node);
-    }
 
     return material ? { ...data, material } : null;
   }
