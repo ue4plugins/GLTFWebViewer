@@ -18,6 +18,8 @@ declare namespace pc {
 
   interface MeshInstance {
     setParameter: Material["setParameter"];
+    setParameters: Material["setParameters"];
+    deleteParameter: Material["deleteParameter"];
   }
 
   interface Texture {
