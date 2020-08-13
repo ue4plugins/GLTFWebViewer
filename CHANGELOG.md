@@ -1,3 +1,10 @@
+### [1.3.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.3.0...v1.3.1) (2020-08-13)
+
+
+### Bug Fixes
+
+* fix misspelled name and encoding-value for EPIC_texture_hdr_encoding in extension-test ([6bb81ab](http://animech[secure]/clients/epic/gltf-web-viewer/commit/6bb81ab9f3f2bce807915feec5bcd8abc202fcb3))
+
 ## [1.3.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.2.3...v1.3.0) (2020-08-11)
 
 
