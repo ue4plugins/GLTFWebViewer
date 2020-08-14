@@ -413,26 +413,22 @@ export class PlayCanvasViewer implements TestableViewer {
         debug("Set node visibility", node.name, properties.visible);
         node.enabled = properties.visible;
       }
-      if (properties.materials !== undefined) {
-        const meshInstances = node.model?.meshInstances;
-        if (meshInstances) {
-          // TODO: Applying materials even when the variant-node is already
-          // active may cause different behavior than in UE. For example,
-          // if a mesh-component in UE lacks override-materials and its mesh
-          // is replaced via a mesh variant, the new mesh will use its own materials.
-          // But if the materials of the mesh-component are changed via a material variant
-          // before changing the mesh, the new mesh will use the changed (overridden) materials.
-          // In our case, since materials are applied after all other variants, and every time
-          // something changes, meshes that are switched via mesh variants will always get
-          // the overridden materials. Do we want to change this to match UE?
+      if (
+        properties.materialMapping !== undefined &&
+        node.model !== undefined
+      ) {
+        debug("Set node materials", node.name, properties.materialMapping);
 
-          debug("Set node materials", node.name, properties.materials);
-          properties.materials.forEach(({ index, material }) => {
-            if (meshInstances[index]) {
-              meshInstances[index].material = material;
-            }
-          });
-        }
+        // TODO: Applying materials even when the variant-node is already
+        // active may cause different behavior than in UE. For example,
+        // if a mesh-component in UE lacks override-materials and its mesh
+        // is replaced via a mesh variant, the new mesh will use its own materials.
+        // But if the materials of the mesh-component are changed via a material variant
+        // before changing the mesh, the new mesh will use the changed (overridden) materials.
+        // In our case, since materials are applied after all other variants, and every time
+        // something changes, meshes that are switched via mesh variants will always get
+        // the overridden materials. Do we want to change this to match UE?
+        node.model.mapping = properties.materialMapping;
       }
     });
 
