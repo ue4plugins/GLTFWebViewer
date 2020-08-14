@@ -406,7 +406,15 @@ export class PlayCanvasViewer implements TestableViewer {
         debug("Set node mesh", node.name, properties.model);
 
         if (node.model.asset !== properties.model.id) {
+          // HACK: prevent the anim-component from being reset when changing model by
+          // temporarily removing it from the entity. When resetting the anim-component,
+          // its state-graph is restored from an asset. But we've constructed the graph
+          // dynamically, and that graph would be lost.
+          const animComponent = node.anim;
+          delete node.anim;
+
           node.model.asset = properties.model;
+          node.anim = animComponent;
         }
       }
       if (properties.visible !== undefined) {

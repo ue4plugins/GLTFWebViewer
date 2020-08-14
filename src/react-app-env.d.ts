@@ -51,6 +51,7 @@ declare namespace pc {
     addComponent(type: "script", data?: any): pc.ScriptComponent;
     addComponent(type: "model", data?: any): pc.ModelComponent;
     addComponent(type: "camera", data?: any): pc.CameraComponent;
+    anim?: pc.AnimComponent;
   }
 
   interface ScriptComponent {
