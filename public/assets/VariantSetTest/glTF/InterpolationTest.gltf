@@ -1198,12 +1198,13 @@
     {
       "mesh": 3,
       "name": "Cube.003",
-      "translation": [0, 3.356412410736084, 0]
+      "translation": [0, 3.356412410736084, 0],
+      "rotation": [ 0.7071068, 0, 0, 0.7071068 ]
     },
     {
       "mesh": 4,
       "name": "Cube.004",
-      "rotation": [0, 0, -0.006683696992695332, 0.9999777674674988],
+      "rotation": [ 0.7071068, 0, 0, 0.7071068 ],
       "translation": [3.33506178855896, 3.356412410736084, 0]
     },
     {
@@ -1400,7 +1401,7 @@
                       "properties": {
                         "materials": [
                           {
-                            "material": 5,
+                            "material": 3,
                             "index": 0
                           }
                         ]
@@ -1411,10 +1412,60 @@
                       "properties": {
                         "materials": [
                           {
-                            "material": 6,
+                            "material": 4,
                             "index": 0
                           }
                         ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Meshes",
+              "variants": [
+                {
+                  "name": "Use a plane-mesh for cube 3",
+                  "active": false,
+                  "thumbnail": 1,
+                  "nodes": [
+                    {
+                      "node": 5,
+                      "properties": {
+                        "mesh": 9
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Use a plane-mesh for cube 4",
+                  "active": false,
+                  "thumbnail": 2,
+                  "nodes": [
+                    {
+                      "node": 6,
+                      "properties": {
+                        "mesh": 9
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Restore default meshes",
+                  "active": true,
+                  "thumbnail": 1,
+                  "nodes": [
+                    {
+                      "node": 5,
+                      "properties": {
+                        "mesh": 3
+                      }
+                    },
+                    {
+                      "node": 6,
+                      "properties": {
+                        "mesh": 4
                       }
                     }
                   ]
