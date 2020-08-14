@@ -78,7 +78,7 @@ export type VariantMaterial = {
 export type VariantNodeProperties = {
   visible?: boolean;
   materials?: VariantMaterial[];
-  model?: pc.Model;
+  model?: pc.Asset;
 };
 
 export type VariantMaterialResolver = (
@@ -178,7 +178,7 @@ export class VariantSetExtensionParser implements ExtensionParser {
       materials: materials
         ?.map(data => this._parseVariantMaterial(data, container))
         .filter((material): material is VariantMaterial => material !== null),
-      model: mesh !== undefined ? container.models[mesh]?.resource : undefined,
+      model: mesh !== undefined ? container.models[mesh] : undefined,
     };
   }
 

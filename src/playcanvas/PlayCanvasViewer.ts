@@ -404,7 +404,10 @@ export class PlayCanvasViewer implements TestableViewer {
     nodeTransforms.forEach(({ node, properties }) => {
       if (properties.model !== undefined && node.model !== undefined) {
         debug("Set node mesh", node.name, properties.model);
-        node.model.model = properties.model.clone();
+
+        if (node.model.asset !== properties.model.id) {
+          node.model.asset = properties.model;
+        }
       }
       if (properties.visible !== undefined) {
         debug("Set node visibility", node.name, properties.visible);
