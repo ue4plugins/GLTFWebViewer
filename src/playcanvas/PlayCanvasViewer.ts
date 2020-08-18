@@ -218,8 +218,18 @@ export class PlayCanvasViewer implements TestableViewer {
     this._activeGltfScene = gltfScene;
     this._app.root.addChild(gltfScene.root);
 
-    // Add default camera to start of camera list
-    gltfScene.cameras.unshift(this._defaultCamera);
+    // List orbit cameras first
+    gltfScene.cameras.sort((a, b) => {
+      const aIsOrbit = isOrbitCameraEntity(a);
+      const bIsOrbit = isOrbitCameraEntity(b);
+      return aIsOrbit === bIsOrbit ? 0 : aIsOrbit ? -1 : 1;
+    });
+
+    // Add default camera to start of camera list if no other orbit
+    // cameras exist in glTF scene
+    if (!gltfScene.cameras.some(isOrbitCameraEntity)) {
+      gltfScene.cameras.unshift(this._defaultCamera);
+    }
 
     // Cameras are only shown in UI if there are more than one
     if (gltfScene.cameras.length > 1) {
