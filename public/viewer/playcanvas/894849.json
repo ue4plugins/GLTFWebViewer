@@ -1,12 +1,10 @@
 {
   "name": "Tropical Beach",
   "settings": {
-    "physics": {
-      "gravity": [0, -9.8, 0]
-    },
+    "physics": { "gravity": [0, -9.8, 0] },
     "render": {
       "fog_end": 1000,
-      "tonemapping": 0,
+      "tonemapping": 3,
       "skybox": 29298157,
       "fog_density": 0.01,
       "gamma_correction": 1,

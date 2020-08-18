@@ -2,66 +2,30 @@
   "application_properties": {
     "i18nAssets": [],
     "useTouch": true,
-    "layerOrder": [{
-      "layer": 0,
-      "enabled": true,
-      "transparent": false
-    }, {
-      "layer": 1,
-      "enabled": true,
-      "transparent": false
-    }, {
-      "layer": 2,
-      "enabled": true,
-      "transparent": false
-    }, {
-      "layer": 0,
-      "enabled": true,
-      "transparent": true
-    }, {
-      "layer": 3,
-      "enabled": true,
-      "transparent": false
-    }, {
-      "layer": 3,
-      "enabled": true,
-      "transparent": true
-    }, {
-      "layer": 4,
-      "enabled": true,
-      "transparent": true
-    }],
+    "layerOrder": [
+      { "layer": 0, "enabled": true, "transparent": false },
+      { "layer": 1, "enabled": true, "transparent": false },
+      { "layer": 2, "enabled": true, "transparent": false },
+      { "layer": 0, "enabled": true, "transparent": true },
+      { "layer": 3, "enabled": true, "transparent": false },
+      { "layer": 3, "enabled": true, "transparent": true },
+      { "layer": 4, "enabled": true, "transparent": true }
+    ],
     "externalScripts": [],
     "height": 720,
     "vr": false,
     "useModelV2": false,
     "antiAlias": true,
     "layers": {
-      "0": {
-        "transparentSortMode": 3,
-        "opaqueSortMode": 2,
-        "name": "World"
-      },
-      "1": {
-        "transparentSortMode": 3,
-        "opaqueSortMode": 2,
-        "name": "Depth"
-      },
-      "2": {
-        "transparentSortMode": 3,
-        "opaqueSortMode": 0,
-        "name": "Skybox"
-      },
+      "0": { "transparentSortMode": 3, "opaqueSortMode": 2, "name": "World" },
+      "1": { "transparentSortMode": 3, "opaqueSortMode": 2, "name": "Depth" },
+      "2": { "transparentSortMode": 3, "opaqueSortMode": 0, "name": "Skybox" },
       "3": {
         "transparentSortMode": 3,
         "opaqueSortMode": 0,
         "name": "Immediate"
       },
-      "4": {
-        "transparentSortMode": 1,
-        "opaqueSortMode": 1,
-        "name": "UI"
-      }
+      "4": { "transparentSortMode": 1, "opaqueSortMode": 1, "name": "UI" }
     },
     "width": 1280,
     "useDevicePixelRatio": false,
@@ -80,23 +44,23 @@
     "useGamepads": false,
     "libraries": []
   },
-  "scenes": [{
-    "name": "Helipad",
-    "url": "894846.json"
-  }, {
-    "name": "Milky Way",
-    "url": "894848.json"
-  }, {
-    "name": "Tropical Beach",
-    "url": "894849.json"
-  }, {
-    "name": "Winter Forest",
-    "url": "894850.json"
-  }],
+  "scenes": [
+    { "name": "Helipad", "url": "894846.json" },
+    { "name": "Milky Way", "url": "894848.json" },
+    { "name": "Tropical Beach", "url": "894849.json" },
+    { "name": "Winter Forest", "url": "894850.json" }
+  ],
   "assets": {
     "29298157": {
       "data": {
-        "textures": [29298163, 29298160, 29298159, 29298162, 29298161, 29298158],
+        "textures": [
+          29298163,
+          29298160,
+          29298159,
+          29298162,
+          29298161,
+          29298158
+        ],
         "magFilter": 1,
         "minFilter": 5,
         "anisotropy": 1,
@@ -391,7 +355,14 @@
     },
     "29298171": {
       "data": {
-        "textures": [29298172, 29298174, 29298176, 29298173, 29298177, 29298175],
+        "textures": [
+          29298172,
+          29298174,
+          29298176,
+          29298173,
+          29298177,
+          29298175
+        ],
         "magFilter": 1,
         "minFilter": 5,
         "anisotropy": 1,
@@ -686,7 +657,14 @@
     },
     "29298184": {
       "data": {
-        "textures": [29298187, 29298185, 29298188, 29298193, 29298189, 29298195],
+        "textures": [
+          29298187,
+          29298185,
+          29298188,
+          29298193,
+          29298189,
+          29298195
+        ],
         "magFilter": 1,
         "minFilter": 5,
         "anisotropy": 1,
@@ -981,7 +959,14 @@
     },
     "29298197": {
       "data": {
-        "textures": [29298198, 29298203, 29298202, 29298199, 29298200, 29298201],
+        "textures": [
+          29298198,
+          29298203,
+          29298202,
+          29298199,
+          29298200,
+          29298201
+        ],
         "magFilter": 1,
         "minFilter": 5,
         "anisotropy": 1,
