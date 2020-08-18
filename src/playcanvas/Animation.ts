@@ -31,6 +31,10 @@ export class Animation {
     return this._layer.playable;
   }
 
+  public get activeState() {
+    return this._layer.activeState;
+  }
+
   public play(state: AnimationState) {
     const currentTime = (() => {
       switch (state) {

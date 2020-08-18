@@ -318,11 +318,15 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._hotspotTrackerHandles = hotspots.map(hotspot => {
       const { animation } = hotspot;
+      const initState = animation?.activeState;
       const renderer = new HotspotBuilder(canvasWrapperElem);
 
       renderer.render({
         imageSource: hotspot.imageSource,
         toggledImageSource: hotspot.toggledImageSource,
+        toggled:
+          initState === AnimationState.Once ||
+          initState === AnimationState.OnceReverse,
         onToggle: active => {
           debug("Toggle hotspot", active);
 

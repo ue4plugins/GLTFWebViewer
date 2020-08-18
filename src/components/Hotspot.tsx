@@ -43,16 +43,18 @@ const useStyles = makeStyles(theme => ({
 export type HotspotProps = {
   imageSource: string;
   toggledImageSource?: string;
+  toggled?: boolean;
   onToggle: (active: boolean) => void;
 };
 
 export const Hotspot: React.FC<HotspotProps> = ({
   imageSource,
   toggledImageSource,
+  toggled: toggledProp,
   onToggle,
 }) => {
   const classes = useStyles();
-  const [toggled, setToggled] = useState(false);
+  const [toggled, setToggled] = useState(toggledProp ?? false);
   const image =
     toggled && toggledImageSource ? toggledImageSource : imageSource;
 
