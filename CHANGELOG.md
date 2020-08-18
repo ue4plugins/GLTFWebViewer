@@ -1,3 +1,16 @@
+## [1.4.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.3.1...v1.4.0) (2020-08-18)
+
+
+### Features
+
+* only show default camera if no other orbit cameras are present in glTF scene ([db3c0fd](http://animech[secure]/clients/epic/gltf-web-viewer/commit/db3c0fd2aa5f385f0b3b5ddbc80279715a37f636))
+* update PlayCanvas scenes to use ACES tonemapping ([43b751a](http://animech[secure]/clients/epic/gltf-web-viewer/commit/43b751a1477509ab58fec5d6f0794e731c1c17a4))
+
+
+### Bug Fixes
+
+* init cameras with proper hotspot states ([5d91f84](http://animech[secure]/clients/epic/gltf-web-viewer/commit/5d91f84bdc2a168d9966b75c7523584a91297064))
+
 ### [1.3.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.3.0...v1.3.1) (2020-08-13)
 
 
