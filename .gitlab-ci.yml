@@ -106,6 +106,22 @@ deploy_dev:
   tags:
     - linux-docker
   stage: deploy
+  only:
+    - master
+  dependencies:
+    - build
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y lftp
+  script:
+    - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete build/ $FTP_DEST_FOLDER_DEV/; bye"
+  environment:
+    name: dev
+
+deploy_prod:
+  tags:
+    - linux-docker
+  stage: deploy
   when: manual
   only:
     - master
@@ -115,6 +131,6 @@ deploy_dev:
     - apt-get update -qy
     - apt-get install -y lftp
   script:
-    - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete build/ $FTP_DEST_FOLDER/; bye"
+    - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete build/ $FTP_DEST_FOLDER_PROD/; bye"
   environment:
-    name: dev
+    name: prod
