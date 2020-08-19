@@ -1,3 +1,10 @@
+## [1.5.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.4.0...v1.5.0) (2020-08-19)
+
+
+### Features
+
+* hide animation selector since we don't want users to be able to turn off non-hotspot animations ([bc4a194](http://animech[secure]/clients/epic/gltf-web-viewer/commit/bc4a194c544e38025022907bb7682043d3b4ba2a))
+
 ## [1.4.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.3.1...v1.4.0) (2020-08-18)
 
 
