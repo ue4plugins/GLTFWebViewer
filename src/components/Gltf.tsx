@@ -3,12 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores";
-import {
-  AnimationSelector,
-  VariantSetList,
-  CameraSelector,
-  InputGroup,
-} from ".";
+import { VariantSetList, CameraSelector, InputGroup } from ".";
 
 const useStyles = makeStyles(theme => ({
   meta: {
@@ -19,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 export const Gltf: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { animations, configurator, gltf, cameras } = gltfStore;
+  const { configurator, gltf, cameras } = gltfStore;
 
   if (!gltf) {
     return null;
@@ -54,11 +49,6 @@ export const Gltf: React.FC = observer(() => {
       {cameras.length > 1 && (
         <InputGroup fullWidth>
           <CameraSelector />
-        </InputGroup>
-      )}
-      {animations.length > 0 && (
-        <InputGroup>
-          <AnimationSelector />
         </InputGroup>
       )}
       {configurator && <VariantSetList />}
