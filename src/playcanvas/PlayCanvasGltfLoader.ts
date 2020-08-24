@@ -5,7 +5,6 @@ import {
   ExtensionParser,
   VariantSetExtensionParser,
   VariantSet,
-  VariantMaterialResolver,
   InteractionHotspotExtensionParser,
   InteractionHotspot,
   HdriBackdropExtensionParser,
@@ -210,7 +209,6 @@ export class PlayCanvasGltfLoader {
             variantSets: variantSetParser.getVariantSetsForScene(
               sceneRoot,
               container,
-              this._createVariantMaterialResolver(lightMapParser),
             ),
             hotspots: hotspotParser.getHotspotsForScene(
               sceneRoot,
@@ -243,28 +241,5 @@ export class PlayCanvasGltfLoader {
 
     this._app.assets.remove(data.asset);
     data.asset.unload();
-  }
-
-  private _createVariantMaterialResolver(
-    lightMapParser: LightMapExtensionParser,
-  ): VariantMaterialResolver {
-    return (sourceMaterial: pc.StandardMaterial, node: pc.Entity) => {
-      // NOTE: Lightmapped nodes use cloned modified materials to be able to render the lightmaps.
-      // Material variants use the original materials from the gltf file, and if we would use such
-      // a material on a lightmapped node, the lightmap would no longer be rendered.
-      // We therefore try to find the modified version of the source material for this node.
-      // If no such material exists, we create a modified version of the source-material that
-      // is compatible with this exact node.
-      // TODO: Can we do this without using this type of "plumbing" between extension parsers?
-      const nodeLightmap = lightMapParser.findNodeLightmap(node);
-      if (nodeLightmap) {
-        return lightMapParser.getOrCreateExtendedMaterial(
-          nodeLightmap,
-          sourceMaterial,
-        );
-      }
-
-      return sourceMaterial;
-    };
   }
 }

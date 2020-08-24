@@ -18,6 +18,8 @@ declare namespace pc {
 
   interface MeshInstance {
     setParameter: Material["setParameter"];
+    setParameters: Material["setParameters"];
+    deleteParameter: Material["deleteParameter"];
   }
 
   interface Texture {
@@ -49,6 +51,7 @@ declare namespace pc {
     addComponent(type: "script", data?: any): pc.ScriptComponent;
     addComponent(type: "model", data?: any): pc.ModelComponent;
     addComponent(type: "camera", data?: any): pc.CameraComponent;
+    anim?: pc.AnimComponent;
   }
 
   interface ScriptComponent {
