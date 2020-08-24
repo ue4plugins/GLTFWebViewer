@@ -1,3 +1,21 @@
+## [1.6.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.5.0...v1.6.0) (2020-08-24)
+
+
+### Features
+
+* **lightmap-extension:** keep lightmaps up-to-date after variants have been changed ([44295ee](http://animech[secure]/clients/epic/gltf-web-viewer/commit/44295ee2859cfe4284ace6346f8ecdd81a9a849c))
+* **lightmap-extension:** split parser into parser + script to allow manipulation of lightmaps after parse ([518e072](http://animech[secure]/clients/epic/gltf-web-viewer/commit/518e0728ea28e2848194f657f992e3b60ecef48d))
+* **variants:** implement node-transform for mesh-variants ([8e7f6cd](http://animech[secure]/clients/epic/gltf-web-viewer/commit/8e7f6cdca24192054016fa17ebbd03a3c560f994))
+* **variants:** implement parsing of mesh variants ([912b83e](http://animech[secure]/clients/epic/gltf-web-viewer/commit/912b83e17091cfd5297156ae0800277e2b99abfa))
+* **variants:** make material-replacement insensitive to timing issues by mapping material-assets ([5f6c72a](http://animech[secure]/clients/epic/gltf-web-viewer/commit/5f6c72a76408411a199684e474b9c496741f4f6b))
+* **variants:** make model-replacement more robust by switching model-asset instead of cloning the resource ([c3ce1f0](http://animech[secure]/clients/epic/gltf-web-viewer/commit/c3ce1f043f3ea04a06f2597d7fdd7795d8b1a81b))
+
+
+### Bug Fixes
+
+* **variants:** make anim-components keep their state when a model is changed via a variant ([070714d](http://animech[secure]/clients/epic/gltf-web-viewer/commit/070714de078099adec3e15c3d2f4f8b1a6b74c01))
+* **variants:** remove early-exit when processing material variants, to ensure later steps are executed ([8b1f046](http://animech[secure]/clients/epic/gltf-web-viewer/commit/8b1f046de08dd622a01dda0b3604c67eaac9fb23))
+
 ## [1.5.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.4.0...v1.5.0) (2020-08-19)
 
 
