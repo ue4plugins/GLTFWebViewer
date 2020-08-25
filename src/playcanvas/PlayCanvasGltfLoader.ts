@@ -197,7 +197,7 @@ export class PlayCanvasGltfLoader {
       debug("Created animations", animations);
 
       const cameraEntities = container.cameras.map(component =>
-        convertToCameraEntity(component.node as pc.Entity),
+        convertToCameraEntity(component.entity),
       );
       debug("Created camera entities", cameraEntities);
 
