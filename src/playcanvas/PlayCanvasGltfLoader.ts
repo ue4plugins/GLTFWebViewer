@@ -76,8 +76,13 @@ export class PlayCanvasGltfLoader {
   }
 
   private _createAnimations(container: pc.ContainerResource): Animation[] {
-    const { nodes, nodeAnimations, animations: animationAssets } = container;
-    return nodeAnimations
+    const {
+      nodes,
+      animationIndicesByNode,
+      animations: animationAssets,
+    } = container;
+
+    return animationIndicesByNode
       .map<Animation[]>((animationIndices, nodeIndex) => {
         if (animationIndices.length === 0) {
           return [];
