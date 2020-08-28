@@ -72,9 +72,11 @@ export const Variant: React.FC<VariantProps> = ({
         value={value}
       />
       <ListItem button>
-        <ListItemAvatar>
-          <Avatar src={image} />
-        </ListItemAvatar>
+        {image && (
+          <ListItemAvatar>
+            <Avatar src={image} />
+          </ListItemAvatar>
+        )}
         <ListItemText primary={label} />
         <Radio
           edge="end"

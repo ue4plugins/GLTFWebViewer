@@ -1,6 +1,12 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
-import { hasNoUndefinedValues } from "../../utilities/typeGuards";
+import { hasNoUndefinedValues } from "../../utilities";
+import {
+  VariantSet,
+  Variant,
+  VariantNode,
+  VariantNodeProperties,
+} from "../../variants";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
@@ -52,32 +58,6 @@ type VariantNodePropertiesData = {
   mesh?: number;
 };
 
-type MaterialMapping = Record<number, number>;
-
-export type VariantSet = {
-  name: string;
-  variants: Variant[];
-};
-
-export type Variant = {
-  name: string;
-  active: boolean;
-  thumbnailSource?: string;
-  nodes: VariantNode[];
-};
-
-export type VariantNode = {
-  node: pc.Entity;
-  properties: VariantNodeProperties;
-  isActiveByDefault: boolean;
-};
-
-export type VariantNodeProperties = {
-  visible?: boolean;
-  materialMapping?: MaterialMapping;
-  model?: pc.Asset;
-};
-
 export class VariantSetExtensionParser implements ExtensionParser {
   private _variantSets: SceneVariantSetDataMap[] = [];
 
@@ -101,24 +81,23 @@ export class VariantSetExtensionParser implements ExtensionParser {
       .map<VariantSet>(set => ({
         ...set,
         variants: set.variants.map<Variant>(
-          ({ name, active, thumbnail, nodes }) => ({
-            name,
-            active,
-            thumbnailSource:
+          ({ name, active, thumbnail, nodes }) =>
+            new Variant(
+              name,
               thumbnail !== undefined
                 ? (textures[thumbnail]?.resource as
                     | pc.Texture
                     | undefined)?.getSource().src
                 : undefined,
-            nodes: nodes.map<VariantNode>(({ node, properties }) => ({
-              node: nodeEntities[node],
-              isActiveByDefault: active,
-              properties: this._parseVariantNodeProperties(
-                properties,
-                container,
-              ),
-            })),
-          }),
+              active,
+              nodes.map<VariantNode>(({ node, properties }) => ({
+                node: nodeEntities[node],
+                properties: this._parseVariantNodeProperties(
+                  properties,
+                  container,
+                ),
+              })),
+            ),
         ),
       }));
   }

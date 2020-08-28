@@ -1,11 +1,6 @@
 import { observable, computed, action } from "mobx";
-import {
-  GltfSource,
-  GltfAnimation,
-  GltfScene,
-  GltfVariantSetConfigurator,
-  GltfCamera,
-} from "../types";
+import { GltfSource, GltfAnimation, GltfScene, GltfCamera } from "../types";
+import { VariantSetManager } from "../variants";
 
 export class GltfStore {
   private defaultGltf: string | null;
@@ -40,8 +35,8 @@ export class GltfStore {
   }
 
   @computed
-  public get configurator(): GltfVariantSetConfigurator | undefined {
-    return this.sceneHierarchy?.configurator;
+  public get variantSetManager(): VariantSetManager | undefined {
+    return this.sceneHierarchy?.variantSetManager;
   }
 
   @computed

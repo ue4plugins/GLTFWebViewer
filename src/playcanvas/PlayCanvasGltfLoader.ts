@@ -1,10 +1,10 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
+import { VariantSet } from "../variants";
 import {
   ExtensionRegistry,
   ExtensionParser,
   VariantSetExtensionParser,
-  VariantSet,
   InteractionHotspotExtensionParser,
   InteractionHotspot,
   HdriBackdropExtensionParser,

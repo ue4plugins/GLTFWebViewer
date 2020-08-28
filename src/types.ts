@@ -1,5 +1,4 @@
-import { Configurator } from "./configurator";
-import { Variant } from "./playcanvas/extensions";
+import { VariantSetManager } from "./variants";
 
 export type GltfSource = {
   filePath: string;
@@ -23,16 +22,9 @@ export type GltfCamera = {
   previewSource?: string;
 };
 
-export type GltfVariantSetMeta = { name: string };
-export type GltfVariant = Variant;
-export type GltfVariantSetConfigurator = Configurator<
-  GltfVariantSetMeta,
-  GltfVariant
->;
-
 export type GltfScene = {
   animations: GltfAnimation[];
-  configurator?: GltfVariantSetConfigurator;
+  variantSetManager?: VariantSetManager;
   cameras: GltfCamera[];
   hasBackdrops: boolean;
 };

@@ -1006,12 +1006,7 @@
     {
       "name": "Blue material",
       "pbrMetallicRoughness": {
-        "baseColorFactor": [
-          0,
-          0,
-          0.800000011920929,
-          1
-        ],
+        "baseColorFactor": [0, 0, 0.800000011920929, 1],
         "metallicFactor": 0,
         "roughnessFactor": 0.5
       }
@@ -1199,12 +1194,12 @@
       "mesh": 3,
       "name": "Cube.003",
       "translation": [0, 3.356412410736084, 0],
-      "rotation": [ 0.7071068, 0, 0, 0.7071068 ]
+      "rotation": [0.7071068, 0, 0, 0.7071068]
     },
     {
       "mesh": 4,
       "name": "Cube.004",
-      "rotation": [ 0.7071068, 0, 0, 0.7071068 ],
+      "rotation": [0.7071068, 0, 0, 0.7071068],
       "translation": [3.33506178855896, 3.356412410736084, 0]
     },
     {
@@ -1374,10 +1369,21 @@
                   ]
                 },
                 {
-                  "name": "Make cube 4 blue",
+                  "name": "Make cube 3 and 4 blue",
                   "active": false,
                   "thumbnail": 2,
                   "nodes": [
+                    {
+                      "node": 5,
+                      "properties": {
+                        "materials": [
+                          {
+                            "material": 10,
+                            "index": 0
+                          }
+                        ]
+                      }
+                    },
                     {
                       "node": 6,
                       "properties": {

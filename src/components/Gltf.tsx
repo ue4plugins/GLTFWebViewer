@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 export const Gltf: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { configurator, gltf, cameras } = gltfStore;
+  const { variantSetManager, gltf, cameras } = gltfStore;
 
   if (!gltf) {
     return null;
@@ -51,7 +51,7 @@ export const Gltf: React.FC = observer(() => {
           <CameraSelector />
         </InputGroup>
       )}
-      {configurator && <VariantSetList />}
+      {variantSetManager && <VariantSetList />}
     </>
   );
 });

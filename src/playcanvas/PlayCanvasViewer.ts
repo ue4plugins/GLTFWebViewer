@@ -2,9 +2,9 @@ import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
-import { GltfScene, GltfVariantSetConfigurator } from "../types";
+import { GltfScene } from "../types";
 import { HotspotBuilder } from "../utilities";
-import { FieldManager, Configurator } from "../configurator";
+import { VariantSet, VariantSetManager } from "../variants";
 import {
   OrbitCamera,
   orbitCameraScriptName,
@@ -22,12 +22,7 @@ import {
   GltfData,
   GltfSceneData,
 } from "./PlayCanvasGltfLoader";
-import {
-  InteractionHotspot,
-  VariantSet,
-  VariantNode,
-  HdriBackdrop,
-} from "./extensions";
+import { InteractionHotspot, HdriBackdrop } from "./extensions";
 import { AnimationState } from "./Animation";
 import {
   CameraEntity,
@@ -37,8 +32,6 @@ import {
 } from "./Camera";
 
 const debug = Debug("PlayCanvasViewer");
-
-type Fields = GltfVariantSetConfigurator["manager"]["fields"];
 
 const waitForAnimationFrame = () =>
   new Promise<void>(resolve => {
@@ -53,7 +46,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _scene?: pc.Scene;
   private _gltf?: GltfData;
   private _activeGltfScene?: GltfSceneData;
-  private _configurator?: GltfVariantSetConfigurator;
+  private _variantSetManager?: VariantSetManager;
   private _hotspotTrackerHandles?: HotspotTrackerHandle[];
   private _backdrops?: HdriBackdrop[];
   private _cameraPreviews?: string[];
@@ -89,8 +82,6 @@ export class PlayCanvasViewer implements TestableViewer {
     if (this._canvasSizeElem) {
       this._canvasResizeObserver.observe(this._canvasSizeElem);
     }
-
-    this._onConfigurationChange = this._onConfigurationChange.bind(this);
   }
 
   public get app() {
@@ -126,7 +117,7 @@ export class PlayCanvasViewer implements TestableViewer {
           active: false,
         }))
         .filter((_, index) => scene.animations[index].playable),
-      configurator: this._configurator,
+      variantSetManager: this._variantSetManager,
       cameras: scene.cameras.map((camera, index) => {
         return {
           id: index,
@@ -240,7 +231,7 @@ export class PlayCanvasViewer implements TestableViewer {
     }
 
     if (gltfScene.variantSets.length > 0) {
-      this._initConfigurator(gltfScene.variantSets);
+      this._initVariantSets(gltfScene.variantSets);
     }
 
     if (gltfScene.backdrops.length > 0) {
@@ -367,110 +358,22 @@ export class PlayCanvasViewer implements TestableViewer {
     this._hotspotTrackerHandles = undefined;
   }
 
-  private _initConfigurator(sets: VariantSet[]) {
-    this._destroyConfigurator();
+  private _initVariantSets(sets: VariantSet[]) {
+    this._destroyVariantSets();
 
-    debug("Init configurator", sets);
+    debug("Init variant sets", sets);
 
-    const fields: Fields = sets.map(vs => ({
-      name: vs.name,
-      values: vs.variants,
-      defaultValue: vs.variants.findIndex(variant => variant.active),
-    }));
-
-    this._configurator = new Configurator(new FieldManager(fields));
-    this._configurator.onConfigurationChange(this._onConfigurationChange);
-    this._onConfigurationChange(this._configurator.configuration);
+    this._variantSetManager = new VariantSetManager(sets);
   }
 
-  private _destroyConfigurator() {
-    if (!this._configurator) {
+  private _destroyVariantSets() {
+    if (!this._variantSetManager) {
       return;
     }
 
-    debug("Destroy configurator", this._configurator);
+    debug("Destroy variant sets", this._variantSetManager);
 
-    this._configurator.offConfigurationChange(this._onConfigurationChange);
-    this._configurator = undefined;
-  }
-
-  private _onConfigurationChange(configuration: readonly number[]) {
-    debug("Configuration changed", configuration);
-
-    const fieldManager = this._configurator?.manager;
-    if (!fieldManager) {
-      return;
-    }
-
-    this._applyVariantNodeTransforms(
-      configuration
-        .map(
-          (valueId, fieldId) =>
-            fieldManager.getValue(fieldId, valueId)?.nodes || [],
-        )
-        .reduce((allNodes, nodes) => [...allNodes, ...nodes], []),
-    );
-  }
-
-  private _applyVariantNodeTransforms(nodeTransforms: VariantNode[]) {
-    debug("Apply node transforms", nodeTransforms);
-
-    nodeTransforms.forEach(({ node, properties }) => {
-      if (properties.model !== undefined && node.model !== undefined) {
-        debug("Set node mesh", node.name, properties.model);
-
-        if (node.model.asset !== properties.model.id) {
-          // HACK: prevent the anim-component from being reset when changing model by
-          // temporarily removing it from the entity. When resetting the anim-component,
-          // its state-graph is restored from an asset. But we've constructed the graph
-          // dynamically, and that graph would be lost.
-          const animComponent = node.anim;
-          delete node.anim;
-
-          node.model.asset = properties.model;
-          node.anim = animComponent;
-        }
-      }
-      if (properties.visible !== undefined) {
-        debug("Set node visibility", node.name, properties.visible);
-        node.enabled = properties.visible;
-      }
-      if (
-        properties.materialMapping !== undefined &&
-        node.model !== undefined
-      ) {
-        debug("Set node materials", node.name, properties.materialMapping);
-
-        // TODO: Applying materials even when the variant-node is already
-        // active may cause different behavior than in UE. For example,
-        // if a mesh-component in UE lacks override-materials and its mesh
-        // is replaced via a mesh variant, the new mesh will use its own materials.
-        // But if the materials of the mesh-component are changed via a material variant
-        // before changing the mesh, the new mesh will use the changed (overridden) materials.
-        // In our case, since materials are applied after all other variants, and every time
-        // something changes, meshes that are switched via mesh variants will always get
-        // the overridden materials. Do we want to change this to match UE?
-        node.model.mapping = properties.materialMapping;
-      }
-    });
-
-    // Update lightmaps for all affected nodes, in case materials or models have changed.
-    nodeTransforms.forEach(variantNode => {
-      const nodeLightmap = variantNode.node.script?.NodeLightmap;
-      if (!nodeLightmap) {
-        return;
-      }
-
-      if (variantNode.isActiveByDefault) {
-        nodeLightmap.applyLightmapToModel();
-      } else {
-        // TODO: In UE, lightmaps are visible on non-default meshes that have been
-        // switched via mesh variants, even though it looks "incorrect" most of the time.
-        // We have currently elected to hide lightmaps when a mesh / model is switched,
-        // but we may wish to change this behavior later to match UE.
-        nodeLightmap.removeLightmapFromModel();
-      }
-    });
+    this._variantSetManager = undefined;
   }
 
   private _initBackdrops(backdrops: HdriBackdrop[]) {
@@ -599,7 +502,7 @@ export class PlayCanvasViewer implements TestableViewer {
     if (this._activeGltfScene) {
       this._app.root.removeChild(this._activeGltfScene.root);
       this._activeGltfScene = undefined;
-      this._destroyConfigurator();
+      this._destroyVariantSets();
       this._destroyBackdrops();
       this._destroyCameraPreviews();
     }
