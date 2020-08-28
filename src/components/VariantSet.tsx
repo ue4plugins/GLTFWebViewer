@@ -1,7 +1,7 @@
-import React, { useCallback } from "react";
-import { RadioGroup, FormControl, Typography } from "@material-ui/core";
+import React, { useState, useEffect, useCallback } from "react";
+import { FormControl, Typography, FormGroup } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { FieldInputProps } from "./Field";
+import { VariantSetManager, VariantSetState, VariantId } from "../variants";
 import { Variant } from "./Variant";
 
 const useStyles = makeStyles(theme => ({
@@ -14,31 +14,56 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export type VariantSetProps = FieldInputProps & {
-  label: string;
-  domainLabels: string[];
-  domainImages: (string | undefined)[];
+export type VariantSetProps = {
+  id: number;
+  manager: VariantSetManager;
 };
 
-export const VariantSet: React.FC<VariantSetProps> = ({
-  id,
-  label,
-  value = 0,
-  domain,
-  domainLabels,
-  domainImages,
-  onValueChange,
-}) => {
+export const VariantSet: React.FC<VariantSetProps> = ({ id, manager }) => {
   const classes = useStyles();
+  const [label, setLabel] = useState<string>();
+  const [variantLabels, setVariantLabels] = useState<string[]>();
+  const [variantImages, setVariantImages] = useState<(string | undefined)[]>();
+  const [variants, setVariants] = useState<VariantId[]>();
+  const [selectedVariants, setSelectedVariants] = useState<VariantSetState>();
+  const [userSelectedVariant, setUserSelectedVariant] = useState<number>();
 
-  const onChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (onValueChange) {
-        onValueChange(Number(e.target.value));
-      }
-    },
-    [onValueChange],
-  );
+  const onSelectedVariantsChange = useCallback(setSelectedVariants, [
+    setSelectedVariants,
+  ]);
+  const onUserSelectedVariantChange = useCallback(setUserSelectedVariant, [
+    setUserSelectedVariant,
+  ]);
+
+  useEffect(() => {
+    setLabel(manager.getName(id));
+    setVariants(manager.getVariantIds(id));
+    setVariantLabels(manager.getVariantNames(id));
+    setVariantImages(manager.getVariantThumbnails(id));
+    setSelectedVariants(manager.getState(id));
+
+    return () => {
+      setLabel(undefined);
+      setVariants(undefined);
+      setVariantLabels(undefined);
+      setVariantImages(undefined);
+      setSelectedVariants(undefined);
+    };
+  }, [manager, id]);
+
+  useEffect(() => {
+    manager.onStateChange(id, onSelectedVariantsChange);
+
+    return () => {
+      manager.offStateChange(id, onSelectedVariantsChange);
+    };
+  }, [manager, id, onSelectedVariantsChange]);
+
+  useEffect(() => {
+    if (userSelectedVariant !== undefined) {
+      manager.activate(id, userSelectedVariant);
+    }
+  }, [manager, id, userSelectedVariant]);
 
   return (
     <FormControl className={classes.root} component="fieldset">
@@ -49,17 +74,23 @@ export const VariantSet: React.FC<VariantSetProps> = ({
       >
         {label}
       </Typography>
-      <RadioGroup name={`variant-${id}`} value={value} onChange={onChange}>
-        {domain &&
-          domain.map((domainValue, domainValueIndex) => (
+      <FormGroup aria-label="variant-set" id={`variant-set-${id}`}>
+        {variants &&
+          variants.map(variantId => (
             <Variant
-              key={domainValue}
-              value={domainValue}
-              label={domainLabels[domainValueIndex]}
-              image={domainImages[domainValueIndex]}
+              key={variantId}
+              checked={selectedVariants?.some(
+                selectedVariantId => selectedVariantId === variantId,
+              )}
+              value={variantId}
+              label={variantLabels?.[variantId] ?? ""}
+              image={variantImages?.[variantId]}
+              onChange={e =>
+                onUserSelectedVariantChange(Number(e.target.value))
+              }
             />
           ))}
-      </RadioGroup>
+      </FormGroup>
     </FormControl>
   );
 };

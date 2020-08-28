@@ -2,11 +2,8 @@ import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { makeStyles, FormLabel } from "@material-ui/core";
 import { useStores } from "../stores";
-import { GltfVariantSetConfigurator } from "../types";
-import { Field } from "./Field";
-import { VariantSet } from "./VariantSet";
-
-type Fields = GltfVariantSetConfigurator["manager"]["fields"];
+import { VariantSet } from "../variants";
+import { VariantSet as VariantSetComponent } from "./VariantSet";
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -17,20 +14,20 @@ const useStyles = makeStyles(theme => ({
 export const VariantSetList: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { configurator } = gltfStore;
-  const [fields, setFields] = useState<Fields>([]);
+  const { variantSetManager: manager } = gltfStore;
+  const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
 
   useEffect(() => {
-    if (configurator) {
-      setFields(configurator.manager.fields);
+    if (manager) {
+      setVariantSets(manager.variantSets);
     }
 
     return () => {
-      setFields([]);
+      setVariantSets([]);
     };
-  }, [configurator]);
+  }, [manager]);
 
-  if (!configurator) {
+  if (!manager) {
     return null;
   }
 
@@ -39,14 +36,12 @@ export const VariantSetList: React.FC = observer(() => {
       <FormLabel className={classes.label} component="legend">
         Variant sets
       </FormLabel>
-      {fields.map((field, fieldIndex) => (
-        <Field key={fieldIndex} id={fieldIndex} configurator={configurator}>
-          <VariantSet
-            label={field.name}
-            domainLabels={field.values.map(variant => variant.name)}
-            domainImages={field.values.map(variant => variant.thumbnailSource)}
-          />
-        </Field>
+      {variantSets.map((_, variantSetId) => (
+        <VariantSetComponent
+          key={variantSetId}
+          id={variantSetId}
+          manager={manager}
+        />
       ))}
     </>
   );
