@@ -40,6 +40,10 @@ export class OrbitCamera extends pc.ScriptType {
    * Factor to use when calculating far clip based on the camera distance from a focused object.
    */
   public farClipFactor?: number;
+  /**
+   * Wether or not to allow panning.
+   */
+  public allowPan?: boolean;
 
   private _cameraComponent!: pc.CameraComponent;
   private _distanceMin = 0;
@@ -524,7 +528,7 @@ export class OrbitCamera extends pc.ScriptType {
     }
     if (this._lookButtonDown) {
       this._orbit(event.dx, event.dy);
-    } else if (this._panButtonDown) {
+    } else if (this._panButtonDown && this.allowPan) {
       this._pan(event.x, event.y);
     }
 
@@ -613,7 +617,7 @@ export class OrbitCamera extends pc.ScriptType {
       const dx = deltaX - this._lastMouseDelta.x;
       const dy = deltaY - this._lastMouseDelta.y;
       this._orbit(dx, dy);
-    } else if (this._panButtonDown) {
+    } else if (this._panButtonDown && this.allowPan) {
       this._pan(x, y);
     }
 

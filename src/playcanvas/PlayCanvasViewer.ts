@@ -196,6 +196,7 @@ export class PlayCanvasViewer implements TestableViewer {
     });
     script.nearClipFactor = 0.002;
     script.farClipFactor = 100;
+    script.allowPan = true;
 
     app.root.addChild(camera);
 
