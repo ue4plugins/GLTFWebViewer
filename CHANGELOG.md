@@ -1,3 +1,10 @@
+## [1.7.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.6.0...v1.7.0) (2020-08-31)
+
+
+### Features
+
+* disable camera pan for orbit cameras added via extension ([5ca49f5](http://animech[secure]/clients/epic/gltf-web-viewer/commit/5ca49f5efd9de017dba8738a1c51c9841a3bd694))
+
 ## [1.6.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.5.0...v1.6.0) (2020-08-24)
 
 
