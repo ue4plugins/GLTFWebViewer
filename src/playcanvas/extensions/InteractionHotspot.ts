@@ -1,6 +1,7 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import { Animation } from "../Animation";
+import { InteractionHotspot as InteractionHotspotScript } from "../scripts";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
@@ -71,6 +72,13 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
         const toggledImage: pc.Texture | undefined = hotspot.data.toggledImage
           ? textures[hotspot.data.toggledImage]?.resource
           : undefined;
+
+        const script = hotspot.node
+          .addComponent("script")
+          .create(InteractionHotspotScript);
+        script.size = 42;
+        script.image = textures[hotspot.data.image];
+        script.onToggle(a => console.log("active", a));
 
         return {
           node: hotspot.node,

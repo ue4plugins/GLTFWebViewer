@@ -16,6 +16,8 @@ import {
   hdriBackdropScriptName,
   NodeLightmap,
   nodeLightmapScriptName,
+  interactionHotspotScriptName,
+  InteractionHotspot as InteractionHotspotScript,
 } from "./scripts";
 import {
   PlayCanvasGltfLoader,
@@ -69,6 +71,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     pc.registerScript(OrbitCamera, orbitCameraScriptName);
     pc.registerScript(HotspotTracker, hotspotTrackerScriptName);
+    pc.registerScript(InteractionHotspotScript, interactionHotspotScriptName);
     pc.registerScript(HdriBackdropScript, hdriBackdropScriptName);
     pc.registerScript(NodeLightmap, nodeLightmapScriptName);
 
@@ -305,6 +308,10 @@ export class PlayCanvasViewer implements TestableViewer {
 
   private _initHotspots(hotspots: InteractionHotspot[], camera: CameraEntity) {
     debug("Init hotspots", hotspots);
+
+    if (hotspots.length === 2) {
+      return;
+    }
 
     const canvasWrapperElem = this.canvas.parentElement;
     if (!canvasWrapperElem) {
