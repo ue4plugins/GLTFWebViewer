@@ -869,11 +869,16 @@
         {
           "animation": 5,
           "image": 1,
-          "toggledImage": 2
+          "hoveredImage": 2,
+          "toggledImage": 3,
+          "toggledHoveredImage": 4
         },
         {
           "animation": 1,
-          "image": 1
+          "image": 1,
+          "hoveredImage": 2,
+          "toggledImage": 3,
+          "toggledHoveredImage": 4
         }
       ]
     }
@@ -883,10 +888,16 @@
       "uri": "l.jpg"
     },
     {
-      "uri": "hotspot.jpg"
+      "uri": "hotspot.png"
+    },
+    {
+      "uri": "hotspot-hovered.png"
     },
     {
       "uri": "hotspot-toggled.png"
+    },
+    {
+      "uri": "hotspot-toggled-hovered.png"
     }
   ],
   "materials": [
@@ -1286,6 +1297,12 @@
     },
     {
       "source": 2
+    },
+    {
+      "source": 3
+    },
+    {
+      "source": 4
     }
   ],
   "cameras": [

@@ -9,7 +9,9 @@ const debug = Debug("InteractionHotspot");
 
 type InteractionData = {
   image: number;
+  hoveredImage?: number;
   toggledImage?: number;
+  toggledHoveredImage?: number;
   animation: number;
 };
 
@@ -33,7 +35,9 @@ type NodeInteractionDataMap = {
 export type InteractionHotspot = {
   node: pc.Entity;
   imageSource: string;
+  hoveredImageSource?: string;
   toggledImageSource?: string;
+  toggledHoveredImageSource?: string;
   animation?: Animation;
 };
 
@@ -76,8 +80,20 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
         const script = hotspot.node
           .addComponent("script")
           .create(InteractionHotspotScript);
+
         script.size = 42;
+        script.transitionDuration = 300;
         script.image = textures[hotspot.data.image];
+        if (hotspot.data.hoveredImage) {
+          script.hoveredImage = textures[hotspot.data.hoveredImage];
+        }
+        if (hotspot.data.toggledImage) {
+          script.toggledImage = textures[hotspot.data.toggledImage];
+        }
+        if (hotspot.data.toggledHoveredImage) {
+          script.toggledHoveredImage =
+            textures[hotspot.data.toggledHoveredImage];
+        }
         script.onToggle(a => console.log("active", a));
 
         return {

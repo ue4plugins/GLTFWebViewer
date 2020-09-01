@@ -29,7 +29,9 @@ class InteractionHotspot extends pc.ScriptType {
   public constructor(args: { app: pc.Application; entity: pc.Entity }) {
     super(args);
 
-    this._onToggle = this._onToggle.bind(this);
+    this._onClick = this._onClick.bind(this);
+    this._onMouseOver = this._onMouseOver.bind(this);
+    this._onMouseOut = this._onMouseOut.bind(this);
 
     this._hotspotElem = document.createElement("div");
     this._hotspotImageElem = document.createElement("div");
@@ -58,6 +60,7 @@ class InteractionHotspot extends pc.ScriptType {
   public initialize() {
     // TODO: store entity pos on init to prevent unnecessary calls to getPosition?
 
+    this._setImage("default");
     this._setParentElem();
     this._setSize();
     this._setTransitionDuration();
@@ -66,17 +69,16 @@ class InteractionHotspot extends pc.ScriptType {
     this.on("attr:size", this._setSize, this);
     this.on("attr:transitionDuration", this._setTransitionDuration, this);
 
-    this._hotspotElem.addEventListener("click", this._onToggle);
+    this._hotspotElem.addEventListener("click", this._onClick);
+    this._hotspotElem.addEventListener("mouseover", this._onMouseOver);
+    this._hotspotElem.addEventListener("mouseout", this._onMouseOut);
 
     this.on("destroy", () => {
       this._parentElem?.removeChild(this._hotspotElem);
-      this._hotspotElem.removeEventListener("click", this._onToggle);
+      this._hotspotElem.removeEventListener("click", this._onClick);
+      this._hotspotElem.removeEventListener("mouseover", this._onMouseOver);
+      this._hotspotElem.removeEventListener("mouseout", this._onMouseOut);
     });
-
-    // TODO: remove
-    this._setImage("default");
-
-    console.log(this.image, this.hoveredImage);
   }
 
   public update() {
@@ -107,9 +109,18 @@ class InteractionHotspot extends pc.ScriptType {
     return new pc.Vec3(0, 0, 0);
   }
 
-  private _onToggle() {
+  private _onClick() {
     this._active = !this._active;
     this._onToggleCallbacks.forEach(callback => callback(this._active));
+    this._setImage(this._active ? "toggled-hovered" : "hovered");
+  }
+
+  private _onMouseOver() {
+    this._setImage(this._active ? "toggled-hovered" : "hovered");
+  }
+
+  private _onMouseOut() {
+    this._setImage(this._active ? "toggled" : "default");
   }
 
   private _getActiveCamera(): pc.CameraComponent | undefined {
@@ -140,7 +151,7 @@ class InteractionHotspot extends pc.ScriptType {
   }
 
   private _setTransitionDuration() {
-    this._hotspotImageElem.style.transition = `background ${this.transitionDuration}ms`;
+    this._hotspotImageElem.style.transition = `background ${this.transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
   }
 
   private _setImage(state: InteractionState) {
