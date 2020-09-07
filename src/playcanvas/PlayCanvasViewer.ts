@@ -3,15 +3,10 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { GltfScene } from "../types";
-import { HotspotBuilder } from "../utilities";
 import { VariantSet, VariantSetManager } from "../variants";
 import {
   OrbitCamera,
   orbitCameraScriptName,
-  HotspotTracker,
-  hotspotTrackerScriptName,
-  HotspotTrackerHandle,
-  HotspotTrackerEventType,
   HdriBackdrop as HdriBackdropScript,
   hdriBackdropScriptName,
   NodeLightmap,
@@ -70,7 +65,6 @@ export class PlayCanvasViewer implements TestableViewer {
     this._app = this._createApp();
 
     pc.registerScript(OrbitCamera, orbitCameraScriptName);
-    pc.registerScript(HotspotTracker, hotspotTrackerScriptName);
     pc.registerScript(InteractionHotspot, interactionHotspotScriptName);
     pc.registerScript(HdriBackdropScript, hdriBackdropScriptName);
     pc.registerScript(NodeLightmap, nodeLightmapScriptName);

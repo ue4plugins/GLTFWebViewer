@@ -1,16 +1,9 @@
 import * as pc from "@animech-public/playcanvas";
-import {
-  hotspotTrackerScriptName,
-  HotspotTracker,
-  orbitCameraScriptName,
-  OrbitCamera,
-} from "./scripts";
+import { orbitCameraScriptName, OrbitCamera } from "./scripts";
 
 export type CameraEntity = pc.Entity & {
   camera: pc.CameraComponent;
-  script: pc.ScriptComponent & {
-    [hotspotTrackerScriptName]: HotspotTracker;
-  };
+  script: pc.ScriptComponent;
 };
 
 export type OrbitCameraEntity = CameraEntity & {
@@ -23,9 +16,8 @@ export function convertToCameraEntity(entity: pc.Entity): CameraEntity {
   const cameraComponent = entity.camera ?? entity.addComponent("camera");
   cameraComponent.clearColor = new pc.Color(0, 0, 0);
 
-  const scriptComponent = entity.script ?? entity.addComponent("script");
-  if (!scriptComponent.has(hotspotTrackerScriptName)) {
-    scriptComponent.create(hotspotTrackerScriptName);
+  if (!entity.script) {
+    entity.addComponent("script");
   }
 
   return entity as CameraEntity;
