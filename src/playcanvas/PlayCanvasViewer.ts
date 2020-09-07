@@ -17,14 +17,14 @@ import {
   NodeLightmap,
   nodeLightmapScriptName,
   interactionHotspotScriptName,
-  InteractionHotspot as InteractionHotspotScript,
+  InteractionHotspot,
 } from "./scripts";
 import {
   PlayCanvasGltfLoader,
   GltfData,
   GltfSceneData,
 } from "./PlayCanvasGltfLoader";
-import { InteractionHotspot, HdriBackdrop } from "./extensions";
+import { HdriBackdrop } from "./extensions";
 import { AnimationState } from "./Animation";
 import {
   CameraEntity,
@@ -49,7 +49,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _gltf?: GltfData;
   private _activeGltfScene?: GltfSceneData;
   private _variantSetManager?: VariantSetManager;
-  private _hotspotTrackerHandles?: HotspotTrackerHandle[];
+  private _hotspots?: InteractionHotspot[];
   private _backdrops?: HdriBackdrop[];
   private _cameraPreviews?: string[];
   private _debouncedCanvasResize = debounce(
@@ -71,7 +71,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     pc.registerScript(OrbitCamera, orbitCameraScriptName);
     pc.registerScript(HotspotTracker, hotspotTrackerScriptName);
-    pc.registerScript(InteractionHotspotScript, interactionHotspotScriptName);
+    pc.registerScript(InteractionHotspot, interactionHotspotScriptName);
     pc.registerScript(HdriBackdropScript, hdriBackdropScriptName);
     pc.registerScript(NodeLightmap, nodeLightmapScriptName);
 
@@ -234,6 +234,10 @@ export class PlayCanvasViewer implements TestableViewer {
       await this._initCameraPreviews(gltfScene.cameras, 80, 80);
     }
 
+    if (gltfScene.hotspots.length > 0) {
+      this._initHotspots(gltfScene.hotspots);
+    }
+
     if (gltfScene.variantSets.length > 0) {
       this._initVariantSets(gltfScene.variantSets);
     }
@@ -306,64 +310,24 @@ export class PlayCanvasViewer implements TestableViewer {
     this._cameraPreviews = undefined;
   }
 
-  private _initHotspots(hotspots: InteractionHotspot[], camera: CameraEntity) {
+  private _initHotspots(hotspots: InteractionHotspot[]) {
+    this._destroyHotspots();
+
     debug("Init hotspots", hotspots);
 
-    if (hotspots.length === 2) {
-      return;
-    }
-
-    const canvasWrapperElem = this.canvas.parentElement;
-    if (!canvasWrapperElem) {
-      return;
-    }
-
-    this._hotspotTrackerHandles = hotspots.map(hotspot => {
-      const { animation } = hotspot;
-      const initState = animation?.activeState;
-      const renderer = new HotspotBuilder(canvasWrapperElem);
-
-      renderer.render({
-        imageSource: hotspot.imageSource,
-        toggledImageSource: hotspot.toggledImageSource,
-        toggled:
-          initState === AnimationState.Once ||
-          initState === AnimationState.OnceReverse,
-        onToggle: active => {
-          debug("Toggle hotspot", active);
-
-          if (!animation || !animation.playable) {
-            return;
-          }
-
-          animation.play(
-            active ? AnimationState.Once : AnimationState.OnceReverse,
-          );
-        },
-      });
-
-      return camera.script[hotspotTrackerScriptName].track(
-        hotspot.node.getPosition(),
-        (ev, screen) => {
-          ev === HotspotTrackerEventType.Stop
-            ? renderer.destroy()
-            : renderer.move(screen.x, screen.y);
-        },
-      );
-    });
+    this._hotspots = hotspots;
+    this._hotspots.forEach(hotspot => (hotspot.enabled = true));
   }
 
-  private _destroyHotspots(camera: CameraEntity) {
-    if (!this._hotspotTrackerHandles) {
+  private _destroyHotspots() {
+    if (!this._hotspots) {
       return;
     }
 
-    debug("Destroy hotspots", this._hotspotTrackerHandles);
+    debug("Destroy hotspots", this._hotspots);
 
-    this._hotspotTrackerHandles.forEach(handle =>
-      camera.script[hotspotTrackerScriptName].untrack(handle),
-    );
-    this._hotspotTrackerHandles = undefined;
+    this._hotspots.forEach(hotspot => (hotspot.enabled = false));
+    this._hotspots = undefined;
   }
 
   private _initVariantSets(sets: VariantSet[]) {
@@ -513,10 +477,7 @@ export class PlayCanvasViewer implements TestableViewer {
       this._destroyVariantSets();
       this._destroyBackdrops();
       this._destroyCameraPreviews();
-    }
-
-    if (this._activeCamera) {
-      this._destroyHotspots(this._activeCamera);
+      this._destroyHotspots();
     }
 
     if (this._gltf) {
@@ -557,19 +518,9 @@ export class PlayCanvasViewer implements TestableViewer {
       }
     });
 
-    // Destroy hotspots for previous camera
-    if (this._activeCamera) {
-      this._destroyHotspots(this._activeCamera);
-    }
-
     this._activeCamera = this._activeGltfScene.cameras.find(
       camera => camera.camera.enabled,
     );
-
-    // Init hotspots for new camera
-    if (this._activeGltfScene.hotspots.length > 0 && this._activeCamera) {
-      this._initHotspots(this._activeGltfScene.hotspots, this._activeCamera);
-    }
 
     // Set focus for orbit cameras
     if (this._activeCamera && isOrbitCameraEntity(this._activeCamera)) {
