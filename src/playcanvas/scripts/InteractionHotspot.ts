@@ -49,6 +49,7 @@ class InteractionHotspot extends pc.ScriptType {
     imageStyle.height = "100%";
     imageStyle.transform = "translateX(-50%) translateY(-50%)";
     imageStyle.backgroundSize = "cover";
+    imageStyle.cursor = "pointer";
   }
 
   public get active() {
