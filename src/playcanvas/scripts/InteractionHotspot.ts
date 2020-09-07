@@ -15,6 +15,7 @@ interface InteractionHotspot {
   size: number;
   transitionDuration: number;
   parentElementId: string;
+  cacheEntityPosition: boolean;
 }
 
 const interactionHotspotScriptName = "InteractionHotspot";
@@ -25,6 +26,7 @@ class InteractionHotspot extends pc.ScriptType {
   private _parentElem: HTMLElement | null = null;
   private _hotspotElem: HTMLElement;
   private _hotspotImageElem: HTMLElement;
+  private _cachedEntityPosition?: pc.Vec3;
 
   public constructor(args: { app: pc.Application; entity: pc.Entity }) {
     super(args);
@@ -58,13 +60,13 @@ class InteractionHotspot extends pc.ScriptType {
   }
 
   public initialize() {
-    // TODO: store entity pos on init to prevent unnecessary calls to getPosition?
-
     this._setImage("default");
+    this._setCachedEntityPosition();
     this._setParentElem();
     this._setSize();
     this._setTransitionDuration();
 
+    this.on("attr:cacheEntityPosition", this._setCachedEntityPosition, this);
     this.on("attr:parentElementId", this._setParentElem, this);
     this.on("attr:size", this._setSize, this);
     this.on("attr:transitionDuration", this._setTransitionDuration, this);
@@ -104,7 +106,7 @@ class InteractionHotspot extends pc.ScriptType {
   public getScreenPosition(): pc.Vec3 {
     const camera = this._getActiveCamera();
     if (camera) {
-      return camera.worldToScreen(this.entity.getPosition());
+      return camera.worldToScreen(this._getEntityPosition());
     }
     return new pc.Vec3(0, 0, 0);
   }
@@ -121,6 +123,16 @@ class InteractionHotspot extends pc.ScriptType {
 
   private _onMouseOut() {
     this._setImage(this._active ? "toggled" : "default");
+  }
+
+  private _setCachedEntityPosition() {
+    this._cachedEntityPosition = this.cacheEntityPosition
+      ? this.entity.getPosition().clone()
+      : undefined;
+  }
+
+  private _getEntityPosition(): pc.Vec3 {
+    return this._cachedEntityPosition ?? this.entity.getPosition();
   }
 
   private _getActiveCamera(): pc.CameraComponent | undefined {
@@ -229,6 +241,14 @@ InteractionHotspot.attributes.add("parentElementId", {
   default: "",
   title: "Element ID",
   description: "The ID of the element that should parent the hotspot.",
+});
+
+InteractionHotspot.attributes.add("cacheEntityPosition", {
+  type: "boolean",
+  default: false,
+  title: "Cache entity position",
+  description:
+    "Cache entity world position on initialize instead of reading from entity on every frame.",
 });
 
 export { InteractionHotspot, interactionHotspotScriptName };

@@ -121,6 +121,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
 
         script.size = 42;
         script.transitionDuration = 300;
+        script.cacheEntityPosition = true;
 
         script.image = textures[hotspot.data.image];
         if (hotspot.data.hoveredImage) {
