@@ -32,6 +32,13 @@ declare namespace pc {
   interface GraphicsDevice {
     gl: WebGLRenderingContext;
     setFramebuffer(frameBuffer: number): void;
+    readPixels(
+      x: number,
+      y: number,
+      w: number,
+      h: number,
+      pixels: Uint8Array,
+    ): void;
   }
 
   interface Vec4 {
@@ -64,6 +71,11 @@ declare namespace pc {
         ind?: number;
       },
     ): InstanceType<T>;
+  }
+
+  interface Layer {
+    incrementCounter(): void;
+    decrementCounter(): void;
   }
 
   const programlib: any;

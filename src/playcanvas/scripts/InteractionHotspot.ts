@@ -3,6 +3,10 @@ import * as pc from "@animech-public/playcanvas";
 type TextureAsset = Omit<pc.Asset, "resource"> & { resource: pc.Texture };
 type OnToggleCallback = (active: boolean) => void;
 type InteractionState = "default" | "hovered" | "toggled" | "toggled-hovered";
+type Position = {
+  x: number;
+  y: number;
+};
 
 /**
  * Typings for PlayCanvas script-attributes attached to the class.
@@ -27,13 +31,25 @@ class InteractionHotspot extends pc.ScriptType {
   private _hotspotElem: HTMLElement;
   private _hotspotImageElem: HTMLElement;
   private _cachedEntityPosition?: pc.Vec3;
+  private _canvasHeight = 0;
+  private _depthPixels = new Uint8Array(4);
+  private _depthVector = new pc.Vec4();
+  private _depthDotVector = new pc.Vec4(
+    1 / (256 * 256 * 256),
+    1 / (256 * 256),
+    1 / 256,
+    1,
+  );
 
   public constructor(args: { app: pc.Application; entity: pc.Entity }) {
     super(args);
 
+    this._setCanvasHeight = this._setCanvasHeight.bind(this);
     this._onClick = this._onClick.bind(this);
     this._onMouseOver = this._onMouseOver.bind(this);
     this._onMouseOut = this._onMouseOut.bind(this);
+
+    this._setCanvasHeight();
 
     this._hotspotElem = document.createElement("div");
     this._hotspotImageElem = document.createElement("div");
@@ -61,6 +77,7 @@ class InteractionHotspot extends pc.ScriptType {
   }
 
   public initialize() {
+    this._setDepthMapActive(true);
     this._setImage("default");
     this._setCachedEntityPosition();
     this._setParentElem();
@@ -72,11 +89,13 @@ class InteractionHotspot extends pc.ScriptType {
     this.on("attr:size", this._setSize, this);
     this.on("attr:transitionDuration", this._setTransitionDuration, this);
 
+    window.addEventListener("resize", this._setCanvasHeight);
     this._hotspotElem.addEventListener("click", this._onClick);
     this._hotspotElem.addEventListener("mouseover", this._onMouseOver);
     this._hotspotElem.addEventListener("mouseout", this._onMouseOut);
 
     this.on("destroy", () => {
+      window.removeEventListener("resize", this._setCanvasHeight);
       this._parentElem?.removeChild(this._hotspotElem);
       this._hotspotElem.removeEventListener("click", this._onClick);
       this._hotspotElem.removeEventListener("mouseover", this._onMouseOver);
@@ -85,8 +104,15 @@ class InteractionHotspot extends pc.ScriptType {
   }
 
   public update() {
-    const { x, y } = this.getScreenPosition();
-    this._moveElem(x, y);
+    const screenPos = this.getScreenPosition();
+    const hitDepth = this._getPixelDepth(screenPos);
+    const hidden = hitDepth < screenPos.z;
+
+    if (!hidden) {
+      this._hotspotElem.style.transform = `translateX(${screenPos.x}px) translateY(${screenPos.y}px)`;
+    }
+
+    this._hotspotElem.style.display = hidden ? "none" : "block";
   }
 
   public onToggle(callback: OnToggleCallback) {
@@ -141,10 +167,6 @@ class InteractionHotspot extends pc.ScriptType {
     return cameras[cameras.length - 1];
   }
 
-  private _moveElem(x: number, y: number) {
-    this._hotspotElem.style.transform = `translateX(${x}px) translateY(${y}px)`;
-  }
-
   private _setParentElem() {
     const elem = this.parentElementId
       ? document.getElementById(this.parentElementId)
@@ -188,6 +210,81 @@ class InteractionHotspot extends pc.ScriptType {
     this._hotspotImageElem.style.backgroundImage = `url(${
       texture.resource.getSource().src
     })`;
+  }
+
+  private _setCanvasHeight() {
+    this._canvasHeight = parseInt(
+      this.app.graphicsDevice.canvas.clientHeight.toString(),
+      10,
+    );
+  }
+
+  private _setDepthMapActive(activate: boolean) {
+    const depthLayer = this.app.scene.layers.getLayerById(pc.LAYERID_DEPTH);
+    if (depthLayer.enabled !== activate) {
+      if (activate) {
+        depthLayer.incrementCounter();
+        this.app.render();
+      } else {
+        depthLayer.decrementCounter();
+      }
+    }
+  }
+
+  /**
+   * Returns the depths of the supplied canvas position from the cameras depth-map.
+   *
+   * @param positions A canvas-positions to return the depth for.
+   */
+  private _getPixelDepth(pos: Position): number {
+    const camera = this._getActiveCamera();
+    if (!camera) {
+      throw new Error("No active camera!");
+    }
+
+    const device = this.app.graphicsDevice;
+    const depthLayer = this.app.scene.layers.getLayerById(pc.LAYERID_DEPTH);
+    if (!depthLayer.enabled) {
+      throw new Error("No depth-map active on the camera!");
+    }
+
+    const prevRenderTarget = device.getRenderTarget();
+    const pixels = this._depthPixels;
+    const position: Position = { x: 0, y: 0 };
+
+    device.setRenderTarget(depthLayer.renderTarget);
+    device.updateBegin();
+
+    this._convertFromCanvasToDepthTexture(pos, position);
+
+    device.readPixels(position.x, position.y, 1, 1, pixels);
+    this._depthVector.set(pixels[0], pixels[1], pixels[2], pixels[3]);
+    this._depthVector.scale(1 / 256); // Scale from byte to 0..1 float
+
+    const result = this._depthVector.dot(this._depthDotVector) * camera.farClip;
+
+    device.updateEnd();
+    device.setRenderTarget(prevRenderTarget);
+
+    return result;
+  }
+
+  /**
+   * Scales / converts the supplied position or rectangle from canvas-space to depth texture-space.
+   * The y-value is also flipped to be bottom-up instead of top-down.
+   *
+   * @param pos Position / rectangle to convert.
+   * @param target (Optional) Target to store the result in. If omitted, the supplied value will be cloned.
+   */
+  private _convertFromCanvasToDepthTexture(
+    pos: Position,
+    target?: Position,
+  ): Position {
+    target = target || { ...pos };
+    target.x = pos.x;
+    target.y = pos.y;
+    target.y = this._canvasHeight - target.y; // Convert from top-down to bottom-up
+    return target;
   }
 }
 
