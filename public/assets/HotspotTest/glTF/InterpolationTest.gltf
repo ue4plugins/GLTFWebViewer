@@ -1202,11 +1202,7 @@
       "mesh": 1,
       "name": "Cube.001",
       "translation": [-3.2963297367095947, 0, 6.461143493652344e-5],
-      "extensions": {
-        "EPIC_interaction_hotspots": {
-          "interaction": 1
-        }
-      }
+      "children": [16]
     },
     {
       "mesh": 2,
@@ -1230,11 +1226,7 @@
       "rotation": [0, 0, -0.03925982117652893, 0.9992290735244751],
       "scale": [0.9999999403953552, 0.9999999403953552, 1],
       "translation": [-3.311399221420288, 3.356412410736084, 0],
-      "extensions": {
-        "EPIC_interaction_hotspots": {
-          "interaction": 0
-        }
-      }
+      "children": [17]
     },
     {
       "mesh": 6,
@@ -1279,6 +1271,24 @@
       "name": "OrthographicCamera",
       "rotation": [-0, -0.707106769, 0, 0.707106709],
       "camera": 1
+    },
+    {
+      "name": "Hotspot1",
+      "translation": [-2, 0, 0],
+      "extensions": {
+        "EPIC_interaction_hotspots": {
+          "interaction": 1
+        }
+      }
+    },
+    {
+      "name": "Hotspot2",
+      "translation": [0, 0, -2],
+      "extensions": {
+        "EPIC_interaction_hotspots": {
+          "interaction": 0
+        }
+      }
     }
   ],
   "scene": 0,
