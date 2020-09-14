@@ -55,10 +55,14 @@ class InteractionHotspot extends pc.ScriptType {
     this._hotspotImageElem = document.createElement("div");
     this._hotspotElem.appendChild(this._hotspotImageElem);
 
+    const timingFunction = "cubic-bezier(0.4, 0, 0.2, 1)";
+
     const { style: hotspotStyle } = this._hotspotElem;
     hotspotStyle.position = "absolute";
     hotspotStyle.top = "0px";
     hotspotStyle.left = "0px";
+    hotspotStyle.transitionProperty = "opacity";
+    hotspotStyle.transitionTimingFunction = timingFunction;
 
     const { style: imageStyle } = this._hotspotImageElem;
     imageStyle.width = "100%";
@@ -66,6 +70,8 @@ class InteractionHotspot extends pc.ScriptType {
     imageStyle.transform = "translateX(-50%) translateY(-50%)";
     imageStyle.backgroundSize = "cover";
     imageStyle.cursor = "pointer";
+    imageStyle.transitionProperty = "background";
+    imageStyle.transitionTimingFunction = timingFunction;
   }
 
   public get active() {
@@ -104,15 +110,18 @@ class InteractionHotspot extends pc.ScriptType {
   }
 
   public update() {
-    const screenPos = this.getScreenPosition();
-    const hitDepth = this._getPixelDepth(screenPos);
-    const hidden = hitDepth < screenPos.z;
-
-    if (!hidden) {
-      this._hotspotElem.style.transform = `translateX(${screenPos.x}px) translateY(${screenPos.y}px)`;
+    const camera = this._getActiveCamera();
+    if (!camera) {
+      return;
     }
 
-    this._hotspotElem.style.display = hidden ? "none" : "block";
+    const screenPos = camera.worldToScreen(this._getEntityPosition());
+    const hitDepth = this._getPixelDepth(screenPos);
+    const hidden = screenPos.z < 0 || hitDepth < screenPos.z;
+
+    this._hotspotElem.style.transform = `translateX(${screenPos.x}px) translateY(${screenPos.y}px)`;
+    this._hotspotElem.style.opacity = hidden ? "0" : "1";
+    this._hotspotElem.style.pointerEvents = hidden ? "none" : "auto";
   }
 
   public onToggle(callback: OnToggleCallback) {
@@ -128,14 +137,6 @@ class InteractionHotspot extends pc.ScriptType {
       return;
     }
     this._onToggleCallbacks.splice(index, 1);
-  }
-
-  public getScreenPosition(): pc.Vec3 {
-    const camera = this._getActiveCamera();
-    if (camera) {
-      return camera.worldToScreen(this._getEntityPosition());
-    }
-    return new pc.Vec3(0, 0, 0);
   }
 
   private _onClick() {
@@ -186,7 +187,8 @@ class InteractionHotspot extends pc.ScriptType {
   }
 
   private _setTransitionDuration() {
-    this._hotspotImageElem.style.transition = `background ${this.transitionDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+    this._hotspotElem.style.transitionDuration = `${this.transitionDuration}ms`;
+    this._hotspotImageElem.style.transitionDuration = `${this.transitionDuration}ms`;
   }
 
   private _setImage(state: InteractionState) {
