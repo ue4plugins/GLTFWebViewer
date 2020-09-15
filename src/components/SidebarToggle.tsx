@@ -7,6 +7,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     textTransform: "uppercase",
     fontSize: theme.typography.pxToRem(9),
+    fontFamily: "inherit",
   },
   icon: {
     height: 24,
