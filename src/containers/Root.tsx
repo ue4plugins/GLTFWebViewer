@@ -9,6 +9,7 @@ import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
 import { Viewer } from "./Viewer";
 import { SettingsView } from "./SettingsView";
 import { GltfView } from "./GltfView";
+import logo from "./logo.svg";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -25,8 +26,32 @@ const useStyles = makeStyles(theme => ({
     },
   },
   root: {
-    display: "flex",
     height: "100%",
+  },
+  topbar: {
+    position: "relative",
+    boxSizing: "border-box",
+    display: "flex",
+    alignItems: "center",
+    height: theme.topbarHeight,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.background.default,
+    zIndex: 1,
+  },
+  topbarLogo: {
+    flex: "0 0 auto",
+    height: 24,
+  },
+  topbarToolbar: {
+    display: "flex",
+    flex: "1 1 auto",
+    justifyContent: "flex-end",
+  },
+  main: {
+    display: "flex",
+    height: `calc(100% - ${theme.topbarHeight}px)`,
   },
   viewport: {
     position: "relative",
@@ -65,42 +90,53 @@ export const Root: React.FC = observer(() => {
   }, [fetchGltfs, runAsync]);
 
   return (
-    <div className={classes.root}>
+    <>
       <CssBaseline />
-      <main
-        className={clsx(classes.viewport, {
-          [classes.viewportFullscreen]: !isSidebarOpen,
-        })}
-      >
-        <Viewer />
-        {showUI && (
-          <SidebarToggle isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-        )}
-      </main>
-      {showUI && (
-        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
-          <Tabs
-            value={activeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
-            onChange={(_, value) => setActiveTab(value)}
+      <div className={classes.root}>
+        <header className={classes.topbar}>
+          <img className={classes.topbarLogo} src={logo} alt="Logo" />
+          <div className={classes.topbarToolbar}>Toolbar</div>
+        </header>
+        <main className={classes.main}>
+          <div
+            className={clsx(classes.viewport, {
+              [classes.viewportFullscreen]: !isSidebarOpen,
+            })}
           >
-            <Tab id="gltf-tab" label="glTF" value="gltf" />
-            <Tab id="settings-tab" label="Settings" value="settings" />
-          </Tabs>
-          <Divider />
-          {activeTab === "settings" && <SettingsView />}
-          {activeTab === "gltf" && (
-            <GltfView isLoading={isLoading} isError={isError} />
+            <Viewer />
+            {showUI && (
+              <SidebarToggle
+                isOpen={isSidebarOpen}
+                setIsOpen={setIsSidebarOpen}
+              />
+            )}
+          </div>
+          {showUI && (
+            <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
+              <Tabs
+                value={activeTab}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+                onChange={(_, value) => setActiveTab(value)}
+              >
+                <Tab id="gltf-tab" label="glTF" value="gltf" />
+                <Tab id="settings-tab" label="Settings" value="settings" />
+              </Tabs>
+              <Divider />
+              {activeTab === "settings" && <SettingsView />}
+              {activeTab === "gltf" && (
+                <GltfView isLoading={isLoading} isError={isError} />
+              )}
+            </Sidebar>
           )}
-        </Sidebar>
-      )}
-      {showUI && showFpsMeter && (
-        <Hidden xsDown>
-          <FpsMonitor />
-        </Hidden>
-      )}
-    </div>
+          {showUI && showFpsMeter && (
+            <Hidden xsDown>
+              <FpsMonitor />
+            </Hidden>
+          )}
+        </main>
+      </div>
+    </>
   );
 });
