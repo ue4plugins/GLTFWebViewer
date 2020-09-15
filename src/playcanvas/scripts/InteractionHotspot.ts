@@ -124,7 +124,7 @@ class InteractionHotspot extends pc.ScriptType {
 
     this._lastScreenPosition = screenPos.clone();
 
-    const hitDepth = this._getPixelDepth(screenPos);
+    const hitDepth = this._getPixelDepth(camera, screenPos);
     const hidden = screenPos.z < 0 || hitDepth < screenPos.z;
     const zIndex = Math.max(
       Math.floor(((camera.farClip - screenPos.z) / camera.farClip) * 10000),
@@ -247,16 +247,14 @@ class InteractionHotspot extends pc.ScriptType {
   }
 
   /**
-   * Returns the depths of the supplied canvas position from the cameras depth-map.
+   * Returns the depths of the supplied screen position from the cameras depth-map.
    *
-   * @param positions A canvas-positions to return the depth for.
+   * @param screenPosition A screen position to return the depth for.
    */
-  private _getPixelDepth(pos: Position): number {
-    const camera = this._getActiveCamera();
-    if (!camera) {
-      throw new Error("No active camera!");
-    }
-
+  private _getPixelDepth(
+    camera: pc.CameraComponent,
+    screenPosition: Position,
+  ): number {
     const device = this.app.graphicsDevice;
     const depthLayer = this.app.scene.layers.getLayerById(pc.LAYERID_DEPTH);
     if (!depthLayer.enabled) {
@@ -270,7 +268,7 @@ class InteractionHotspot extends pc.ScriptType {
     device.setRenderTarget(depthLayer.renderTarget);
     device.updateBegin();
 
-    this._convertFromCanvasToDepthTexture(pos, position);
+    this._convertFromCanvasToDepthTexture(screenPosition, position);
 
     device.readPixels(position.x, position.y, 1, 1, pixels);
     this._depthVector.set(pixels[0], pixels[1], pixels[2], pixels[3]);
@@ -286,7 +284,7 @@ class InteractionHotspot extends pc.ScriptType {
 
   /**
    * Scales / converts the supplied position or rectangle from canvas-space to depth texture-space.
-   * The y-value is also flipped to be bottom-up instead of top-down.
+   * The y-value is flipped to be bottom-up instead of top-down.
    *
    * @param pos Position / rectangle to convert.
    * @param target (Optional) Target to store the result in. If omitted, the supplied value will be cloned.
