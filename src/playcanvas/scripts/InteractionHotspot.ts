@@ -126,10 +126,15 @@ class InteractionHotspot extends pc.ScriptType {
 
     const hitDepth = this._getPixelDepth(screenPos);
     const hidden = screenPos.z < 0 || hitDepth < screenPos.z;
+    const zIndex = Math.max(
+      Math.floor(((camera.farClip - screenPos.z) / camera.farClip) * 10000),
+      1,
+    );
 
     this._hotspotElem.style.transform = `translateX(${screenPos.x}px) translateY(${screenPos.y}px)`;
     this._hotspotElem.style.opacity = hidden ? "0" : "1";
     this._hotspotElem.style.pointerEvents = hidden ? "none" : "auto";
+    this._hotspotElem.style.zIndex = String(zIndex);
   }
 
   public onToggle(callback: OnToggleCallback) {
