@@ -1,17 +1,19 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { ButtonBase } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import { Menu, Close } from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
   root: {
+    display: "flex",
+    alignItems: "center",
     textTransform: "uppercase",
     fontSize: theme.typography.pxToRem(9),
     fontFamily: "inherit",
   },
-  icon: {
-    height: 24,
+  button: {
     marginLeft: theme.spacing(1),
+    padding: theme.spacing(1),
   },
 }));
 
@@ -27,15 +29,17 @@ export const SidebarToggle: React.FC<SidebarToggleProps> = ({
   const classes = useStyles();
 
   return (
-    <ButtonBase
-      className={classes.root}
-      aria-label="open sidebar"
-      data-testid="open-button"
-      disableRipple
-      onClick={() => setIsOpen(!isOpen)}
-    >
+    <div className={classes.root}>
       Configure
-      <span className={classes.icon}>{isOpen ? <Close /> : <Menu />}</span>
-    </ButtonBase>
+      <IconButton
+        className={classes.button}
+        aria-label="open sidebar"
+        data-testid="open-button"
+        disableTouchRipple
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {isOpen ? <Close /> : <Menu />}
+      </IconButton>
+    </div>
   );
 };

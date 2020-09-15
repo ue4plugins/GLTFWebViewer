@@ -8,6 +8,7 @@ export * from "./InputGroup";
 export * from "./SceneSelector";
 export * from "./SearchField";
 export * from "./Sidebar";
+export * from "./SidebarHeader";
 export * from "./SidebarToggle";
 export * from "./Variant";
 export * from "./VariantSet";

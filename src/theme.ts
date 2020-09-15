@@ -14,10 +14,10 @@ declare module "@material-ui/core/styles" {
 
 const epicBlue = "#3393FA";
 const panel = "#262A2E";
-const grey1 = "#20262C";
-const grey2 = "#2B323B";
-const grey3 = "#1C1E22";
-const grey5 = "#8F8F8F";
+const grey1 = "#1C1E22";
+const grey2 = "#20262C";
+const grey3 = "#2B323B";
+const grey4 = "#8F8F8F";
 const white = "#FFFFFF";
 const black = "#000000";
 
@@ -26,12 +26,12 @@ export const theme = createMuiTheme({
     type: "dark",
     text: {
       primary: white,
-      secondary: grey5,
-      disabled: grey5,
+      secondary: grey4,
+      disabled: grey4,
     },
     background: {
       default: panel,
-      paper: grey3,
+      paper: grey1,
     },
     divider: black,
     action: {
@@ -42,8 +42,8 @@ export const theme = createMuiTheme({
       white,
     },
     grey: {
-      50: grey5,
-      100: grey5,
+      50: grey4,
+      100: grey4,
       200: grey3,
       300: grey3,
       400: grey2,

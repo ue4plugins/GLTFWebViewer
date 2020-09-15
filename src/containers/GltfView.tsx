@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Divider,
-  Button,
-  Typography,
-  CircularProgress,
-} from "@material-ui/core";
-import { ArrowBack } from "@material-ui/icons";
+import { Typography, CircularProgress } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
-import { GltfList, Gltf } from "../components";
+import { GltfList, Gltf, SidebarHeader } from "../components";
 import { useStores } from "../stores";
 
 const useStyles = makeStyles(theme => ({
@@ -26,9 +20,6 @@ const useStyles = makeStyles(theme => ({
   },
   single: {
     overflow: "auto",
-  },
-  backButton: {
-    margin: theme.spacing(1.5, 1),
   },
 }));
 
@@ -72,17 +63,10 @@ export const GltfView: React.FC<GltfProps> = observer(
                 return (
                   <>
                     {gltfs.length > 1 && (
-                      <>
-                        <div className={classes.backButton}>
-                          <Button
-                            startIcon={<ArrowBack />}
-                            onClick={() => setView("list")}
-                          >
-                            Show all files
-                          </Button>
-                        </div>
-                        <Divider />
-                      </>
+                      <SidebarHeader
+                        title="Test"
+                        navigateBack={() => setView("list")}
+                      />
                     )}
                     <div className={classes.single}>
                       <Gltf />
