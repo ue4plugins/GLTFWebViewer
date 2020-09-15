@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Drawer, Divider, IconButton } from "@material-ui/core";
-import { ChevronRight } from "@material-ui/icons";
+import { Drawer } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   drawer: {
@@ -23,14 +22,9 @@ const useStyles = makeStyles(theme => ({
 
 export type SidebarProps = {
   isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({
-  children,
-  isOpen,
-  setIsOpen,
-}) => {
+export const Sidebar: React.FC<SidebarProps> = ({ children, isOpen }) => {
   const classes = useStyles();
 
   return (
@@ -48,16 +42,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         paper: classes.drawerPaper,
       }}
     >
-      <div className={classes.drawerHeader}>
-        <IconButton
-          aria-label="close sidebar"
-          data-testid="close-button"
-          onClick={() => setIsOpen(false)}
-        >
-          <ChevronRight />
-        </IconButton>
-      </div>
-      <Divider />
       {children}
     </Drawer>
   );

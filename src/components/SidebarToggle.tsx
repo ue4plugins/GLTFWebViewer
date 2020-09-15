@@ -1,25 +1,16 @@
 import React from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import { Fab } from "@material-ui/core";
-import { Menu } from "@material-ui/icons";
+import { ButtonBase } from "@material-ui/core";
+import { Menu, Close } from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    display: "flex",
-    alignItems: "center",
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-    justifyContent: "flex-start",
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(1, 1),
-    },
+    textTransform: "uppercase",
+    fontSize: theme.typography.pxToRem(9),
   },
-  hide: {
-    display: "none",
+  icon: {
+    height: 24,
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -35,20 +26,15 @@ export const SidebarToggle: React.FC<SidebarToggleProps> = ({
   const classes = useStyles();
 
   return (
-    <div
-      className={clsx(classes.root, {
-        [classes.hide]: isOpen,
-      })}
+    <ButtonBase
+      className={classes.root}
+      aria-label="open sidebar"
+      data-testid="open-button"
+      disableRipple
+      onClick={() => setIsOpen(!isOpen)}
     >
-      <Fab
-        color="default"
-        aria-label="open sidebar"
-        data-testid="open-button"
-        size="medium"
-        onClick={() => setIsOpen(true)}
-      >
-        <Menu />
-      </Fab>
-    </div>
+      Configure
+      <span className={classes.icon}>{isOpen ? <Close /> : <Menu />}</span>
+    </ButtonBase>
   );
 };

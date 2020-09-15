@@ -91,7 +91,12 @@ export const Root: React.FC = observer(() => {
       <div className={classes.root}>
         <header className={classes.topbar}>
           <img className={classes.topbarLogo} src={logo} alt="Logo" />
-          <div className={classes.topbarToolbar}>Toolbar</div>
+          <div className={classes.topbarToolbar}>
+            <SidebarToggle
+              isOpen={isSidebarOpen}
+              setIsOpen={setIsSidebarOpen}
+            />
+          </div>
         </header>
         <main className={classes.main}>
           <div
@@ -100,15 +105,9 @@ export const Root: React.FC = observer(() => {
             })}
           >
             <Viewer />
-            {showUI && (
-              <SidebarToggle
-                isOpen={isSidebarOpen}
-                setIsOpen={setIsSidebarOpen}
-              />
-            )}
           </div>
           {showUI && (
-            <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}>
+            <Sidebar isOpen={isSidebarOpen}>
               <GltfView isLoading={isLoading} isError={isError} />
             </Sidebar>
           )}
