@@ -31,6 +31,7 @@ class InteractionHotspot extends pc.ScriptType {
   private _hotspotElem: HTMLElement;
   private _hotspotImageElem: HTMLElement;
   private _cachedEntityPosition?: pc.Vec3;
+  private _lastScreenPosition?: pc.Vec3;
   private _canvasHeight = 0;
   private _depthPixels = new Uint8Array(4);
   private _depthVector = new pc.Vec4();
@@ -115,7 +116,14 @@ class InteractionHotspot extends pc.ScriptType {
       return;
     }
 
+    // Prevent rendering depth buffer and updating HTML element if screen pos remains unchanged
     const screenPos = camera.worldToScreen(this._getEntityPosition());
+    if (this._lastScreenPosition?.equals(screenPos)) {
+      return;
+    }
+
+    this._lastScreenPosition = screenPos.clone();
+
     const hitDepth = this._getPixelDepth(screenPos);
     const hidden = screenPos.z < 0 || hitDepth < screenPos.z;
 
