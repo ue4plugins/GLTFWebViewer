@@ -10,13 +10,7 @@ const useStyles = makeStyles(theme => ({
   drawerPaper: {
     position: "relative",
     width: "100%",
-  },
-  drawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-    justifyContent: "flex-start",
+    border: "none",
   },
 }));
 

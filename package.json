@@ -35,7 +35,6 @@
     "clsx": "^1.1.0",
     "draco3d": "^1.3.6",
     "fs-extra": "^8.1.0",
-    "fuse.js": "^5.0.6-beta",
     "hammerjs": "^2.0.8",
     "lodash.debounce": "^4.0.8",
     "mobx": "^5.15.4",
