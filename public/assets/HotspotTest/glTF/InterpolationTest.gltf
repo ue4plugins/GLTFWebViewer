@@ -879,6 +879,13 @@
           "hoveredImage": 2,
           "toggledImage": 3,
           "toggledHoveredImage": 4
+        },
+        {
+          "animation": 7,
+          "image": 1,
+          "hoveredImage": 2,
+          "toggledImage": 3,
+          "toggledHoveredImage": 4
         }
       ]
     }
@@ -1236,7 +1243,8 @@
     {
       "mesh": 7,
       "name": "Cube.008",
-      "translation": [3.3051798343658447, 6.734194278717041, 0]
+      "translation": [3.3051798343658447, 6.734194278717041, 0],
+      "children": [18]
     },
     {
       "mesh": 8,
@@ -1287,6 +1295,15 @@
       "extensions": {
         "EPIC_interaction_hotspots": {
           "interaction": 0
+        }
+      }
+    },
+    {
+      "name": "Hotspot3",
+      "translation": [0, 0, 2],
+      "extensions": {
+        "EPIC_interaction_hotspots": {
+          "interaction": 2
         }
       }
     }
