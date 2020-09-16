@@ -6,9 +6,9 @@ import { observer } from "mobx-react-lite";
 import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
 import { useStores } from "../stores";
 import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
+import logo from "../images/logo.svg";
 import { Viewer } from "./Viewer";
 import { GltfRoot } from "./GltfRoot";
-import logo from "./logo.svg";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
