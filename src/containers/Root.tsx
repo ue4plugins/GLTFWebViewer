@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
     flex: "0 0 auto",
     height: 24,
   },
-  topbarToolbar: {
+  topbarToggle: {
     display: "flex",
     flex: "1 1 auto",
     justifyContent: "flex-end",
@@ -91,7 +91,7 @@ export const Root: React.FC = observer(() => {
       <div className={classes.root}>
         <header className={classes.topbar}>
           <img className={classes.topbarLogo} src={logo} alt="Logo" />
-          <div className={classes.topbarToolbar}>
+          <div className={classes.topbarToggle}>
             <SidebarToggle open={isSidebarOpen} toggleOpen={setIsSidebarOpen} />
           </div>
         </header>

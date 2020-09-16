@@ -24,22 +24,33 @@ export const GltfView: React.FC<GltfViewProps> = observer(
   ({ isLoading, isError }) => {
     const classes = useStyles();
     const { gltfStore } = useStores();
-    const { gltfs, gltf, variantSetId, showVariantSet } = gltfStore;
+    const {
+      gltfs,
+      gltf,
+      variantSetId,
+      showVariantSet,
+      variantSetManager,
+    } = gltfStore;
     const [view, setView] = useState<
       "gltf-list" | "gltf" | "variant-set" | "none"
     >("gltf-list");
 
+    const variantSet =
+      variantSetManager && variantSetId !== undefined
+        ? variantSetManager.variantSets[variantSetId]
+        : undefined;
+
     useEffect(() => {
       setView(
         gltf
-          ? variantSetId !== undefined
+          ? variantSet
             ? "variant-set"
             : "gltf"
           : gltfs.length === 0
           ? "none"
           : "gltf-list",
       );
-    }, [gltf, variantSetId, gltfs]);
+    }, [gltf, variantSet, gltfs]);
 
     if (isLoading) {
       return (
@@ -99,7 +110,7 @@ export const GltfView: React.FC<GltfViewProps> = observer(
       case "variant-set":
         return (
           <SidebarContainer
-            title={gltf?.name}
+            title={variantSet?.name}
             onNavigateBack={() => showVariantSet(undefined)}
           >
             Variant set: {variantSetId}

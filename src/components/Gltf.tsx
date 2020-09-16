@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
+import {
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../stores";
 import { VariantSet } from "../variants";
@@ -19,24 +25,27 @@ const useStyles = makeStyles(theme => ({
   meta: {
     flex: "0 0 auto",
     margin: theme.spacing(2, 2, 3, 2),
+    "& p:not(:last-of-type)": {
+      marginBottom: theme.spacing(2),
+    },
   },
 }));
 
 export const Gltf: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore } = useStores();
-  const { variantSetManager: manager, gltf, showVariantSet } = gltfStore;
+  const { variantSetManager, gltf, showVariantSet } = gltfStore;
   const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
 
   useEffect(() => {
-    if (manager) {
-      setVariantSets(manager.variantSets);
+    if (variantSetManager) {
+      setVariantSets(variantSetManager.variantSets);
     }
 
     return () => {
       setVariantSets([]);
     };
-  }, [manager]);
+  }, [variantSetManager]);
 
   if (!gltf) {
     return null;
@@ -59,29 +68,41 @@ export const Gltf: React.FC = observer(() => {
           </List>
         )}
       </div>
-      <div className={classes.meta}>
-        {gltf.description && (
-          <Typography variant="caption" component="div">
-            Description: {gltf.description}
-          </Typography>
-        )}
-        {gltf.creator && (
-          <Typography variant="caption" component="div">
-            Creator:{" "}
-            {gltf.creatorUrl ? (
-              <a
-                href={gltf.creatorUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {gltf.creator}
-              </a>
-            ) : (
-              gltf.creator
+      {(gltf.description || gltf.creator) && (
+        <>
+          <Divider />
+          <div className={classes.meta}>
+            {gltf.description && (
+              <>
+                <Typography variant="overline" color="textSecondary">
+                  Description
+                </Typography>
+                <Typography>{gltf.description}</Typography>
+              </>
             )}
-          </Typography>
-        )}
-      </div>
+            {gltf.creator && (
+              <>
+                <Typography variant="overline" color="textSecondary">
+                  Creator
+                </Typography>
+                <Typography>
+                  {gltf.creatorUrl ? (
+                    <a
+                      href={gltf.creatorUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {gltf.creator}
+                    </a>
+                  ) : (
+                    gltf.creator
+                  )}
+                </Typography>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 });
