@@ -15,10 +15,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export type SidebarProps = {
-  isOpen: boolean;
+  open: boolean;
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ children, isOpen }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ children, open }) => {
   const classes = useStyles();
 
   return (
@@ -27,7 +27,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, isOpen }) => {
       className={classes.drawer}
       variant="persistent"
       anchor="right"
-      open={isOpen}
+      open={open}
       onWheel={e => e.nativeEvent.stopPropagation()}
       onMouseDown={e => {
         e.stopPropagation();

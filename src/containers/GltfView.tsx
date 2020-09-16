@@ -2,91 +2,109 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, CircularProgress } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
-import { GltfList, Gltf, SidebarHeader } from "../components";
+import { GltfList, Gltf, SidebarContainer } from "../components";
 import { useStores } from "../stores";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    overflow: "hidden",
-  },
-  spinner: {
+  loading: {
     paddingTop: theme.spacing(2),
     textAlign: "center",
   },
-  error: {
+  text: {
     margin: theme.spacing(2),
-  },
-  single: {
-    overflow: "auto",
   },
 }));
 
-export type GltfProps = {
+export type GltfViewProps = {
   isLoading?: boolean;
   isError?: boolean;
 };
 
-export const GltfView: React.FC<GltfProps> = observer(
+export const GltfView: React.FC<GltfViewProps> = observer(
   ({ isLoading, isError }) => {
     const classes = useStyles();
     const { gltfStore } = useStores();
-    const { gltfs, gltf } = gltfStore;
-    const [view, setView] = useState<"list" | "single" | "none">("list");
+    const { gltfs, gltf, variantSetId, showVariantSet } = gltfStore;
+    const [view, setView] = useState<
+      "gltf-list" | "gltf" | "variant-set" | "none"
+    >("gltf-list");
 
     useEffect(() => {
-      setView(gltf ? "single" : gltfs.length === 0 ? "none" : "list");
-    }, [gltf, gltfs]);
+      setView(
+        gltf
+          ? variantSetId !== undefined
+            ? "variant-set"
+            : "gltf"
+          : gltfs.length === 0
+          ? "none"
+          : "gltf-list",
+      );
+    }, [gltf, variantSetId, gltfs]);
 
-    return (
-      <div className={classes.root}>
-        {isLoading ? (
-          <div className={classes.spinner}>
+    if (isLoading) {
+      return (
+        <SidebarContainer>
+          <div className={classes.loading}>
             <CircularProgress />
           </div>
-        ) : isError ? (
+        </SidebarContainer>
+      );
+    }
+
+    if (isError) {
+      return (
+        <SidebarContainer>
           <Typography
-            className={classes.error}
+            className={classes.text}
             variant="body2"
             color="textSecondary"
           >
             Something went wrong when loading glTF files. Check console for more
             details.
           </Typography>
-        ) : (
-          (() => {
-            switch (view) {
-              case "list":
-                return <GltfList onSelect={() => setView("single")} />;
-              case "single":
-                return (
-                  <>
-                    {gltfs.length > 1 && (
-                      <SidebarHeader
-                        title="Test"
-                        navigateBack={() => setView("list")}
-                      />
-                    )}
-                    <div className={classes.single}>
-                      <Gltf />
-                    </div>
-                  </>
-                );
-              case "none":
-                return (
-                  <Typography
-                    className={classes.error}
-                    variant="body2"
-                    color="textSecondary"
-                  >
-                    Drag and drop a glTF file to start
-                  </Typography>
-                );
+        </SidebarContainer>
+      );
+    }
+
+    switch (view) {
+      case "none":
+        return (
+          <SidebarContainer>
+            <Typography
+              className={classes.text}
+              variant="body2"
+              color="textSecondary"
+            >
+              Drag and drop a glTF file to start
+            </Typography>
+          </SidebarContainer>
+        );
+      case "gltf-list":
+        return (
+          <SidebarContainer title="Select file">
+            <GltfList onSelect={() => setView("gltf")} />
+          </SidebarContainer>
+        );
+      case "gltf":
+        return (
+          <SidebarContainer
+            title={gltf?.name}
+            onNavigateBack={
+              gltfs.length > 1 ? () => setView("gltf-list") : undefined
             }
-          })()
-        )}
-      </div>
-    );
+          >
+            <Gltf />
+          </SidebarContainer>
+        );
+      case "variant-set":
+        return (
+          <SidebarContainer
+            title={gltf?.name}
+            onNavigateBack={() => showVariantSet(undefined)}
+          >
+            Variant set: {variantSetId}
+          </SidebarContainer>
+        );
+    }
   },
 );

@@ -24,6 +24,9 @@ export class GltfStore {
   @observable
   public camera?: GltfCamera;
 
+  @observable
+  public variantSetId?: number;
+
   @computed
   public get animations(): GltfAnimation[] {
     return this.sceneHierarchy?.animations ?? [];
@@ -60,6 +63,11 @@ export class GltfStore {
   }
 
   @action.bound
+  public showVariantSet(id?: number) {
+    this.variantSetId = id;
+  }
+
+  @action.bound
   public async fetchGltfs() {
     const res = await fetch("index.json");
     const gltfs = (await res.json()) as GltfSource[] | undefined;
@@ -88,5 +96,6 @@ export class GltfStore {
       }
     }
     this.sceneHierarchy = sceneHierarchy;
+    this.variantSetId = undefined;
   }
 }

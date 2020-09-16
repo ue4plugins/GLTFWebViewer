@@ -8,14 +8,14 @@ const openButtonId = "open-button";
 describe("SidebarToggle", () => {
   it("should not be visible if isOpen is true", () => {
     const { getByTestId } = render(
-      <SidebarToggle isOpen={true} setIsOpen={jest.fn()} />,
+      <SidebarToggle open={true} toggleOpen={jest.fn()} />,
     );
     expect(getByTestId(openButtonId)).not.toBeVisible();
   });
 
   it("should be visible if isOpen is false", () => {
     const { getByTestId } = render(
-      <SidebarToggle isOpen={false} setIsOpen={jest.fn()} />,
+      <SidebarToggle open={false} toggleOpen={jest.fn()} />,
     );
     expect(getByTestId(openButtonId)).toBeVisible();
   });
@@ -23,7 +23,7 @@ describe("SidebarToggle", () => {
   it("should call setIsOpen with 'true' when close button is clicked", () => {
     const setIsOpen = jest.fn((open: boolean) => open);
     const { getByTestId } = render(
-      <SidebarToggle isOpen={true} setIsOpen={setIsOpen} />,
+      <SidebarToggle open={true} toggleOpen={setIsOpen} />,
     );
     fireEvent.click(getByTestId(openButtonId));
     expect(setIsOpen).toBeCalledTimes(1);

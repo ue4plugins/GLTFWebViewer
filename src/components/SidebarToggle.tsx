@@ -18,13 +18,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export type SidebarToggleProps = {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
+  open: boolean;
+  toggleOpen: (open: boolean) => void;
 };
 
 export const SidebarToggle: React.FC<SidebarToggleProps> = ({
-  isOpen,
-  setIsOpen,
+  open,
+  toggleOpen,
 }) => {
   const classes = useStyles();
 
@@ -36,9 +36,9 @@ export const SidebarToggle: React.FC<SidebarToggleProps> = ({
         aria-label="open sidebar"
         data-testid="open-button"
         disableTouchRipple
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => toggleOpen(!open)}
       >
-        {isOpen ? <Close /> : <Menu />}
+        {open ? <Close /> : <Menu />}
       </IconButton>
     </div>
   );

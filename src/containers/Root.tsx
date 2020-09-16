@@ -92,10 +92,7 @@ export const Root: React.FC = observer(() => {
         <header className={classes.topbar}>
           <img className={classes.topbarLogo} src={logo} alt="Logo" />
           <div className={classes.topbarToolbar}>
-            <SidebarToggle
-              isOpen={isSidebarOpen}
-              setIsOpen={setIsSidebarOpen}
-            />
+            <SidebarToggle open={isSidebarOpen} toggleOpen={setIsSidebarOpen} />
           </div>
         </header>
         <main className={classes.main}>
@@ -107,7 +104,7 @@ export const Root: React.FC = observer(() => {
             <Viewer />
           </div>
           {showUI && (
-            <Sidebar isOpen={isSidebarOpen}>
+            <Sidebar open={isSidebarOpen}>
               <GltfView isLoading={isLoading} isError={isError} />
             </Sidebar>
           )}
