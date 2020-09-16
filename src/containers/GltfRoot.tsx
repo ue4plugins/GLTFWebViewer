@@ -15,12 +15,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export type GltfViewProps = {
+export type GltfRootProps = {
   isLoading?: boolean;
   isError?: boolean;
 };
 
-export const GltfView: React.FC<GltfViewProps> = observer(
+export const GltfRoot: React.FC<GltfRootProps> = observer(
   ({ isLoading, isError }) => {
     const classes = useStyles();
     const { gltfStore } = useStores();

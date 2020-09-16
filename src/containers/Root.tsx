@@ -7,7 +7,7 @@ import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
 import { useStores } from "../stores";
 import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
 import { Viewer } from "./Viewer";
-import { GltfView } from "./GltfView";
+import { GltfRoot } from "./GltfRoot";
 import logo from "./logo.svg";
 
 const useStyles = makeStyles(theme => ({
@@ -105,7 +105,7 @@ export const Root: React.FC = observer(() => {
           </div>
           {showUI && (
             <Sidebar open={isSidebarOpen}>
-              <GltfView isLoading={isLoading} isError={isError} />
+              <GltfRoot isLoading={isLoading} isError={isError} />
             </Sidebar>
           )}
           {showUI && showFpsMeter && (
