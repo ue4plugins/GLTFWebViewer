@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, CircularProgress } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
-import { GltfList, Gltf, SidebarContainer } from "../components";
+import {
+  GltfList,
+  Gltf,
+  SidebarContainer,
+  VariantSet as VariantSetComponent,
+} from "../components";
 import { useStores } from "../stores";
+import { VariantSet } from "../variants";
 
 const useStyles = makeStyles(theme => ({
   loading: {
@@ -34,11 +40,20 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
     const [view, setView] = useState<
       "gltf-list" | "gltf" | "variant-set" | "none"
     >("gltf-list");
+    const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
 
     const variantSet =
-      variantSetManager && variantSetId !== undefined
-        ? variantSetManager.variantSets[variantSetId]
-        : undefined;
+      variantSetId !== undefined ? variantSets[variantSetId] : undefined;
+
+    useEffect(() => {
+      if (variantSetManager) {
+        setVariantSets(variantSetManager.variantSets);
+      }
+
+      return () => {
+        setVariantSets([]);
+      };
+    }, [variantSetManager]);
 
     useEffect(() => {
       setView(
@@ -97,6 +112,9 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
           </SidebarContainer>
         );
       case "gltf":
+        if (!gltf) {
+          return null;
+        }
         return (
           <SidebarContainer
             title={gltf?.name}
@@ -104,16 +122,26 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
               gltfs.length > 1 ? () => setView("gltf-list") : undefined
             }
           >
-            <Gltf />
+            <Gltf
+              gltf={gltf}
+              variantSets={variantSets}
+              onVariantSetSelect={showVariantSet}
+            />
           </SidebarContainer>
         );
       case "variant-set":
+        if (variantSetId === undefined || !variantSetManager) {
+          return null;
+        }
         return (
           <SidebarContainer
             title={variantSet?.name}
             onNavigateBack={() => showVariantSet(undefined)}
           >
-            Variant set: {variantSetId}
+            <VariantSetComponent
+              id={variantSetId}
+              manager={variantSetManager}
+            />
           </SidebarContainer>
         );
     }

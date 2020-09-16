@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -7,9 +7,8 @@ import {
   ListItemText,
   Divider,
 } from "@material-ui/core";
-import { observer } from "mobx-react-lite";
-import { useStores } from "../stores";
 import { VariantSet } from "../variants";
+import { GltfSource } from "../types";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,25 +30,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const Gltf: React.FC = observer(() => {
+export type GltfProps = {
+  gltf: GltfSource;
+  variantSets: VariantSet[];
+  onVariantSetSelect: (id: number) => void;
+};
+
+export const Gltf: React.FC<GltfProps> = ({
+  gltf,
+  variantSets,
+  onVariantSetSelect,
+}) => {
   const classes = useStyles();
-  const { gltfStore } = useStores();
-  const { variantSetManager, gltf, showVariantSet } = gltfStore;
-  const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
-
-  useEffect(() => {
-    if (variantSetManager) {
-      setVariantSets(variantSetManager.variantSets);
-    }
-
-    return () => {
-      setVariantSets([]);
-    };
-  }, [variantSetManager]);
-
-  if (!gltf) {
-    return null;
-  }
 
   return (
     <div className={classes.root}>
@@ -58,7 +50,7 @@ export const Gltf: React.FC = observer(() => {
           <List>
             {variantSets.map((variantSet, variantSetId) => (
               <ListItem
-                onClick={() => showVariantSet(variantSetId)}
+                onClick={() => onVariantSetSelect(variantSetId)}
                 button
                 key={variantSetId}
               >
@@ -105,4 +97,4 @@ export const Gltf: React.FC = observer(() => {
       )}
     </div>
   );
-});
+};
