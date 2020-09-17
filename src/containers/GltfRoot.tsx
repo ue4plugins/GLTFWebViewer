@@ -159,10 +159,12 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
             title={variantSet?.name}
             onNavigateBack={() => showVariantSet(undefined)}
           >
-            <VariantSetComponent
-              id={selectedVariantSetId}
-              manager={variantSetManager}
-            />
+            <div className={classes.content}>
+              <VariantSetComponent
+                id={selectedVariantSetId}
+                manager={variantSetManager}
+              />
+            </div>
           </SidebarContainer>
         );
     }

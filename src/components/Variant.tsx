@@ -1,20 +1,44 @@
 import React from "react";
-import {
-  makeStyles,
-  useRadioGroup,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Avatar,
-  Radio,
-} from "@material-ui/core";
+import { makeStyles, useRadioGroup, Typography } from "@material-ui/core";
+import clsx from "clsx";
+import { red } from "@material-ui/core/colors";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   input: {
     position: "absolute",
     opacity: 0,
     pointerEvents: "none",
   },
+  button: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    marginBottom: theme.spacing(1),
+    padding: theme.spacing(1.5),
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: theme.palette.grey[700],
+    color: theme.palette.common.white,
+    boxShadow: `0 0 0 1px ${theme.palette.grey[500]} inset`,
+    cursor: "pointer",
+  },
+  buttonChecked: {
+    boxShadow: `0 0 0 2px ${theme.palette.primary.main} inset`,
+  },
+  image: {
+    marginRight: theme.spacing(2),
+    height: 46,
+    width: 46,
+    borderRadius: theme.shape.borderRadius,
+    objectFit: "cover",
+  },
+  label: {},
+  checkbox: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    backgroundColor: "red",
+  },
+  checkboxChecked: {},
 }));
 
 export type VariantProps = {
@@ -71,22 +95,23 @@ export const Variant: React.FC<VariantProps> = ({
         type="radio"
         value={value}
       />
-      <ListItem button>
-        {image && (
-          <ListItemAvatar>
-            <Avatar src={image} />
-          </ListItemAvatar>
-        )}
-        <ListItemText primary={label} />
-        <Radio
-          edge="end"
-          checked={checked}
-          onChange={e => {
-            e.target.value = value?.toString() ?? "";
-            _onChange(e);
-          }}
-        />
-      </ListItem>
+      <div
+        className={clsx(classes.button, {
+          [classes.buttonChecked]: checked,
+        })}
+      >
+        {image && <img className={classes.image} src={image} />}
+        <Typography className={classes.label} component="div" variant="body2">
+          {label}
+        </Typography>
+        <div
+          className={clsx(classes.checkbox, {
+            [classes.checkboxChecked]: checked,
+          })}
+        >
+          a
+        </div>
+      </div>
     </label>
   );
 };
