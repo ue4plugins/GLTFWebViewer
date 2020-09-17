@@ -1,14 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-} from "@material-ui/core";
+import { Typography, Divider } from "@material-ui/core";
 import { VariantSet } from "../variants";
 import { GltfSource } from "../types";
+import { NavList, NavListItem } from "./NavList";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,13 +12,14 @@ const useStyles = makeStyles(theme => ({
     height: "100%",
     overflow: "hidden",
   },
-  list: {
+  variantSets: {
     flex: "1 1 auto",
+    padding: theme.spacing(2),
     overflow: "auto",
   },
   meta: {
     flex: "0 0 auto",
-    margin: theme.spacing(2, 2, 3, 2),
+    padding: theme.spacing(2, 2, 3, 2),
     "& p:not(:last-of-type)": {
       marginBottom: theme.spacing(2),
     },
@@ -45,19 +41,18 @@ export const Gltf: React.FC<GltfProps> = ({
 
   return (
     <div className={classes.root}>
-      <div className={classes.list}>
+      <div className={classes.variantSets}>
         {variantSets.length > 0 && (
-          <List>
+          <NavList>
             {variantSets.map((variantSet, variantSetId) => (
-              <ListItem
+              <NavListItem
                 onClick={() => onVariantSetSelect(variantSetId)}
-                button
                 key={variantSetId}
               >
-                <ListItemText primary={variantSet.name} />
-              </ListItem>
+                {variantSet.name}
+              </NavListItem>
             ))}
-          </List>
+          </NavList>
         )}
       </div>
       {(gltf.description || gltf.creator) && (

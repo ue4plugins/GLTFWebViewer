@@ -3,10 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Typography, CircularProgress } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import {
-  GltfList,
   Gltf,
   SidebarContainer,
   VariantSet as VariantSetComponent,
+  NavList,
+  NavListItem,
 } from "../components";
 import { useStores } from "../stores";
 import { VariantSet } from "../variants";
@@ -16,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(2),
     textAlign: "center",
   },
-  text: {
+  content: {
     margin: theme.spacing(2),
   },
 }));
@@ -32,10 +33,11 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
     const { gltfStore } = useStores();
     const {
       gltfs,
-      gltf,
-      variantSetId,
-      showVariantSet,
+      gltf: selectedGltf,
+      variantSetId: selectedVariantSetId,
       variantSetManager,
+      showVariantSet,
+      setGltf,
     } = gltfStore;
     const [view, setView] = useState<
       "gltf-list" | "gltf" | "variant-set" | "none"
@@ -43,7 +45,9 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
     const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
 
     const variantSet =
-      variantSetId !== undefined ? variantSets[variantSetId] : undefined;
+      selectedVariantSetId !== undefined
+        ? variantSets[selectedVariantSetId]
+        : undefined;
 
     useEffect(() => {
       if (variantSetManager) {
@@ -57,7 +61,7 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
 
     useEffect(() => {
       setView(
-        gltf
+        selectedGltf
           ? variantSet
             ? "variant-set"
             : "gltf"
@@ -65,7 +69,7 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
           ? "none"
           : "gltf-list",
       );
-    }, [gltf, variantSet, gltfs]);
+    }, [selectedGltf, variantSet, gltfs]);
 
     if (isLoading) {
       return (
@@ -81,7 +85,7 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
       return (
         <SidebarContainer>
           <Typography
-            className={classes.text}
+            className={classes.content}
             variant="body2"
             color="textSecondary"
           >
@@ -97,7 +101,7 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
         return (
           <SidebarContainer>
             <Typography
-              className={classes.text}
+              className={classes.content}
               variant="body2"
               color="textSecondary"
             >
@@ -108,29 +112,46 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
       case "gltf-list":
         return (
           <SidebarContainer title="Select file">
-            <GltfList onSelect={() => setView("gltf")} />
+            <div className={classes.content}>
+              <NavList>
+                {gltfs.map(gltf => (
+                  <NavListItem
+                    key={gltf.filePath}
+                    onClick={() => {
+                      setGltf(gltf);
+                      setView("gltf");
+                    }}
+                    selected={
+                      selectedGltf && gltf.filePath === selectedGltf.filePath
+                    }
+                  >
+                    {gltf.name}
+                  </NavListItem>
+                ))}
+              </NavList>
+            </div>
           </SidebarContainer>
         );
       case "gltf":
-        if (!gltf) {
+        if (!selectedGltf) {
           return null;
         }
         return (
           <SidebarContainer
-            title={gltf?.name}
+            title={selectedGltf?.name}
             onNavigateBack={
               gltfs.length > 1 ? () => setView("gltf-list") : undefined
             }
           >
             <Gltf
-              gltf={gltf}
+              gltf={selectedGltf}
               variantSets={variantSets}
               onVariantSetSelect={showVariantSet}
             />
           </SidebarContainer>
         );
       case "variant-set":
-        if (variantSetId === undefined || !variantSetManager) {
+        if (selectedVariantSetId === undefined || !variantSetManager) {
           return null;
         }
         return (
@@ -139,7 +160,7 @@ export const GltfRoot: React.FC<GltfRootProps> = observer(
             onNavigateBack={() => showVariantSet(undefined)}
           >
             <VariantSetComponent
-              id={variantSetId}
+              id={selectedVariantSetId}
               manager={variantSetManager}
             />
           </SidebarContainer>
