@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { Hidden, makeStyles } from "@material-ui/core";
+import { Hidden, makeStyles, Typography } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
 import { useStores } from "../stores";
@@ -40,12 +40,16 @@ const useStyles = makeStyles(theme => ({
     zIndex: 1,
   },
   topbarLogo: {
-    flex: "0 0 auto",
+    flex: "0 0 40px",
     height: 24,
+  },
+  topbarTitle: {
+    flex: "1 1 auto",
+    textAlign: "center",
   },
   topbarToggle: {
     display: "flex",
-    flex: "1 1 auto",
+    flex: "0 0 40px",
     justifyContent: "flex-end",
   },
   main: {
@@ -91,6 +95,9 @@ export const Root: React.FC = observer(() => {
       <div className={classes.root}>
         <header className={classes.topbar}>
           <img className={classes.topbarLogo} src={logo} alt="Logo" />
+          <Typography className={classes.topbarTitle} variant="body2">
+            Epic Games glTF Viewer
+          </Typography>
           <div className={classes.topbarToggle}>
             <SidebarToggle open={isSidebarOpen} toggleOpen={setIsSidebarOpen} />
           </div>
