@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     height: theme.topbarHeight,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
-    color: theme.palette.grey[200],
+    color: theme.palette.text.secondary,
     backgroundColor: theme.palette.background.paper,
     zIndex: 1,
   },

@@ -21,6 +21,9 @@ const useStyles = makeStyles(theme => ({
   meta: {
     flex: "0 0 auto",
     padding: theme.spacing(2, 2, 3, 2),
+    "& a": {
+      color: theme.palette.common.white,
+    },
     "& p:not(:last-of-type)": {
       marginBottom: theme.spacing(2),
     },
@@ -43,7 +46,7 @@ export const Gltf: React.FC<GltfProps> = ({
   return (
     <div className={classes.root}>
       <div className={classes.variantSets}>
-        {variantSets.length > 0 && (
+        {variantSets.length > 0 ? (
           <NavList>
             {variantSets.map((variantSet, variantSetId) => (
               <NavListItem
@@ -54,6 +57,8 @@ export const Gltf: React.FC<GltfProps> = ({
               </NavListItem>
             ))}
           </NavList>
+        ) : (
+          <>This file has no configurable options</>
         )}
       </div>
       {(gltf.description || gltf.creator) && (
@@ -65,7 +70,7 @@ export const Gltf: React.FC<GltfProps> = ({
                 <Typography variant="overline" color="textSecondary">
                   Description
                 </Typography>
-                <Typography>{gltf.description}</Typography>
+                <Typography variant="body2">{gltf.description}</Typography>
               </>
             )}
             {gltf.creator && (
@@ -73,7 +78,7 @@ export const Gltf: React.FC<GltfProps> = ({
                 <Typography variant="overline" color="textSecondary">
                   Creator
                 </Typography>
-                <Typography>
+                <Typography variant="body2">
                   {gltf.creatorUrl ? (
                     <a
                       href={gltf.creatorUrl}
