@@ -3,6 +3,7 @@ export * from "./FpsMonitor";
 export * from "./Gltf";
 export * from "./Hotspot";
 export * from "./NavList";
+export * from "./NavListItem";
 export * from "./Sidebar";
 export * from "./SidebarContainer";
 export * from "./SidebarToggle";

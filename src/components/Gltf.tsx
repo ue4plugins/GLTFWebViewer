@@ -3,7 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Divider } from "@material-ui/core";
 import { VariantSet } from "../variants";
 import { GltfSource } from "../types";
-import { NavList, NavListItem } from "./NavList";
+import { NavList } from "./NavList";
+import { NavListItem } from "./NavListItem";
 
 const useStyles = makeStyles(theme => ({
   root: {
