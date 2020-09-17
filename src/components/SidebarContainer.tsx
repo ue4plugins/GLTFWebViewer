@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     flex: `0 0 ${theme.topbarHeight}px`,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    backgroundColor: theme.palette.grey["500"],
+    backgroundColor: theme.palette.grey[700],
   },
   backButton: {
     marginLeft: -theme.spacing(1),

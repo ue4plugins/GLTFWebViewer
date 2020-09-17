@@ -13,12 +13,17 @@ declare module "@material-ui/core/styles" {
 }
 
 const epicBlue = "#3393FA";
-const panel = "#262A2E";
-const grey1 = "#1C1E22";
-const grey2 = "#20262C";
-const grey3 = "#2B323B";
-const grey4 = "#8F8F8F";
 const white = "#FFFFFF";
+const grey50 = "#EFEFF0";
+const grey100 = "#EFEFF0";
+const grey200 = "#BBBBBD";
+const grey300 = "#93989F";
+const grey400 = "#464E59";
+const grey500 = "#2B323B";
+const grey600 = "#252B32";
+const grey700 = "#20262C";
+const grey800 = "#1D2126";
+const grey900 = "#1C1E22";
 const black = "#000000";
 
 export const theme = createMuiTheme({
@@ -26,12 +31,12 @@ export const theme = createMuiTheme({
     type: "dark",
     text: {
       primary: white,
-      secondary: grey4,
-      disabled: grey4,
+      secondary: grey500,
+      disabled: grey300,
     },
     background: {
-      default: panel,
-      paper: grey1,
+      default: grey900,
+      paper: grey900,
     },
     divider: black,
     action: {
@@ -42,16 +47,16 @@ export const theme = createMuiTheme({
       white,
     },
     grey: {
-      50: grey4,
-      100: grey4,
-      200: grey3,
-      300: grey3,
-      400: grey2,
-      500: grey2,
-      600: grey2,
-      700: grey1,
-      800: grey1,
-      900: grey1,
+      50: grey50,
+      100: grey100,
+      200: grey200,
+      300: grey300,
+      400: grey400,
+      500: grey500,
+      600: grey600,
+      700: grey700,
+      800: grey800,
+      900: grey900,
     },
     primary: {
       main: epicBlue,

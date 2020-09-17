@@ -35,8 +35,8 @@ const useStyles = makeStyles(theme => ({
     height: theme.topbarHeight,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
-    color: theme.palette.common.white,
-    backgroundColor: theme.palette.background.default,
+    color: theme.palette.grey[200],
+    backgroundColor: theme.palette.background.paper,
     zIndex: 1,
   },
   topbarLogo: {
