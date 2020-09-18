@@ -1,3 +1,3 @@
-export * from "./GltfRoot";
+export * from "./Gltf";
 export * from "./Root";
 export * from "./Viewer";

@@ -30,13 +30,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export type GltfProps = {
+export type GltfContentProps = {
   gltf: GltfSource;
   variantSets: VariantSet[];
   onVariantSetSelect: (id: number) => void;
 };
 
-export const Gltf: React.FC<GltfProps> = ({
+export const GltfContent: React.FC<GltfContentProps> = ({
   gltf,
   variantSets,
   onVariantSetSelect,

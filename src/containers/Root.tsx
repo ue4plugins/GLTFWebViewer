@@ -8,7 +8,7 @@ import { useStores } from "../stores";
 import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
 import logo from "../images/logo.svg";
 import { Viewer } from "./Viewer";
-import { GltfRoot } from "./GltfRoot";
+import { Gltf } from "./Gltf";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -112,7 +112,7 @@ export const Root: React.FC = observer(() => {
           </div>
           {showUI && (
             <Sidebar open={isSidebarOpen}>
-              <GltfRoot isLoading={isLoading} isError={isError} />
+              <Gltf isLoading={isLoading} isError={isError} />
             </Sidebar>
           )}
           {showUI && showFpsMeter && (

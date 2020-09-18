@@ -1,6 +1,5 @@
-export * from "./CameraSelector";
 export * from "./FpsMonitor";
-export * from "./Gltf";
+export * from "./GltfContent";
 export * from "./Hotspot";
 export * from "./NavList";
 export * from "./NavListItem";

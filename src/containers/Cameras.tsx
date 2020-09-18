@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { FormControl, FormLabel, RadioGroup } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStores } from "../stores";
-import { Variant } from "./Variant";
+import { Variant } from "../components/Variant";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const CameraSelector: React.FC = observer(() => {
+export const Cameras: React.FC = observer(() => {
   const { gltfStore } = useStores();
   const { cameras, camera, setCamera } = gltfStore;
   const classes = useStyles();
