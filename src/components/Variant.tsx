@@ -1,45 +1,100 @@
 import React from "react";
 import { makeStyles, useRadioGroup, Typography } from "@material-ui/core";
 import clsx from "clsx";
-import { red } from "@material-ui/core/colors";
+import { Check } from "@material-ui/icons";
+import { mixColor } from "../utilities";
 
-const useStyles = makeStyles(theme => ({
-  input: {
-    position: "absolute",
-    opacity: 0,
-    pointerEvents: "none",
-  },
-  button: {
-    position: "relative",
-    display: "flex",
-    alignItems: "center",
-    marginBottom: theme.spacing(1),
-    padding: theme.spacing(1.5),
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.grey[700],
-    color: theme.palette.common.white,
-    boxShadow: `0 0 0 1px ${theme.palette.grey[500]} inset`,
-    cursor: "pointer",
-  },
-  buttonChecked: {
-    boxShadow: `0 0 0 2px ${theme.palette.primary.main} inset`,
-  },
-  image: {
-    marginRight: theme.spacing(2),
-    height: 46,
-    width: 46,
-    borderRadius: theme.shape.borderRadius,
-    objectFit: "cover",
-  },
-  label: {},
-  checkbox: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    backgroundColor: "red",
-  },
-  checkboxChecked: {},
-}));
+const useStyles = makeStyles(theme => {
+  const backgroundColor = theme.palette.grey[700];
+  const borderColor = theme.palette.grey[500];
+  const checkColor = mixColor(theme.palette.common.white, borderColor, 0.2);
+
+  const hoverBackgroundColor = mixColor(
+    theme.palette.primary.main,
+    backgroundColor,
+    0.2,
+  );
+  const hoverBorderColor = mixColor(
+    theme.palette.primary.main,
+    backgroundColor,
+    0.4,
+  );
+  const hoverCheckColor = mixColor(
+    theme.palette.common.white,
+    hoverBorderColor,
+    0.2,
+  );
+
+  const checkedBorderColor = theme.palette.primary.main;
+  const checkedCheckColor = theme.palette.common.white;
+
+  return {
+    input: {
+      position: "absolute",
+      opacity: 0,
+      pointerEvents: "none",
+    },
+    button: {
+      position: "relative",
+      display: "flex",
+      alignItems: "center",
+      marginBottom: theme.spacing(1),
+      padding: theme.spacing(1.5),
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: backgroundColor,
+      color: theme.palette.common.white,
+      boxShadow: `0 0 0 1px ${borderColor} inset`,
+      cursor: "pointer",
+      overflow: "hidden",
+      "&:hover": {
+        backgroundColor: hoverBackgroundColor,
+        "&:not($buttonChecked)": {
+          boxShadow: `0 0 0 1px ${hoverBorderColor} inset`,
+          "& $checkbox": {
+            borderTopColor: hoverBorderColor,
+            color: hoverCheckColor,
+          },
+        },
+      },
+    },
+    buttonChecked: {
+      boxShadow: `0 0 0 2px ${checkedBorderColor} inset`,
+    },
+    image: {
+      marginRight: theme.spacing(2),
+      height: 46,
+      width: 46,
+      borderRadius: theme.shape.borderRadius,
+      objectFit: "cover",
+    },
+    label: {},
+    checkbox: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: 0,
+      height: 0,
+      borderTop: `28px solid ${borderColor}`,
+      borderRight: "28px solid transparent",
+      color: checkColor,
+      content: "''",
+    },
+    checkboxChecked: {
+      color: checkedCheckColor,
+      borderTopColor: checkedBorderColor,
+    },
+    checkboxIcon: {
+      position: "absolute",
+      top: -32,
+      left: 4,
+      width: 10,
+      "& path": {
+        stroke: "currentColor",
+        strokeWidth: 2,
+      },
+    },
+  };
+});
 
 export type VariantProps = {
   autoFocus?: boolean;
@@ -100,7 +155,7 @@ export const Variant: React.FC<VariantProps> = ({
           [classes.buttonChecked]: checked,
         })}
       >
-        {image && <img className={classes.image} src={image} />}
+        {image && <img className={classes.image} src={image} alt="Variant" />}
         <Typography className={classes.label} component="div" variant="body2">
           {label}
         </Typography>
@@ -109,7 +164,7 @@ export const Variant: React.FC<VariantProps> = ({
             [classes.checkboxChecked]: checked,
           })}
         >
-          a
+          <Check className={classes.checkboxIcon} />
         </div>
       </div>
     </label>
