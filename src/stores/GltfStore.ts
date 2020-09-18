@@ -94,6 +94,8 @@ export class GltfStore {
       if (this.autoPlayAnimations) {
         sceneHierarchy.animations.forEach(a => (a.active = true));
       }
+    } else {
+      this.camera = undefined;
     }
     this.sceneHierarchy = sceneHierarchy;
     this.variantSetId = undefined;
