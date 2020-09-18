@@ -45,6 +45,7 @@ export const Cameras: React.FC = observer(() => {
           key={camera.id}
           value={camera.id.toString()}
           image={camera.previewSource}
+          orbit={camera.orbit}
         />
       ))}
     </RadioGroup>

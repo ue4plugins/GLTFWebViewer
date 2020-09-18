@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, useRadioGroup } from "@material-ui/core";
 import clsx from "clsx";
+import { ReactComponent as Rotate } from "../icons/Rotate.svg";
 
 const useStyles = makeStyles(theme => {
   const dropShadow =
@@ -35,10 +36,23 @@ const useStyles = makeStyles(theme => {
     buttonChecked: {
       boxShadow: `0 0 0 2px ${theme.palette.primary.main} inset, ` + dropShadow,
     },
+    orbitIcon: {
+      position: "absolute",
+      bottom: theme.spacing(1),
+      right: theme.spacing(1),
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width: 22,
+      height: 22,
+      borderRadius: "50%",
+      backgroundColor: theme.palette.grey[900],
+    },
   };
 });
 
 export type CameraProps = {
+  orbit?: boolean;
   autoFocus?: boolean;
   checked?: boolean;
   id?: string;
@@ -50,6 +64,7 @@ export type CameraProps = {
 };
 
 export const Camera: React.FC<CameraProps> = ({
+  orbit,
   autoFocus,
   checked: checkedProp,
   id,
@@ -95,7 +110,13 @@ export const Camera: React.FC<CameraProps> = ({
           [classes.buttonChecked]: checked,
         })}
         style={{ backgroundImage: `url(${image})` }}
-      />
+      >
+        {orbit && (
+          <div className={classes.orbitIcon}>
+            <Rotate />
+          </div>
+        )}
+      </div>
     </label>
   );
 };
