@@ -29,6 +29,11 @@ const useStyles = makeStyles(theme => {
   const checkedCheckColor = theme.palette.common.white;
 
   return {
+    root: {
+      "&:not(:last-child)": {
+        marginBottom: theme.spacing(1),
+      },
+    },
     input: {
       position: "absolute",
       opacity: 0,
@@ -38,7 +43,6 @@ const useStyles = makeStyles(theme => {
       position: "relative",
       display: "flex",
       alignItems: "center",
-      marginBottom: theme.spacing(1),
       padding: theme.spacing(1.5),
       borderRadius: theme.shape.borderRadius,
       backgroundColor: backgroundColor,
@@ -138,7 +142,7 @@ export const Variant: React.FC<VariantProps> = ({
   };
 
   return (
-    <label>
+    <label className={classes.root}>
       <input
         autoFocus={autoFocus}
         checked={checked}
