@@ -6,7 +6,11 @@ import { useStores } from "../stores";
 import { Variant } from "../components/Variant";
 
 const useStyles = makeStyles(theme => ({
-  formControl: {
+  root: {
+    zIndex: 2,
+    position: "absolute",
+    bottom: theme.spacing(2),
+    left: theme.spacing(2),
     display: "flex",
   },
   label: {
@@ -20,10 +24,7 @@ export const Cameras: React.FC = observer(() => {
   const classes = useStyles();
 
   return (
-    <FormControl className={classes.formControl} component="fieldset">
-      <FormLabel className={classes.label} component="legend">
-        Camera
-      </FormLabel>
+    <FormControl className={classes.root} component="fieldset">
       <RadioGroup
         aria-label="camera"
         id="camera-select"

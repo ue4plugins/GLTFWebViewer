@@ -18,13 +18,13 @@ const barColors = [
 const useStyles = makeStyles(theme => {
   const { fontSize, fontWeightBold: fontWeight } = theme.typography;
   const internalSpacing = theme.spacing(0.5);
-  const externalSpacing = theme.spacing(1);
+  const externalSpacing = theme.spacing(2);
   const backgroundColor = theme.palette.common.black;
   return {
     root: {
       zIndex: 2,
-      position: "fixed",
-      bottom: externalSpacing,
+      position: "absolute",
+      top: externalSpacing,
       left: externalSpacing,
       height: graphHeight + fontSize + internalSpacing * 3,
       width: graphWidth + internalSpacing * 2,

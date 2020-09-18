@@ -9,6 +9,7 @@ import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
 import logo from "../images/logo.svg";
 import { Viewer } from "./Viewer";
 import { Gltf } from "./Gltf";
+import { Cameras } from "./Cameras";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -42,6 +43,8 @@ const useStyles = makeStyles(theme => ({
   topbarLogo: {
     flex: "0 0 40px",
     height: 24,
+    objectFit: "contain",
+    objectPosition: "left 50%",
   },
   topbarTitle: {
     flex: "1 1 auto",
@@ -109,16 +112,17 @@ export const Root: React.FC = observer(() => {
             })}
           >
             <Viewer />
+            {showUI && <Cameras />}
+            {showUI && showFpsMeter && (
+              <Hidden xsDown>
+                <FpsMonitor />
+              </Hidden>
+            )}
           </div>
           {showUI && (
             <Sidebar open={isSidebarOpen}>
               <Gltf isLoading={isLoading} isError={isError} />
             </Sidebar>
-          )}
-          {showUI && showFpsMeter && (
-            <Hidden xsDown>
-              <FpsMonitor />
-            </Hidden>
           )}
         </main>
       </div>
