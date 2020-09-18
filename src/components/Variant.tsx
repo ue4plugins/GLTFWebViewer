@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, useRadioGroup, Typography } from "@material-ui/core";
 import clsx from "clsx";
-import { Check } from "@material-ui/icons";
+import { ReactComponent as Check } from "../icons/Check.svg";
 import { mixColor } from "../utilities";
 
 const useStyles = makeStyles(theme => {
@@ -89,13 +89,8 @@ const useStyles = makeStyles(theme => {
     },
     checkboxIcon: {
       position: "absolute",
-      top: -30,
-      left: 4,
-      width: 10,
-      "& path": {
-        stroke: "currentColor",
-        strokeWidth: 2,
-      },
+      top: -23,
+      left: 5,
     },
   };
 });
