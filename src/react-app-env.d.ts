@@ -73,9 +73,32 @@ declare namespace pc {
     ): InstanceType<T>;
   }
 
+  interface InstanceList {
+    opaqueMeshInstances: pc.MeshInstance[];
+    transparentMeshInstances: pc.MeshInstance[];
+
+    /** Arrays of visible instances for each camera */
+    visibleOpaque: VisibleInstanceList[];
+
+    /** Arrays of visible instances for each camera */
+    visibleTransparent: VisibleInstanceList[];
+  }
+
+  interface VisibleInstanceList {
+    list: pc.MeshInstance[];
+  }
+
   interface Layer {
     incrementCounter(): void;
     decrementCounter(): void;
+
+    instances: pc.InstanceList;
+  }
+
+  interface Picker {
+    app: pc.Application;
+    device: pc.GraphicsDevice;
+    layer: pc.Layer;
   }
 
   const programlib: any;
