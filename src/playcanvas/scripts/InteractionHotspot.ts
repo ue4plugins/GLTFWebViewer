@@ -314,9 +314,14 @@ class InteractionHotspot extends pc.ScriptType {
     const pixels = this._pickerPixels;
     const drawCalls = picker.layer.instances.visibleOpaque[0].list;
 
+    const minX = Math.max(pickerX - 1, 0);
+    const maxX = Math.min(pickerX + 1, pickerWidth - 1);
+    const minY = Math.max(pickerY - 1, 0);
+    const maxY = Math.min(pickerY + 1, pickerHeight - 1);
+
     // To avoid issues with precision, we sample 3x3 pixels instead of just 1
-    for (let y = Math.max(pickerY - 1, 0); y < pickerY + 2; y += 1) {
-      for (let x = Math.max(pickerX - 1, 0); x < pickerX + 2; x += 1) {
+    for (let y = minY; y <= maxY; y += 1) {
+      for (let x = minX; x <= maxX; x += 1) {
         const idx = y * picker.width + x;
         const r = pixels[4 * idx + 0];
         const g = pixels[4 * idx + 1];
