@@ -1,3 +1,4 @@
+export * from "./Camera";
 export * from "./FpsMonitor";
 export * from "./GltfContent";
 export * from "./Hotspot";

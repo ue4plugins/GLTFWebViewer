@@ -5,6 +5,7 @@ import {
   Backdrop,
   CircularProgress,
   makeStyles,
+  useTheme,
   Card,
   CardContent,
   Typography,
@@ -43,6 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 export const Viewer: React.FC = observer(() => {
   const classes = useStyles();
+  const theme = useTheme();
   const { gltfStore, sceneStore } = useStores();
   const {
     gltf,
@@ -84,7 +86,10 @@ export const Viewer: React.FC = observer(() => {
     }
 
     debug("Create viewer");
-    const viewer = new PlayCanvasViewer(canvasRef.current);
+    const viewer = new PlayCanvasViewer(canvasRef.current, {
+      width: theme.cameraPreviewWidth,
+      height: theme.cameraPreviewHeight,
+    });
 
     runAsync(async () => {
       debug("Configure viewer start");
@@ -99,7 +104,7 @@ export const Viewer: React.FC = observer(() => {
       window.viewer = undefined;
       viewer.destroy();
     };
-  }, [runAsync]);
+  }, [runAsync, theme.cameraPreviewHeight, theme.cameraPreviewWidth]);
 
   // SceneStore: Update scene list
   useEffect(() => {

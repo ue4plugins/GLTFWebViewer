@@ -19,7 +19,7 @@ export type GltfCamera = {
   id: number;
   name: string;
   orbit: boolean;
-  previewSource?: string;
+  previewSource: string;
 };
 
 export type GltfScene = {

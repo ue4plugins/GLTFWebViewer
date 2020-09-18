@@ -38,6 +38,11 @@ const waitForAnimationFrame = () =>
     requestAnimationFrame(() => resolve());
   });
 
+export type CameraPreviewSize = {
+  width: number;
+  height: number;
+};
+
 export class PlayCanvasViewer implements TestableViewer {
   private _app: pc.Application;
   private _activeCamera?: CameraEntity;
@@ -62,7 +67,10 @@ export class PlayCanvasViewer implements TestableViewer {
   private _sceneLoaded = false;
   private _gltfLoaded = false;
 
-  public constructor(public canvas: HTMLCanvasElement) {
+  public constructor(
+    public canvas: HTMLCanvasElement,
+    private _cameraPreviewSize: CameraPreviewSize,
+  ) {
     this._resizeCanvas = this._resizeCanvas.bind(this);
 
     this._app = this._createApp();
@@ -123,7 +131,7 @@ export class PlayCanvasViewer implements TestableViewer {
           id: index,
           name: camera.name,
           orbit: isOrbitCameraEntity(camera),
-          previewSource: this._cameraPreviews?.[index],
+          previewSource: this._cameraPreviews?.[index] ?? "",
         };
       }),
       hasBackdrops: scene.backdrops.length > 0,
@@ -228,7 +236,8 @@ export class PlayCanvasViewer implements TestableViewer {
 
     // Cameras are only shown in UI if there are more than one
     if (gltfScene.cameras.length > 1) {
-      await this._initCameraPreviews(gltfScene.cameras, 80, 80);
+      const { width, height } = this._cameraPreviewSize;
+      await this._initCameraPreviews(gltfScene.cameras, width * 2, height * 2);
     }
 
     if (gltfScene.variantSets.length > 0) {
