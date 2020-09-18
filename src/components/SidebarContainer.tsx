@@ -23,6 +23,9 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
     padding: theme.spacing(1),
   },
+  title: {
+    lineHeight: 1.4,
+  },
   body: {
     flex: "1 1 auto",
     overflow: "auto",
@@ -54,7 +57,9 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
             <ArrowBack />
           </IconButton>
         )}
-        <Typography variant="button">{title}</Typography>
+        <Typography className={classes.title} variant="button">
+          {title}
+        </Typography>
       </div>
       <div className={classes.body}>{children}</div>
     </div>
