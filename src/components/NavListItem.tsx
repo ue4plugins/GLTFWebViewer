@@ -8,7 +8,8 @@ const useStyles = makeStyles(theme => {
     item: {
       display: "flex",
       alignItems: "center",
-      padding: theme.spacing(1, 0, 1, 2),
+      padding: theme.spacing(0, 0, 0, 2),
+      height: 40,
       boxShadow: borderBoxShadow,
       cursor: "pointer",
       fontSize: 14,

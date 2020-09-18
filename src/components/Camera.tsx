@@ -8,8 +8,8 @@ const useStyles = makeStyles(theme => {
 
   return {
     root: {
-      marginBottom: theme.spacing(2),
-      marginRight: theme.spacing(2),
+      marginBottom: theme.spacing(1.5),
+      marginRight: theme.spacing(1.5),
     },
     input: {
       position: "absolute",

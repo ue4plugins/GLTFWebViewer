@@ -14,8 +14,8 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "center",
     flex: `0 0 ${theme.topbarHeight}px`,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
     backgroundColor: theme.palette.grey[700],
   },
   backButton: {

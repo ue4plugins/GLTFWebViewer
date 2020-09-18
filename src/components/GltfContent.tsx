@@ -15,12 +15,12 @@ const useStyles = makeStyles(theme => ({
   },
   variantSets: {
     flex: "1 1 auto",
-    padding: theme.spacing(2),
+    padding: theme.spacing(2, 3),
     overflow: "auto",
   },
   meta: {
     flex: "0 0 auto",
-    padding: theme.spacing(2, 2, 3, 2),
+    padding: theme.spacing(3),
     "& a": {
       color: theme.palette.common.white,
     },

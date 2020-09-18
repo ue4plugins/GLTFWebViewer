@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     textAlign: "center",
   },
   content: {
-    margin: theme.spacing(2),
+    padding: theme.spacing(2, 3),
   },
 }));
 

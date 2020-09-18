@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     zIndex: 2,
     position: "absolute",
-    marginBottom: -theme.spacing(2), // Compensates for Camera margin
+    marginBottom: -theme.spacing(1.5), // Compensates for Camera margin
     bottom: theme.spacing(2),
     left: theme.spacing(2),
     display: "flex",
