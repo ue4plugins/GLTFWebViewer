@@ -5,7 +5,7 @@ import { ReactComponent as Rotate } from "../icons/Rotate.svg";
 
 const useStyles = makeStyles(theme => {
   const dropShadow =
-    "0px 15px 25px rgba(0, 0, 0, 0.15), 0px 5px 10px rgba(0, 0, 0, 0.05);";
+    "0px 15px 25px rgba(0, 0, 0, 0.15), 0px 5px 10px rgba(0, 0, 0, 0.05)";
 
   return {
     root: {
@@ -29,12 +29,15 @@ const useStyles = makeStyles(theme => {
       boxShadow: dropShadow,
       cursor: "pointer",
       overflow: "hidden",
+      transition: theme.transitions.create(["box-shadow"], {
+        duration: theme.transitions.duration.short,
+      }),
       "&:hover:not($buttonChecked)": {
-        boxShadow: `0 0 0 2px ${theme.palette.grey[300]} inset, ` + dropShadow,
+        boxShadow: dropShadow + `, 0 0 0 2px ${theme.palette.grey[300]} inset`,
       },
     },
     buttonChecked: {
-      boxShadow: `0 0 0 2px ${theme.palette.primary.main} inset, ` + dropShadow,
+      boxShadow: dropShadow + `, 0 0 0 2px ${theme.palette.primary.main} inset`,
     },
     orbitIcon: {
       position: "absolute",

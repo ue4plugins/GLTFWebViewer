@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => {
 
   return {
     root: {
+      userSelect: "none",
       "&:not(:last-child)": {
         marginBottom: theme.spacing(1),
       },
@@ -50,6 +51,9 @@ const useStyles = makeStyles(theme => {
       boxShadow: `0 0 0 1px ${borderColor} inset`,
       cursor: "pointer",
       overflow: "hidden",
+      transition: theme.transitions.create(["background-color", "box-shadow"], {
+        duration: theme.transitions.duration.short,
+      }),
       "&:hover": {
         backgroundColor: hoverBackgroundColor,
         "&:not($buttonChecked)": {
@@ -81,6 +85,9 @@ const useStyles = makeStyles(theme => {
       borderTop: `28px solid ${borderColor}`,
       borderRight: "28px solid transparent",
       color: checkColor,
+      transition: theme.transitions.create(["color", "border-color"], {
+        duration: theme.transitions.duration.short,
+      }),
       content: "''",
     },
     checkboxChecked: {
