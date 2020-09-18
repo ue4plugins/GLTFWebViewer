@@ -59,6 +59,9 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     height: `calc(100% - ${theme.topbarHeight}px)`,
   },
+  mainFullheight: {
+    height: "100%",
+  },
   viewport: {
     position: "relative",
     flexGrow: 1,
@@ -96,16 +99,25 @@ export const Root: React.FC = observer(() => {
     <>
       <CssBaseline />
       <div className={classes.root}>
-        <header className={classes.topbar}>
-          <img className={classes.topbarLogo} src={logo} alt="Logo" />
-          <Typography className={classes.topbarTitle} variant="body2">
-            Epic Games glTF Viewer
-          </Typography>
-          <div className={classes.topbarToggle}>
-            <SidebarToggle open={isSidebarOpen} toggleOpen={setIsSidebarOpen} />
-          </div>
-        </header>
-        <main className={classes.main}>
+        {showUI && (
+          <header className={classes.topbar}>
+            <img className={classes.topbarLogo} src={logo} alt="Logo" />
+            <Typography className={classes.topbarTitle} variant="body2">
+              Epic Games glTF Viewer
+            </Typography>
+            <div className={classes.topbarToggle}>
+              <SidebarToggle
+                open={isSidebarOpen}
+                toggleOpen={setIsSidebarOpen}
+              />
+            </div>
+          </header>
+        )}
+        <main
+          className={clsx(classes.main, {
+            [classes.mainFullheight]: !showUI,
+          })}
+        >
           <div
             className={clsx(classes.viewport, {
               [classes.viewportFullscreen]: !isSidebarOpen,
