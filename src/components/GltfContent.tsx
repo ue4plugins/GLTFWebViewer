@@ -58,7 +58,7 @@ export const GltfContent: React.FC<GltfContentProps> = ({
             ))}
           </NavList>
         ) : (
-          <>This file has no configurable options</>
+          <Typography>This file has no configurable options</Typography>
         )}
       </div>
       {(gltf.description || gltf.creator) && (

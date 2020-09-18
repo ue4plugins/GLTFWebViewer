@@ -84,11 +84,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
   if (isError) {
     return (
       <SidebarContainer>
-        <Typography
-          className={classes.content}
-          variant="body2"
-          color="textSecondary"
-        >
+        <Typography className={classes.content}>
           Something went wrong when loading glTF files. Check console for more
           details.
         </Typography>
@@ -100,11 +96,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
     case "none":
       return (
         <SidebarContainer>
-          <Typography
-            className={classes.content}
-            variant="body2"
-            color="textSecondary"
-          >
+          <Typography className={classes.content}>
             Drag and drop a glTF file to start
           </Typography>
         </SidebarContainer>

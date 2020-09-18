@@ -209,7 +209,7 @@ export const Viewer: React.FC = observer(() => {
               <Typography gutterBottom variant="h5">
                 Error
               </Typography>
-              <Typography variant="body2" color="textSecondary">
+              <Typography>
                 Something went wrong when loading the asset. Check console for
                 more details.
               </Typography>

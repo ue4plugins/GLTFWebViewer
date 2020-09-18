@@ -23,9 +23,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
     padding: theme.spacing(1),
   },
-  title: {
-    lineHeight: 1.4,
-  },
+  title: {},
   body: {
     flex: "1 1 auto",
     overflow: "auto",

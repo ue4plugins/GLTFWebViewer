@@ -85,7 +85,7 @@ const useStyles = makeStyles(theme => {
     },
     checkboxIcon: {
       position: "absolute",
-      top: -32,
+      top: -30,
       left: 4,
       width: 10,
       "& path": {
@@ -156,7 +156,7 @@ export const Variant: React.FC<VariantProps> = ({
         })}
       >
         {image && <img className={classes.image} src={image} alt="Variant" />}
-        <Typography className={classes.label} component="div" variant="body2">
+        <Typography className={classes.label} component="div">
           {label}
         </Typography>
         <div

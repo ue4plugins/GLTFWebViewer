@@ -8,9 +8,10 @@ const useStyles = makeStyles(theme => {
     item: {
       display: "flex",
       alignItems: "center",
-      cursor: "pointer",
       padding: theme.spacing(1, 0, 1, 2),
       boxShadow: borderBoxShadow,
+      cursor: "pointer",
+      fontSize: 14,
       "&:hover": {
         boxShadow:
           `2px 0 0 0 ${theme.palette.primary.main} inset, ` + borderBoxShadow,

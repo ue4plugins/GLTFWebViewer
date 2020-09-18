@@ -69,6 +69,7 @@ export const theme = createMuiTheme({
     fontWeightMedium: 600,
     fontWeightRegular: 400,
     fontWeightLight: 300,
+    fontSize: 12,
   },
   topbarHeight: 52,
   sidebarWidth: 340,
