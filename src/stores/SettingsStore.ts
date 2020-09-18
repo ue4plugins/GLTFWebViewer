@@ -4,6 +4,7 @@ export class SettingsStore {
   public constructor() {
     const urlParams = new URLSearchParams(window.location.search);
     this.showUI = !urlParams.get("hideUI");
+    this.showFpsMeter = !!urlParams.get("showFpsMeter");
   }
 
   @observable
