@@ -172,7 +172,7 @@ export class PlayCanvasViewer implements TestableViewer {
         preserveDrawingBuffer: false,
         antialias: true,
         alpha: true,
-        preferWebGl2: false,
+        preferWebGl2: true,
         use3dPhysics: false,
       },
     });
