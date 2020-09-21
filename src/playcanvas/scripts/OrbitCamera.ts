@@ -346,7 +346,7 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _buildAabb(entity: pc.Entity) {
-    const modelsAabb = new pc.BoundingBox();
+    const modelsAabb = new pc.BoundingBox(new pc.Vec3(), new pc.Vec3());
     let modelsAdded = 0;
 
     if (entity.tags.has("ignoreBoundingBox")) {
