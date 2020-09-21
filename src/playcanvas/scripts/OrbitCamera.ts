@@ -187,6 +187,13 @@ export class OrbitCamera extends pc.ScriptType {
 
     this._cameraComponent = camera;
 
+    // If a focus-entity is already set, ensure that the camera is pointing towards it
+    // before calculating yaw, pitch and target-distance
+    if (this._focusEntity) {
+      this._pivotPoint.copy(this._buildAabb(this._focusEntity).center);
+      this.entity.lookAt(this._pivotPoint, pc.Vec3.UP);
+    }
+
     // Calculate the camera euler angle rotation around x and y axes
     // This allows us to place the camera at a particular rotation to begin with in the scene
     const cameraQuat = this.entity.getLocalRotation();
