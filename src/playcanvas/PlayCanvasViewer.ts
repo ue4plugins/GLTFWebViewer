@@ -146,9 +146,9 @@ export class PlayCanvasViewer implements TestableViewer {
       app.resizeCanvas(
         aspectRatio > sizeElemAspectRatio
           ? clientWidth
-          : clientHeight / aspectRatio,
+          : clientHeight * aspectRatio,
         aspectRatio > sizeElemAspectRatio
-          ? clientWidth * aspectRatio
+          ? clientWidth / aspectRatio
           : clientHeight,
       );
     } else {
