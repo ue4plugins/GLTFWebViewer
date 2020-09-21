@@ -189,7 +189,7 @@ export class OrbitCamera extends pc.ScriptType {
 
     // Calculate the camera euler angle rotation around x and y axes
     // This allows us to place the camera at a particular rotation to begin with in the scene
-    const cameraQuat = this.entity.getRotation();
+    const cameraQuat = this.entity.getLocalRotation();
 
     // Preset the camera
     this._targetYaw = this._yaw = this._calcYaw(cameraQuat);
@@ -281,7 +281,7 @@ export class OrbitCamera extends pc.ScriptType {
 
     this.pivotPoint.copy(lookAtPoint);
 
-    const cameraQuat = this.entity.getRotation();
+    const cameraQuat = this.entity.getLocalRotation();
     this.yaw = this._calcYaw(cameraQuat);
     this.pitch = this._calcPitch(cameraQuat, this.yaw);
 
