@@ -190,7 +190,15 @@ export class OrbitCamera extends pc.ScriptType {
     // If a focus-entity is already set, ensure that the camera is pointing towards it
     // before calculating yaw, pitch and target-distance
     if (this._focusEntity) {
-      this._pivotPoint.copy(this._buildAabb(this._focusEntity).center);
+      const aabb = this._buildAabb(this._focusEntity);
+
+      // Use the position of the focus-entity as focus-point if
+      // no models were found to construct an aabb from.
+      if (aabb.halfExtents.equals(pc.Vec3.ZERO)) {
+        aabb.center.copy(this._focusEntity.getPosition());
+      }
+
+      this._pivotPoint.copy(aabb.center);
       this.entity.lookAt(this._pivotPoint, pc.Vec3.UP);
     }
 
