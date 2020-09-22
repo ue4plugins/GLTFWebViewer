@@ -146,9 +146,9 @@ export class PlayCanvasViewer implements TestableViewer {
       app.resizeCanvas(
         aspectRatio > sizeElemAspectRatio
           ? clientWidth
-          : clientHeight / aspectRatio,
+          : clientHeight * aspectRatio,
         aspectRatio > sizeElemAspectRatio
-          ? clientWidth * aspectRatio
+          ? clientWidth / aspectRatio
           : clientHeight,
       );
     } else {
@@ -271,7 +271,6 @@ export class PlayCanvasViewer implements TestableViewer {
       cameraComponent.enabled = true;
       if (orbitCamera) {
         orbitCamera.enabled = true;
-        this._focusOrbitCamera(orbitCamera);
       }
 
       // Resize canvas to get correct aspect ratio given
@@ -516,9 +515,9 @@ export class PlayCanvasViewer implements TestableViewer {
       camera => camera.camera.enabled,
     );
 
-    // Set focus for orbit cameras
-    if (this._activeCamera && isOrbitCameraEntity(this._activeCamera)) {
-      this._focusOrbitCamera(this._activeCamera.script[orbitCameraScriptName]);
+    // Focus the camera, but only if it's the default (orbit-)camera
+    if (this._activeCamera === this._defaultCamera) {
+      this._focusOrbitCamera(this._defaultCamera.script[orbitCameraScriptName]);
     }
 
     // Resize since new camera aspect ratio might affect canvas size
