@@ -32,6 +32,13 @@ declare namespace pc {
   interface GraphicsDevice {
     gl: WebGLRenderingContext;
     setFramebuffer(frameBuffer: number): void;
+    readPixels(
+      x: number,
+      y: number,
+      w: number,
+      h: number,
+      pixels: Uint8Array,
+    ): void;
   }
 
   interface Vec4 {
@@ -64,6 +71,34 @@ declare namespace pc {
         ind?: number;
       },
     ): InstanceType<T>;
+  }
+
+  interface InstanceList {
+    opaqueMeshInstances: pc.MeshInstance[];
+    transparentMeshInstances: pc.MeshInstance[];
+
+    /** Arrays of visible instances for each camera */
+    visibleOpaque: VisibleInstanceList[];
+
+    /** Arrays of visible instances for each camera */
+    visibleTransparent: VisibleInstanceList[];
+  }
+
+  interface VisibleInstanceList {
+    list: pc.MeshInstance[];
+  }
+
+  interface Layer {
+    incrementCounter(): void;
+    decrementCounter(): void;
+
+    instances: pc.InstanceList;
+  }
+
+  interface Picker {
+    app: pc.Application;
+    device: pc.GraphicsDevice;
+    layer: pc.Layer;
   }
 
   const programlib: any;
