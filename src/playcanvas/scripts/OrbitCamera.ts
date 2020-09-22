@@ -204,14 +204,14 @@ export class OrbitCamera extends pc.ScriptType {
 
     // Calculate the camera euler angle rotation around x and y axes
     // This allows us to place the camera at a particular rotation to begin with in the scene
-    const cameraQuat = this.entity.getLocalRotation();
+    const cameraQuat = this.entity.getRotation();
 
     // Preset the camera
     this._targetYaw = this._yaw = this._calcYaw(cameraQuat);
     this._targetPitch = this._pitch = this._clampPitchAngle(
       this._calcPitch(cameraQuat, this._yaw),
     );
-    this.entity.setLocalEulerAngles(this._pitch, this._yaw, 0);
+    this.entity.setEulerAngles(this._pitch, this._yaw, 0);
 
     const distanceBetween = new pc.Vec3();
     distanceBetween.sub2(this.entity.getPosition(), this._pivotPoint);
@@ -296,7 +296,7 @@ export class OrbitCamera extends pc.ScriptType {
 
     this.pivotPoint.copy(lookAtPoint);
 
-    const cameraQuat = this.entity.getLocalRotation();
+    const cameraQuat = this.entity.getRotation();
     this.yaw = this._calcYaw(cameraQuat);
     this.pitch = this._calcPitch(cameraQuat, this.yaw);
 
@@ -338,7 +338,7 @@ export class OrbitCamera extends pc.ScriptType {
   private _updatePosition() {
     // Work out the camera position based on the pivot point, pitch, yaw and distance
     this.entity.setLocalPosition(0, 0, 0);
-    this.entity.setLocalEulerAngles(this._pitch, this._yaw, 0);
+    this.entity.setEulerAngles(this._pitch, this._yaw, 0);
 
     const position = this.entity.getPosition();
     position.copy(this.entity.forward);
