@@ -33,6 +33,10 @@ export class OrbitCamera extends pc.ScriptType {
    */
   public distanceSensitivity = 0.5;
   /**
+   * How long time (in seconds) to use for dolly-transitions. Lower is faster.
+   */
+  public dollyDuration = 0.2;
+  /**
    * Factor to use when calculating near clip based on the camera distance from a focused object.
    */
   public nearClipFactor?: number;
@@ -438,7 +442,7 @@ export class OrbitCamera extends pc.ScriptType {
     const targetValue = this.distanceSensitivity * (this.distance * 0.1);
 
     const start = Date.now();
-    const duration = 200;
+    const duration = this.dollyDuration * 1000;
     const smoothZoom = () => {
       const elapsed = Date.now() - start;
       const nextValue =
