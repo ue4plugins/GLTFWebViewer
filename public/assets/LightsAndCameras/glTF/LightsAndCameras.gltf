@@ -267,7 +267,11 @@
           "maxDistance": 8,
           "minDistance": 3,
           "maxAngle": 45,
-          "minAngle": -45
+          "minAngle": -45,
+          "distanceSensitivity": 0.5,
+          "orbitSensitivity": 0.3, 
+          "orbitInertia": 0.07,
+          "dollyDuration": 0.2
         }
       }
     },
@@ -283,10 +287,14 @@
         "EPIC_orbital_cameras": {
           "name": "OrbitalPerspective1",
           "focus": 8,
-          "maxDistance": 0,
-          "minDistance": 0,
+          "maxDistance": 5,
+          "minDistance": 5,
           "maxAngle": 45,
-          "minAngle": -45
+          "minAngle": -45,
+          "distanceSensitivity": 0.5,
+          "orbitSensitivity": 0.3, 
+          "orbitInertia": 0.07,
+          "dollyDuration": 0.2
         }
       }
     }
