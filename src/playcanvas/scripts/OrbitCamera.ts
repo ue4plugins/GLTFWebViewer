@@ -194,7 +194,7 @@ export class OrbitCamera extends pc.ScriptType {
     });
   }
 
-  public update(dt: number) {
+  public postUpdate(dt: number) {
     // Add inertia, if any
     const t =
       this.inertiaFactor === 0 ? 1 : Math.min(dt / this.inertiaFactor, 1);
