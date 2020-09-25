@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 
-const useStyles = makeStyles(_theme => {
+const useStyles = makeStyles(theme => {
   const layerWidth = 18;
   const layerHeight = 2;
   const layerSpacing = 4;
@@ -15,9 +15,9 @@ const useStyles = makeStyles(_theme => {
     height: layerHeight,
     backgroundColor: "currentColor",
     borderRadius: borderRadius,
-    transitionProperty: "transform, opacity",
-    transitionDuration: "150ms",
-    transitionTimingFunction: "ease",
+    transition: theme.transitions.create(["transform", "opacity"], {
+      duration: theme.transitions.duration.shorter,
+    }),
   };
 
   return {
@@ -50,7 +50,7 @@ const useStyles = makeStyles(_theme => {
         layerHeight}px, 0) rotate(45deg)`,
       "&::before": {
         transform: `rotate(-45deg) translate3d(${layerWidth /
-          -7}px, ${layerSpacing * -1}, 0)`,
+          -7}px, ${layerSpacing * -1}px, 0)`,
         opacity: 0,
       },
       "&::after": {
