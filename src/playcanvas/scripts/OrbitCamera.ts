@@ -60,8 +60,9 @@ export class OrbitCamera extends pc.ScriptType {
   private _targetDistance = 0;
   private _targetPitch = 0;
   private _targetYaw = 0;
-  private _pivotPoint = new pc.Vec3();
   private _focusEntity?: pc.Entity;
+  private _focusOffset = new pc.Vec3();
+  private _focusPosition = new pc.Vec3();
   private _lookButtonDown = false;
   private _panButtonDown = false;
   private _lastMousePos = new pc.Vec2();
@@ -163,23 +164,12 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   /**
-   * Property to get and set the world position of the pivot point that the camera orbits around.
+   * Property to get and set the entity that the camera orbits around.
    */
-  public get pivotPoint() {
-    return this._pivotPoint;
+  public get focusEntity(): pc.Entity {
+    return this._focusEntity ?? this.app.root;
   }
-  public set pivotPoint(value: pc.Vec3) {
-    this._pivotPoint.copy(value);
-  }
-
-  /**
-   * Property to get and set the focus entity that the camera orbits around. Used if this.focus() is
-   * called with empty argument.
-   */
-  public get focusEntity(): pc.Entity | undefined {
-    return this._focusEntity;
-  }
-  public set focusEntity(value: pc.Entity | undefined) {
+  public set focusEntity(value: pc.Entity) {
     this._focusEntity = value;
   }
 
@@ -191,37 +181,9 @@ export class OrbitCamera extends pc.ScriptType {
 
     this._cameraComponent = camera;
 
-    // If a focus-entity is already set, ensure that the camera is pointing towards it
-    // before calculating yaw, pitch and target-distance
-    if (this._focusEntity) {
-      const aabb = this._buildAabb(this._focusEntity);
-
-      // Use the position of the focus-entity as focus-point if
-      // no models were found to construct an aabb from.
-      if (aabb.halfExtents.equals(pc.Vec3.ZERO)) {
-        aabb.center.copy(this._focusEntity.getPosition());
-      }
-
-      this._pivotPoint.copy(aabb.center);
-      this.entity.lookAt(this._pivotPoint, pc.Vec3.UP);
-    }
-
-    // Calculate the camera euler angle rotation around x and y axes
-    // This allows us to place the camera at a particular rotation to begin with in the scene
-    const cameraQuat = this.entity.getRotation();
-
-    // Preset the camera
-    this._targetYaw = this._yaw = this._calcYaw(cameraQuat);
-    this._targetPitch = this._pitch = this._clampPitchAngle(
-      this._calcPitch(cameraQuat, this._yaw),
-    );
-    this.entity.setEulerAngles(this._pitch, this._yaw, 0);
-
-    const distanceBetween = new pc.Vec3();
-    distanceBetween.sub2(this.entity.getPosition(), this._pivotPoint);
-    this._targetDistance = this._distance = this._clampDistance(
-      distanceBetween.length(),
-    );
+    this.focus(this._focusEntity, {
+      lookAtEntity: true,
+    });
 
     this._setUpMouseEvents();
     this._setUpTouchEvents();
@@ -240,72 +202,85 @@ export class OrbitCamera extends pc.ScriptType {
     this._yaw = pc.math.lerp(this._yaw, this._targetYaw, t);
     this._pitch = pc.math.lerp(this._pitch, this._targetPitch, t);
 
+    this._updateFocusPosition();
     this._updatePosition();
   }
 
   /**
-   * Moves the camera to look at an entity and all its children so they are all in the view.
-   * @param focusEntity
+   * Focuses on an entity.
+   * @param focusEntity         Entity to focus. If no entity is passed in, the scene-root will be used.
+   * @param options.frameModels Uses the center of the bounding-box as focus-point, and moves the camera to a suitable distance.
    */
-  public focus(focusEntity?: pc.Entity) {
-    if (focusEntity) {
-      this._focusEntity = focusEntity;
-    } else if (this._focusEntity) {
-      focusEntity = this._focusEntity;
-    } else {
-      throw new Error("No focusEntity is specified");
+  public focus(
+    focusEntity?: pc.Entity | null,
+    options?: {
+      frameModels?: boolean;
+      lookAtEntity?: boolean;
+      offset?: pc.Vec3;
+    },
+  ) {
+    this._focusEntity = focusEntity ?? this.app.root;
+    this._focusOffset.set(0, 0, 0);
+
+    if (options?.offset) {
+      this._focusOffset.add(options.offset);
     }
 
-    // Calculate an bounding box that encompasses all the models to frame in the camera view
-    const aabb = this._buildAabb(focusEntity);
-    const halfExtents = aabb.halfExtents;
+    let aabb: pc.BoundingBox | null = null;
 
-    let distance = Math.max(
-      halfExtents.x,
-      Math.max(halfExtents.y, halfExtents.z),
-    );
-    distance =
-      distance / Math.tan(0.5 * this._cameraComponent.fov * pc.math.DEG_TO_RAD);
-    distance = distance * 2;
+    if (options?.frameModels) {
+      aabb = this._buildAabb(this._focusEntity);
 
-    this.distance = distance;
+      if (aabb.halfExtents.lengthSq() > 0) {
+        this._focusOffset.add(aabb.center).sub(this._focusEntity.getPosition());
+      } else {
+        aabb = null;
+      }
+    }
+
+    this._updateFocusPosition();
+
+    if (aabb) {
+      this.distance = this._calcDistanceForBoundingBox(aabb);
+    } else {
+      this.distance = new pc.Vec3()
+        .sub2(this.entity.getPosition(), this._focusPosition)
+        .length();
+    }
+
+    if (options?.lookAtEntity) {
+      this.entity.lookAt(this._focusPosition, pc.Vec3.UP);
+
+      const cameraQuat = this.entity.getRotation();
+      this.yaw = this._calcYaw(cameraQuat);
+      this.pitch = this._calcPitch(cameraQuat, this.yaw);
+    }
 
     if (this.nearClipFactor) {
-      this._cameraComponent.nearClip = distance * this.nearClipFactor;
+      this._cameraComponent.nearClip = this.distance * this.nearClipFactor;
     }
     if (this.farClipFactor) {
-      this._cameraComponent.farClip = distance * this.farClipFactor;
+      this._cameraComponent.farClip = this.distance * this.farClipFactor;
     }
 
     this._removeInertia();
-
-    this._pivotPoint.copy(aabb.center);
+    this._updatePosition();
   }
 
   /**
    * Set the camera position to a world position and look at a world position.
-   * Useful if you have multiple viewing angles to swap between in a scene.
+   * Useful if you have multiple viewing angles to swap between in a scene.`
+   * Note that the scene-root will become the focused entity.
    * @param resetPoint
    * @param lookAtPoint
    */
   public resetAndLookAtPoint(resetPoint: pc.Vec3, lookAtPoint: pc.Vec3) {
-    this.pivotPoint.copy(lookAtPoint);
     this.entity.setPosition(resetPoint);
 
-    this.entity.lookAt(lookAtPoint, 0, 0);
-
-    const distance = new pc.Vec3();
-    distance.sub2(lookAtPoint, resetPoint);
-    this.distance = distance.length();
-
-    this.pivotPoint.copy(lookAtPoint);
-
-    const cameraQuat = this.entity.getRotation();
-    this.yaw = this._calcYaw(cameraQuat);
-    this.pitch = this._calcPitch(cameraQuat, this.yaw);
-
-    this._removeInertia();
-    this._updatePosition();
+    this.focus(null, {
+      lookAtEntity: true,
+      offset: lookAtPoint,
+    });
   }
 
   /**
@@ -315,8 +290,12 @@ export class OrbitCamera extends pc.ScriptType {
    * @param entity
    */
   public resetAndLookAtEntity(resetPoint: pc.Vec3, entity: pc.Entity) {
-    const modelsAabb = this._buildAabb(entity);
-    this.resetAndLookAtPoint(resetPoint, modelsAabb.center);
+    this.entity.setPosition(resetPoint);
+
+    this.focus(entity, {
+      frameModels: true,
+      lookAtEntity: true,
+    });
   }
 
   /**
@@ -339,6 +318,21 @@ export class OrbitCamera extends pc.ScriptType {
     this._removeInertia();
   }
 
+  private _calcDistanceForBoundingBox(aabb: pc.BoundingBox): number {
+    const halfExtents = aabb.halfExtents;
+    const fov = this._cameraComponent.fov;
+
+    // Determine the distance needed to frame the bounding-box in the camera view
+    let distance = Math.max(
+      halfExtents.x,
+      Math.max(halfExtents.y, halfExtents.z),
+    );
+    distance = distance / Math.tan(0.5 * fov * pc.math.DEG_TO_RAD);
+    distance = distance * 2;
+
+    return distance;
+  }
+
   private _updatePosition() {
     // Work out the camera position based on the pivot point, pitch, yaw and distance
     this.entity.setLocalPosition(0, 0, 0);
@@ -347,8 +341,14 @@ export class OrbitCamera extends pc.ScriptType {
     const position = this.entity.getPosition();
     position.copy(this.entity.forward);
     position.scale(-this._distance);
-    position.add(this.pivotPoint);
+    position.add(this._focusPosition);
     this.entity.setPosition(position);
+  }
+
+  private _updateFocusPosition() {
+    this._focusPosition
+      .copy(this.focusEntity.getPosition())
+      .add(this._focusOffset);
   }
 
   private _removeInertia() {
@@ -487,7 +487,7 @@ export class OrbitCamera extends pc.ScriptType {
 
     worldDiff.sub2(toWorldPoint, fromWorldPoint);
 
-    this.pivotPoint.add(worldDiff);
+    this._focusOffset.add(worldDiff);
   }
 
   private _onKeyDown(event: KeyDownEvent) {
@@ -496,7 +496,9 @@ export class OrbitCamera extends pc.ScriptType {
     }
     if (event.key === pc.KEY_SPACE && this._focusEntity) {
       this.reset(0, 0, 0);
-      this.focus(this._focusEntity);
+      this.focus(this._focusEntity, {
+        frameModels: true,
+      });
     }
   }
 
