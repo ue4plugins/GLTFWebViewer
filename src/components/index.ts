@@ -1,4 +1,5 @@
 export * from "./Camera";
+export * from "./ErrorMessage";
 export * from "./FpsMonitor";
 export * from "./GltfContent";
 export * from "./Hotspot";

@@ -123,7 +123,7 @@ export const Root: React.FC = observer(() => {
               [classes.viewportFullscreen]: !isSidebarOpen,
             })}
           >
-            <Viewer />
+            <Viewer isError={isError} />
             {showUI && <Cameras />}
             {showUI && showFpsMeter && (
               <Hidden xsDown>

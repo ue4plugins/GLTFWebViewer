@@ -7,9 +7,9 @@ import {
   makeStyles,
   useTheme,
   Card,
-  CardContent,
   Typography,
 } from "@material-ui/core";
+import clsx from "clsx";
 import { PlayCanvasViewer } from "../playcanvas";
 import { useStores } from "../stores";
 import {
@@ -17,6 +17,7 @@ import {
   usePreventableCameraInteractions,
   useGltfDrop,
 } from "../hooks";
+import { ErrorMessage } from "../components";
 
 const debug = Debug("Viewer");
 
@@ -36,13 +37,24 @@ const useStyles = makeStyles(theme => ({
     zIndex: 3,
     color: theme.palette.common.white,
     backgroundColor: "rgba(0, 0, 0, 0.9)",
+    transition:
+      theme.transitions.create(["opacity", "background-color"], {
+        duration: theme.transitions.duration.shorter,
+      }) + " !important",
+  },
+  backdropTransparent: {
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
   error: {
-    maxWidth: 300,
+    maxWidth: 320,
   },
 }));
 
-export const Viewer: React.FC = observer(() => {
+export type ViewerProps = {
+  isError?: boolean;
+};
+
+export const Viewer: React.FC<ViewerProps> = observer(({ isError = false }) => {
   const classes = useStyles();
   const theme = useTheme();
   const { gltfStore, sceneStore } = useStores();
@@ -72,8 +84,8 @@ export const Viewer: React.FC = observer(() => {
     runAsync,
   ] = useAsyncWithLoadingAndErrorHandling();
 
-  const showBackdrop =
-    isLoading || hasLoadError || isDragActive || hasDropError;
+  const hasError = hasLoadError || hasDropError || isError;
+  const showBackdrop = isLoading || isDragActive || hasError;
 
   const [setPreventInteraction] = usePreventableCameraInteractions(
     showBackdrop,
@@ -201,24 +213,29 @@ export const Viewer: React.FC = observer(() => {
       <div className={classes.canvasWrapper}>
         <canvas ref={canvasRef} />
       </div>
-      <Backdrop className={classes.backdrop} open={showBackdrop}>
+      <Backdrop
+        className={clsx(classes.backdrop, {
+          [classes.backdropTransparent]: !(isDragActive || isLoading),
+        })}
+        open={showBackdrop}
+      >
         {isDragActive ? (
-          <Typography variant="h5" color="inherit">
+          <Typography variant="h6">
             Drop glTF and accompanying assets here
           </Typography>
         ) : isLoading ? (
           <CircularProgress />
-        ) : hasDropError || hasLoadError ? (
+        ) : hasError ? (
           <Card className={classes.error}>
-            <CardContent>
-              <Typography gutterBottom variant="h5">
-                Error
-              </Typography>
-              <Typography>
-                Something went wrong when loading the asset. Check console for
-                more details.
-              </Typography>
-            </CardContent>
+            <ErrorMessage
+              type="unexpected"
+              overline="Oops!"
+              title="Unexpected issue"
+            >
+              We tried our best but something went wrong when loading{" "}
+              {isError ? "assets" : "the asset"}. Check console for more
+              details.
+            </ErrorMessage>
           </Card>
         ) : null}
       </Backdrop>

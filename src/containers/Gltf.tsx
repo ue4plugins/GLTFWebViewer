@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import {
   GltfContent,
@@ -8,13 +8,14 @@ import {
   VariantSet as VariantSetComponent,
   NavList,
   NavListItem,
+  ErrorMessage,
 } from "../components";
 import { useStores } from "../stores";
 import { VariantSet } from "../variants";
 
 const useStyles = makeStyles(theme => ({
   loading: {
-    paddingTop: theme.spacing(2),
+    paddingTop: theme.spacing(8),
     textAlign: "center",
   },
   content: {
@@ -82,28 +83,21 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
   }
 
   if (isError) {
-    return (
-      <SidebarContainer>
-        <Typography className={classes.content}>
-          Something went wrong when loading glTF files. Check console for more
-          details.
-        </Typography>
-      </SidebarContainer>
-    );
+    return <SidebarContainer></SidebarContainer>;
   }
 
   switch (view) {
     case "none":
       return (
         <SidebarContainer>
-          <Typography className={classes.content}>
-            Drag and drop a glTF file to start
-          </Typography>
+          <ErrorMessage type="empty" overline="Empty" title="No scenes">
+            Drag and drop a glTF file to start.
+          </ErrorMessage>
         </SidebarContainer>
       );
     case "gltf-list":
       return (
-        <SidebarContainer title="Select file">
+        <SidebarContainer title="Select scene">
           <div className={classes.content}>
             <NavList>
               {gltfs.map(gltf => (

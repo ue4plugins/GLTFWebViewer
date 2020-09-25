@@ -5,6 +5,7 @@ import { VariantSet } from "../variants";
 import { GltfSource } from "../types";
 import { NavList } from "./NavList";
 import { NavListItem } from "./NavListItem";
+import { ErrorMessage } from "./ErrorMessage";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -58,7 +59,9 @@ export const GltfContent: React.FC<GltfContentProps> = ({
             ))}
           </NavList>
         ) : (
-          <Typography>This file has no configurable options</Typography>
+          <ErrorMessage type="empty" overline="Empty" title="No options">
+            This scene does not contain any configurable objects.
+          </ErrorMessage>
         )}
       </div>
       {(gltf.description || gltf.creator) && (
