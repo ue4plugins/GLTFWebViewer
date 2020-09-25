@@ -81,5 +81,5 @@ export const theme = createMuiTheme({
   sidebarWidth: 340,
   cameraPreviewWidth: 96,
   cameraPreviewHeight: 60,
-  listAnimationDelay: 50,
+  listAnimationDelay: 25,
 });
