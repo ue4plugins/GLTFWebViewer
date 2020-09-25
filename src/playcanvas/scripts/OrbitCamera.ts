@@ -231,10 +231,8 @@ export class OrbitCamera extends pc.ScriptType {
     if (options?.frameModels) {
       aabb = this._buildAabb(this._focusEntity);
 
-      if (aabb.halfExtents.lengthSq() > 0) {
+      if (aabb) {
         this._focusOffset.add(aabb.center).sub(this._focusEntity.getPosition());
-      } else {
-        aabb = null;
       }
     }
 
@@ -357,9 +355,8 @@ export class OrbitCamera extends pc.ScriptType {
     this._distance = this._targetDistance;
   }
 
-  private _buildAabb(entity: pc.Entity) {
-    const modelsAabb = new pc.BoundingBox(new pc.Vec3(), new pc.Vec3());
-    let modelsAdded = 0;
+  private _buildAabb(entity: pc.Entity): pc.BoundingBox | null {
+    let modelsAabb: pc.BoundingBox | null = null;
 
     if (entity.tags.has("ignoreBoundingBox")) {
       return modelsAabb;
@@ -368,25 +365,25 @@ export class OrbitCamera extends pc.ScriptType {
     if (entity.model) {
       const mi = entity.model.meshInstances;
       for (let i = 0; i < mi.length; i += 1) {
-        if (modelsAdded === 0) {
-          modelsAabb.copy(mi[i].aabb);
+        if (!modelsAabb) {
+          modelsAabb = mi[i].aabb.clone();
         } else {
           modelsAabb.add(mi[i].aabb);
         }
-
-        modelsAdded += 1;
       }
     }
 
     for (let i = 0; i < entity.children.length; i += 1) {
       const childAabb = this._buildAabb(entity.children[i] as pc.Entity);
-      if (modelsAdded === 0) {
-        modelsAabb.copy(childAabb);
+      if (!childAabb) {
+        continue;
+      }
+
+      if (!modelsAabb) {
+        modelsAabb = childAabb.clone();
       } else {
         modelsAabb.add(childAabb);
       }
-
-      modelsAdded += 1;
     }
 
     return modelsAabb;
