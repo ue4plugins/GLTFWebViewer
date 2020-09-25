@@ -53,7 +53,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
       ? variantSets[selectedVariantSetId]
       : undefined;
 
-  let direction: "left" | "right" = "left";
+  let appearDirection: "left" | "right" = "left";
 
   useEffect(() => {
     if (variantSetManager) {
@@ -115,9 +115,13 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
         </SidebarContainer>
       );
     case "gltf-list":
-      direction = previousViewRef.current === "gltf-content" ? "right" : "left";
+      appearDirection =
+        previousViewRef.current === "gltf-content" ? "right" : "left";
       return (
-        <SidebarContainer title="Select scene">
+        <SidebarContainer
+          title="Select scene"
+          appearDirection={appearDirection}
+        >
           <div className={classes.content}>
             <NavList>
               {gltfs.map((gltf, index) => (
@@ -132,9 +136,9 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
                   }
                   appear={
                     <Appear
-                      direction={direction}
+                      direction={appearDirection}
                       delay={
-                        direction === "left"
+                        appearDirection === "left"
                           ? index * theme.listAnimationDelay
                           : (gltfs.length - 1 - index) *
                             theme.listAnimationDelay
@@ -150,13 +154,15 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
         </SidebarContainer>
       );
     case "gltf-content":
-      direction = previousViewRef.current === "variant-set" ? "right" : "left";
+      appearDirection =
+        previousViewRef.current === "variant-set" ? "right" : "left";
       if (!selectedGltf) {
         return null;
       }
       return (
         <SidebarContainer
           title={selectedGltf?.name}
+          appearDirection={appearDirection}
           onNavigateBack={
             gltfs.length > 1 ? () => setView("gltf-list") : undefined
           }
@@ -165,7 +171,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
             <GltfContent
               gltf={selectedGltf}
               variantSets={variantSets}
-              direction={direction}
+              appearDirection={appearDirection}
               onVariantSetSelect={showVariantSet}
             />
           ) : (

@@ -35,14 +35,14 @@ const useStyles = makeStyles(theme => ({
 export type GltfContentProps = {
   gltf: GltfSource;
   variantSets: VariantSet[];
-  direction: "left" | "right";
+  appearDirection: "left" | "right";
   onVariantSetSelect: (id: number) => void;
 };
 
 export const GltfContent: React.FC<GltfContentProps> = ({
   gltf,
   variantSets,
-  direction,
+  appearDirection,
   onVariantSetSelect,
 }) => {
   const classes = useStyles();
@@ -59,9 +59,9 @@ export const GltfContent: React.FC<GltfContentProps> = ({
                 onClick={() => onVariantSetSelect(variantSetId)}
                 appear={
                   <Appear
-                    direction={direction}
+                    direction={appearDirection}
                     delay={
-                      direction === "left"
+                      appearDirection === "left"
                         ? variantSetId * theme.listAnimationDelay
                         : (variantSets.length - 1 - variantSetId) *
                           theme.listAnimationDelay

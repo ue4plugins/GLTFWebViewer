@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, IconButton } from "@material-ui/core";
 import { ArrowBack } from "@material-ui/icons";
+import { Appear } from "./Appear";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,9 +19,17 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(3),
     backgroundColor: theme.palette.grey[700],
   },
-  backButton: {
-    marginLeft: -theme.spacing(1),
+  backButtonWrapper: {
+    display: "flex",
+    alignItems: "center",
+    marginLeft: -theme.spacing(3),
     marginRight: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    height: "100%",
+    backgroundColor: theme.palette.grey[700],
+    zIndex: 1,
+  },
+  backButton: {
     padding: theme.spacing(1),
   },
   title: {},
@@ -32,13 +41,15 @@ const useStyles = makeStyles(theme => ({
 
 export type SidebarContainerProps = {
   title?: string;
+  appearDirection?: "left" | "right";
   onNavigateBack?: () => void;
 };
 
 export const SidebarContainer: React.FC<SidebarContainerProps> = ({
-  title,
-  onNavigateBack,
   children,
+  title,
+  appearDirection = "left",
+  onNavigateBack,
 }) => {
   const classes = useStyles();
 
@@ -46,17 +57,21 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
     <div className={classes.root}>
       <div className={classes.header}>
         {onNavigateBack && (
-          <IconButton
-            className={classes.backButton}
-            size="small"
-            disableTouchRipple
-            onClick={onNavigateBack}
-          >
-            <ArrowBack />
-          </IconButton>
+          <div className={classes.backButtonWrapper}>
+            <IconButton
+              className={classes.backButton}
+              size="small"
+              disableTouchRipple
+              onClick={onNavigateBack}
+            >
+              <ArrowBack />
+            </IconButton>
+          </div>
         )}
         <Typography className={classes.title} variant="button">
-          {title}
+          <Appear key={title} direction={appearDirection}>
+            {title}
+          </Appear>
         </Typography>
       </div>
       <div className={classes.body}>{children}</div>
