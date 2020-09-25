@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CircularProgress, useTheme } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
@@ -24,6 +24,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+type View = "gltf-list" | "gltf-content" | "variant-set" | "none";
+
 export type GltfProps = {
   isLoading?: boolean;
   isError?: boolean;
@@ -42,15 +44,16 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
     showVariantSet,
     setGltf,
   } = gltfStore;
-  const [view, setView] = useState<
-    "gltf-list" | "gltf-content" | "variant-set" | "none"
-  >("gltf-list");
+  const [view, setView] = useState<View>("gltf-list");
+  const previousViewRef = useRef<View | undefined>();
   const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
 
   const variantSet =
     selectedVariantSetId !== undefined
       ? variantSets[selectedVariantSetId]
       : undefined;
+
+  let direction: "left" | "right" = "left";
 
   useEffect(() => {
     if (variantSetManager) {
@@ -61,6 +64,10 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
       setVariantSets([]);
     };
   }, [variantSetManager]);
+
+  useEffect(() => {
+    previousViewRef.current = view;
+  });
 
   useEffect(() => {
     setView(
@@ -108,6 +115,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
         </SidebarContainer>
       );
     case "gltf-list":
+      direction = previousViewRef.current === "gltf-content" ? "right" : "left";
       return (
         <SidebarContainer title="Select scene">
           <div className={classes.content}>
@@ -124,8 +132,13 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
                   }
                   appear={
                     <Appear
-                      direction="left"
-                      delay={index * theme.listAnimationDelay}
+                      direction={direction}
+                      delay={
+                        direction === "left"
+                          ? index * theme.listAnimationDelay
+                          : (gltfs.length - 1 - index) *
+                            theme.listAnimationDelay
+                      }
                     />
                   }
                 >
@@ -137,6 +150,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
         </SidebarContainer>
       );
     case "gltf-content":
+      direction = previousViewRef.current === "variant-set" ? "right" : "left";
       if (!selectedGltf) {
         return null;
       }
@@ -151,6 +165,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
             <GltfContent
               gltf={selectedGltf}
               variantSets={variantSets}
+              direction={direction}
               onVariantSetSelect={showVariantSet}
             />
           ) : (
