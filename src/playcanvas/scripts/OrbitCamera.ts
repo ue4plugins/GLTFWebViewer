@@ -60,7 +60,7 @@ export class OrbitCamera extends pc.ScriptType {
   private _targetDistance = 0;
   private _targetPitch = 0;
   private _targetYaw = 0;
-  private _focusEntity?: pc.Entity;
+  private _focusEntity: pc.Entity | null = null;
   private _focusOffset = new pc.Vec3();
   private _focusPosition = new pc.Vec3();
   private _lookButtonDown = false;
@@ -166,11 +166,18 @@ export class OrbitCamera extends pc.ScriptType {
   /**
    * Property to get and set the entity that the camera orbits around.
    */
-  public get focusEntity(): pc.Entity {
-    return this._focusEntity ?? this.app.root;
+  public get focusEntity(): pc.Entity | null {
+    return this._focusEntity;
   }
-  public set focusEntity(value: pc.Entity) {
-    this._focusEntity = value;
+  public set focusEntity(value: pc.Entity | null) {
+    // Sanitize in case an undefined value is passed somehow
+    value = value ?? null;
+
+    if (value !== this._focusEntity) {
+      this._focusEntity?.off("destroy", this._onEntityDestroyed, this);
+      this._focusEntity = value;
+      this._focusEntity?.on("destroy", this._onEntityDestroyed, this);
+    }
   }
 
   public initialize() {
@@ -212,7 +219,7 @@ export class OrbitCamera extends pc.ScriptType {
    * @param options.frameModels Uses the center of the bounding-box as focus-point, and moves the camera to a suitable distance.
    */
   public focus(
-    focusEntity?: pc.Entity | null,
+    focusEntity: pc.Entity | null,
     options: {
       frameModels?: boolean;
       lookAtEntity?: boolean;
@@ -221,13 +228,17 @@ export class OrbitCamera extends pc.ScriptType {
   ) {
     const { frameModels, lookAtEntity, offset } = options;
 
-    this._focusEntity = focusEntity ?? this.app.root;
+    if (!focusEntity) {
+      focusEntity = this.app.root;
+    }
+
+    this.focusEntity = focusEntity;
     this._focusOffset.copy(offset ?? pc.Vec3.ZERO);
 
-    const aabb = frameModels ? this._buildAabb(this._focusEntity) : null;
+    const aabb = frameModels ? this._buildAabb(focusEntity) : null;
     if (aabb) {
       // Add offset to keep center of bounding-box focused
-      this._focusOffset.add(aabb.center).sub(this._focusEntity.getPosition());
+      this._focusOffset.add(aabb.center).sub(focusEntity.getPosition());
     }
 
     this._updateFocusPosition();
@@ -306,6 +317,12 @@ export class OrbitCamera extends pc.ScriptType {
     this._removeInertia();
   }
 
+  private _onEntityDestroyed(entity: pc.Entity) {
+    if (this._focusEntity === entity) {
+      this._focusEntity = null;
+    }
+  }
+
   private _calcDistanceForBoundingBox(aabb: pc.BoundingBox): number {
     const halfExtents = aabb.halfExtents;
     const fov = this._cameraComponent.fov;
@@ -334,8 +351,12 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _updateFocusPosition() {
+    if (!this._focusEntity) {
+      return;
+    }
+
     this._focusPosition
-      .copy(this.focusEntity.getPosition())
+      .copy(this._focusEntity.getPosition())
       .add(this._focusOffset);
   }
 
