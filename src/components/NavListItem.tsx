@@ -1,6 +1,7 @@
-import React from "react";
+import React, { cloneElement } from "react";
 import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
+import { AppearProps } from "./Appear";
 
 const useStyles = makeStyles(theme => {
   const borderBoxShadow = `1px 0 0 0 ${theme.palette.grey[500]} inset`;
@@ -33,18 +34,20 @@ const useStyles = makeStyles(theme => {
 });
 
 export type NavListItemProps = {
+  appear?: React.ReactElement<AppearProps>;
   selected?: boolean;
   onClick?: () => void;
 };
 
 export const NavListItem: React.FC<NavListItemProps> = ({
   children,
+  appear,
   selected,
   onClick,
 }) => {
   const classes = useStyles();
 
-  return (
+  const content = (
     <li
       onClick={onClick}
       className={clsx(classes.item, {
@@ -54,4 +57,6 @@ export const NavListItem: React.FC<NavListItemProps> = ({
       {children}
     </li>
   );
+
+  return appear ? cloneElement(appear, { children: content }) : content;
 };

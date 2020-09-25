@@ -1,11 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, Divider } from "@material-ui/core";
+import { Typography, Divider, useTheme } from "@material-ui/core";
 import { VariantSet } from "../variants";
 import { GltfSource } from "../types";
 import { NavList } from "./NavList";
 import { NavListItem } from "./NavListItem";
 import { ErrorMessage } from "./ErrorMessage";
+import { Appear } from "./Appear";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,6 +44,7 @@ export const GltfContent: React.FC<GltfContentProps> = ({
   onVariantSetSelect,
 }) => {
   const classes = useStyles();
+  const theme = useTheme();
 
   return (
     <div className={classes.root}>
@@ -51,21 +53,29 @@ export const GltfContent: React.FC<GltfContentProps> = ({
           <NavList>
             {variantSets.map((variantSet, variantSetId) => (
               <NavListItem
-                onClick={() => onVariantSetSelect(variantSetId)}
                 key={variantSetId}
+                onClick={() => onVariantSetSelect(variantSetId)}
+                appear={
+                  <Appear
+                    direction="left"
+                    delay={variantSetId * theme.listAnimationDelay}
+                  />
+                }
               >
                 {variantSet.name}
               </NavListItem>
             ))}
           </NavList>
         ) : (
-          <ErrorMessage type="empty" overline="Empty" title="No options">
-            This scene does not contain any configurable objects.
-          </ErrorMessage>
+          <Appear duration={theme.transitions.duration.standard}>
+            <ErrorMessage type="empty" overline="Empty" title="No options">
+              This scene does not contain any configurable objects.
+            </ErrorMessage>
+          </Appear>
         )}
       </div>
       {(gltf.description || gltf.creator) && (
-        <>
+        <Appear direction="up">
           <Divider />
           <div className={classes.meta}>
             {gltf.description && (
@@ -97,7 +107,7 @@ export const GltfContent: React.FC<GltfContentProps> = ({
               </>
             )}
           </div>
-        </>
+        </Appear>
       )}
     </div>
   );

@@ -7,12 +7,14 @@ declare module "@material-ui/core/styles" {
     sidebarWidth: number;
     cameraPreviewWidth: number;
     cameraPreviewHeight: number;
+    listAnimationDelay: number;
   }
   interface ThemeOptions {
     topbarHeight: number;
     sidebarWidth: number;
     cameraPreviewWidth: number;
     cameraPreviewHeight: number;
+    listAnimationDelay: number;
   }
 }
 
@@ -79,4 +81,5 @@ export const theme = createMuiTheme({
   sidebarWidth: 340,
   cameraPreviewWidth: 96,
   cameraPreviewHeight: 60,
+  listAnimationDelay: 50,
 });

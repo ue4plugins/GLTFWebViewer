@@ -1,8 +1,9 @@
-import React from "react";
+import React, { cloneElement } from "react";
 import { makeStyles, useRadioGroup, Typography } from "@material-ui/core";
 import clsx from "clsx";
 import { ReactComponent as Check } from "../icons/Check.svg";
 import { mixColor } from "../utilities";
+import { AppearProps } from "./Appear";
 
 const useStyles = makeStyles(theme => {
   const backgroundColor = theme.palette.grey[700];
@@ -103,6 +104,7 @@ const useStyles = makeStyles(theme => {
 });
 
 export type VariantProps = {
+  appear?: React.ReactElement<AppearProps>;
   autoFocus?: boolean;
   checked?: boolean;
   id?: string;
@@ -115,6 +117,7 @@ export type VariantProps = {
 };
 
 export const Variant: React.FC<VariantProps> = ({
+  appear,
   autoFocus,
   checked: checkedProp,
   id,
@@ -143,6 +146,26 @@ export const Variant: React.FC<VariantProps> = ({
     }
   };
 
+  const content = (
+    <div
+      className={clsx(classes.button, {
+        [classes.buttonChecked]: checked,
+      })}
+    >
+      {image && <img className={classes.image} src={image} alt="Variant" />}
+      <Typography className={classes.label} component="div">
+        {label}
+      </Typography>
+      <div
+        className={clsx(classes.checkbox, {
+          [classes.checkboxChecked]: checked,
+        })}
+      >
+        <Check className={classes.checkboxIcon} />
+      </div>
+    </div>
+  );
+
   return (
     <label className={classes.root}>
       <input
@@ -156,23 +179,7 @@ export const Variant: React.FC<VariantProps> = ({
         type="radio"
         value={value}
       />
-      <div
-        className={clsx(classes.button, {
-          [classes.buttonChecked]: checked,
-        })}
-      >
-        {image && <img className={classes.image} src={image} alt="Variant" />}
-        <Typography className={classes.label} component="div">
-          {label}
-        </Typography>
-        <div
-          className={clsx(classes.checkbox, {
-            [classes.checkboxChecked]: checked,
-          })}
-        >
-          <Check className={classes.checkboxIcon} />
-        </div>
-      </div>
+      {appear ? cloneElement(appear, { children: content }) : content}
     </label>
   );
 };

@@ -8,5 +8,6 @@ export * from "./NavListItem";
 export * from "./Sidebar";
 export * from "./SidebarContainer";
 export * from "./SidebarToggle";
+export * from "./Appear";
 export * from "./Variant";
 export * from "./VariantSet";

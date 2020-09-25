@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, useTheme } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import {
   GltfContent,
@@ -9,13 +9,14 @@ import {
   NavList,
   NavListItem,
   ErrorMessage,
+  Appear,
 } from "../components";
 import { useStores } from "../stores";
 import { VariantSet } from "../variants";
 
 const useStyles = makeStyles(theme => ({
   loading: {
-    paddingTop: theme.spacing(8),
+    paddingTop: theme.spacing(10),
     textAlign: "center",
   },
   content: {
@@ -30,6 +31,7 @@ export type GltfProps = {
 
 export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
   const classes = useStyles();
+  const theme = useTheme();
   const { gltfStore } = useStores();
   const {
     gltfs,
@@ -72,12 +74,18 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
     );
   }, [selectedGltf, variantSet, gltfs]);
 
+  const Loading: React.FC = () => (
+    <div className={classes.loading}>
+      <Appear>
+        <CircularProgress />
+      </Appear>
+    </div>
+  );
+
   if (isLoading) {
     return (
       <SidebarContainer>
-        <div className={classes.loading}>
-          <CircularProgress />
-        </div>
+        <Loading />
       </SidebarContainer>
     );
   }
@@ -90,9 +98,13 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
     case "none":
       return (
         <SidebarContainer>
-          <ErrorMessage type="empty" overline="Empty" title="No scenes">
-            Drag and drop a glTF file to start.
-          </ErrorMessage>
+          <div className={classes.content}>
+            <Appear duration={theme.transitions.duration.standard}>
+              <ErrorMessage type="empty" overline="Empty" title="No scenes">
+                Drag and drop a glTF file to start.
+              </ErrorMessage>
+            </Appear>
+          </div>
         </SidebarContainer>
       );
     case "gltf-list":
@@ -100,7 +112,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
         <SidebarContainer title="Select scene">
           <div className={classes.content}>
             <NavList>
-              {gltfs.map(gltf => (
+              {gltfs.map((gltf, index) => (
                 <NavListItem
                   key={gltf.filePath}
                   onClick={() => {
@@ -109,6 +121,12 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
                   }}
                   selected={
                     selectedGltf && gltf.filePath === selectedGltf.filePath
+                  }
+                  appear={
+                    <Appear
+                      direction="left"
+                      delay={index * theme.listAnimationDelay}
+                    />
                   }
                 >
                   {gltf.name}
@@ -136,9 +154,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
               onVariantSetSelect={showVariantSet}
             />
           ) : (
-            <div className={classes.loading}>
-              <CircularProgress />
-            </div>
+            <Loading />
           )}
         </SidebarContainer>
       );
