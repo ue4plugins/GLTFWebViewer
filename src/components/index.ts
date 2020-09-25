@@ -2,6 +2,7 @@ export * from "./Camera";
 export * from "./ErrorMessage";
 export * from "./FpsMonitor";
 export * from "./GltfContent";
+export * from "./Hamburger";
 export * from "./Hotspot";
 export * from "./NavList";
 export * from "./NavListItem";
