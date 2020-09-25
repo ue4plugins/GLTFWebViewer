@@ -13,9 +13,6 @@ const useStyles = makeStyles(theme => {
       boxShadow: borderBoxShadow,
       cursor: "pointer",
       fontSize: 14,
-      transition: theme.transitions.create(["box-shadow"], {
-        duration: 100,
-      }),
       "&:hover": {
         boxShadow:
           `2px 0 0 0 ${theme.palette.primary.main} inset, ` + borderBoxShadow,
