@@ -187,6 +187,21 @@ export class OrbitCamera extends pc.ScriptType {
 
     this._cameraComponent = camera;
 
+    // If a focus-entity is already set, ensure that the camera is pointing towards it
+    // before calculating yaw, pitch and target-distance
+    if (this._focusEntity) {
+      const aabb = this._buildAabb(this._focusEntity);
+
+      // Use the position of the focus-entity as focus-point if
+      // no models were found to construct an aabb from.
+      if (aabb.halfExtents.equals(pc.Vec3.ZERO)) {
+        aabb.center.copy(this._focusEntity.getPosition());
+      }
+
+      this._pivotPoint.copy(aabb.center);
+      this.entity.lookAt(this._pivotPoint, pc.Vec3.UP);
+    }
+
     // Calculate the camera euler angle rotation around x and y axes
     // This allows us to place the camera at a particular rotation to begin with in the scene
     const cameraQuat = this.entity.getRotation();
@@ -196,7 +211,7 @@ export class OrbitCamera extends pc.ScriptType {
     this._targetPitch = this._pitch = this._clampPitchAngle(
       this._calcPitch(cameraQuat, this._yaw),
     );
-    this.entity.setLocalEulerAngles(this._pitch, this._yaw, 0);
+    this.entity.setEulerAngles(this._pitch, this._yaw, 0);
 
     const distanceBetween = new pc.Vec3();
     distanceBetween.sub2(this.entity.getPosition(), this._pivotPoint);
@@ -323,7 +338,7 @@ export class OrbitCamera extends pc.ScriptType {
   private _updatePosition() {
     // Work out the camera position based on the pivot point, pitch, yaw and distance
     this.entity.setLocalPosition(0, 0, 0);
-    this.entity.setLocalEulerAngles(this._pitch, this._yaw, 0);
+    this.entity.setEulerAngles(this._pitch, this._yaw, 0);
 
     const position = this.entity.getPosition();
     position.copy(this.entity.forward);
@@ -339,7 +354,7 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _buildAabb(entity: pc.Entity) {
-    const modelsAabb = new pc.BoundingBox();
+    const modelsAabb = new pc.BoundingBox(new pc.Vec3(), new pc.Vec3());
     let modelsAdded = 0;
 
     if (entity.tags.has("ignoreBoundingBox")) {

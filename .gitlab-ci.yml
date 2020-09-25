@@ -1,7 +1,10 @@
 image: node:12.16.3
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
+  key:
+    files:
+      - package-lock.json
+    prefix: ${CI_COMMIT_REF_SLUG}
   paths:
     - .npm/
 

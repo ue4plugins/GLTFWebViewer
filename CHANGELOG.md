@@ -1,3 +1,38 @@
+## [1.9.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.8.0...v1.9.0) (2020-09-22)
+
+
+### Features
+
+* **OrbitCamera:** calculate initial yaw and pitch based on angle to the focus-entity ([76f8204](http://animech[secure]/clients/epic/gltf-web-viewer/commit/76f820441c7a5203ce51764d549d0262039c25b2))
+* **OrbitCamera:** correctly focus on initial focus-entity even if it has no models ([f56e114](http://animech[secure]/clients/epic/gltf-web-viewer/commit/f56e11436e86782cb9ef4e2e7f4660819f319088))
+* **OrbitCamera:** never re-focus additional orbit-cameras since they're already initialized ([923b7ec](http://animech[secure]/clients/epic/gltf-web-viewer/commit/923b7eccc0601bcf71192ed38d1c1889d6ba0a79))
+* **OrbitCamera:** switch to global rotation as basis for yaw and pitch ([79f40b7](http://animech[secure]/clients/epic/gltf-web-viewer/commit/79f40b7c33251c72af1379793dda6df4b58e1300))
+
+
+### Bug Fixes
+
+* **OrbitCamera:** avoid using the default size of 0.5, 0.5, 0.5 for empty aabb's ([a1641ef](http://animech[secure]/clients/epic/gltf-web-viewer/commit/a1641ef801bbc4cc1502a4a235e0eb7c0ccaa42f))
+* **OrbitCamera:** use local rotation as basis when calculating yaw and pitch ([6d8f40a](http://animech[secure]/clients/epic/gltf-web-viewer/commit/6d8f40a9250df2c33e344edc107743a4bfc47de4))
+* fix calculation of canvas-size to match aspect-ratio of cameras ([d80ebd9](http://animech[secure]/clients/epic/gltf-web-viewer/commit/d80ebd9c5f06816de023c1e572011df0934fd652))
+
+## [1.8.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.7.0...v1.8.0) (2020-09-22)
+
+
+### Features
+
+* re-introduce support for WebGL2 ([29eaab3](http://animech[secure]/clients/epic/gltf-web-viewer/commit/29eaab3b95f78de60a885dcfeb32775cfa32b589))
+* **InteractionHotspot:** set z-index of hotspot using z-depth ([22bb3e9](http://animech[secure]/clients/epic/gltf-web-viewer/commit/22bb3e9ebc40ea86c44e3cca6af09c81da792a37))
+* **InteractionHotspot:** use pc.Picker instead of reading the depthbuffer ([4001440](http://animech[secure]/clients/epic/gltf-web-viewer/commit/4001440d3dd8e906ad14e75262c2147b5f4ce0ab))
+* add fade in/out for occluded hotspots ([5f66463](http://animech[secure]/clients/epic/gltf-web-viewer/commit/5f66463be7493954b2080c605bf3306961d42ecf))
+* add hover state images to hotspots ([49db39b](http://animech[secure]/clients/epic/gltf-web-viewer/commit/49db39be4241001f3d2718778769c1724812db6d))
+* add option to cache entity position in InteractionHotspot script ([67bf7a1](http://animech[secure]/clients/epic/gltf-web-viewer/commit/67bf7a16c4ddf2345be47a566da150ec11067012))
+* implement hotspot occlusion (WIP) ([ef8a0e3](http://animech[secure]/clients/epic/gltf-web-viewer/commit/ef8a0e39134e3c7f87919fdd7d2fdd18d292ad55))
+
+
+### Bug Fixes
+
+* **InteractionHotspot:** fix incorrect limits when sampling pixels ([e1d838a](http://animech[secure]/clients/epic/gltf-web-viewer/commit/e1d838a309c025509c24e6f87f3faa6b60ebe56b))
+
 ## [1.7.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.6.0...v1.7.0) (2020-08-31)
 
 

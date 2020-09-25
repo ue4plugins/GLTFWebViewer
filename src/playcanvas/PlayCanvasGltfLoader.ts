@@ -6,7 +6,6 @@ import {
   ExtensionParser,
   VariantSetExtensionParser,
   InteractionHotspotExtensionParser,
-  InteractionHotspot,
   HdriBackdropExtensionParser,
   LightMapExtensionParser,
   HdriBackdrop,
@@ -15,6 +14,7 @@ import {
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
 import { CameraEntity, convertToCameraEntity } from "./Camera";
+import { InteractionHotspot } from "./scripts";
 
 const debug = Debug("PlayCanvasGltfLoader");
 
