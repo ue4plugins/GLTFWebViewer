@@ -30,7 +30,8 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     top: "50%",
     left: "50%",
-    transform: "translateY(-50%) translateX(-50%)",
+    // 2px adjusts for rounding issue when centering canvas vertically
+    transform: "translateY(calc(-50% + 2px)) translateX(-50%)",
   },
   backdrop: {
     position: "absolute",
