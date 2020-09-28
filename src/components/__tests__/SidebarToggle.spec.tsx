@@ -3,30 +3,26 @@ import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { SidebarToggle } from "..";
 
-const openButtonId = "open-button";
+const sidebarToggleId = "sidebar-toggle";
 
 describe("SidebarToggle", () => {
-  it("should not be visible if isOpen is true", () => {
+  it("should call toggleOpen with 'true' when button is clicked if current value is 'false'", () => {
+    const setIsOpen = jest.fn((open: boolean) => open);
     const { getByTestId } = render(
-      <SidebarToggle open={true} toggleOpen={jest.fn()} />,
+      <SidebarToggle open={false} toggleOpen={setIsOpen} />,
     );
-    expect(getByTestId(openButtonId)).not.toBeVisible();
+    fireEvent.click(getByTestId(sidebarToggleId));
+    expect(setIsOpen).toBeCalledTimes(1);
+    expect(setIsOpen.mock.calls[0][0]).toBe(true);
   });
 
-  it("should be visible if isOpen is false", () => {
-    const { getByTestId } = render(
-      <SidebarToggle open={false} toggleOpen={jest.fn()} />,
-    );
-    expect(getByTestId(openButtonId)).toBeVisible();
-  });
-
-  it("should call setIsOpen with 'true' when close button is clicked", () => {
+  it("should call toggleOpen with 'false' when button is clicked if current value is 'true'", () => {
     const setIsOpen = jest.fn((open: boolean) => open);
     const { getByTestId } = render(
       <SidebarToggle open={true} toggleOpen={setIsOpen} />,
     );
-    fireEvent.click(getByTestId(openButtonId));
+    fireEvent.click(getByTestId(sidebarToggleId));
     expect(setIsOpen).toBeCalledTimes(1);
-    expect(setIsOpen.mock.calls[0][0]).toBe(true);
+    expect(setIsOpen.mock.calls[0][0]).toBe(false);
   });
 });

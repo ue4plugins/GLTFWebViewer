@@ -34,7 +34,7 @@ export const Cameras: React.FC = observer(() => {
     <RadioGroup
       className={classes.root}
       aria-label="camera"
-      id="camera-select"
+      data-testid="camera-select"
       name="camera-select"
       value={camera !== undefined ? camera.id.toString() : ""}
       onChange={e => {

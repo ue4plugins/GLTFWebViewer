@@ -1,38 +1,24 @@
 import "jest";
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { Sidebar } from "..";
 
-const closeButtonId = "close-button";
+const sidebarId = "sidebar";
 
 describe("Sidebar", () => {
-  it("should not be visible if isOpen is false", () => {
-    const { getByTestId } = render(
-      <Sidebar open={false} setIsOpen={jest.fn()} />,
-    );
-    expect(getByTestId(closeButtonId)).not.toBeVisible();
+  it("should not be visible if open is false", () => {
+    const { getByTestId } = render(<Sidebar open={false} />);
+    expect(getByTestId(sidebarId)).not.toBeVisible();
   });
 
-  it("should be visible if isOpen is true", () => {
-    const { getByTestId } = render(
-      <Sidebar open={true} setIsOpen={jest.fn()} />,
-    );
-    expect(getByTestId(closeButtonId)).toBeVisible();
-  });
-
-  it("should call setIsOpen with 'false' when close button is clicked", () => {
-    const setIsOpen = jest.fn((open: boolean) => open);
-    const { getByTestId } = render(
-      <Sidebar open={true} setIsOpen={setIsOpen} />,
-    );
-    fireEvent.click(getByTestId(closeButtonId));
-    expect(setIsOpen).toBeCalledTimes(1);
-    expect(setIsOpen.mock.calls[0][0]).toBe(false);
+  it("should be visible if open is true", () => {
+    const { getByTestId } = render(<Sidebar open={true} />);
+    expect(getByTestId(sidebarId)).toBeVisible();
   });
 
   it("should render children", () => {
     const { getByText } = render(
-      <Sidebar open={true} setIsOpen={jest.fn()}>
+      <Sidebar open={true}>
         <span>Inner content</span>
       </Sidebar>,
     );

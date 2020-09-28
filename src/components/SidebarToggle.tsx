@@ -25,7 +25,7 @@ export const SidebarToggle: React.FC<SidebarToggleProps> = ({
     <IconButton
       className={classes.button}
       aria-label="open sidebar"
-      data-testid="open-button"
+      data-testid="sidebar-toggle"
       disableTouchRipple
       onClick={() => toggleOpen(!open)}
     >

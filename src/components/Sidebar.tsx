@@ -23,7 +23,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, open }) => {
 
   return (
     <Drawer
-      id="sidebar"
       className={classes.drawer}
       variant="persistent"
       anchor="right"
@@ -35,6 +34,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, open }) => {
       classes={{
         paper: classes.drawerPaper,
       }}
+      PaperProps={
+        {
+          "data-testid": "sidebar",
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any
+      }
     >
       {children}
     </Drawer>
