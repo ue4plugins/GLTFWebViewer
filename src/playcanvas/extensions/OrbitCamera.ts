@@ -45,7 +45,7 @@ export class OrbitCameraExtensionParser implements ExtensionParser {
 
     this._focusNodes.forEach(
       ({ script, node: nodeIndex }) =>
-        (script.focusEntity = container.nodes[nodeIndex]),
+        (script.focusEntity = container.nodes[nodeIndex] ?? null),
     );
   }
 
