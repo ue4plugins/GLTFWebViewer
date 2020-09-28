@@ -15,37 +15,21 @@ describe("UI", () => {
     await Promise.all([waitForViewer()]);
   });
 
-  it("should have a searchable glTF list", async () => {
-    await page.click("#search-input");
-    expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
+  it("should have glTF list", async () => {
+    await page.waitFor(1000);
+    expect(
+      await screenshotElement("[data-testid=sidebar]"),
+    ).toMatchImageSnapshot();
 
-    await expect(page).toFill("#search-input", "Damaged");
-    await page.waitFor(100);
-    expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
-
-    const item = (await page.$$("#gltf-list .MuiListItem-button"))[0];
+    const item = (await page.$$("[data-testid=gltf-list] li"))[0];
     if (!item) {
-      throw new Error("Missing item");
+      throw new Error("Missing items");
     }
-
-    const itemSpan = await item.$(".MuiListItemText-primary");
-    if (!itemSpan) {
-      throw new Error("Missing item span");
-    }
-
-    expect(await page.evaluate(element => element.textContent, itemSpan)).toBe(
-      "Damaged Helmet",
-    );
 
     await item.click();
     await page.waitFor(500);
-    expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
-  });
-
-  it("should have a scene list", async () => {
-    await page.click("#settings-tab");
-    await page.click("#scene-select");
-    await page.waitFor(500);
-    expect(await screenshotElement("#sidebar")).toMatchImageSnapshot();
+    expect(
+      await screenshotElement("[data-testid=sidebar]"),
+    ).toMatchImageSnapshot();
   });
 });

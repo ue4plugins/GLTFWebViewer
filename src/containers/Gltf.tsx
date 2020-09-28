@@ -122,7 +122,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
           title="Select scene"
           appearDirection={appearDirection}
         >
-          <div className={classes.content}>
+          <div className={classes.content} data-testid="gltf-list">
             <NavList>
               {gltfs.map((gltf, index) => (
                 <NavListItem
