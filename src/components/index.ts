@@ -1,3 +1,4 @@
+export * from "./Appear";
 export * from "./Camera";
 export * from "./ErrorMessage";
 export * from "./FpsMonitor";
@@ -9,6 +10,5 @@ export * from "./NavListItem";
 export * from "./Sidebar";
 export * from "./SidebarContainer";
 export * from "./SidebarToggle";
-export * from "./Appear";
 export * from "./Variant";
 export * from "./VariantSet";

@@ -1,9 +1,9 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { RadioGroup } from "@material-ui/core";
+import { RadioGroup, useTheme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStores } from "../stores";
-import { Camera } from "../components";
+import { Camera, Appear } from "../components";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 export const Cameras: React.FC = observer(() => {
   const { gltfStore } = useStores();
+  const theme = useTheme();
   const { cameras, camera, setCamera } = gltfStore;
   const classes = useStyles();
 
@@ -40,12 +41,15 @@ export const Cameras: React.FC = observer(() => {
         setCamera(cameras.find(c => c.id === parseInt(e.target.value, 10)));
       }}
     >
-      {cameras.map(camera => (
+      {cameras.map((camera, index) => (
         <Camera
           key={camera.id}
           value={camera.id.toString()}
           image={camera.previewSource}
           orbit={camera.orbit}
+          appear={
+            <Appear delay={index * theme.listAnimationDelay} direction="up" />
+          }
         />
       ))}
     </RadioGroup>

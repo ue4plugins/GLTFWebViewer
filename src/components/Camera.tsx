@@ -1,7 +1,8 @@
-import React from "react";
+import React, { cloneElement } from "react";
 import { makeStyles, useRadioGroup } from "@material-ui/core";
 import clsx from "clsx";
 import { ReactComponent as Rotate } from "../icons/Rotate.svg";
+import { AppearProps } from "./Appear";
 
 const useStyles = makeStyles(theme => {
   const dropShadow =
@@ -55,6 +56,7 @@ const useStyles = makeStyles(theme => {
 });
 
 export type CameraProps = {
+  appear?: React.ReactElement<AppearProps>;
   orbit?: boolean;
   autoFocus?: boolean;
   checked?: boolean;
@@ -67,6 +69,7 @@ export type CameraProps = {
 };
 
 export const Camera: React.FC<CameraProps> = ({
+  appear,
   orbit,
   autoFocus,
   checked: checkedProp,
@@ -95,6 +98,21 @@ export const Camera: React.FC<CameraProps> = ({
     }
   };
 
+  const content = (
+    <div
+      className={clsx(classes.button, {
+        [classes.buttonChecked]: checked,
+      })}
+      style={{ backgroundImage: `url(${image})` }}
+    >
+      {orbit && (
+        <div className={classes.orbitIcon}>
+          <Rotate />
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <label className={classes.root}>
       <input
@@ -108,18 +126,7 @@ export const Camera: React.FC<CameraProps> = ({
         type="radio"
         value={value}
       />
-      <div
-        className={clsx(classes.button, {
-          [classes.buttonChecked]: checked,
-        })}
-        style={{ backgroundImage: `url(${image})` }}
-      >
-        {orbit && (
-          <div className={classes.orbitIcon}>
-            <Rotate />
-          </div>
-        )}
-      </div>
+      {appear ? cloneElement(appear, { children: content }) : content}
     </label>
   );
 };
