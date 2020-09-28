@@ -1,3 +1,34 @@
+## [1.10.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.9.0...v1.10.0) (2020-09-28)
+
+
+### Features
+
+* add animated arrow icon ([6ceffbe](http://animech[secure]/clients/epic/gltf-web-viewer/commit/6ceffbedfa667ce8d29571214eab5207edf02fe5))
+* add animated hamburger icon ([16b44d7](http://animech[secure]/clients/epic/gltf-web-viewer/commit/16b44d7e9e7d0d571ec5a91bc1e4df0446475c3c))
+* add app title to topbar ([ac76e37](http://animech[secure]/clients/epic/gltf-web-viewer/commit/ac76e37a5a40a228cfa1d29563f7da6c7287cbcd))
+* add appear animation to cameras ([d322d4f](http://animech[secure]/clients/epic/gltf-web-viewer/commit/d322d4fc9b2c3dff384c8f2e7293cf785b9bbf71))
+* add appear animation to sidebar header ([a84b614](http://animech[secure]/clients/epic/gltf-web-viewer/commit/a84b6140a8a72d6e7f5dc4ddbc407a216664d40b))
+* add appear animations to sidebar content ([fcb2b9e](http://animech[secure]/clients/epic/gltf-web-viewer/commit/fcb2b9e0c96ee6a8f8ce7969da211e10d1a56566))
+* add left and right direction of appear animation depending on previous view ([85cf423](http://animech[secure]/clients/epic/gltf-web-viewer/commit/85cf423428d453574cacfc93e2ee290f0cdc08f5))
+* add orbit icon to Camera ([8faff4d](http://animech[secure]/clients/epic/gltf-web-viewer/commit/8faff4daac526cf7df5136e9dd9a39e5f7ac8582))
+* add transitions to Camera, NavListItem and Variant ([e4990b3](http://animech[secure]/clients/epic/gltf-web-viewer/commit/e4990b38c9d6ca9cc5f4583216344daa0108e531))
+* allow showing FPS meter via query param ([a05f113](http://animech[secure]/clients/epic/gltf-web-viewer/commit/a05f11322388a958c74f0505fd7602dfac2e2362))
+* create new Camera component ([cb4658f](http://animech[secure]/clients/epic/gltf-web-viewer/commit/cb4658f790278afd30386fe0f49887fbfca77d6e))
+* new VariantSet style (WIP) ([209520d](http://animech[secure]/clients/epic/gltf-web-viewer/commit/209520d3af0a17119f6b52aa2c36966e3689c253))
+* standardise error and empty states by introducing component ErrorMessage ([56a5c0d](http://animech[secure]/clients/epic/gltf-web-viewer/commit/56a5c0d7e7444db9a34f82cddd115a5ffd50b1a9))
+* update state colors in Variant component using new utility function mixColor ([3033aa0](http://animech[secure]/clients/epic/gltf-web-viewer/commit/3033aa01818e097a0dc14b84ccd8a85f3c471988))
+
+
+### Bug Fixes
+
+* adjust font size to match design docs ([cef4685](http://animech[secure]/clients/epic/gltf-web-viewer/commit/cef46857a8e1fac03304c3852b03457d895369e8))
+* adjust spacings to match design ([b3b089d](http://animech[secure]/clients/epic/gltf-web-viewer/commit/b3b089d6543974febe460164f46d3c95f90ce718))
+* fix implementation of hideUI query param ([c851b48](http://animech[secure]/clients/epic/gltf-web-viewer/commit/c851b4801a39cbd6f61cf46c236e0a78a245d4e5))
+* fix line height in sidebar header ([9d97773](http://animech[secure]/clients/epic/gltf-web-viewer/commit/9d9777312e1d1defd621f69a0e9a1bf380b94ba0))
+* fix loading state to GltfContent when loading a single file ([fcc5986](http://animech[secure]/clients/epic/gltf-web-viewer/commit/fcc59869e157f6a81019f440c9f1d0c3047a72bc))
+* remove margin of last variant child ([03b4ec8](http://animech[secure]/clients/epic/gltf-web-viewer/commit/03b4ec89eefa8ed687fbdb2721dd3526ef7c330f))
+* remove sluggish NavListItem transition ([2f62f7d](http://animech[secure]/clients/epic/gltf-web-viewer/commit/2f62f7d7d6f12e9af9046a893d7515a7dbfe43c6))
+
 ## [1.9.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.8.0...v1.9.0) (2020-09-22)
 
 
