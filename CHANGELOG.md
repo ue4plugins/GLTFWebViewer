@@ -1,3 +1,15 @@
+## [1.11.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.10.0...v1.11.0) (2020-09-28)
+
+
+### Features
+
+* add selected glTF name to header ([121d0f3](http://animech[secure]/clients/epic/gltf-web-viewer/commit/121d0f3834beaa7d53bc67927c1b94a5fdd67224))
+
+
+### Bug Fixes
+
+* fix rounding issue when centering canvas vertically ([f047c46](http://animech[secure]/clients/epic/gltf-web-viewer/commit/f047c46cfd5ac1626cdd41bc0142b0891baf7d02))
+
 ## [1.10.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.9.0...v1.10.0) (2020-09-28)
 
 
