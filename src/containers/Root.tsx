@@ -84,7 +84,7 @@ const useStyles = makeStyles(theme => ({
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore, settingsStore } = useStores();
-  const { fetchGltfs } = gltfStore;
+  const { gltf, fetchGltfs } = gltfStore;
   const { showUI, showFpsMeter } = settingsStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
@@ -104,6 +104,7 @@ export const Root: React.FC = observer(() => {
             <img className={classes.topbarLogo} src={logo} alt="Logo" />
             <Typography className={classes.topbarTitle} variant="body2">
               Epic Games glTF Viewer
+              {gltf && ` — ${gltf.name}`}
             </Typography>
             <div className={classes.topbarToggle}>
               <SidebarToggle
