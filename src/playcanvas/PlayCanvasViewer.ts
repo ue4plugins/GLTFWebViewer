@@ -393,6 +393,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _focusOrbitCamera(orbitCamera: OrbitCamera) {
     const focusEntity = orbitCamera.focusEntity ?? this._app.root;
     debug("Focus camera on entity", focusEntity);
+    orbitCamera.reset(0, 0, 0);
     orbitCamera.focus(focusEntity, {
       frameModels: true,
     });
