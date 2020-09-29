@@ -1,3 +1,11 @@
+## [1.13.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.12.0...v1.13.0) (2020-09-29)
+
+
+### Features
+
+* **OrbitCamera:** reset orbit camera to last focused position when pressing space key ([f8c2dbf](http://animech[secure]/clients/epic/gltf-web-viewer/commit/f8c2dbf985e5f14cb7df1fad0e9947e710140b14))
+* **OrbitCamera:** reset position of default orbit camera when switching models ([b657404](http://animech[secure]/clients/epic/gltf-web-viewer/commit/b65740482cd24f71d112e0e3ff992521fdcc55c0))
+
 ## [1.12.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.11.0...v1.12.0) (2020-09-29)
 
 
