@@ -1,8 +1,14 @@
 import * as pc from "@animech-public/playcanvas";
 
+const interactionStates = [
+  "default",
+  "hovered",
+  "toggled",
+  "toggled-hovered",
+] as const;
+type InteractionState = typeof interactionStates[number];
 type TextureAsset = Omit<pc.Asset, "resource"> & { resource: pc.Texture };
 type OnToggleCallback = (active: boolean) => void;
-type InteractionState = "default" | "hovered" | "toggled" | "toggled-hovered";
 
 /**
  * Typings for PlayCanvas script-attributes attached to the class.
@@ -12,7 +18,6 @@ interface InteractionHotspot {
   hoveredImage: TextureAsset | null;
   toggledImage: TextureAsset | null;
   toggledHoveredImage: TextureAsset | null;
-  size: number;
   transitionDuration: number;
   parentElementId: string;
   cacheEntityPosition: boolean;
@@ -36,7 +41,9 @@ class InteractionHotspot extends pc.ScriptType {
   private _active = false;
   private _parentElem: HTMLElement | null = null;
   private _hotspotElem: HTMLElement;
-  private _hotspotImageElem: HTMLElement;
+  private _hotspotImageElems: {
+    [state in InteractionState]: HTMLImageElement;
+  };
   private _cachedEntityPosition?: pc.Vec3;
   private _pickerEntity!: pc.Entity;
 
@@ -53,26 +60,33 @@ class InteractionHotspot extends pc.ScriptType {
     this._onMouseOut = this._onMouseOut.bind(this);
 
     this._hotspotElem = document.createElement("div");
-    this._hotspotImageElem = document.createElement("div");
-    this._hotspotElem.appendChild(this._hotspotImageElem);
+    this._hotspotImageElems = {
+      default: document.createElement("img"),
+      hovered: document.createElement("img"),
+      toggled: document.createElement("img"),
+      "toggled-hovered": document.createElement("img"),
+    };
 
-    const timingFunction = "cubic-bezier(0.4, 0, 0.2, 1)";
+    Object.values(this._hotspotImageElems).forEach(elem =>
+      this._hotspotElem.appendChild(elem),
+    );
 
     const { style: hotspotStyle } = this._hotspotElem;
     hotspotStyle.position = "absolute";
     hotspotStyle.top = "0px";
     hotspotStyle.left = "0px";
     hotspotStyle.transitionProperty = "opacity";
-    hotspotStyle.transitionTimingFunction = timingFunction;
+    hotspotStyle.transitionTimingFunction = "cubic-bezier(0.4, 0, 0.2, 1)";
 
-    const { style: imageStyle } = this._hotspotImageElem;
-    imageStyle.width = "100%";
-    imageStyle.height = "100%";
-    imageStyle.transform = "translateX(-50%) translateY(-50%)";
-    imageStyle.backgroundSize = "cover";
-    imageStyle.cursor = "pointer";
-    imageStyle.transitionProperty = "background";
-    imageStyle.transitionTimingFunction = timingFunction;
+    Object.values(this._hotspotImageElems).forEach(imageElem => {
+      const { style: imageStyle } = imageElem;
+      imageStyle.position = "absolute";
+      imageStyle.top = "0";
+      imageStyle.left = "0";
+      imageStyle.transform = "translateX(-50%) translateY(-50%)";
+      imageStyle.opacity = "0";
+      imageStyle.cursor = "pointer";
+    });
   }
 
   public get active() {
@@ -86,16 +100,15 @@ class InteractionHotspot extends pc.ScriptType {
   public initialize() {
     InteractionHotspot._onInstanceAdded();
 
-    this._setImage("default");
+    this._setStateImages();
+    this._setStateVisibility("default");
     this._setCachedEntityPosition();
     this._setParentElem();
-    this._setSize();
     this._setTransitionDuration();
     this._addPickerEntity();
 
     this.on("attr:cacheEntityPosition", this._setCachedEntityPosition, this);
     this.on("attr:parentElementId", this._setParentElem, this);
-    this.on("attr:size", this._setSize, this);
     this.on("attr:transitionDuration", this._setTransitionDuration, this);
 
     this._hotspotElem.addEventListener("click", this._onClick);
@@ -367,15 +380,15 @@ class InteractionHotspot extends pc.ScriptType {
   private _onClick() {
     this._active = !this._active;
     this._onToggleCallbacks.forEach(callback => callback(this._active));
-    this._setImage(this._active ? "toggled-hovered" : "hovered");
+    this._setStateVisibility(this._active ? "toggled-hovered" : "hovered");
   }
 
   private _onMouseOver() {
-    this._setImage(this._active ? "toggled-hovered" : "hovered");
+    this._setStateVisibility(this._active ? "toggled-hovered" : "hovered");
   }
 
   private _onMouseOut() {
-    this._setImage(this._active ? "toggled" : "default");
+    this._setStateVisibility(this._active ? "toggled" : "default");
   }
 
   private _setCachedEntityPosition() {
@@ -401,17 +414,11 @@ class InteractionHotspot extends pc.ScriptType {
     this._parentElem = elem;
   }
 
-  private _setSize() {
-    this._hotspotElem.style.width = `${this.size}px`;
-    this._hotspotElem.style.height = `${this.size}px`;
-  }
-
   private _setTransitionDuration() {
     this._hotspotElem.style.transitionDuration = `${this.transitionDuration}ms`;
-    this._hotspotImageElem.style.transitionDuration = `${this.transitionDuration}ms`;
   }
 
-  private _setImage(state: InteractionState) {
+  private _getStateImageSource(state: InteractionState) {
     const texture = (() => {
       switch (state) {
         case "default":
@@ -429,9 +436,23 @@ class InteractionHotspot extends pc.ScriptType {
           );
       }
     })();
-    this._hotspotImageElem.style.backgroundImage = `url(${
-      texture.resource.getSource().src
-    })`;
+    return texture.resource.getSource().src;
+  }
+
+  private _setStateImages() {
+    // By assigning all sources immediately we prevent asset load times from
+    // affecting the transition between states
+    interactionStates.forEach(
+      state =>
+        (this._hotspotImageElems[state].src = this._getStateImageSource(state)),
+    );
+  }
+
+  private _setStateVisibility(state: InteractionState) {
+    Object.values(this._hotspotImageElems).forEach(
+      elem => (elem.style.opacity = "0"),
+    );
+    this._hotspotImageElems[state].style.opacity = "1";
   }
 }
 
@@ -464,13 +485,6 @@ InteractionHotspot.attributes.add("toggledHoveredImage", {
   default: null,
   title: "Toggled hovered image",
   description: "",
-});
-
-InteractionHotspot.attributes.add("size", {
-  type: "number",
-  default: 50,
-  title: "Size (px)",
-  description: "Width and height of hotspot in px.",
 });
 
 InteractionHotspot.attributes.add("transitionDuration", {
