@@ -119,7 +119,6 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
             enabled: false, // This is enabled later for the active scene
           });
 
-        script.size = 42;
         script.transitionDuration = 200;
 
         script.image = textures[hotspot.data.image];

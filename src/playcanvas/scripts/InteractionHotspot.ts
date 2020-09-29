@@ -12,7 +12,6 @@ interface InteractionHotspot {
   hoveredImage: TextureAsset | null;
   toggledImage: TextureAsset | null;
   toggledHoveredImage: TextureAsset | null;
-  size: number;
   transitionDuration: number;
   parentElementId: string;
   cacheEntityPosition: boolean;
@@ -89,13 +88,11 @@ class InteractionHotspot extends pc.ScriptType {
     this._setImage("default");
     this._setCachedEntityPosition();
     this._setParentElem();
-    this._setSize();
     this._setTransitionDuration();
     this._addPickerEntity();
 
     this.on("attr:cacheEntityPosition", this._setCachedEntityPosition, this);
     this.on("attr:parentElementId", this._setParentElem, this);
-    this.on("attr:size", this._setSize, this);
     this.on("attr:transitionDuration", this._setTransitionDuration, this);
 
     this._hotspotElem.addEventListener("click", this._onClick);
@@ -401,11 +398,6 @@ class InteractionHotspot extends pc.ScriptType {
     this._parentElem = elem;
   }
 
-  private _setSize() {
-    this._hotspotElem.style.width = `${this.size}px`;
-    this._hotspotElem.style.height = `${this.size}px`;
-  }
-
   private _setTransitionDuration() {
     this._hotspotElem.style.transitionDuration = `${this.transitionDuration}ms`;
     this._hotspotImageElem.style.transitionDuration = `${this.transitionDuration}ms`;
@@ -464,13 +456,6 @@ InteractionHotspot.attributes.add("toggledHoveredImage", {
   default: null,
   title: "Toggled hovered image",
   description: "",
-});
-
-InteractionHotspot.attributes.add("size", {
-  type: "number",
-  default: 50,
-  title: "Size (px)",
-  description: "Width and height of hotspot in px.",
 });
 
 InteractionHotspot.attributes.add("transitionDuration", {
