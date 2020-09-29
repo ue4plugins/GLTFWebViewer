@@ -1,3 +1,10 @@
+## [1.14.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.13.0...v1.14.0) (2020-09-29)
+
+
+### Features
+
+* **InteractionHotspot:** use image dimensions to set hotspot size and remove image transitions ([6524547](http://animech[secure]/clients/epic/gltf-web-viewer/commit/6524547080ff3d24b4a5272e305773df4e87dc23))
+
 ## [1.13.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.12.0...v1.13.0) (2020-09-29)
 
 
