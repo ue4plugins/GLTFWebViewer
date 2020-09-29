@@ -1,3 +1,19 @@
+## [1.12.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.11.0...v1.12.0) (2020-09-29)
+
+
+### Features
+
+* **OrbitCamera:** add live-tracking of focused entity and generalize focus-function ([3aee020](http://animech[secure]/clients/epic/gltf-web-viewer/commit/3aee020da29bcfa1f6f7a56aa78a1513ce3bc74a))
+* **OrbitCamera:** add parsing of more settings from extension-data ([b3e2989](http://animech[secure]/clients/epic/gltf-web-viewer/commit/b3e298938ab95ec2d3ccc5d71568086570cfac5a))
+* **OrbitCamera:** allow focusEntity to be null and reset it if the entity is destroyed ([c4efffe](http://animech[secure]/clients/epic/gltf-web-viewer/commit/c4efffe38cb52d88fc07209567dda8792c708767))
+* **OrbitCamera:** update positions in postUpdate to keep in sync with focused entity ([e490ca1](http://animech[secure]/clients/epic/gltf-web-viewer/commit/e490ca1417708540443f373ca39733cf8cfedb3d))
+
+
+### Bug Fixes
+
+* **OrbitCamera:** fix incorrect bounding-boxes when a hierarchy contains non-model entities ([377dbce](http://animech[secure]/clients/epic/gltf-web-viewer/commit/377dbce600ec61f80feb69ae728858b7e2748035))
+* **OrbitCamera:** prevent focusEntity from becoming undefined if no valid node exists ([3a4dc12](http://animech[secure]/clients/epic/gltf-web-viewer/commit/3a4dc12ae7df89cccd9fffff5be808a4a3a556e0))
+
 ## [1.11.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.10.0...v1.11.0) (2020-09-28)
 
 
