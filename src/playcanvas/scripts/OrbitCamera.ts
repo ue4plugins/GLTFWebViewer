@@ -63,6 +63,10 @@ export class OrbitCamera extends pc.ScriptType {
   private _focusEntity: pc.Entity | null = null;
   private _focusOffset = new pc.Vec3();
   private _focusPosition = new pc.Vec3();
+  private _lastFocusDistance = this._distance;
+  private _lastFocusPitch = this._pitch;
+  private _lastFocusYaw = this._yaw;
+  private _lastFocusOffset = new pc.Vec3();
   private _lookButtonDown = false;
   private _panButtonDown = false;
   private _lastMousePos = new pc.Vec2();
@@ -261,6 +265,11 @@ export class OrbitCamera extends pc.ScriptType {
     if (this.farClipFactor) {
       this._cameraComponent.farClip = this.distance * this.farClipFactor;
     }
+
+    this._lastFocusDistance = this.distance;
+    this._lastFocusPitch = this.pitch;
+    this._lastFocusYaw = this.yaw;
+    this._lastFocusOffset.copy(this._focusOffset);
 
     this._removeInertia();
     this._updatePosition();
@@ -502,11 +511,14 @@ export class OrbitCamera extends pc.ScriptType {
     if (event.event.prevent || !this.enabled) {
       return;
     }
+
     if (event.key === pc.KEY_SPACE && this._focusEntity) {
-      this.reset(0, 0, 0);
-      this.focus(this._focusEntity, {
-        frameModels: true,
-      });
+      this._focusOffset.copy(this._lastFocusOffset);
+      this.reset(
+        this._lastFocusYaw,
+        this._lastFocusPitch,
+        this._lastFocusDistance,
+      );
     }
   }
 
