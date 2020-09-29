@@ -12,6 +12,10 @@ type NodeExtensionData = {
   minDistance: number;
   maxAngle: number;
   minAngle: number;
+  distanceSensitivity: number;
+  orbitSensitivity: number;
+  orbitInertia: number;
+  dollyDuration: number;
 };
 
 type OrbitCameraScriptFocusMap = {
@@ -41,7 +45,7 @@ export class OrbitCameraExtensionParser implements ExtensionParser {
 
     this._focusNodes.forEach(
       ({ script, node: nodeIndex }) =>
-        (script.focusEntity = container.nodes[nodeIndex]),
+        (script.focusEntity = container.nodes[nodeIndex] ?? null),
     );
   }
 
@@ -59,6 +63,10 @@ export class OrbitCameraExtensionParser implements ExtensionParser {
     orbitCameraScript.pitchAngleMin = extensionData.minAngle;
     orbitCameraScript.distanceMax = extensionData.maxDistance;
     orbitCameraScript.distanceMin = extensionData.minDistance;
+    orbitCameraScript.distanceSensitivity = extensionData.distanceSensitivity;
+    orbitCameraScript.orbitSensitivity = extensionData.orbitSensitivity;
+    orbitCameraScript.inertiaFactor = extensionData.orbitInertia;
+    orbitCameraScript.dollyDuration = extensionData.dollyDuration;
 
     debug("Added orbit camera script", camera, orbitCameraScript);
 
