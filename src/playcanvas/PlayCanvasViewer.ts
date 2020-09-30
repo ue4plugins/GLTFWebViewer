@@ -87,6 +87,10 @@ export class PlayCanvasViewer implements TestableViewer {
     if (this._canvasSizeElem) {
       this._canvasResizeObserver.observe(this._canvasSizeElem);
     }
+
+    // For debugging purposes
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).getStats = this._getStats.bind(this);
   }
 
   public get app() {
@@ -189,6 +193,16 @@ export class PlayCanvasViewer implements TestableViewer {
     app.start();
 
     return app;
+  }
+
+  private _getStats() {
+    const app = this._app;
+    const stats = app.stats;
+    const bToKb = 1 / 1024;
+    const ib = Math.round(stats.vram.ib * bToKb * 10) / 10;
+    const tex = Math.round(stats.vram.tex * bToKb * 10) / 10;
+    const vb = Math.round(stats.vram.vb * bToKb * 10) / 10;
+    return `VRAM: Triangles ${ib} KB, Textures ${tex} KB, Vertices ${vb} KB`;
   }
 
   private _createDefaultCamera(app: pc.Application): OrbitCameraEntity {

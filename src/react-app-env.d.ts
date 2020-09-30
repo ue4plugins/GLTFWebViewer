@@ -4,6 +4,13 @@
 declare namespace pc {
   interface Application {
     _skyboxLast: number | null;
+    stats: {
+      vram: {
+        ib: number;
+        tex: number;
+        vb: number;
+      };
+    };
   }
 
   interface Scene {
