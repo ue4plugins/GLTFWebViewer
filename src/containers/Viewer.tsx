@@ -27,6 +27,7 @@ const useStyles = makeStyles(theme => ({
     // centering canvas vertically and horizontally
     height: "calc(100% + 4px)",
     width: "calc(100% + 4px)",
+    outline: 0,
   },
   canvasWrapper: {
     position: "absolute",
