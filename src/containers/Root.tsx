@@ -67,6 +67,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     height: "100%",
     backgroundColor: theme.palette.common.black,
+    overflow: "hidden",
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,

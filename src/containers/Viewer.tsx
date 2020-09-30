@@ -23,15 +23,19 @@ const debug = Debug("Viewer");
 
 const useStyles = makeStyles(theme => ({
   root: {
-    height: "100%",
-    outline: "none",
+    // Extra height and width adjusts for rounding issue when
+    // centering canvas vertically and horizontally
+    height: "calc(100% + 4px)",
+    width: "calc(100% + 4px)",
   },
   canvasWrapper: {
     position: "absolute",
     top: "50%",
     left: "50%",
-    // 2px adjusts for rounding issue when centering canvas vertically
-    transform: "translateY(calc(-50% + 2px)) translateX(-50%)",
+    transform: "translateY(-50%) translateX(-50%)",
+  },
+  canvas: {
+    outline: 0,
   },
   backdrop: {
     position: "absolute",
@@ -212,7 +216,7 @@ export const Viewer: React.FC<ViewerProps> = observer(({ isError = false }) => {
   return (
     <div className={classes.root} {...getRootProps()}>
       <div className={classes.canvasWrapper}>
-        <canvas ref={canvasRef} />
+        <canvas className={classes.canvas} ref={canvasRef} />
       </div>
       <Backdrop
         className={clsx(classes.backdrop, {
