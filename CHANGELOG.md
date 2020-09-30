@@ -1,3 +1,10 @@
+## [1.15.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.14.1...v1.15.0) (2020-09-30)
+
+
+### Features
+
+* **InteractionHotspot:** make it possible to have hotspots without an animation ([b17cbe6](http://animech[secure]/clients/epic/gltf-web-viewer/commit/b17cbe6afbd44180f6784ce636333b4d0ea2837d))
+
 ### [1.14.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.14.0...v1.14.1) (2020-09-30)
 
 
