@@ -1,3 +1,11 @@
+### [1.14.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.14.0...v1.14.1) (2020-09-30)
+
+
+### Bug Fixes
+
+* fix GltfContent height issue for Safari ([5f0f0e1](http://animech[secure]/clients/epic/gltf-web-viewer/commit/5f0f0e196af096310b686f96cfb32bf340d602e0))
+* remove black canvas borders in Safari ([f99e963](http://animech[secure]/clients/epic/gltf-web-viewer/commit/f99e9631016684a2a1f08603c6880618afdcc5e1))
+
 ## [1.14.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.13.0...v1.14.0) (2020-09-29)
 
 
