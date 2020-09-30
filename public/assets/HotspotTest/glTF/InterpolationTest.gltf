@@ -881,7 +881,6 @@
           "toggledHoveredImage": 4
         },
         {
-          "animation": 7,
           "image": 1,
           "hoveredImage": 2,
           "toggledImage": 3,

@@ -12,7 +12,7 @@ type InteractionData = {
   hoveredImage?: number;
   toggledImage?: number;
   toggledHoveredImage?: number;
-  animation: number;
+  animation?: number;
 };
 
 type NodeExtensionData = {
@@ -44,7 +44,8 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
     return this._hotspotDatas
       .map(({ data }) => data.animation)
       .filter(
-        (animationIndex, index, animationIndices) =>
+        (animationIndex, index, animationIndices): animationIndex is number =>
+          animationIndex !== undefined &&
           animationIndices.indexOf(animationIndex) === index,
       );
   }
@@ -104,10 +105,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
 
   private _initHotspotScripts(animations: Animation[], textures: pc.Asset[]) {
     return this._hotspotDatas
-      .filter(
-        hotspot =>
-          textures[hotspot.data.image] && animations[hotspot.data.animation],
-      )
+      .filter(hotspot => textures[hotspot.data.image])
       .map(hotspot => {
         const animation = animations.find(
           ({ index }) => index === hotspot.data.animation,
