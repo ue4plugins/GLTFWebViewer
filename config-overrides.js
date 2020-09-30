@@ -28,6 +28,20 @@ module.exports = {
         ),
     );
 
+    // Place static assets in sub dir
+    config.module.rules
+      .find(rule => rule.oneOf)
+      .oneOf.filter(
+        rule =>
+          rule.options &&
+          rule.options.name &&
+          rule.options.name.includes("static"),
+      )
+      .forEach(
+        loader =>
+          (loader.options.name = path.join(buildSubDir, loader.options.name)),
+      );
+
     return merge(config, {
       plugins: [
         new webpack.DefinePlugin({
@@ -43,6 +57,7 @@ module.exports = {
         }),
       ],
       output: {
+        // Place js output in sub dir
         filename: path.join(buildSubDir, config.output.filename),
         chunkFilename: path.join(buildSubDir, config.output.chunkFilename),
       },
