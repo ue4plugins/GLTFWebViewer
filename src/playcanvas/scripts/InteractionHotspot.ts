@@ -79,6 +79,8 @@ class InteractionHotspot extends pc.ScriptType {
     hotspotStyle.transitionTimingFunction = "cubic-bezier(0.4, 0, 0.2, 1)";
 
     Object.values(this._hotspotImageElems).forEach(imageElem => {
+      imageElem.draggable = false;
+
       const { style: imageStyle } = imageElem;
       imageStyle.position = "absolute";
       imageStyle.top = "0";
