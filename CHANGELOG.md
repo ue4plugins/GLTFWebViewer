@@ -1,3 +1,17 @@
+## [1.16.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.15.0...v1.16.0) (2020-10-01)
+
+
+### Features
+
+* add debug function window.getStats to print VRAM usage stats ([c83fd76](http://animech[secure]/clients/epic/gltf-web-viewer/commit/c83fd76dddc0fa782deca46d24753591a092d956))
+* make it possible to start the application without index.json ([17ff951](http://animech[secure]/clients/epic/gltf-web-viewer/commit/17ff9517574351b46570307a955b236de0e3f029))
+
+
+### Bug Fixes
+
+* remove outline from viewport root element ([4091949](http://animech[secure]/clients/epic/gltf-web-viewer/commit/40919493e6ecdafbe13152f75570d81127d9e5c1))
+* **InteractionHotspot:** make hotspot images not draggable ([2c5e0ae](http://animech[secure]/clients/epic/gltf-web-viewer/commit/2c5e0aeaf5293fc9410c4b81c2e3a31fa21b2239))
+
 ## [1.15.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.14.1...v1.15.0) (2020-09-30)
 
 
