@@ -20,7 +20,6 @@ import {
   GltfSceneData,
 } from "./PlayCanvasGltfLoader";
 import { HdriBackdrop } from "./extensions";
-import { AnimationState } from "./Animation";
 import {
   CameraEntity,
   OrbitCameraEntity,
@@ -123,7 +122,7 @@ export class PlayCanvasViewer implements TestableViewer {
         .map((anim, index) => ({
           id: index,
           name: anim.name,
-          active: false,
+          active: anim.playing,
         }))
         .filter((_, index) => scene.animations[index].playable),
       variantSetManager: this._variantSetManager,
@@ -514,8 +513,8 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this._activeGltfScene.animations.forEach((animation, animationIndex) => {
       const active = animationIds.includes(animationIndex);
-      if (active && animation.playable) {
-        animation.play(AnimationState.Loop);
+      if (active && animation.playable && animation.defaultState) {
+        animation.play(animation.defaultState);
       } else {
         animation.pause();
       }

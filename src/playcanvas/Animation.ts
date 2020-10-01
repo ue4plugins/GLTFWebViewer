@@ -13,7 +13,27 @@ export class Animation {
     private _node: pc.Entity,
     private _layer: pc.AnimComponentLayer,
     private _index: number,
-  ) {}
+    private _defaultState?: AnimationState,
+    autoPlay?: boolean,
+    startTime?: number,
+  ) {
+    this._layer.pause();
+    if (_defaultState && autoPlay) {
+      this._layer.play(_defaultState);
+      if (startTime !== undefined) {
+        this._layer.activeStateCurrentTime = Math.min(
+          startTime,
+          this._layer.activeStateDuration,
+        );
+      }
+    }
+    console.log(
+      _defaultState,
+      autoPlay,
+      startTime,
+      this._layer.activeStateDuration,
+    );
+  }
 
   public get node() {
     return this._node;
@@ -29,6 +49,14 @@ export class Animation {
 
   public get playable() {
     return this._layer.playable;
+  }
+
+  public get playing() {
+    return this._layer.playing;
+  }
+
+  public get defaultState() {
+    return this._defaultState;
   }
 
   public get activeState() {

@@ -1,5 +1,5 @@
 {
-  "extensionsUsed": ["EPIC_interaction_hotspots"],
+  "extensionsUsed": ["EPIC_interaction_hotspots", "EPIC_animation_play_data"],
   "accessors": [
     {
       "bufferView": 0,
@@ -482,7 +482,15 @@
           "interpolation": "CUBICSPLINE",
           "output": 49
         }
-      ]
+      ],
+      "extensions": {
+        "EPIC_animation_play_data": {
+          "looping": false,
+          "playing": true,
+          "playRate": -1,
+          "position": 5
+        }
+      }
     },
     {
       "channels": [
@@ -501,7 +509,15 @@
           "interpolation": "LINEAR",
           "output": 51
         }
-      ]
+      ],
+      "extensions": {
+        "EPIC_animation_play_data": {
+          "looping": false,
+          "playing": false,
+          "playRate": 1,
+          "position": 1.5
+        }
+      }
     },
     {
       "channels": [
@@ -867,7 +883,7 @@
     "EPIC_interaction_hotspots": {
       "interactions": [
         {
-          "animation": 5,
+          "animation": 3,
           "image": 1,
           "hoveredImage": 2,
           "toggledImage": 3,
@@ -1218,7 +1234,8 @@
     {
       "mesh": 3,
       "name": "Cube.003",
-      "translation": [0, 3.356412410736084, 0]
+      "translation": [0, 3.356412410736084, 0],
+      "children": [17]
     },
     {
       "mesh": 4,
@@ -1231,8 +1248,7 @@
       "name": "Cube.005",
       "rotation": [0, 0, -0.03925982117652893, 0.9992290735244751],
       "scale": [0.9999999403953552, 0.9999999403953552, 1],
-      "translation": [-3.311399221420288, 3.356412410736084, 0],
-      "children": [17]
+      "translation": [-3.311399221420288, 3.356412410736084, 0]
     },
     {
       "mesh": 6,
