@@ -1,5 +1,5 @@
 import { observable, computed, action } from "mobx";
-import { GltfSource, GltfAnimation, GltfScene, GltfCamera } from "../types";
+import { GltfSource, GltfScene, GltfCamera } from "../types";
 import { VariantSetManager } from "../variants";
 
 export class GltfStore {
@@ -24,16 +24,6 @@ export class GltfStore {
 
   @observable
   public variantSetId?: number;
-
-  @computed
-  public get animations(): GltfAnimation[] {
-    return this.sceneHierarchy?.animations ?? [];
-  }
-
-  @computed
-  public get activeAnimationIds(): number[] {
-    return this.animations.filter(a => a.active).map(a => a.id);
-  }
 
   @computed
   public get variantSetManager(): VariantSetManager | undefined {

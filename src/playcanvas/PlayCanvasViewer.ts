@@ -122,13 +122,6 @@ export class PlayCanvasViewer implements TestableViewer {
       return undefined;
     }
     return {
-      animations: scene.animations
-        .map((anim, index) => ({
-          id: index,
-          name: anim.name,
-          active: false,
-        }))
-        .filter((_, index) => scene.animations[index].playable),
       variantSetManager: this._variantSetManager,
       cameras: scene.cameras.map((camera, index) => {
         return {
