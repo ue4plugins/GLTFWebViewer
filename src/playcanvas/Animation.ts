@@ -78,7 +78,10 @@ export class Animation {
       switch (state) {
         case AnimationState.Loop:
         case AnimationState.Once:
-          return 0;
+          return this._layer.activeStateCurrentTime >=
+            this._layer.activeStateDuration
+            ? 0
+            : this._layer.activeStateCurrentTime;
         case AnimationState.LoopReverse:
           return (
             this._layer.activeStateCurrentTime % this._layer.activeStateDuration
