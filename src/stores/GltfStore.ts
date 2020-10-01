@@ -69,11 +69,14 @@ export class GltfStore {
 
   @action.bound
   public async fetchGltfs() {
-    const res = await fetch("index.json");
-    const gltfs = (await res.json()) as GltfSource[] | undefined;
+    let gltfs: GltfSource[] = [];
 
-    if (!gltfs || gltfs.length === 0) {
-      throw new Error("No glTFs found");
+    try {
+      const res = await fetch("index.json");
+      gltfs = await res.json();
+    } catch (e) {
+      // Ignore since it should be possible to start the application
+      // without assets
     }
 
     this.gltfs = gltfs;
