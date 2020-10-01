@@ -597,7 +597,9 @@
       ],
       "extensions": {
         "EPIC_animation_play_data": {
-          "playing": false
+          "playing": true,
+          "playRate": 2,
+          "looping": false
         }
       }
     }
