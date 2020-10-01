@@ -9,12 +9,6 @@ export type GltfSource = {
   creatorUrl?: string;
 };
 
-export type GltfAnimation = {
-  id: number;
-  name: string;
-  active: boolean;
-};
-
 export type GltfCamera = {
   id: number;
   name: string;
@@ -23,7 +17,6 @@ export type GltfCamera = {
 };
 
 export type GltfScene = {
-  animations: GltfAnimation[];
   variantSetManager?: VariantSetManager;
   cameras: GltfCamera[];
   hasBackdrops: boolean;

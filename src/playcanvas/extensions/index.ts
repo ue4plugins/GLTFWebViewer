@@ -1,3 +1,4 @@
+export * from "./AnimationPlayData";
 export * from "./ExtensionRegistry";
 export * from "./ExtensionParser";
 export * from "./HdrEncoding";

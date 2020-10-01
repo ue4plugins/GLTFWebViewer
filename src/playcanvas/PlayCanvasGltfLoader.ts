@@ -11,6 +11,9 @@ import {
   HdriBackdrop,
   HdrEncodingExtensionParser,
   OrbitCameraExtensionParser,
+  AnimationPlayDataExtensionParser,
+  AnimationPlayData,
+  animationPlayDataDefaults,
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
 import { CameraEntity, convertToCameraEntity } from "./Camera";
@@ -75,7 +78,11 @@ export class PlayCanvasGltfLoader {
     });
   }
 
-  private _createAnimations(container: pc.ContainerResource): Animation[] {
+  private _createAnimations(
+    container: pc.ContainerResource,
+    playDataByAnimationIndex: (AnimationPlayData | undefined)[],
+    hotspotAnimationIndices: number[],
+  ): Animation[] {
     const {
       nodes,
       animationIndicesByNode,
@@ -93,17 +100,26 @@ export class PlayCanvasGltfLoader {
 
         // Create one layer per animation asset so that the animations can be played simultaneously
         component.loadStateGraph({
-          layers: animationIndices.map(index => ({
-            name: (animationAssets[index].resource as pc.AnimTrack).name,
-            states: [
-              { name: pc.ANIM_STATE_START },
-              { name: AnimationState.Loop, speed: 1, loop: true },
-              { name: AnimationState.LoopReverse, speed: -1, loop: true },
-              { name: AnimationState.Once, speed: 1, loop: false },
-              { name: AnimationState.OnceReverse, speed: -1, loop: false },
-            ],
-            transitions: [],
-          })),
+          layers: animationIndices.map(index => {
+            const speed =
+              playDataByAnimationIndex[index]?.playRate ??
+              animationPlayDataDefaults.playRate;
+            return {
+              name: (animationAssets[index].resource as pc.AnimTrack).name,
+              states: [
+                { name: pc.ANIM_STATE_START },
+                { name: AnimationState.Loop, speed, loop: true },
+                { name: AnimationState.LoopReverse, speed: -speed, loop: true },
+                { name: AnimationState.Once, speed, loop: false },
+                {
+                  name: AnimationState.OnceReverse,
+                  speed: -speed,
+                  loop: false,
+                },
+              ],
+              transitions: [],
+            };
+          }),
           parameters: {},
         });
 
@@ -127,7 +143,33 @@ export class PlayCanvasGltfLoader {
               .slice(1, layer.states.length)
               .forEach(state => layer.assignAnimation(state, track));
 
-            return new Animation(node, layer, index);
+            if (hotspotAnimationIndices.includes(index)) {
+              return new Animation(node, layer, index);
+            }
+
+            const playData = playDataByAnimationIndex[index];
+
+            const defaultState =
+              (playData?.looping ?? animationPlayDataDefaults.looping) === false
+                ? AnimationState.Once
+                : AnimationState.Loop;
+
+            const autoPlay =
+              (playData?.playing ?? animationPlayDataDefaults.playing) === false
+                ? false
+                : true;
+
+            const startTime =
+              playData?.position ?? animationPlayDataDefaults.position;
+
+            return new Animation(
+              node,
+              layer,
+              index,
+              defaultState,
+              autoPlay,
+              startTime,
+            );
           });
       })
       .reduce<Animation[]>((acc, anims) => [...acc, ...anims], []);
@@ -159,12 +201,14 @@ export class PlayCanvasGltfLoader {
     const hotspotParser = new InteractionHotspotExtensionParser();
     const lightMapParser = new LightMapExtensionParser();
     const backdropParser = new HdriBackdropExtensionParser();
+    const animationPlayDataParser = new AnimationPlayDataExtensionParser();
 
     const extensions: ExtensionParser[] = [
       variantSetParser,
       hotspotParser,
       lightMapParser,
       backdropParser,
+      animationPlayDataParser,
       new OrbitCameraExtensionParser(),
       new HdrEncodingExtensionParser(),
     ];
@@ -193,15 +237,21 @@ export class PlayCanvasGltfLoader {
       this._postParseExtensions(extensions, container);
       this._unregisterExtensions(extensions);
 
-      const animations = this._createAnimations(container);
+      const playDataByAnimationIndex = animationPlayDataParser.getPlayDataByAnimationIndex(
+        container,
+      );
+      const { hotspotAnimationIndices } = hotspotParser;
+      const animations = this._createAnimations(
+        container,
+        playDataByAnimationIndex,
+        hotspotAnimationIndices,
+      );
       debug("Created animations", animations);
 
       const cameraEntities = container.cameras.map(component =>
         convertToCameraEntity(component.entity),
       );
       debug("Created camera entities", cameraEntities);
-
-      const { hotspotAnimationIndices } = hotspotParser;
 
       return {
         asset,

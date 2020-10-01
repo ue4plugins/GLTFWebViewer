@@ -1,15 +1,13 @@
 import { observable, computed, action } from "mobx";
-import { GltfSource, GltfAnimation, GltfScene, GltfCamera } from "../types";
+import { GltfSource, GltfScene, GltfCamera } from "../types";
 import { VariantSetManager } from "../variants";
 
 export class GltfStore {
   private defaultGltf: string | null;
-  private autoPlayAnimations: boolean;
 
   public constructor() {
     const urlParams = new URLSearchParams(window.location.search);
     this.defaultGltf = urlParams.get("gltf");
-    this.autoPlayAnimations = !urlParams.get("noAnimations");
   }
 
   @observable
@@ -26,16 +24,6 @@ export class GltfStore {
 
   @observable
   public variantSetId?: number;
-
-  @computed
-  public get animations(): GltfAnimation[] {
-    return this.sceneHierarchy?.animations ?? [];
-  }
-
-  @computed
-  public get activeAnimationIds(): number[] {
-    return this.animations.filter(a => a.active).map(a => a.id);
-  }
 
   @computed
   public get variantSetManager(): VariantSetManager | undefined {
@@ -92,14 +80,7 @@ export class GltfStore {
 
   @action.bound
   public setSceneHierarchy(sceneHierarchy?: GltfScene) {
-    if (sceneHierarchy) {
-      this.camera = sceneHierarchy.cameras[0];
-      if (this.autoPlayAnimations) {
-        sceneHierarchy.animations.forEach(a => (a.active = true));
-      }
-    } else {
-      this.camera = undefined;
-    }
+    this.camera = sceneHierarchy?.cameras[0];
     this.sceneHierarchy = sceneHierarchy;
     this.variantSetId = undefined;
   }

@@ -64,13 +64,7 @@ export const Viewer: React.FC<ViewerProps> = observer(({ isError = false }) => {
   const classes = useStyles();
   const theme = useTheme();
   const { gltfStore, sceneStore } = useStores();
-  const {
-    gltf,
-    setGltf,
-    setSceneHierarchy,
-    activeAnimationIds,
-    camera,
-  } = gltfStore;
+  const { gltf, setGltf, setSceneHierarchy, camera } = gltfStore;
   const { scene, setScenes } = sceneStore;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -167,6 +161,7 @@ export const Viewer: React.FC<ViewerProps> = observer(({ isError = false }) => {
       debug("Load glTF start", gltf.filePath);
       setSceneHierarchy();
       await viewer.loadGltf(gltf.filePath, gltf.blobFileName);
+      viewer.initAnimations();
       debug("Load glTF end", gltf.filePath);
 
       if (viewer.activeSceneHierarchy) {
@@ -183,15 +178,6 @@ export const Viewer: React.FC<ViewerProps> = observer(({ isError = false }) => {
       setSceneHierarchy();
     };
   }, [runAsync, viewer, gltf, setSceneHierarchy]);
-
-  // PlayCanvasViewer: Set active animations
-  useEffect(() => {
-    if (!viewer?.initiated) {
-      return;
-    }
-    debug("Set active animations", activeAnimationIds);
-    viewer.setActiveAnimations(activeAnimationIds);
-  }, [viewer, activeAnimationIds]);
 
   // PlayCanvasViewer: Set active camera
   useEffect(() => {
