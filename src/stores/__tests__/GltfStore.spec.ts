@@ -7,11 +7,6 @@ const fetchMock = () =>
     json: async () => gltfs,
   } as Response);
 
-const fetchMockEmpty = () =>
-  Promise.resolve({
-    json: async () => [],
-  } as Response);
-
 const fetchMockFail = () => Promise.reject(new Error("Request failed"));
 
 const mockLocationSearch = (search: string) =>
