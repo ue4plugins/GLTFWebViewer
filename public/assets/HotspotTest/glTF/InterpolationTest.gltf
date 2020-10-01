@@ -406,7 +406,12 @@
           "interpolation": "STEP",
           "output": 41
         }
-      ]
+      ],
+      "extensions": {
+        "EPIC_animation_play_data": {
+          "playing": false
+        }
+      }
     },
     {
       "channels": [
@@ -444,7 +449,12 @@
           "interpolation": "CUBICSPLINE",
           "output": 45
         }
-      ]
+      ],
+      "extensions": {
+        "EPIC_animation_play_data": {
+          "playing": false
+        }
+      }
     },
     {
       "channels": [
@@ -486,9 +496,9 @@
       "extensions": {
         "EPIC_animation_play_data": {
           "looping": false,
-          "playing": true,
-          "playRate": -1,
-          "position": 5
+          "playing": false,
+          "playRate": 1,
+          "position": 1.2
         }
       }
     },
@@ -512,10 +522,10 @@
       ],
       "extensions": {
         "EPIC_animation_play_data": {
-          "looping": false,
-          "playing": false,
-          "playRate": 1,
-          "position": 1.5
+          "looping": true,
+          "playing": true,
+          "playRate": -1,
+          "position": 60
         }
       }
     },
@@ -536,7 +546,12 @@
           "interpolation": "STEP",
           "output": 53
         }
-      ]
+      ],
+      "extensions": {
+        "EPIC_animation_play_data": {
+          "playing": false
+        }
+      }
     },
     {
       "channels": [
@@ -555,7 +570,12 @@
           "interpolation": "CUBICSPLINE",
           "output": 55
         }
-      ]
+      ],
+      "extensions": {
+        "EPIC_animation_play_data": {
+          "playing": false
+        }
+      }
     },
     {
       "channels": [
@@ -574,7 +594,12 @@
           "interpolation": "LINEAR",
           "output": 57
         }
-      ]
+      ],
+      "extensions": {
+        "EPIC_animation_play_data": {
+          "playing": false
+        }
+      }
     }
   ],
   "asset": {
