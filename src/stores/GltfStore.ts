@@ -4,12 +4,12 @@ import { VariantSetManager } from "../variants";
 
 export class GltfStore {
   private defaultGltf: string | null;
-  private autoPlayAnimations: boolean;
+  private noAnimations: boolean;
 
   public constructor() {
     const urlParams = new URLSearchParams(window.location.search);
     this.defaultGltf = urlParams.get("gltf");
-    this.autoPlayAnimations = !urlParams.get("noAnimations");
+    this.noAnimations = !!urlParams.get("noAnimations");
   }
 
   @observable
@@ -94,8 +94,8 @@ export class GltfStore {
   public setSceneHierarchy(sceneHierarchy?: GltfScene) {
     if (sceneHierarchy) {
       this.camera = sceneHierarchy.cameras[0];
-      if (this.autoPlayAnimations) {
-        sceneHierarchy.animations.forEach(a => (a.active = true));
+      if (this.noAnimations) {
+        sceneHierarchy.animations.forEach(a => (a.active = false));
       }
     } else {
       this.camera = undefined;
