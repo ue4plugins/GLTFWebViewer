@@ -14,25 +14,10 @@ export class Animation {
     private _layer: pc.AnimComponentLayer,
     private _index: number,
     private _defaultState?: AnimationState,
-    autoPlay?: boolean,
-    startTime?: number,
+    private _autoPlay = false,
+    private _initialStartTime?: number,
   ) {
     this._layer.pause();
-    if (_defaultState && autoPlay) {
-      this._layer.play(_defaultState);
-      if (startTime !== undefined) {
-        this._layer.activeStateCurrentTime = Math.min(
-          startTime,
-          this._layer.activeStateDuration,
-        );
-      }
-    }
-    console.log(
-      _defaultState,
-      autoPlay,
-      startTime,
-      this._layer.activeStateDuration,
-    );
   }
 
   public get node() {
@@ -51,10 +36,6 @@ export class Animation {
     return this._layer.playable;
   }
 
-  public get playing() {
-    return this._layer.playing;
-  }
-
   public get defaultState() {
     return this._defaultState;
   }
@@ -63,8 +44,37 @@ export class Animation {
     return this._layer.activeState;
   }
 
-  public play(state: AnimationState) {
-    const currentTime = (() => {
+  public init() {
+    // Only animations with a default state and start time have to
+    // be initialized
+    if (!this.defaultState || (!this._autoPlay && !this._initialStartTime)) {
+      return;
+    }
+
+    this.play(this.defaultState, this._initialStartTime);
+
+    // Non-auto played animations have to play for one frame
+    // to get to their start time frame
+    if (!this._autoPlay) {
+      requestAnimationFrame(() => this.pause());
+    }
+  }
+
+  public play(state: AnimationState, startTime?: number) {
+    const currentTime = startTime ?? this._getStartTime(state);
+    this._layer.play(state);
+    this._layer.activeStateCurrentTime = Math.min(
+      currentTime,
+      this._layer.activeStateDuration,
+    );
+  }
+
+  public pause() {
+    this._layer.pause();
+  }
+
+  private _getStartTime(state: AnimationState) {
+    return (() => {
       switch (state) {
         case AnimationState.Loop:
         case AnimationState.Once:
@@ -77,14 +87,5 @@ export class Animation {
           return this._layer.activeStateCurrentTime;
       }
     })();
-    this._layer.play(state);
-    this._layer.activeStateCurrentTime = Math.min(
-      currentTime,
-      this._layer.activeStateDuration,
-    );
-  }
-
-  public pause() {
-    this._layer.pause();
   }
 }

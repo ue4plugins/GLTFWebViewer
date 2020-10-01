@@ -167,6 +167,7 @@ export const Viewer: React.FC<ViewerProps> = observer(({ isError = false }) => {
       debug("Load glTF start", gltf.filePath);
       setSceneHierarchy();
       await viewer.loadGltf(gltf.filePath, gltf.blobFileName);
+      viewer.initAnimations();
       debug("Load glTF end", gltf.filePath);
 
       if (viewer.activeSceneHierarchy) {

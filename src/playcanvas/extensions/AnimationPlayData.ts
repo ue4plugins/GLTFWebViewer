@@ -19,7 +19,7 @@ export type AnimationPlayData = {
 
 export const animationPlayDataDefaults = {
   looping: true,
-  playing: true, // TODO
+  playing: true,
   playRate: 1,
   position: 0,
 };

@@ -62,12 +62,16 @@ export class PlayCanvasViewer implements TestableViewer {
   private _initiated = false;
   private _sceneLoaded = false;
   private _gltfLoaded = false;
+  private _noAnimations: boolean;
 
   public constructor(
     public canvas: HTMLCanvasElement,
     private _cameraPreviewSize: CameraPreviewSize,
   ) {
     this._resizeCanvas = this._resizeCanvas.bind(this);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    this._noAnimations = !!urlParams.get("noAnimations");
 
     this._app = this._createApp();
 
@@ -122,7 +126,7 @@ export class PlayCanvasViewer implements TestableViewer {
         .map((anim, index) => ({
           id: index,
           name: anim.name,
-          active: anim.playing,
+          active: false,
         }))
         .filter((_, index) => scene.animations[index].playable),
       variantSetManager: this._variantSetManager,
@@ -502,6 +506,28 @@ export class PlayCanvasViewer implements TestableViewer {
       this._loader.unload(this._gltf);
       this._gltf = undefined;
     }
+  }
+
+  /**
+   * Initialize animations. Auto played animations will start playing
+   * and non-auto played animations will be set to their start frame,
+   * if defined.
+   *
+   * This has to be run after the scene has loaded and rendered for the
+   * animations to play.
+   */
+  public initAnimations() {
+    debug("Init animations", this._activeGltfScene?.animations);
+
+    const gltfScene = this._activeGltfScene;
+    if (!gltfScene || this._noAnimations) {
+      return;
+    }
+
+    // Ensure first frame has rendered
+    requestAnimationFrame(() =>
+      gltfScene.animations.forEach(animation => animation.init()),
+    );
   }
 
   public setActiveAnimations(animationIds: number[]) {
