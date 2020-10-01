@@ -1,3 +1,16 @@
+## [1.17.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.16.0...v1.17.0) (2020-10-01)
+
+
+### Features
+
+* add support for extension EPIC_animation_play_data ([cfbd455](http://animech[secure]/clients/epic/gltf-web-viewer/commit/cfbd45577314fbb4bf5024253e8e2ab0dec368db))
+
+
+### Bug Fixes
+
+* init animations in correct order for them to play ([a5f541d](http://animech[secure]/clients/epic/gltf-web-viewer/commit/a5f541d60904cfa6d44f966b729e27649137e150))
+* play delayed animations from start time, if defined ([96edd55](http://animech[secure]/clients/epic/gltf-web-viewer/commit/96edd55fec8bfaecfb897adfdb47c0aa82a33c4a))
+
 ## [1.16.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.15.0...v1.16.0) (2020-10-01)
 
 
