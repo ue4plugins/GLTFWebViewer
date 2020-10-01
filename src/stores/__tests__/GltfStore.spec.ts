@@ -64,36 +64,11 @@ describe("GltfStore", () => {
     spy.mockRestore();
   });
 
-  it("should throw and have empty glTF list if request fails", async () => {
+  it("should have empty glTF list if request fails", async () => {
     const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMockFail);
 
-    expect.assertions(4);
-
     const store = new GltfStore();
-    try {
-      await store.fetchGltfs();
-    } catch (e) {
-      expect(e).toBeDefined();
-    }
-
-    expect(store.gltfs).toEqual([]);
-    expect(store.gltf).toBeUndefined();
-    expect(window.fetch).toHaveBeenCalledTimes(1);
-
-    spy.mockRestore();
-  });
-
-  it("should throw if empty glTF list is fetched", async () => {
-    const spy = jest.spyOn(window, "fetch").mockImplementation(fetchMockEmpty);
-
-    expect.assertions(4);
-
-    const store = new GltfStore();
-    try {
-      await store.fetchGltfs();
-    } catch (e) {
-      expect(e).toBeDefined();
-    }
+    await store.fetchGltfs();
 
     expect(store.gltfs).toEqual([]);
     expect(store.gltf).toBeUndefined();
