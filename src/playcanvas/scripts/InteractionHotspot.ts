@@ -128,38 +128,6 @@ class InteractionHotspot extends pc.ScriptType {
     this.app.on("prerender", this._onPrerender, this);
   }
 
-  public update() {
-    const camera = InteractionHotspot._getActiveCamera();
-    if (!camera) {
-      return;
-    }
-
-    const screenPos = this._screenPosition;
-    const isVisible = InteractionHotspot._isInstanceVisibleAtPosition(
-      this,
-      screenPos,
-    );
-
-    // Only update position of HTML element if it has changed
-    if (!this._lastScreenPosition.equals(screenPos)) {
-      const zIndex = Math.max(
-        Math.floor(((camera.farClip - screenPos.z) / camera.farClip) * 10000),
-        1,
-      );
-
-      this._hotspotElem.style.transform = `translateX(${screenPos.x}px) translateY(${screenPos.y}px)`;
-      this._hotspotElem.style.zIndex = String(zIndex);
-    }
-
-    // Only update visibility of HTML element if it has changed
-    if (this._wasVisible !== isVisible) {
-      this._hotspotElem.style.opacity = isVisible ? "1" : "0";
-      this._hotspotElem.style.pointerEvents = isVisible ? "auto" : "none";
-    }
-
-    this._wasVisible = isVisible;
-  }
-
   public onToggle(callback: OnToggleCallback) {
     if (this._onToggleCallbacks.indexOf(callback) > -1) {
       return;
@@ -372,11 +340,37 @@ class InteractionHotspot extends pc.ScriptType {
       return;
     }
 
-    // TODO: if screen-position is updated in the update-function, it yields
-    // unexpected results, but it works correctly when updated here.
-    // We might want to investigate why.
-    this._lastScreenPosition.copy(this._screenPosition);
-    camera.worldToScreen(this._getEntityPosition(), this._screenPosition);
+    const screenPos = this._screenPosition;
+    const lastScreenPos = this._lastScreenPosition;
+
+    lastScreenPos.copy(screenPos);
+    camera.worldToScreen(this._getEntityPosition(), screenPos);
+
+    // NOTE: The picker is updated post render (and this is pre render), so we sample it using
+    // the last screen-position instead of the current position.
+    const isVisible = InteractionHotspot._isInstanceVisibleAtPosition(
+      this,
+      lastScreenPos,
+    );
+
+    // Only update position of HTML element if it has changed
+    if (!lastScreenPos.equals(screenPos)) {
+      const zIndex = Math.max(
+        Math.floor(((camera.farClip - screenPos.z) / camera.farClip) * 10000),
+        1,
+      );
+
+      this._hotspotElem.style.transform = `translateX(${screenPos.x}px) translateY(${screenPos.y}px)`;
+      this._hotspotElem.style.zIndex = String(zIndex);
+    }
+
+    // Only update visibility of HTML element if it has changed
+    if (this._wasVisible !== isVisible) {
+      this._hotspotElem.style.opacity = isVisible ? "1" : "0";
+      this._hotspotElem.style.pointerEvents = isVisible ? "auto" : "none";
+    }
+
+    this._wasVisible = isVisible;
   }
 
   private _onClick() {
