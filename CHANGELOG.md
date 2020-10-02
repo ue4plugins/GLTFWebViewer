@@ -1,3 +1,10 @@
+### [1.17.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.17.0...v1.17.1) (2020-10-02)
+
+
+### Bug Fixes
+
+* **InteractionHotspot:** fix html hotspots lagging behind their entities ([4e90ff1](http://animech[secure]/clients/epic/gltf-web-viewer/commit/4e90ff196ae343ade99aa8a907a29ad31a8327bc))
+
 ## [1.17.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.16.0...v1.17.0) (2020-10-01)
 
 
