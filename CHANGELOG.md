@@ -1,3 +1,10 @@
+### [1.17.2](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.17.1...v1.17.2) (2020-10-02)
+
+
+### Bug Fixes
+
+* **InteractionHotspot:** fix jumps in animations when toggling direction ([c9b5056](http://animech[secure]/clients/epic/gltf-web-viewer/commit/c9b5056a6482a1be2b3b022a2d9901f7cac02995))
+
 ### [1.17.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.17.0...v1.17.1) (2020-10-02)
 
 
