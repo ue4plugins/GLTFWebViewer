@@ -140,6 +140,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
 
           animation.play(
             active ? AnimationState.Once : AnimationState.OnceReverse,
+            animation.activeStateClipTime,
           );
         });
 

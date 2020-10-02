@@ -44,6 +44,26 @@ export class Animation {
     return this._layer.activeState;
   }
 
+  public get activeStateClipTime() {
+    // TODO: This is a hack to get the current clip time,
+    // which we need to use as start-time when switching between
+    // states with different directions, a.k.a ping-ponging.
+    // Using activeStateCurrentTime from the layer leads to
+    // incorrect results in this case, since it calculates time differently.
+    // We should fix or extend the engine to remove the need for this hack.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const controller = (this._layer as any)._controller;
+    if (controller.activeStateAnimations.length < 1) {
+      return 0;
+    }
+
+    const activeClip = controller._animEvaluator.findClip(
+      controller.activeStateAnimations[0].name,
+    );
+
+    return activeClip ? activeClip.time : 0;
+  }
+
   public init() {
     // Only animations with a default state and start time have to
     // be initialized
