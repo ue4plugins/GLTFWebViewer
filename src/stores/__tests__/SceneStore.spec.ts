@@ -38,9 +38,6 @@ describe("SceneStore", () => {
 
     store.setScene(undefined);
     expect(store.scene).toBeUndefined();
-
-    store.setScene(scenes[1]);
-    expect(store.scene).toEqual(scenes[1]);
   });
 
   it("should have scene index after setScene is called", async () => {
@@ -50,9 +47,6 @@ describe("SceneStore", () => {
 
     store.setScene(undefined);
     expect(store.sceneIndex).toEqual(-1);
-
-    store.setScene(scenes[1]);
-    expect(store.sceneIndex).toEqual(1);
   });
 
   it("should automatically set scene from url param", async () => {
