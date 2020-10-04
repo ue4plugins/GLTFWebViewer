@@ -1,3 +1,15 @@
+## [1.18.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.17.2...v1.18.0) (2020-10-04)
+
+
+### Features
+
+* add temporary hack to make playcanvas work offline ([d8de8fd](http://animech[secure]/clients/epic/gltf-web-viewer/commit/d8de8fd4974310d0821195a8816928f3dc4482c5))
+
+
+### Bug Fixes
+
+* fallback to regular urls if URL.createObjectURL doesn't exists (which it doesn't in test framework) ([4e22b42](http://animech[secure]/clients/epic/gltf-web-viewer/commit/4e22b42ffa5b3be54fce284b0e536661259f857e))
+
 ### [1.17.2](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.17.1...v1.17.2) (2020-10-02)
 
 
