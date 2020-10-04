@@ -2,7 +2,11 @@
   "name": "ClearSky",
   "settings": {
     "physics": {
-      "gravity": [0, -9.8, 0]
+      "gravity": [
+        0,
+        -9.8,
+        0
+      ]
     },
     "render": {
       "fog_end": 1000,
@@ -12,9 +16,17 @@
       "gamma_correction": 1,
       "exposure": 1,
       "fog_start": 1,
-      "global_ambient": [0.2, 0.2, 0.2],
+      "global_ambient": [
+        0.2,
+        0.2,
+        0.2
+      ],
       "skyboxIntensity": 1,
-      "fog_color": [0, 0, 0],
+      "fog_color": [
+        0,
+        0,
+        0
+      ],
       "lightmapMode": 1,
       "fog": "none",
       "lightmapMaxResolution": 2048,
@@ -24,13 +36,25 @@
   },
   "entities": {
     "aed82cab-703d-4336-8ce9-dfc2d23a3b99": {
-      "position": [0, 0, 0],
-      "scale": [1, 1, 1],
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
       "name": "Root",
       "parent": null,
       "resource_id": "aed82cab-703d-4336-8ce9-dfc2d23a3b99",
       "components": {},
-      "rotation": [0, 0, 0],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
       "tags": [],
       "enabled": true,
       "children": []

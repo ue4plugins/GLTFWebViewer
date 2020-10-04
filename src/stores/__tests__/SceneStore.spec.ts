@@ -38,9 +38,6 @@ describe("SceneStore", () => {
 
     store.setScene(undefined);
     expect(store.scene).toBeUndefined();
-
-    store.setScene(scenes[1]);
-    expect(store.scene).toEqual(scenes[1]);
   });
 
   it("should have scene index after setScene is called", async () => {
@@ -50,18 +47,15 @@ describe("SceneStore", () => {
 
     store.setScene(undefined);
     expect(store.sceneIndex).toEqual(-1);
-
-    store.setScene(scenes[1]);
-    expect(store.sceneIndex).toEqual(1);
   });
 
   it("should automatically set scene from url param", async () => {
-    mockLocationSearch("?scene=Tropical%20Beach");
+    mockLocationSearch("?scene=ClearSky");
 
     const store = new SceneStore();
     store.setScenes(scenes);
 
-    expect(store.scene).toEqual(scenes.find(m => m.name === "Tropical Beach"));
+    expect(store.scene).toEqual(scenes.find(m => m.name === "ClearSky"));
   });
 
   it("should not have scene if scene from url param is not found", async () => {
