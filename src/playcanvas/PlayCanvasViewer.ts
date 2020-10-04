@@ -425,9 +425,9 @@ export class PlayCanvasViewer implements TestableViewer {
     const app = this._app;
 
     return new Promise<void>((resolve, reject) => {
-      //const url = pc.path.join(app.assets.prefix, "config.json");
+      let url = pc.path.join(app.assets.prefix, "config.json");
 
-      const url = configUrl; // TODO: replace hack
+      url = configUrl || url; // TODO: replace hack
 
       app.configure(url, error => {
         if (error) {
@@ -454,7 +454,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     this.destroyScene();
 
-    url = sceneUrl; // TODO: replace hack
+    url = sceneUrl || url; // TODO: replace hack
 
     debug("Loading scene", url);
 

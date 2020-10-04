@@ -1,5 +1,9 @@
 /* eslint-disable */
 
+if (!("createObjectURL" in URL)) {
+  (URL as any).createObjectURL = () => ""; // test framework doesn't seem to support createObjectURL
+}
+
 function getBytesFromBase64(base64: string, sliceSize = 512) {
   const byteCharacters = atob(base64);
   const byteArrays = [];
