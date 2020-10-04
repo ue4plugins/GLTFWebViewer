@@ -56,12 +56,12 @@ describe("SceneStore", () => {
   });
 
   it("should automatically set scene from url param", async () => {
-    mockLocationSearch("?scene=Tropical%20Beach");
+    mockLocationSearch("?scene=ClearSky");
 
     const store = new SceneStore();
     store.setScenes(scenes);
 
-    expect(store.scene).toEqual(scenes.find(m => m.name === "Tropical Beach"));
+    expect(store.scene).toEqual(scenes.find(m => m.name === "ClearSky"));
   });
 
   it("should not have scene if scene from url param is not found", async () => {

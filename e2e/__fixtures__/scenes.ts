@@ -1,18 +1,6 @@
 export const scenes: pc.SceneSource[] = [
   {
-    name: "Helipad",
-    url: "894846.json",
-  },
-  {
-    name: "Milky Way",
-    url: "894848.json",
-  },
-  {
-    name: "Tropical Beach",
-    url: "894849.json",
-  },
-  {
-    name: "Winter Forest",
-    url: "894850.json",
+    name: "ClearSky",
+    url: "1002267.json",
   },
 ];

@@ -3,13 +3,41 @@
     "i18nAssets": [],
     "useTouch": true,
     "layerOrder": [
-      { "layer": 0, "enabled": true, "transparent": false },
-      { "layer": 1, "enabled": true, "transparent": false },
-      { "layer": 2, "enabled": true, "transparent": false },
-      { "layer": 0, "enabled": true, "transparent": true },
-      { "layer": 3, "enabled": true, "transparent": false },
-      { "layer": 3, "enabled": true, "transparent": true },
-      { "layer": 4, "enabled": true, "transparent": true }
+      {
+        "layer": 0,
+        "enabled": true,
+        "transparent": false
+      },
+      {
+        "layer": 1,
+        "enabled": true,
+        "transparent": false
+      },
+      {
+        "layer": 2,
+        "enabled": true,
+        "transparent": false
+      },
+      {
+        "layer": 0,
+        "enabled": true,
+        "transparent": true
+      },
+      {
+        "layer": 3,
+        "enabled": true,
+        "transparent": false
+      },
+      {
+        "layer": 3,
+        "enabled": true,
+        "transparent": true
+      },
+      {
+        "layer": 4,
+        "enabled": true,
+        "transparent": true
+      }
     ],
     "externalScripts": [],
     "height": 720,
@@ -17,15 +45,31 @@
     "useModelV2": false,
     "antiAlias": true,
     "layers": {
-      "0": { "transparentSortMode": 3, "opaqueSortMode": 2, "name": "World" },
-      "1": { "transparentSortMode": 3, "opaqueSortMode": 2, "name": "Depth" },
-      "2": { "transparentSortMode": 3, "opaqueSortMode": 0, "name": "Skybox" },
+      "0": {
+        "transparentSortMode": 3,
+        "opaqueSortMode": 2,
+        "name": "World"
+      },
+      "1": {
+        "transparentSortMode": 3,
+        "opaqueSortMode": 2,
+        "name": "Depth"
+      },
+      "2": {
+        "transparentSortMode": 3,
+        "opaqueSortMode": 0,
+        "name": "Skybox"
+      },
       "3": {
         "transparentSortMode": 3,
         "opaqueSortMode": 0,
         "name": "Immediate"
       },
-      "4": { "transparentSortMode": 1, "opaqueSortMode": 1, "name": "UI" }
+      "4": {
+        "transparentSortMode": 1,
+        "opaqueSortMode": 1,
+        "name": "UI"
+      }
     },
     "width": 1280,
     "useDevicePixelRatio": false,
@@ -45,1219 +89,325 @@
     "libraries": []
   },
   "scenes": [
-    { "name": "Helipad", "url": "894846.json" },
-    { "name": "Milky Way", "url": "894848.json" },
-    { "name": "Tropical Beach", "url": "894849.json" },
-    { "name": "Winter Forest", "url": "894850.json" }
+    {
+      "name": "ClearSky",
+      "url": "1002267.json"
+    }
   ],
   "assets": {
-    "29298157": {
+    "36180616": {
+      "tags": [],
+      "name": "clearsky_negy.png",
+      "revision": 1,
+      "preload": true,
+      "meta": {
+        "compress": {
+          "alpha": false,
+          "normals": true,
+          "dxt": false,
+          "pvr": false,
+          "pvrBpp": 4,
+          "etc1": false,
+          "etc2": false,
+          "basis": false,
+          "quality": 128
+        },
+        "format": "png",
+        "type": "TrueColorAlpha",
+        "width": 256,
+        "height": 256,
+        "alpha": true,
+        "depth": 8,
+        "srgb": true,
+        "interlaced": false
+      },
       "data": {
-        "textures": [
-          29298163,
-          29298160,
-          29298159,
-          29298162,
-          29298161,
-          29298158
-        ],
-        "magFilter": 1,
-        "minFilter": 5,
+        "addressu": "repeat",
+        "addressv": "repeat",
+        "minfilter": "linear_mip_linear",
+        "magfilter": "linear",
         "anisotropy": 1,
-        "name": "Tropical Beach",
+        "rgbm": true,
+        "mipmaps": true
+      },
+      "type": "texture",
+      "file": {
+        "filename": "clearsky_negy.png",
+        "hash": "626e602e44f70b967985fb8144c5450b",
+        "size": 37985,
+        "variants": {},
+        "url": "files/assets/36180616/1/clearsky_negy.png"
+      },
+      "region": "eu-west-1",
+      "i18n": {},
+      "id": "36180616"
+    },
+    "36180617": {
+      "tags": [],
+      "name": "clearsky_posx.png",
+      "revision": 1,
+      "preload": true,
+      "meta": {
+        "compress": {
+          "alpha": false,
+          "normals": false,
+          "dxt": false,
+          "pvr": false,
+          "pvrBpp": 4,
+          "etc1": false,
+          "etc2": false,
+          "basis": false,
+          "quality": 128
+        },
+        "format": "png",
+        "type": "TrueColorAlpha",
+        "width": 256,
+        "height": 256,
+        "alpha": true,
+        "depth": 8,
+        "srgb": true,
+        "interlaced": false
+      },
+      "data": {
+        "addressu": "repeat",
+        "addressv": "repeat",
+        "minfilter": "linear_mip_linear",
+        "magfilter": "linear",
+        "anisotropy": 1,
+        "rgbm": true,
+        "mipmaps": true
+      },
+      "type": "texture",
+      "file": {
+        "filename": "clearsky_posx.png",
+        "hash": "b653bf5a31d160fdebd7e565e99cced3",
+        "size": 62895,
+        "variants": {},
+        "url": "files/assets/36180617/1/clearsky_posx.png"
+      },
+      "region": "eu-west-1",
+      "i18n": {},
+      "id": "36180617"
+    },
+    "36180618": {
+      "tags": [],
+      "name": "clearsky_negx.png",
+      "revision": 1,
+      "preload": true,
+      "meta": {
+        "compress": {
+          "alpha": false,
+          "normals": false,
+          "dxt": false,
+          "pvr": false,
+          "pvrBpp": 4,
+          "etc1": false,
+          "etc2": false,
+          "basis": false,
+          "quality": 128
+        },
+        "format": "png",
+        "type": "TrueColorAlpha",
+        "width": 256,
+        "height": 256,
+        "alpha": true,
+        "depth": 8,
+        "srgb": true,
+        "interlaced": false
+      },
+      "data": {
+        "addressu": "repeat",
+        "addressv": "repeat",
+        "minfilter": "linear_mip_linear",
+        "magfilter": "linear",
+        "anisotropy": 1,
+        "rgbm": true,
+        "mipmaps": true
+      },
+      "type": "texture",
+      "file": {
+        "filename": "clearsky_negx.png",
+        "hash": "d7132bcc6288d0834845898412fd6ecc",
+        "size": 45557,
+        "variants": {},
+        "url": "files/assets/36180618/1/clearsky_negx.png"
+      },
+      "region": "eu-west-1",
+      "i18n": {},
+      "id": "36180618"
+    },
+    "36180619": {
+      "tags": [],
+      "name": "clearsky_posz.png",
+      "revision": 1,
+      "preload": true,
+      "meta": {
+        "compress": {
+          "alpha": false,
+          "normals": false,
+          "dxt": false,
+          "pvr": false,
+          "pvrBpp": 4,
+          "etc1": false,
+          "etc2": false,
+          "basis": false,
+          "quality": 128
+        },
+        "format": "png",
+        "type": "TrueColorAlpha",
+        "width": 256,
+        "height": 256,
+        "alpha": true,
+        "depth": 8,
+        "srgb": true,
+        "interlaced": false
+      },
+      "data": {
+        "addressu": "repeat",
+        "addressv": "repeat",
+        "minfilter": "linear_mip_linear",
+        "magfilter": "linear",
+        "anisotropy": 1,
+        "rgbm": true,
+        "mipmaps": true
+      },
+      "type": "texture",
+      "file": {
+        "filename": "clearsky_posz.png",
+        "hash": "4515fb958bf3bd908648a224d077adf9",
+        "size": 54352,
+        "variants": {},
+        "url": "files/assets/36180619/1/clearsky_posz.png"
+      },
+      "region": "eu-west-1",
+      "i18n": {},
+      "id": "36180619"
+    },
+    "36180620": {
+      "tags": [],
+      "name": "clearsky_negz.png",
+      "revision": 1,
+      "preload": true,
+      "meta": {
+        "compress": {
+          "alpha": false,
+          "normals": false,
+          "dxt": false,
+          "pvr": false,
+          "pvrBpp": 4,
+          "etc1": false,
+          "etc2": false,
+          "basis": false,
+          "quality": 128
+        },
+        "format": "png",
+        "type": "TrueColorAlpha",
+        "width": 256,
+        "height": 256,
+        "alpha": true,
+        "depth": 8,
+        "srgb": true,
+        "interlaced": false
+      },
+      "data": {
+        "addressu": "repeat",
+        "addressv": "repeat",
+        "minfilter": "linear_mip_linear",
+        "magfilter": "linear",
+        "anisotropy": 1,
+        "rgbm": true,
+        "mipmaps": true
+      },
+      "type": "texture",
+      "file": {
+        "filename": "clearsky_negz.png",
+        "hash": "47dc05363c97dc47cf786ff6a7ee1af0",
+        "size": 53326,
+        "variants": {},
+        "url": "files/assets/36180620/1/clearsky_negz.png"
+      },
+      "region": "eu-west-1",
+      "i18n": {},
+      "id": "36180620"
+    },
+    "36180621": {
+      "tags": [],
+      "name": "clearsky_posy.png",
+      "revision": 1,
+      "preload": true,
+      "meta": {
+        "compress": {
+          "alpha": false,
+          "normals": false,
+          "dxt": false,
+          "pvr": false,
+          "pvrBpp": 4,
+          "etc1": false,
+          "etc2": false,
+          "basis": false,
+          "quality": 128
+        },
+        "format": "png",
+        "type": "TrueColorAlpha",
+        "width": 256,
+        "height": 256,
+        "alpha": true,
+        "depth": 8,
+        "srgb": true,
+        "interlaced": false
+      },
+      "data": {
+        "addressu": "repeat",
+        "addressv": "repeat",
+        "minfilter": "linear_mip_linear",
+        "magfilter": "linear",
+        "anisotropy": 1,
+        "rgbm": true,
+        "mipmaps": true
+      },
+      "type": "texture",
+      "file": {
+        "filename": "clearsky_posy.png",
+        "hash": "8dbf7eb7d62bb586a02c24b72020f69d",
+        "size": 51271,
+        "variants": {},
+        "url": "files/assets/36180621/1/clearsky_posy.png"
+      },
+      "region": "eu-west-1",
+      "i18n": {},
+      "id": "36180621"
+    },
+    "36180622": {
+      "tags": [],
+      "name": "clearsky",
+      "revision": 1,
+      "preload": true,
+      "meta": null,
+      "data": {
+        "name": "New Cubemap",
+        "textures": [
+          36180617,
+          36180618,
+          36180621,
+          36180616,
+          36180619,
+          36180620
+        ],
+        "minFilter": 5,
+        "magFilter": 1,
+        "anisotropy": 1,
         "rgbm": true
       },
+      "type": "cubemap",
       "file": {
-        "filename": "Tropical Beach.dds",
+        "filename": "clearsky.dds",
         "size": 524456,
-        "hash": "f3625d8403ae64addab6c6d6a3eebeec",
-        "url": "files/assets/29298157/1/Tropical%20Beach.dds"
+        "hash": "562ce97935ad1f80ef9afd8363a85782",
+        "url": "files/assets/36180622/1/clearsky.dds"
       },
-      "meta": null,
-      "name": "Tropical Beach",
-      "preload": false,
       "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "cubemap",
       "i18n": {},
-      "id": "29298157"
-    },
-    "29298158": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Tropical_Beach_negz.png",
-        "hash": "4a36a257bf7e8a897c5f6e12017963c8",
-        "size": 550226,
-        "url": "files/assets/29298158/1/Tropical_Beach_negz.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Tropical_Beach_negz",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298158"
-    },
-    "29298159": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Tropical_Beach_posy.png",
-        "hash": "27a8f49e22e2d52b92bb73e8770b0752",
-        "size": 596394,
-        "url": "files/assets/29298159/1/Tropical_Beach_posy.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Tropical_Beach_posy",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298159"
-    },
-    "29298160": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Tropical_Beach_negx.png",
-        "hash": "85df3152375501daa8df764e69e2ae92",
-        "size": 507530,
-        "url": "files/assets/29298160/1/Tropical_Beach_negx.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Tropical_Beach_negx",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298160"
-    },
-    "29298161": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Tropical_Beach_posz.png",
-        "hash": "05e891b6632c7ce711c80affbf8b4c3b",
-        "size": 484992,
-        "url": "files/assets/29298161/1/Tropical_Beach_posz.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Tropical_Beach_posz",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298161"
-    },
-    "29298162": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Tropical_Beach_negy.png",
-        "hash": "a72fd64413e298d05f095e466f85d06f",
-        "size": 453597,
-        "url": "files/assets/29298162/1/Tropical_Beach_negy.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Tropical_Beach_negy",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298162"
-    },
-    "29298163": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Tropical_Beach_posx.png",
-        "hash": "314096281b507d5eb7ea6c4119d87efc",
-        "size": 552869,
-        "url": "files/assets/29298163/1/Tropical_Beach_posx.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Tropical_Beach_posx",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298163"
-    },
-    "29298171": {
-      "data": {
-        "textures": [
-          29298172,
-          29298174,
-          29298176,
-          29298173,
-          29298177,
-          29298175
-        ],
-        "magFilter": 1,
-        "minFilter": 5,
-        "anisotropy": 1,
-        "name": "Milky Way",
-        "rgbm": true
-      },
-      "file": {
-        "size": 524324,
-        "hash": "4516e55838a21f520b8bd0e42d56b85f",
-        "filename": "Milky Way.dds",
-        "url": "files/assets/29298171/1/Milky%20Way.dds"
-      },
-      "meta": null,
-      "name": "Milky Way",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "cubemap",
-      "i18n": {},
-      "id": "29298171"
-    },
-    "29298172": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Milkyway_posx.png",
-        "hash": "9a008c78760c892d01d3b6ca519f39df",
-        "size": 676171,
-        "url": "files/assets/29298172/1/Milkyway_posx.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Milkyway_posx",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298172"
-    },
-    "29298173": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Milkyway_negy.png",
-        "hash": "2cb1c6360ce8198f04dc21ef0da25987",
-        "size": 728143,
-        "url": "files/assets/29298173/1/Milkyway_negy.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Milkyway_negy",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298173"
-    },
-    "29298174": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Milkyway_negx.png",
-        "hash": "c167c73e3e8c36d26e4072de2d9ecce5",
-        "size": 671615,
-        "url": "files/assets/29298174/1/Milkyway_negx.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Milkyway_negx",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298174"
-    },
-    "29298175": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Milkyway_negz.png",
-        "hash": "448aec872c149b4d5168c67a071a84cd",
-        "size": 730425,
-        "url": "files/assets/29298175/1/Milkyway_negz.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Milkyway_negz",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298175"
-    },
-    "29298176": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Milkyway_posy.png",
-        "hash": "324f15bcce2532404c40c0d4e6884aa4",
-        "size": 741731,
-        "url": "files/assets/29298176/1/Milkyway_posy.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Milkyway_posy",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298176"
-    },
-    "29298177": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Milkyway_posz.png",
-        "hash": "a3d598923194a98319257d9209be049e",
-        "size": 722134,
-        "url": "files/assets/29298177/1/Milkyway_posz.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Milkyway_posz",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298177"
-    },
-    "29298184": {
-      "data": {
-        "textures": [
-          29298187,
-          29298185,
-          29298188,
-          29298193,
-          29298189,
-          29298195
-        ],
-        "magFilter": 1,
-        "minFilter": 5,
-        "anisotropy": 1,
-        "name": "Helipad",
-        "rgbm": true
-      },
-      "file": {
-        "filename": "Helipad.dds",
-        "size": 524456,
-        "hash": "0041d1327917349afb13096fe4acd3bf",
-        "url": "files/assets/29298184/1/Helipad.dds"
-      },
-      "meta": null,
-      "name": "Helipad",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "cubemap",
-      "i18n": {},
-      "id": "29298184"
-    },
-    "29298185": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Helipad_negx.png",
-        "hash": "ad3dcc195356ed24941a5f127f06f917",
-        "size": 421202,
-        "url": "files/assets/29298185/1/Helipad_negx.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Helipad_negx",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298185"
-    },
-    "29298187": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Helipad_posx.png",
-        "hash": "cac1dd195a385d5871816e5f6c99a714",
-        "size": 442652,
-        "url": "files/assets/29298187/1/Helipad_posx.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Helipad_posx",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298187"
-    },
-    "29298188": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Helipad_posy.png",
-        "hash": "b4db4d7dc90e3e34e74a251f1f201eab",
-        "size": 185811,
-        "url": "files/assets/29298188/1/Helipad_posy.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Helipad_posy",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298188"
-    },
-    "29298189": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Helipad_posz.png",
-        "hash": "ed7ddf73b69555d1aef880e581214856",
-        "size": 458870,
-        "url": "files/assets/29298189/1/Helipad_posz.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Helipad_posz",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298189"
-    },
-    "29298193": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Helipad_negy.png",
-        "hash": "1ee3f6bfb70d50783c2f0f0588aebc55",
-        "size": 465542,
-        "url": "files/assets/29298193/1/Helipad_negy.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Helipad_negy",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298193"
-    },
-    "29298195": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "Helipad_negz.png",
-        "hash": "98b3170f573dad6dff21623ffb347d80",
-        "size": 414309,
-        "url": "files/assets/29298195/1/Helipad_negz.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 512,
-        "height": 512,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "Helipad_negz",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298195"
-    },
-    "29298197": {
-      "data": {
-        "textures": [
-          29298198,
-          29298203,
-          29298202,
-          29298199,
-          29298200,
-          29298201
-        ],
-        "magFilter": 1,
-        "minFilter": 5,
-        "anisotropy": 1,
-        "name": "Winter Forest",
-        "rgbm": true
-      },
-      "file": {
-        "size": 524324,
-        "hash": "c1e8355398b331ccd0665712b41efc90",
-        "filename": "Winter Forest.dds",
-        "url": "files/assets/29298197/1/Winter%20Forest.dds"
-      },
-      "meta": null,
-      "name": "Winter Forest",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "cubemap",
-      "i18n": {},
-      "id": "29298197"
-    },
-    "29298198": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "winterforest_posx.png",
-        "hash": "69c50b2b97ace8dd31413d8674f0a337",
-        "size": 2395805,
-        "url": "files/assets/29298198/1/winterforest_posx.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 1024,
-        "height": 1024,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "winterforest_posx",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298198"
-    },
-    "29298199": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "winterforest_negy.png",
-        "hash": "616e037b021722161937e6ebf7346315",
-        "size": 1610683,
-        "url": "files/assets/29298199/1/winterforest_negy.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 1024,
-        "height": 1024,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "winterforest_negy",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298199"
-    },
-    "29298200": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "winterforest_posz.png",
-        "hash": "d8d6e34967ce8b48997629cef39d0b6f",
-        "size": 2203618,
-        "url": "files/assets/29298200/1/winterforest_posz.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 1024,
-        "height": 1024,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "winterforest_posz",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298200"
-    },
-    "29298201": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "winterforest_negz.png",
-        "hash": "646647b9b4792127860bbfeb80ae7528",
-        "size": 2302579,
-        "url": "files/assets/29298201/1/winterforest_negz.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 1024,
-        "height": 1024,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "winterforest_negz",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298201"
-    },
-    "29298202": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "winterforest_posy.png",
-        "hash": "2fc9ca4f2553b0e91ce4778dda88d915",
-        "size": 1863356,
-        "url": "files/assets/29298202/1/winterforest_posy.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 1024,
-        "height": 1024,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "winterforest_posy",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298202"
-    },
-    "29298203": {
-      "data": {
-        "addressu": "repeat",
-        "addressv": "repeat",
-        "minfilter": "linear_mip_linear",
-        "magfilter": "linear",
-        "anisotropy": 1,
-        "rgbm": true,
-        "mipmaps": true
-      },
-      "file": {
-        "filename": "winterforest_negx.png",
-        "hash": "f2e93ce771e171a00c97c951335c5276",
-        "size": 2286835,
-        "url": "files/assets/29298203/1/winterforest_negx.png"
-      },
-      "meta": {
-        "format": "png",
-        "type": "TrueColorAlpha",
-        "width": 1024,
-        "height": 1024,
-        "alpha": true,
-        "depth": 8,
-        "srgb": true,
-        "compress": {
-          "alpha": true,
-          "normals": false,
-          "dxt": false,
-          "pvr": false,
-          "pvrBpp": 4,
-          "etc1": false,
-          "etc2": false,
-          "basis": false,
-          "quality": 128
-        }
-      },
-      "name": "winterforest_negx",
-      "preload": false,
-      "region": "eu-west-1",
-      "revision": 1,
-      "tags": [],
-      "type": "texture",
-      "i18n": {},
-      "id": "29298203"
+      "id": "36180622"
     }
   }
 }
