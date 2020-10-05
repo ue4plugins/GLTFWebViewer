@@ -85,16 +85,19 @@ const useStyles = makeStyles(theme => ({
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore, settingsStore } = useStores();
-  const { gltf, fetchGltfs } = gltfStore;
+  const { gltf, gltfs, fetchGltfs } = gltfStore;
   const { showUI, showFpsMeter } = settingsStore;
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
+  const isEmpty = gltfs.length === 0 && !gltf;
 
   useEffect(() => {
     runAsync(async () => {
       await fetchGltfs();
     });
   }, [fetchGltfs, runAsync]);
+
+  useEffect(() => setIsSidebarOpen(!isEmpty), [isEmpty]);
 
   return (
     <>
@@ -125,7 +128,7 @@ export const Root: React.FC = observer(() => {
               [classes.viewportFullscreen]: !isSidebarOpen,
             })}
           >
-            <Viewer isError={isError} />
+            <Viewer isError={isError} isEmpty={isEmpty} />
             {showUI && <Cameras />}
             {showUI && showFpsMeter && (
               <Hidden xsDown>

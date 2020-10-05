@@ -29,8 +29,8 @@ const useStyles = makeStyles(theme => {
 });
 
 export type ErrorMessageProps = {
-  type: "empty" | "unexpected";
-  overline: string;
+  type?: "empty" | "unexpected";
+  overline?: string;
   title: string;
 };
 
@@ -44,19 +44,23 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
 
   return (
     <div className={classes.root}>
-      <div className={classes.icon}>
-        {(() => {
-          switch (type) {
-            case "empty":
-              return <EmptyConfigurationIcon />;
-            case "unexpected":
-              return <ErrorIcon />;
-          }
-        })()}
-      </div>
-      <Typography variant="overline" color="textSecondary">
-        {overline}
-      </Typography>
+      {type && (
+        <div className={classes.icon}>
+          {(() => {
+            switch (type) {
+              case "empty":
+                return <EmptyConfigurationIcon />;
+              case "unexpected":
+                return <ErrorIcon />;
+            }
+          })()}
+        </div>
+      )}
+      {overline && (
+        <Typography variant="overline" color="textSecondary">
+          {overline}
+        </Typography>
+      )}
       <Typography variant="h6" gutterBottom>
         {title}
       </Typography>
