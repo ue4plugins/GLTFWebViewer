@@ -215,7 +215,7 @@ export const Viewer: React.FC<ViewerProps> = observer(
         >
           {isDragActive ? (
             <Typography variant="h6">
-              Drop glTF and accompanying assets here
+              Drop a .gltf or .glb file with accompanying assets here
             </Typography>
           ) : isLoading ? (
             <CircularProgress />
