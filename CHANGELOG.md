@@ -1,3 +1,15 @@
+## [1.19.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.18.0...v1.19.0) (2020-10-05)
+
+
+### Features
+
+* add empty state to viewport and don't show sidebar if no files are found ([8dde379](http://animech[secure]/clients/epic/gltf-web-viewer/commit/8dde379546c9ff3b4ca860324517c9973efc21c9))
+
+
+### Bug Fixes
+
+* remove fixed height of NavListItem to allow multiple lines ([74dca14](http://animech[secure]/clients/epic/gltf-web-viewer/commit/74dca14b79ca2bcab2dd3e45403c118a982ed267))
+
 ## [1.18.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.17.2...v1.18.0) (2020-10-04)
 
 
