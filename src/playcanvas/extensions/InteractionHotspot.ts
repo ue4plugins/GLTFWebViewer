@@ -118,6 +118,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
           });
 
         script.transitionDuration = 200;
+        script.colliderScreenRadius = 18; // TODO: Make this driven by image-size?
 
         script.image = textures[hotspot.data.image];
         if (hotspot.data.hoveredImage) {

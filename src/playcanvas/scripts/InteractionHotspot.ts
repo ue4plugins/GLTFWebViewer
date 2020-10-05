@@ -21,6 +21,7 @@ interface InteractionHotspot {
   transitionDuration: number;
   parentElementId: string;
   cacheEntityPosition: boolean;
+  colliderScreenRadius: number;
 }
 
 const interactionHotspotScriptName = "InteractionHotspot";
@@ -30,12 +31,18 @@ const interactionHotspotScriptName = "InteractionHotspot";
 const pickerWidth = 256;
 const pickerHeight = 256;
 
+type PickerHotspot = {
+  script: InteractionHotspot;
+  pickerPosition: pc.Vec3;
+};
+
 class InteractionHotspot extends pc.ScriptType {
   private static _picker: pc.Picker;
   private static _pickerPixels: Uint8Array;
   private static _pickerModel: pc.Model;
   private static _pickerMaterial: pc.Material;
-  private static _instanceCount = 0;
+  private static _hotspots: PickerHotspot[] = [];
+  private static _tempVecs = [new pc.Vec3(), new pc.Vec3(), new pc.Vec3()];
 
   private _onToggleCallbacks: OnToggleCallback[] = [];
   private _active = false;
@@ -100,7 +107,7 @@ class InteractionHotspot extends pc.ScriptType {
   }
 
   public initialize() {
-    InteractionHotspot._onInstanceAdded();
+    InteractionHotspot._onInstanceAdded(this);
 
     this._setStateImages();
     this._setStateVisibility("default");
@@ -118,7 +125,7 @@ class InteractionHotspot extends pc.ScriptType {
     this._hotspotElem.addEventListener("mouseout", this._onMouseOut);
 
     this.on("destroy", () => {
-      InteractionHotspot._onInstanceRemoved();
+      InteractionHotspot._onInstanceRemoved(this);
       this._parentElem?.removeChild(this._hotspotElem);
       this._hotspotElem.removeEventListener("click", this._onClick);
       this._hotspotElem.removeEventListener("mouseover", this._onMouseOver);
@@ -143,28 +150,35 @@ class InteractionHotspot extends pc.ScriptType {
     this._onToggleCallbacks.splice(index, 1);
   }
 
-  private static _onInstanceAdded() {
+  private static _onInstanceAdded(script: InteractionHotspot) {
     this._initialize();
-    this._instanceCount += 1;
 
-    // Start updating the picker when the first instance is added
-    if (this._instanceCount === 1) {
-      this._updatePicker();
-      this._picker.app.on("postrender", this._updatePicker, this);
+    if (!this._hotspots.find(hotspot => hotspot.script === script)) {
+      this._hotspots.push({
+        script: script,
+        pickerPosition: pc.Vec3.ZERO.clone(),
+      });
+
+      // Start updating the picker when the first instance is added
+      if (this._hotspots.length === 1) {
+        this._updatePicker();
+        this._picker.app.on("postrender", this._updatePicker, this);
+      }
     }
   }
 
-  private static _onInstanceRemoved() {
+  private static _onInstanceRemoved(script: InteractionHotspot) {
     this._initialize();
-    this._instanceCount -= 1;
 
-    // Stop updating the picker when all instances have been removed
-    if (this._instanceCount === 0) {
-      this._picker.app.off("postrender", this._updatePicker, this);
+    const hotspot = this._hotspots.find(hotspot => hotspot.script === script);
+    if (hotspot) {
+      this._hotspots.splice(this._hotspots.indexOf(hotspot), 1);
+
+      // Stop updating the picker when all instances have been removed
+      if (this._hotspots.length === 0) {
+        this._picker.app.off("postrender", this._updatePicker, this);
+      }
     }
-
-    // Sanity check, keep count inside valid range
-    this._instanceCount = Math.max(this._instanceCount, 0);
   }
 
   private static _initialize() {
@@ -179,47 +193,11 @@ class InteractionHotspot extends pc.ScriptType {
 
     this._picker = new pc.Picker(app, pickerWidth, pickerHeight);
     this._pickerPixels = new Uint8Array(4 * pickerWidth * pickerHeight);
+    this._pickerMaterial = new pc.BasicMaterial();
 
-    // Setup special material for picking hotspots
-    this._pickerMaterial = new pc.Material();
-    this._pickerMaterial.shader = new pc.Shader(app.graphicsDevice, {
-      attributes: {
-        aPosition: pc.SEMANTIC_POSITION,
-      },
-      vshader: `
-        attribute vec4 aPosition;
-
-        uniform mat4   matrix_model;
-        uniform mat4   matrix_viewProjection;
-
-        void main(void)
-        {
-            vec4 worldPosition = matrix_model * vec4(aPosition.xyz, 1);
-            gl_Position = matrix_viewProjection * worldPosition;
-            gl_PointSize = 1.0;
-        }
-    `,
-      fshader: `
-        precision mediump float;
-
-        uniform vec4 uColor;
-        varying vec4 outColor;
-
-        void main(void)
-        {
-            gl_FragColor = uColor;
-        }
-    `,
+    const mesh = pc.createSphere(app.graphicsDevice, {
+      radius: 1,
     });
-
-    // Setup special mesh for picking hotspots
-    const mesh = new pc.Mesh(app.graphicsDevice);
-    mesh.setPositions([0, 0, 0]);
-    mesh.update(pc.PRIMITIVE_POINTS, false);
-    mesh.aabb = new pc.BoundingBox(
-      new pc.Vec3(-1, -1, -1),
-      new pc.Vec3(1, 1, 1),
-    );
 
     const node = new pc.GraphNode();
     const meshInstance = new pc.MeshInstance(
@@ -261,6 +239,41 @@ class InteractionHotspot extends pc.ScriptType {
       return;
     }
 
+    const device = picker.app.graphicsDevice;
+    const scaleX = pickerWidth / device.width;
+    const scaleY = pickerHeight / device.height;
+
+    const [screenPos, testPos] = this._tempVecs;
+    const cameraPosition = camera.entity.getPosition();
+
+    // Update scale and calculated picker-position of all active hotspots
+    this._hotspots.forEach(hotspot => {
+      const { script, pickerPosition } = hotspot;
+      if (!script._pickerEntity) {
+        return;
+      }
+
+      const position = script._pickerEntity.getPosition();
+      const cameraDistance = position.distance(cameraPosition); // TODO: Should this be projected along the camera's forward-vector?
+
+      camera.worldToScreen(position, screenPos);
+      camera.screenToWorld(
+        screenPos.x + script.colliderScreenRadius,
+        screenPos.y,
+        cameraDistance,
+        testPos,
+      );
+
+      const scale = testPos.distance(position);
+      script._pickerEntity.setLocalScale(scale, scale, scale);
+
+      pickerPosition.x = Math.floor(screenPos.x * scaleX);
+      pickerPosition.y = Math.floor(screenPos.y * scaleY);
+
+      // Flip Y to match the way textures are stored
+      pickerPosition.y = Math.floor(picker.height - 1 - pickerPosition.y);
+    });
+
     const worldLayer = picker.app.scene.layers.getLayerById(pc.LAYERID_WORLD);
 
     // Render to the picker's render-target
@@ -269,7 +282,6 @@ class InteractionHotspot extends pc.ScriptType {
     this._setPickerMaterialVisible(false);
 
     // Read all pixels from the render-target into our pixel-array
-    const device = picker.app.graphicsDevice;
     const prevRenderTarget = device.getRenderTarget();
     device.setRenderTarget(picker.layer.renderTarget);
     device.updateBegin();
@@ -278,51 +290,31 @@ class InteractionHotspot extends pc.ScriptType {
     device.setRenderTarget(prevRenderTarget);
   }
 
-  private static _isInstanceVisibleAtPosition(
-    instance: InteractionHotspot,
-    screenPosition: pc.Vec3,
-  ) {
+  private static _isHotspotVisible(script: InteractionHotspot) {
+    const hotspot = this._hotspots.find(hotspot => hotspot.script === script);
+    if (!hotspot) {
+      return false;
+    }
+
     const picker = this._picker;
-    const device = picker.app.graphicsDevice;
-
-    const scaleX = pickerWidth / device.width;
-    const scaleY = pickerHeight / device.height;
-
-    const pickerX = Math.round(screenPosition.x * scaleX);
-    let pickerY = Math.round(screenPosition.y * scaleY);
-
-    // Flip Y to match the way textures are stored
-    pickerY = picker.height - 1 - pickerY;
-
     const pixels = this._pickerPixels;
     const drawCalls = picker.layer.instances.visibleOpaque[0].list;
 
-    const minX = Math.max(pickerX - 1, 0);
-    const maxX = Math.min(pickerX + 1, pickerWidth - 1);
-    const minY = Math.max(pickerY - 1, 0);
-    const maxY = Math.min(pickerY + 1, pickerHeight - 1);
+    const { x, y } = hotspot.pickerPosition;
 
     // To avoid issues with precision, we sample 3x3 pixels instead of just 1
-    for (let y = minY; y <= maxY; y += 1) {
-      for (let x = minX; x <= maxX; x += 1) {
-        const idx = y * picker.width + x;
-        const r = pixels[4 * idx + 0];
-        const g = pixels[4 * idx + 1];
-        const b = pixels[4 * idx + 2];
-        const index = (r << 16) | (g << 8) | b;
+    const idx = y * picker.width + x;
+    const r = pixels[4 * idx + 0];
+    const g = pixels[4 * idx + 1];
+    const b = pixels[4 * idx + 2];
+    const index = (r << 16) | (g << 8) | b;
 
-        // White is 'no selection'
-        if (index === 0xffffff) {
-          continue;
-        }
-
-        if (drawCalls[index]?.node?.parent === instance._pickerEntity) {
-          return true;
-        }
-      }
+    // White is 'no selection'
+    if (index === 0xffffff) {
+      return false;
     }
 
-    return false;
+    return drawCalls[index]?.node?.parent === script._pickerEntity;
   }
 
   private _addPickerEntity() {
@@ -346,13 +338,6 @@ class InteractionHotspot extends pc.ScriptType {
     lastScreenPos.copy(screenPos);
     camera.worldToScreen(this._getEntityPosition(), screenPos);
 
-    // NOTE: The picker is updated post render (and this is pre render), so we sample it using
-    // the last screen-position instead of the current position.
-    const isVisible = InteractionHotspot._isInstanceVisibleAtPosition(
-      this,
-      lastScreenPos,
-    );
-
     // Only update position of HTML element if it has changed
     if (!lastScreenPos.equals(screenPos)) {
       const zIndex = Math.max(
@@ -363,6 +348,8 @@ class InteractionHotspot extends pc.ScriptType {
       this._hotspotElem.style.transform = `translateX(${screenPos.x}px) translateY(${screenPos.y}px)`;
       this._hotspotElem.style.zIndex = String(zIndex);
     }
+
+    const isVisible = InteractionHotspot._isHotspotVisible(this);
 
     // Only update visibility of HTML element if it has changed
     if (this._wasVisible !== isVisible) {
@@ -504,6 +491,14 @@ InteractionHotspot.attributes.add("cacheEntityPosition", {
   title: "Cache entity position",
   description:
     "Cache entity world position on initialize instead of reading from entity on every frame.",
+});
+
+InteractionHotspot.attributes.add("colliderScreenRadius", {
+  type: "number",
+  default: 10,
+  title: "Radius of collider in pixels",
+  description:
+    "Used for determining if a hotspot is visible or hidden behind other geometry.",
 });
 
 export { InteractionHotspot, interactionHotspotScriptName };
