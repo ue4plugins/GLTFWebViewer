@@ -14,7 +14,7 @@ export type VariantNode = {
 export type VariantNodeProperties = {
   visible?: boolean;
   materialMapping?: MaterialMapping;
-  model?: pc.Asset;
+  modelAssetID?: number | null;
 };
 
 export class Variant {
@@ -31,10 +31,11 @@ export class Variant {
 
   public get active() {
     return this._variantNodes.every(({ node, properties }) => {
-      const { visible, model, materialMapping } = properties;
+      const { visible, modelAssetID, materialMapping } = properties;
 
       const visibilityMatch = visible === undefined || visible === node.enabled;
-      const modelMatch = model === undefined || model.id === node.model?.asset;
+      const modelMatch =
+        modelAssetID === undefined || modelAssetID === node.model?.asset;
       const materialMappingMatch =
         materialMapping === undefined ||
         deepEqual(materialMapping, node.model?.mapping);
@@ -45,10 +46,13 @@ export class Variant {
 
   public activate(): void {
     this._variantNodes.forEach(({ node, properties }) => {
-      if (properties.model !== undefined && node.model !== undefined) {
-        debug("Set node mesh", node.name, properties.model);
+      if (properties.modelAssetID !== undefined && node.model !== undefined) {
+        debug("Set node mesh", node.name, properties.modelAssetID);
 
-        if (node.model.asset !== properties.model.id) {
+        // TODO: Improve typings for ModelComponent.asset to include null as possible value
+        const assetID = properties.modelAssetID as number;
+
+        if (node.model.asset !== assetID) {
           // HACK: prevent the anim-component from being reset when changing model by
           // temporarily removing it from the entity. When resetting the anim-component,
           // its state-graph is restored from an asset. But we've constructed the graph
@@ -56,7 +60,7 @@ export class Variant {
           const animComponent = node.anim;
           delete node.anim;
 
-          node.model.asset = properties.model;
+          node.model.asset = assetID;
           node.anim = animComponent;
         }
       }
