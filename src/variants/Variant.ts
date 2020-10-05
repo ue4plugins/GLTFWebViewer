@@ -1,6 +1,5 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
-import { deepEqual } from "../utilities";
 
 const debug = Debug("Variant");
 
@@ -38,7 +37,7 @@ export class Variant {
         modelAssetID === undefined || modelAssetID === node.model?.asset;
       const materialMappingMatch =
         materialMapping === undefined ||
-        deepEqual(materialMapping, node.model?.mapping);
+        this._hasMatchingMaterials(materialMapping, node.model);
 
       return visibilityMatch && modelMatch && materialMappingMatch;
     });
@@ -102,6 +101,38 @@ export class Variant {
       // are completely different. We may wish to investigate this issue later if this is
       // an important use-case.
       nodeLightmap.applyLightmapToModel();
+    });
+  }
+
+  private _hasMatchingMaterials(
+    mapping: MaterialMapping,
+    model?: pc.ModelComponent,
+  ): boolean {
+    if (!model?.meshInstances) {
+      return false;
+    }
+
+    if (Object.keys(mapping).length < 1) {
+      // NOTE: Mappings without keys serve as "reset" mappings, that
+      // restores the original mappings of the source model-asset.
+      // They are not highlighted as active in Unreal when pressed, so
+      // we replicate the same behavior by returning false.
+      return false;
+    }
+
+    const app = pc.Application.getApplication();
+    const srcMapping = app?.assets.get(model.asset as number)?.data?.mapping;
+
+    return model.meshInstances.every((meshInstance, idx) => {
+      const assetID =
+        mapping[idx] !== undefined ? mapping[idx] : srcMapping[idx]?.material;
+      const asset = app?.assets.get(assetID);
+      const material = asset?.resource;
+      if (!material) {
+        return false;
+      }
+
+      return material === meshInstance.material;
     });
   }
 }
