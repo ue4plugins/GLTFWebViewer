@@ -107,8 +107,8 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
         <SidebarContainer>
           <div className={classes.content}>
             <Appear duration={theme.transitions.duration.standard}>
-              <ErrorMessage type="empty" overline="Empty" title="No scenes">
-                Drag and drop a glTF file to start.
+              <ErrorMessage type="empty" overline="Empty" title="No options">
+                This scene does not contain any configurable objects.
               </ErrorMessage>
             </Appear>
           </div>

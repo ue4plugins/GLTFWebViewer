@@ -11,8 +11,8 @@ import {
   hdriBackdropScriptName,
   NodeLightmap,
   nodeLightmapScriptName,
-  interactionHotspotScriptName,
-  InteractionHotspot,
+  animationHotspotScriptName,
+  AnimationHotspot,
 } from "./scripts";
 import {
   PlayCanvasGltfLoader,
@@ -49,7 +49,7 @@ export class PlayCanvasViewer implements TestableViewer {
   private _gltf?: GltfData;
   private _activeGltfScene?: GltfSceneData;
   private _variantSetManager?: VariantSetManager;
-  private _hotspots?: InteractionHotspot[];
+  private _hotspots?: AnimationHotspot[];
   private _backdrops?: HdriBackdrop[];
   private _cameraPreviews?: string[];
   private _debouncedCanvasResize = debounce(
@@ -77,7 +77,7 @@ export class PlayCanvasViewer implements TestableViewer {
     this._app = this._createApp();
 
     pc.registerScript(OrbitCamera, orbitCameraScriptName);
-    pc.registerScript(InteractionHotspot, interactionHotspotScriptName);
+    pc.registerScript(AnimationHotspot, animationHotspotScriptName);
     pc.registerScript(HdriBackdropScript, hdriBackdropScriptName);
     pc.registerScript(NodeLightmap, nodeLightmapScriptName);
 
@@ -323,7 +323,7 @@ export class PlayCanvasViewer implements TestableViewer {
     this._cameraPreviews = undefined;
   }
 
-  private _initHotspots(hotspots: InteractionHotspot[]) {
+  private _initHotspots(hotspots: AnimationHotspot[]) {
     this._destroyHotspots();
 
     debug("Init hotspots", hotspots);

@@ -13,7 +13,7 @@ type OnToggleCallback = (active: boolean) => void;
 /**
  * Typings for PlayCanvas script-attributes attached to the class.
  */
-interface InteractionHotspot {
+interface AnimationHotspot {
   image: TextureAsset;
   hoveredImage: TextureAsset | null;
   toggledImage: TextureAsset | null;
@@ -24,7 +24,7 @@ interface InteractionHotspot {
   colliderScreenRadius: number;
 }
 
-const interactionHotspotScriptName = "InteractionHotspot";
+const animationHotspotScriptName = "AnimationHotspot";
 
 // NOTE: We keep a constant resolution for the picker regardless of
 // current canvas-resolution in order to prevent expensive resizing.
@@ -32,11 +32,11 @@ const pickerWidth = 256;
 const pickerHeight = 256;
 
 type PickerHotspot = {
-  script: InteractionHotspot;
+  script: AnimationHotspot;
   pickerPosition: pc.Vec3;
 };
 
-class InteractionHotspot extends pc.ScriptType {
+class AnimationHotspot extends pc.ScriptType {
   private static _picker: pc.Picker;
   private static _pickerPixels: Uint8Array;
   private static _pickerModel: pc.Model;
@@ -107,7 +107,7 @@ class InteractionHotspot extends pc.ScriptType {
   }
 
   public initialize() {
-    InteractionHotspot._onInstanceAdded(this);
+    AnimationHotspot._onInstanceAdded(this);
 
     this._setStateImages();
     this._setStateVisibility("default");
@@ -125,7 +125,7 @@ class InteractionHotspot extends pc.ScriptType {
     this._hotspotElem.addEventListener("mouseout", this._onMouseOut);
 
     this.on("destroy", () => {
-      InteractionHotspot._onInstanceRemoved(this);
+      AnimationHotspot._onInstanceRemoved(this);
       this._parentElem?.removeChild(this._hotspotElem);
       this._hotspotElem.removeEventListener("click", this._onClick);
       this._hotspotElem.removeEventListener("mouseover", this._onMouseOver);
@@ -150,7 +150,7 @@ class InteractionHotspot extends pc.ScriptType {
     this._onToggleCallbacks.splice(index, 1);
   }
 
-  private static _onInstanceAdded(script: InteractionHotspot) {
+  private static _onInstanceAdded(script: AnimationHotspot) {
     this._initialize();
 
     if (!this._hotspots.find(hotspot => hotspot.script === script)) {
@@ -167,7 +167,7 @@ class InteractionHotspot extends pc.ScriptType {
     }
   }
 
-  private static _onInstanceRemoved(script: InteractionHotspot) {
+  private static _onInstanceRemoved(script: AnimationHotspot) {
     this._initialize();
 
     const hotspot = this._hotspots.find(hotspot => hotspot.script === script);
@@ -203,7 +203,7 @@ class InteractionHotspot extends pc.ScriptType {
     const meshInstance = new pc.MeshInstance(
       node,
       mesh,
-      InteractionHotspot._pickerMaterial,
+      AnimationHotspot._pickerMaterial,
     );
 
     const model = new pc.Model();
@@ -290,7 +290,7 @@ class InteractionHotspot extends pc.ScriptType {
     device.setRenderTarget(prevRenderTarget);
   }
 
-  private static _isHotspotVisible(script: InteractionHotspot) {
+  private static _isHotspotVisible(script: AnimationHotspot) {
     const hotspot = this._hotspots.find(hotspot => hotspot.script === script);
     if (!hotspot) {
       return false;
@@ -321,13 +321,13 @@ class InteractionHotspot extends pc.ScriptType {
     this._pickerEntity = new pc.Entity();
 
     const model = this._pickerEntity.addComponent("model");
-    model.model = InteractionHotspot._pickerModel.clone();
+    model.model = AnimationHotspot._pickerModel.clone();
 
     this.entity.addChild(this._pickerEntity);
   }
 
-  private _onPrerender(this: InteractionHotspot) {
-    const camera = InteractionHotspot._getActiveCamera();
+  private _onPrerender(this: AnimationHotspot) {
+    const camera = AnimationHotspot._getActiveCamera();
     if (!camera) {
       return;
     }
@@ -349,7 +349,7 @@ class InteractionHotspot extends pc.ScriptType {
       this._hotspotElem.style.zIndex = String(zIndex);
     }
 
-    const isVisible = InteractionHotspot._isHotspotVisible(this);
+    const isVisible = AnimationHotspot._isHotspotVisible(this);
 
     // Only update visibility of HTML element if it has changed
     if (this._wasVisible !== isVisible) {
@@ -439,14 +439,14 @@ class InteractionHotspot extends pc.ScriptType {
   }
 }
 
-InteractionHotspot.attributes.add("image", {
+AnimationHotspot.attributes.add("image", {
   type: "asset",
   assetType: "texture",
   title: "Image",
   description: "",
 });
 
-InteractionHotspot.attributes.add("hoveredImage", {
+AnimationHotspot.attributes.add("hoveredImage", {
   type: "asset",
   assetType: "texture",
   default: null,
@@ -454,7 +454,7 @@ InteractionHotspot.attributes.add("hoveredImage", {
   description: "",
 });
 
-InteractionHotspot.attributes.add("toggledImage", {
+AnimationHotspot.attributes.add("toggledImage", {
   type: "asset",
   assetType: "texture",
   default: null,
@@ -462,7 +462,7 @@ InteractionHotspot.attributes.add("toggledImage", {
   description: "",
 });
 
-InteractionHotspot.attributes.add("toggledHoveredImage", {
+AnimationHotspot.attributes.add("toggledHoveredImage", {
   type: "asset",
   assetType: "texture",
   default: null,
@@ -470,7 +470,7 @@ InteractionHotspot.attributes.add("toggledHoveredImage", {
   description: "",
 });
 
-InteractionHotspot.attributes.add("transitionDuration", {
+AnimationHotspot.attributes.add("transitionDuration", {
   type: "number",
   default: 0,
   title: "Transition duration (ms)",
@@ -478,14 +478,14 @@ InteractionHotspot.attributes.add("transitionDuration", {
     "Duration of transition when toggling between images for states.",
 });
 
-InteractionHotspot.attributes.add("parentElementId", {
+AnimationHotspot.attributes.add("parentElementId", {
   type: "string",
   default: "",
   title: "Element ID",
   description: "The ID of the element that should parent the hotspot.",
 });
 
-InteractionHotspot.attributes.add("cacheEntityPosition", {
+AnimationHotspot.attributes.add("cacheEntityPosition", {
   type: "boolean",
   default: false,
   title: "Cache entity position",
@@ -493,7 +493,7 @@ InteractionHotspot.attributes.add("cacheEntityPosition", {
     "Cache entity world position on initialize instead of reading from entity on every frame.",
 });
 
-InteractionHotspot.attributes.add("colliderScreenRadius", {
+AnimationHotspot.attributes.add("colliderScreenRadius", {
   type: "number",
   default: 10,
   title: "Radius of collider in pixels",
@@ -501,4 +501,4 @@ InteractionHotspot.attributes.add("colliderScreenRadius", {
     "Used for determining if a hotspot is visible or hidden behind other geometry.",
 });
 
-export { InteractionHotspot, interactionHotspotScriptName };
+export { AnimationHotspot, animationHotspotScriptName };
