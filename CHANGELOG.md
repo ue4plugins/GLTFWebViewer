@@ -1,3 +1,10 @@
+## [1.20.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.19.0...v1.20.0) (2020-10-06)
+
+
+### Features
+
+* **InteractionHotspot:** use a 3d sphere as proxy for each hotspot instead of a point-sprite ([4ce2967](http://animech[secure]/clients/epic/gltf-web-viewer/commit/4ce296705021e67b2877b00acb413fea3a29484a))
+
 ## [1.19.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.18.0...v1.19.0) (2020-10-05)
 
 
