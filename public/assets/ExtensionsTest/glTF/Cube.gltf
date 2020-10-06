@@ -5,7 +5,7 @@
   },
   "extensionsUsed": [
     "EPIC_variant_sets",
-    "EPIC_interaction_hotspots",
+    "EPIC_animation_hotspots",
     "EPIC_hdri_backdrops",
     "EPIC_reflection_probes",
     "EPIC_lightmap_textures",
@@ -18,8 +18,12 @@
       "byteOffset": 0,
       "componentType": 5123,
       "count": 36,
-      "max": [35],
-      "min": [0],
+      "max": [
+        35
+      ],
+      "min": [
+        0
+      ],
       "type": "SCALAR"
     },
     {
@@ -27,8 +31,16 @@
       "byteOffset": 0,
       "componentType": 5126,
       "count": 36,
-      "max": [1.0, 1.0, 1.000001],
-      "min": [-1.0, -1.0, -1.0],
+      "max": [
+        1.0,
+        1.0,
+        1.000001
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
       "type": "VEC3"
     },
     {
@@ -36,8 +48,16 @@
       "byteOffset": 0,
       "componentType": 5126,
       "count": 36,
-      "max": [1.0, 1.0, 1.0],
-      "min": [-1.0, -1.0, -1.0],
+      "max": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
       "type": "VEC3"
     },
     {
@@ -45,8 +65,18 @@
       "byteOffset": 0,
       "componentType": 5126,
       "count": 36,
-      "max": [1.0, -0.0, -0.0, 1.0],
-      "min": [0.0, -0.0, -1.0, -1.0],
+      "max": [
+        1.0,
+        -0.0,
+        -0.0,
+        1.0
+      ],
+      "min": [
+        0.0,
+        -0.0,
+        -1.0,
+        -1.0
+      ],
       "type": "VEC4"
     },
     {
@@ -54,8 +84,14 @@
       "byteOffset": 0,
       "componentType": 5126,
       "count": 36,
-      "max": [1.0, 1.0],
-      "min": [-1.0, -1.0],
+      "max": [
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0
+      ],
       "type": "VEC2"
     }
   ],
@@ -159,14 +195,17 @@
   "nodes": [
     {
       "name": "Root",
-      "children": [1, 2]
+      "children": [
+        1,
+        2
+      ]
     },
     {
       "mesh": 0,
       "name": "Cube",
       "extensions": {
-        "EPIC_interaction_hotspots": {
-          "interaction": 0
+        "EPIC_animation_hotspots": {
+          "hotspot": 0
         },
         "EPIC_hdri_backdrops": {
           "backdrop": 0
@@ -201,14 +240,20 @@
       "camera": 0
     }
   ],
-  "samplers": [{}],
+  "samplers": [
+    {}
+  ],
   "scene": 0,
   "scenes": [
     {
-      "nodes": [0],
+      "nodes": [
+        0
+      ],
       "extensions": {
         "EPIC_variant_sets": {
-          "levelVariantSets": [0]
+          "levelVariantSets": [
+            0
+          ]
         }
       }
     }
@@ -273,8 +318,8 @@
         }
       ]
     },
-    "EPIC_interaction_hotspots": {
-      "interactions": [
+    "EPIC_animation_hotspots": {
+      "hotspots": [
         {
           "animation": 0,
           "image": 0
@@ -285,10 +330,21 @@
       "backdrops": [
         {
           "mesh": 0,
-          "cubemap": [0, 0, 0, 1, 1, 1],
+          "cubemap": [
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
           "intensity": 1.0,
           "size": 150.0,
-          "projectionCenter": [0.0, 0.0, 290.0],
+          "projectionCenter": [
+            0.0,
+            0.0,
+            290.0
+          ],
           "lightingDistanceFactor": 0.5,
           "useCameraProjection": false
         }
@@ -298,8 +354,19 @@
       "reflections": [
         {
           "type": "box",
-          "cubemap": [0, 1, 2, 3, 4, 5],
-          "size": [100.0, 100.0, 50.0]
+          "cubemap": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "size": [
+            100.0,
+            100.0,
+            50.0
+          ]
         }
       ]
     },
@@ -310,10 +377,26 @@
             "index": 3,
             "texCoord": 1
           },
-          "valueScale": [0.465454638, 0.360524952, 1.16352212, 6.25222874],
-          "valueOffset": [0.511837959, 0.968727827, 0.522957325, -4.60263348],
-          "coordinateScale": [0.388671875, 0.77734375],
-          "coordinateOffset": [0.391601563, 0.001953125]
+          "valueScale": [
+            0.465454638,
+            0.360524952,
+            1.16352212,
+            6.25222874
+          ],
+          "valueOffset": [
+            0.511837959,
+            0.968727827,
+            0.522957325,
+            -4.60263348
+          ],
+          "coordinateScale": [
+            0.388671875,
+            0.77734375
+          ],
+          "coordinateOffset": [
+            0.391601563,
+            0.001953125
+          ]
         }
       ]
     }

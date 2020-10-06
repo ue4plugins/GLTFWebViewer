@@ -5,26 +5,26 @@ import {
   ExtensionRegistry,
   ExtensionParser,
   VariantSetExtensionParser,
-  InteractionHotspotExtensionParser,
+  AnimationHotspotExtensionParser,
   HdriBackdropExtensionParser,
   LightMapExtensionParser,
   HdriBackdrop,
   HdrEncodingExtensionParser,
   OrbitCameraExtensionParser,
-  AnimationPlayDataExtensionParser,
-  AnimationPlayData,
-  animationPlayDataDefaults,
+  AnimationPlaybackExtensionParser,
+  AnimationPlayback,
+  animationPlaybackDefaults,
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
 import { CameraEntity, convertToCameraEntity } from "./Camera";
-import { InteractionHotspot } from "./scripts";
+import { AnimationHotspot } from "./scripts";
 
 const debug = Debug("PlayCanvasGltfLoader");
 
 export type GltfSceneData = {
   root: pc.Entity;
   variantSets: VariantSet[];
-  hotspots: InteractionHotspot[];
+  hotspots: AnimationHotspot[];
   backdrops: HdriBackdrop[];
   animations: Animation[];
   cameras: CameraEntity[];
@@ -80,7 +80,7 @@ export class PlayCanvasGltfLoader {
 
   private _createAnimations(
     container: pc.ContainerResource,
-    playDataByAnimationIndex: (AnimationPlayData | undefined)[],
+    playbackByAnimationIndex: (AnimationPlayback | undefined)[],
     hotspotAnimationIndices: number[],
   ): Animation[] {
     const {
@@ -102,8 +102,8 @@ export class PlayCanvasGltfLoader {
         component.loadStateGraph({
           layers: animationIndices.map(index => {
             const speed =
-              playDataByAnimationIndex[index]?.playRate ??
-              animationPlayDataDefaults.playRate;
+              playbackByAnimationIndex[index]?.playRate ??
+              animationPlaybackDefaults.playRate;
             return {
               name: (animationAssets[index].resource as pc.AnimTrack).name,
               states: [
@@ -147,20 +147,21 @@ export class PlayCanvasGltfLoader {
               return new Animation(node, layer, index);
             }
 
-            const playData = playDataByAnimationIndex[index];
+            const playback = playbackByAnimationIndex[index];
 
             const defaultState =
-              (playData?.looping ?? animationPlayDataDefaults.looping) === false
+              (playback?.loop ?? animationPlaybackDefaults.loop) === false
                 ? AnimationState.Once
                 : AnimationState.Loop;
 
             const autoPlay =
-              (playData?.playing ?? animationPlayDataDefaults.playing) === false
+              (playback?.autoPlay ?? animationPlaybackDefaults.autoPlay) ===
+              false
                 ? false
                 : true;
 
             const startTime =
-              playData?.position ?? animationPlayDataDefaults.position;
+              playback?.startTime ?? animationPlaybackDefaults.startTime;
 
             return new Animation(
               node,
@@ -198,17 +199,17 @@ export class PlayCanvasGltfLoader {
     debug("Load glTF asset", url, fileName);
 
     const variantSetParser = new VariantSetExtensionParser();
-    const hotspotParser = new InteractionHotspotExtensionParser();
+    const hotspotParser = new AnimationHotspotExtensionParser();
     const lightMapParser = new LightMapExtensionParser();
     const backdropParser = new HdriBackdropExtensionParser();
-    const animationPlayDataParser = new AnimationPlayDataExtensionParser();
+    const animationPlaybackParser = new AnimationPlaybackExtensionParser();
 
     const extensions: ExtensionParser[] = [
       variantSetParser,
       hotspotParser,
       lightMapParser,
       backdropParser,
-      animationPlayDataParser,
+      animationPlaybackParser,
       new OrbitCameraExtensionParser(),
       new HdrEncodingExtensionParser(),
     ];
@@ -237,13 +238,13 @@ export class PlayCanvasGltfLoader {
       this._postParseExtensions(extensions, container);
       this._unregisterExtensions(extensions);
 
-      const playDataByAnimationIndex = animationPlayDataParser.getPlayDataByAnimationIndex(
+      const playbackByAnimationIndex = animationPlaybackParser.getPlaybackByAnimationIndex(
         container,
       );
       const { hotspotAnimationIndices } = hotspotParser;
       const animations = this._createAnimations(
         container,
-        playDataByAnimationIndex,
+        playbackByAnimationIndex,
         hotspotAnimationIndices,
       );
       debug("Created animations", animations);

@@ -1,11 +1,11 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import { Animation, AnimationState } from "../Animation";
-import { InteractionHotspot } from "../scripts";
+import { AnimationHotspot } from "../scripts";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
-const debug = Debug("InteractionHotspot");
+const debug = Debug("AnimationHotspot");
 
 type InteractionData = {
   image: number;
@@ -16,13 +16,13 @@ type InteractionData = {
 };
 
 type NodeExtensionData = {
-  interaction: number;
+  hotspot: number;
 };
 
 type RootData = {
   extensions?: {
-    EPIC_interaction_hotspots?: {
-      interactions: InteractionData[];
+    EPIC_animation_hotspots?: {
+      hotspots: InteractionData[];
     };
   };
 };
@@ -32,12 +32,12 @@ type NodeInteractionDataMap = {
   data: InteractionData;
 };
 
-export class InteractionHotspotExtensionParser implements ExtensionParser {
+export class AnimationHotspotExtensionParser implements ExtensionParser {
   private _hotspotDatas: NodeInteractionDataMap[] = [];
-  private _hotspots?: InteractionHotspot[];
+  private _hotspots?: AnimationHotspot[];
 
   public get name() {
-    return "EPIC_interaction_hotspots";
+    return "EPIC_animation_hotspots";
   }
 
   public get hotspotAnimationIndices(): number[] {
@@ -54,7 +54,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
     scene: pc.Entity,
     animations: Animation[],
     container: pc.ContainerResource,
-  ): InteractionHotspot[] {
+  ): AnimationHotspot[] {
     const { textures } = container;
 
     if (!this._hotspots) {
@@ -88,8 +88,8 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
     debug("Parse hotspot", node, extensionData, rootData);
 
     const hotspot =
-      rootData.extensions?.EPIC_interaction_hotspots?.interactions[
-        extensionData.interaction
+      rootData.extensions?.EPIC_animation_hotspots?.hotspots[
+        extensionData.hotspot
       ];
     if (!hotspot) {
       return;
@@ -113,7 +113,7 @@ export class InteractionHotspotExtensionParser implements ExtensionParser {
 
         const script = hotspot.node
           .addComponent("script")
-          .create(InteractionHotspot, {
+          .create(AnimationHotspot, {
             enabled: false, // This is enabled later for the active scene
           });
 

@@ -3,37 +3,37 @@ import Debug from "debug";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
-const debug = Debug("AnimationPlayData");
+const debug = Debug("AnimationPlayback");
 
 type AnimInteractionDataMap = {
   anim: pc.AnimTrack;
-  data: AnimationPlayData;
+  data: AnimationPlayback;
 };
 
-export type AnimationPlayData = {
-  looping?: boolean;
-  playing?: boolean;
+export type AnimationPlayback = {
+  loop?: boolean;
+  autoPlay?: boolean;
   playRate?: number;
-  position?: number;
+  startTime?: number;
 };
 
-export const animationPlayDataDefaults = {
-  looping: true,
-  playing: true,
+export const animationPlaybackDefaults = {
+  loop: true,
+  autoPlay: true,
   playRate: 1,
-  position: 0,
+  startTime: 0,
 };
 
-export class AnimationPlayDataExtensionParser implements ExtensionParser {
+export class AnimationPlaybackExtensionParser implements ExtensionParser {
   private _animDatas: AnimInteractionDataMap[] = [];
 
   public get name() {
-    return "EPIC_animation_play_data";
+    return "EPIC_animation_playback";
   }
 
-  public getPlayDataByAnimationIndex(
+  public getPlaybackByAnimationIndex(
     container: pc.ContainerResource,
-  ): (AnimationPlayData | undefined)[] {
+  ): (AnimationPlayback | undefined)[] {
     const { animations } = container;
     return animations.map(
       animationAsset =>
@@ -58,7 +58,7 @@ export class AnimationPlayDataExtensionParser implements ExtensionParser {
 
   private _animationPostParse(
     animTrack: pc.AnimTrack,
-    extensionData: AnimationPlayData,
+    extensionData: AnimationPlayback,
   ) {
     debug("Parse animation play data", animTrack, extensionData);
 

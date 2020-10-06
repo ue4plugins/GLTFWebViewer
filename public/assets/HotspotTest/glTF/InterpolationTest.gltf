@@ -1,12 +1,23 @@
 {
-  "extensionsUsed": ["EPIC_interaction_hotspots", "EPIC_animation_play_data"],
+  "extensionsUsed": [
+    "EPIC_animation_hotspots",
+    "EPIC_animation_playback"
+  ],
   "accessors": [
     {
       "bufferView": 0,
       "componentType": 5126,
       "count": 24,
-      "max": [1, 1, 1],
-      "min": [-1, -1, -1],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
       "type": "VEC3"
     },
     {
@@ -31,8 +42,16 @@
       "bufferView": 4,
       "componentType": 5126,
       "count": 24,
-      "max": [1, 1, 1],
-      "min": [-1, -1, -1],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
       "type": "VEC3"
     },
     {
@@ -57,8 +76,16 @@
       "bufferView": 8,
       "componentType": 5126,
       "count": 24,
-      "max": [1, 1, 1],
-      "min": [-1, -1, -1],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
       "type": "VEC3"
     },
     {
@@ -83,8 +110,16 @@
       "bufferView": 12,
       "componentType": 5126,
       "count": 24,
-      "max": [1, 1, 1],
-      "min": [-1, -1, -1],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
       "type": "VEC3"
     },
     {
@@ -109,8 +144,16 @@
       "bufferView": 16,
       "componentType": 5126,
       "count": 24,
-      "max": [1, 1, 1],
-      "min": [-1, -1, -1],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
       "type": "VEC3"
     },
     {
@@ -135,8 +178,16 @@
       "bufferView": 20,
       "componentType": 5126,
       "count": 24,
-      "max": [1, 1, 1],
-      "min": [-1, -1, -1],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
       "type": "VEC3"
     },
     {
@@ -161,8 +212,16 @@
       "bufferView": 24,
       "componentType": 5126,
       "count": 24,
-      "max": [1, 1, 1],
-      "min": [-1, -1, -1],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
       "type": "VEC3"
     },
     {
@@ -187,8 +246,16 @@
       "bufferView": 28,
       "componentType": 5126,
       "count": 24,
-      "max": [1, 1, 1],
-      "min": [-1, -1, -1],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
       "type": "VEC3"
     },
     {
@@ -213,8 +280,16 @@
       "bufferView": 32,
       "componentType": 5126,
       "count": 24,
-      "max": [1, 1, 1],
-      "min": [-1, -1, -1],
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
       "type": "VEC3"
     },
     {
@@ -239,8 +314,16 @@
       "bufferView": 36,
       "componentType": 5126,
       "count": 4,
-      "max": [1, 0, 1],
-      "min": [-1, 0, -1],
+      "max": [
+        1,
+        0,
+        1
+      ],
+      "min": [
+        -1,
+        0,
+        -1
+      ],
       "type": "VEC3"
     },
     {
@@ -265,8 +348,12 @@
       "bufferView": 40,
       "componentType": 5126,
       "count": 5,
-      "max": [1.6666666666666667],
-      "min": [0.041666666666666664],
+      "max": [
+        1.6666666666666667
+      ],
+      "min": [
+        0.041666666666666664
+      ],
       "type": "SCALAR"
     },
     {
@@ -279,8 +366,12 @@
       "bufferView": 42,
       "componentType": 5126,
       "count": 5,
-      "max": [1.6666666666666667],
-      "min": [0.041666666666666664],
+      "max": [
+        1.6666666666666667
+      ],
+      "min": [
+        0.041666666666666664
+      ],
       "type": "SCALAR"
     },
     {
@@ -293,8 +384,12 @@
       "bufferView": 44,
       "componentType": 5126,
       "count": 5,
-      "max": [1.6666666666666667],
-      "min": [0.041666666666666664],
+      "max": [
+        1.6666666666666667
+      ],
+      "min": [
+        0.041666666666666664
+      ],
       "type": "SCALAR"
     },
     {
@@ -307,8 +402,12 @@
       "bufferView": 46,
       "componentType": 5126,
       "count": 5,
-      "max": [1.7083333333333333],
-      "min": [0],
+      "max": [
+        1.7083333333333333
+      ],
+      "min": [
+        0
+      ],
       "type": "SCALAR"
     },
     {
@@ -321,8 +420,12 @@
       "bufferView": 48,
       "componentType": 5126,
       "count": 5,
-      "max": [1.7083333333333333],
-      "min": [0],
+      "max": [
+        1.7083333333333333
+      ],
+      "min": [
+        0
+      ],
       "type": "SCALAR"
     },
     {
@@ -335,8 +438,12 @@
       "bufferView": 50,
       "componentType": 5126,
       "count": 5,
-      "max": [1.7083333333333333],
-      "min": [0],
+      "max": [
+        1.7083333333333333
+      ],
+      "min": [
+        0
+      ],
       "type": "SCALAR"
     },
     {
@@ -349,8 +456,12 @@
       "bufferView": 52,
       "componentType": 5126,
       "count": 5,
-      "max": [1.7083333333333333],
-      "min": [0],
+      "max": [
+        1.7083333333333333
+      ],
+      "min": [
+        0
+      ],
       "type": "SCALAR"
     },
     {
@@ -363,8 +474,12 @@
       "bufferView": 54,
       "componentType": 5126,
       "count": 5,
-      "max": [1.6666666666666667],
-      "min": [0],
+      "max": [
+        1.6666666666666667
+      ],
+      "min": [
+        0
+      ],
       "type": "SCALAR"
     },
     {
@@ -377,8 +492,12 @@
       "bufferView": 56,
       "componentType": 5126,
       "count": 5,
-      "max": [1.6666666666666667],
-      "min": [0],
+      "max": [
+        1.6666666666666667
+      ],
+      "min": [
+        0
+      ],
       "type": "SCALAR"
     },
     {
@@ -408,8 +527,8 @@
         }
       ],
       "extensions": {
-        "EPIC_animation_play_data": {
-          "playing": false
+        "EPIC_animation_playback": {
+          "autoPlay": false
         }
       }
     },
@@ -451,8 +570,8 @@
         }
       ],
       "extensions": {
-        "EPIC_animation_play_data": {
-          "playing": false
+        "EPIC_animation_playback": {
+          "autoPlay": false
         }
       }
     },
@@ -494,11 +613,11 @@
         }
       ],
       "extensions": {
-        "EPIC_animation_play_data": {
-          "looping": false,
-          "playing": false,
+        "EPIC_animation_playback": {
+          "loop": false,
+          "autoPlay": false,
           "playRate": 1,
-          "position": 1.2
+          "startTime": 1.2
         }
       }
     },
@@ -521,11 +640,11 @@
         }
       ],
       "extensions": {
-        "EPIC_animation_play_data": {
-          "looping": true,
-          "playing": true,
+        "EPIC_animation_playback": {
+          "loop": true,
+          "autoPlay": true,
           "playRate": -1,
-          "position": 60
+          "startTime": 60
         }
       }
     },
@@ -548,8 +667,8 @@
         }
       ],
       "extensions": {
-        "EPIC_animation_play_data": {
-          "playing": false
+        "EPIC_animation_playback": {
+          "autoPlay": false
         }
       }
     },
@@ -572,8 +691,8 @@
         }
       ],
       "extensions": {
-        "EPIC_animation_play_data": {
-          "playing": false
+        "EPIC_animation_playback": {
+          "autoPlay": false
         }
       }
     },
@@ -596,10 +715,10 @@
         }
       ],
       "extensions": {
-        "EPIC_animation_play_data": {
-          "playing": true,
+        "EPIC_animation_playback": {
+          "autoPlay": true,
           "playRate": 2,
-          "looping": false
+          "loop": false
         }
       }
     }
@@ -907,8 +1026,8 @@
     }
   ],
   "extensions": {
-    "EPIC_interaction_hotspots": {
-      "interactions": [
+    "EPIC_animation_hotspots": {
+      "hotspots": [
         {
           "animation": 3,
           "image": 1,
@@ -1234,13 +1353,30 @@
         -0.27217137813568115,
         0.570947527885437
       ],
-      "scale": [1, 1, 0.9999999403953552],
-      "translation": [0.18540644645690918, 5.903861999511719, 8.732584953308105]
+      "scale": [
+        1,
+        1,
+        0.9999999403953552
+      ],
+      "translation": [
+        0.18540644645690918,
+        5.903861999511719,
+        8.732584953308105
+      ]
     },
     {
       "name": "Camera",
-      "rotation": [0.6819981932640076, 0, 0, 0.7313538193702698],
-      "scale": [1, 0.39365354180336, 1],
+      "rotation": [
+        0.6819981932640076,
+        0,
+        0,
+        0.7313538193702698
+      ],
+      "scale": [
+        1,
+        0.39365354180336,
+        1
+      ],
       "translation": [
         0.31374117732048035,
         4.958309173583984,
@@ -1250,102 +1386,211 @@
     {
       "mesh": 1,
       "name": "Cube.001",
-      "translation": [-3.2963297367095947, 0, 6.461143493652344e-5],
-      "children": [16]
+      "translation": [
+        -3.2963297367095947,
+        0,
+        6.461143493652344e-5
+      ],
+      "children": [
+        16
+      ]
     },
     {
       "mesh": 2,
       "name": "Cube.002",
-      "translation": [3.3401193618774414, 0, 0.008944988250732422]
+      "translation": [
+        3.3401193618774414,
+        0,
+        0.008944988250732422
+      ]
     },
     {
       "mesh": 3,
       "name": "Cube.003",
-      "translation": [0, 3.356412410736084, 0],
-      "children": [17]
+      "translation": [
+        0,
+        3.356412410736084,
+        0
+      ],
+      "children": [
+        17
+      ]
     },
     {
       "mesh": 4,
       "name": "Cube.004",
-      "rotation": [0, 0, -0.006683696992695332, 0.9999777674674988],
-      "translation": [3.33506178855896, 3.356412410736084, 0]
+      "rotation": [
+        0,
+        0,
+        -0.006683696992695332,
+        0.9999777674674988
+      ],
+      "translation": [
+        3.33506178855896,
+        3.356412410736084,
+        0
+      ]
     },
     {
       "mesh": 5,
       "name": "Cube.005",
-      "rotation": [0, 0, -0.03925982117652893, 0.9992290735244751],
-      "scale": [0.9999999403953552, 0.9999999403953552, 1],
-      "translation": [-3.311399221420288, 3.356412410736084, 0]
+      "rotation": [
+        0,
+        0,
+        -0.03925982117652893,
+        0.9992290735244751
+      ],
+      "scale": [
+        0.9999999403953552,
+        0.9999999403953552,
+        1
+      ],
+      "translation": [
+        -3.311399221420288,
+        3.356412410736084,
+        0
+      ]
     },
     {
       "mesh": 6,
       "name": "Cube.006",
-      "translation": [0, 6.665226459503174, 0]
+      "translation": [
+        0,
+        6.665226459503174,
+        0
+      ]
     },
     {
       "mesh": 7,
       "name": "Cube.008",
-      "translation": [3.3051798343658447, 6.734194278717041, 0],
-      "children": [18]
+      "translation": [
+        3.3051798343658447,
+        6.734194278717041,
+        0
+      ],
+      "children": [
+        18
+      ]
     },
     {
       "mesh": 8,
       "name": "Cube.009",
-      "translation": [-3.2975807189941406, 6.958913326263428, 0]
+      "translation": [
+        -3.2975807189941406,
+        6.958913326263428,
+        0
+      ]
     },
     {
       "mesh": 9,
       "name": "Plane",
-      "rotation": [0.7071068286895752, 0, 0, 0.7071068286895752],
-      "scale": [4.218648433685303, 1, 0.3652837574481964],
-      "translation": [0, -1.7941787242889404, 1.0036747455596924]
+      "rotation": [
+        0.7071068286895752,
+        0,
+        0,
+        0.7071068286895752
+      ],
+      "scale": [
+        4.218648433685303,
+        1,
+        0.3652837574481964
+      ],
+      "translation": [
+        0,
+        -1.7941787242889404,
+        1.0036747455596924
+      ]
     },
     {
       "name": "PerspectiveCamera_SceneComponent",
-      "translation": [5.0999999, 7.89999986, 5.0999999],
-      "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
-      "children": [13]
+      "translation": [
+        5.0999999,
+        7.89999986,
+        5.0999999
+      ],
+      "rotation": [
+        -0.353553385,
+        0.853553414,
+        -0.146446615,
+        0.353553414
+      ],
+      "children": [
+        13
+      ]
     },
     {
       "name": "PerspectiveCamera",
-      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "rotation": [
+        -0,
+        -0.707106769,
+        0,
+        0.707106709
+      ],
       "camera": 0
     },
     {
       "name": "OrthographicCamera_SceneComponent",
-      "translation": [2, 4.82499981, 2],
-      "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
-      "children": [15]
+      "translation": [
+        2,
+        4.82499981,
+        2
+      ],
+      "rotation": [
+        -0.353553385,
+        0.853553414,
+        -0.146446615,
+        0.353553414
+      ],
+      "children": [
+        15
+      ]
     },
     {
       "name": "OrthographicCamera",
-      "rotation": [-0, -0.707106769, 0, 0.707106709],
+      "rotation": [
+        -0,
+        -0.707106769,
+        0,
+        0.707106709
+      ],
       "camera": 1
     },
     {
       "name": "Hotspot1",
-      "translation": [-2, 0, 0],
+      "translation": [
+        -2,
+        0,
+        0
+      ],
       "extensions": {
-        "EPIC_interaction_hotspots": {
-          "interaction": 1
+        "EPIC_animation_hotspots": {
+          "hotspot": 1
         }
       }
     },
     {
       "name": "Hotspot2",
-      "translation": [0, 0, -2],
+      "translation": [
+        0,
+        0,
+        -2
+      ],
       "extensions": {
-        "EPIC_interaction_hotspots": {
-          "interaction": 0
+        "EPIC_animation_hotspots": {
+          "hotspot": 0
         }
       }
     },
     {
       "name": "Hotspot3",
-      "translation": [0, 0, 2],
+      "translation": [
+        0,
+        0,
+        2
+      ],
       "extensions": {
-        "EPIC_interaction_hotspots": {
-          "interaction": 2
+        "EPIC_animation_hotspots": {
+          "hotspot": 2
         }
       }
     }
@@ -1354,7 +1599,22 @@
   "scenes": [
     {
       "name": "Scene",
-      "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14]
+      "nodes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14
+      ]
     }
   ],
   "textures": [
