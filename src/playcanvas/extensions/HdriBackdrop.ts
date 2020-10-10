@@ -39,6 +39,7 @@ export type HdriBackdrop = {
   script: HdriBackdropScript;
   cubemap: pc.Texture;
   skyboxCubemaps: pc.Texture[];
+  skyboxIntensity: number;
 };
 
 export class HdriBackdropExtensionParser implements ExtensionParser {
@@ -112,11 +113,13 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
           createMipChainInFirstMip: true,
         });
 
+        const skyboxIntensity = data.intensity;
         return {
           node,
           script,
           cubemap,
           skyboxCubemaps,
+          skyboxIntensity,
         };
       })
       .filter((backdrop): backdrop is HdriBackdrop => backdrop !== null);

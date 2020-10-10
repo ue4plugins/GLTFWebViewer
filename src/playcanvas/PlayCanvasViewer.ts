@@ -372,6 +372,7 @@ export class PlayCanvasViewer implements TestableViewer {
     const onBackdropEnabled = (backdrop: HdriBackdrop) => {
       // TODO: Add support for using reflection probes instead of skyboxes
       app.scene.setSkybox([null, ...backdrop.skyboxCubemaps]);
+      app.scene.skyboxIntensity = backdrop.skyboxIntensity;
     };
 
     const onBackdropDisabled = (_backdrop: HdriBackdrop) => {
