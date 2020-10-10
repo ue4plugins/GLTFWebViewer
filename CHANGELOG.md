@@ -1,3 +1,10 @@
+### [1.20.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.20.0...v1.20.1) (2020-10-10)
+
+
+### Bug Fixes
+
+* add missing intensity factor for skybox when using hdri backdrop ([13f4ed2](http://animech[secure]/clients/epic/gltf-web-viewer/commit/13f4ed20a35ac1d5694e05993a35121837cf9ff7))
+
 ## [1.20.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.19.0...v1.20.0) (2020-10-06)
 
 
