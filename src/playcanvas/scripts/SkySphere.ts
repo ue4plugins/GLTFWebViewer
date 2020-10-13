@@ -39,6 +39,10 @@ interface SkySphere {
   cloudColor: pc.Color;
   overallColor: pc.Color;
 
+  zenithColorCurve: pc.CurveSet;
+  horizonColorCurve: pc.CurveSet;
+  cloudColorCurve: pc.CurveSet;
+
   scale: pc.Vec3;
 }
 
@@ -53,24 +57,6 @@ class SkySphere extends pc.ScriptType {
 
   private _defaultHorizonSunColor = new pc.Color(1, 0.221, 0.04);
   private _defaultZenithSunColor = new pc.Color(0.954, 0.901, 0.74412);
-
-  private _horizonColorCurve = new pc.CurveSet([
-    [-1, 0.048, -0.6, 0.386, 0, 2, 0.2, 1.943, 0.4, 0.703, 0.5, 0.92],
-    [-1, 0.052, -0.6, 0.131, 0, 0.6, 0.2, 0.613, 0.4, 1.048, 0.5, 1.322],
-    [-1, 0.075, -0.6, 0.111, 0, 0.2, 0.2, 0.283, 0.4, 1.669, 0.5, 2],
-  ]);
-
-  private _zenithColorCurve = new pc.CurveSet([
-    [-1, 0, -0.4, 0.08, 0, 0.23, 0.1, 0.27, 0.2, 0.08, 0.3, 0.05, 0.5, 0.02],
-    [-1, 0, -0.4, 0.07, 0, 0.1, 0.1, 0.15, 0.2, 0.13, 0.3, 0.09, 0.5, 0.05],
-    [-1, 0, -0.4, 0.08, 0, 0.09, 0.1, 0.13, 0.2, 0.19, 0.3, 0.21, 0.5, 0.12],
-  ]);
-
-  private _cloudColorCurve = new pc.CurveSet([
-    [-0.8, 0.054, -0.5, 0.198, -0.2, 0.684, 0.2, 0.809, 0.4, 0.857, 0.8, 0.929],
-    [-0.8, 0.059, -0.5, 0.139, -0.2, 0.415, 0.2, 0.514, 0.4, 0.801, 0.8, 0.947],
-    [-0.8, 0.065, -0.5, 0.129, -0.2, 0.304, 0.2, 0.407, 0.4, 0.806, 0.8, 1],
-  ]);
 
   private _entityRotation = new pc.Quat();
   private _lightDir = new pc.Vec3();
@@ -197,17 +183,17 @@ class SkySphere extends pc.ScriptType {
 
       material.setParameter(
         "uHorizonColor",
-        this._horizonColorCurve.value(sunHeight),
+        this.horizonColorCurve.value(sunHeight),
       );
 
       material.setParameter(
         "uZenithColor",
-        this._zenithColorCurve.value(sunHeight),
+        this.zenithColorCurve.value(sunHeight),
       );
 
       material.setParameter(
         "uCloudColor",
-        this._cloudColorCurve.value(sunHeight),
+        this.cloudColorCurve.value(sunHeight),
       );
 
       material.setParameter(
@@ -693,6 +679,45 @@ SkySphere.attributes.add("overallColor", {
   type: "rgb",
   default: [1, 1, 1],
   title: "Overall color (HDR)",
+});
+
+SkySphere.attributes.add("zenithColorCurve", {
+  type: "curve",
+  color: "rgb",
+  default: {
+    keys: [
+      [-1, 0, -0.4, 0.08, 0, 0.23, 0.1, 0.27, 0.2, 0.08, 0.3, 0.05, 0.5, 0.02],
+      [-1, 0, -0.4, 0.07, 0, 0.1, 0.1, 0.15, 0.2, 0.13, 0.3, 0.09, 0.5, 0.05],
+      [-1, 0, -0.4, 0.08, 0, 0.09, 0.1, 0.13, 0.2, 0.19, 0.3, 0.21, 0.5, 0.12],
+    ],
+  },
+  title: "Zenith color curve. The keys (time) correspond to sunHeight values",
+});
+
+SkySphere.attributes.add("horizonColorCurve", {
+  type: "curve",
+  color: "rgb",
+  default: {
+    keys: [
+      [-1, 0.048, -0.6, 0.386, 0, 2, 0.2, 1.943, 0.4, 0.703, 0.5, 0.92],
+      [-1, 0.052, -0.6, 0.131, 0, 0.6, 0.2, 0.613, 0.4, 1.048, 0.5, 1.322],
+      [-1, 0.075, -0.6, 0.111, 0, 0.2, 0.2, 0.283, 0.4, 1.669, 0.5, 2],
+    ],
+  },
+  title: "Horizon color curve. The keys (time) correspond to sunHeight values",
+});
+
+SkySphere.attributes.add("cloudColorCurve", {
+  type: "curve",
+  color: "rgb",
+  default: {
+    keys: [
+      [-0.8, 0.054, -0.5, 0.198, -0.2, 0.684, 0.2, 0.81, 0.4, 0.857, 0.8, 0.93],
+      [-0.8, 0.059, -0.5, 0.139, -0.2, 0.415, 0.2, 0.514, 0.4, 0.81, 0.8, 0.95],
+      [-0.8, 0.065, -0.5, 0.129, -0.2, 0.304, 0.2, 0.407, 0.4, 0.806, 0.8, 1],
+    ],
+  },
+  title: "Cloud color curve. The keys (time) correspond to sunHeight values",
 });
 
 SkySphere.attributes.add("scale", {
