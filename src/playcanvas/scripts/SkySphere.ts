@@ -101,6 +101,9 @@ class SkySphere extends pc.ScriptType {
     this.on("attr:horizonColor", this._updateColors, this);
     this.on("attr:cloudColor", this._updateColors, this);
     this.on("attr:overallColor", this._updateColors, this);
+    this.on("attr:zenithColorCurve", this._updateColors, this);
+    this.on("attr:horizonColorCurve", this._updateColors, this);
+    this.on("attr:cloudColorCurve", this._updateColors, this);
     this.on("attr:colorsDeterminedBySunPosition", this._updateColors, this);
 
     // Ensure that the skybox is disabled while a SkySphere instance exists in the scene
