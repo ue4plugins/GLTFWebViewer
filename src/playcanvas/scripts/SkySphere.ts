@@ -49,6 +49,9 @@ interface SkySphere {
 const skySphereScriptName = "SkySphere";
 
 class SkySphere extends pc.ScriptType {
+  private static _skyboxWasInitiallyEnabled = false;
+  private static _instanceCount = 0;
+
   private _skyEntity!: EntityWithModel;
   private _material = new pc.Material();
   private _lightComponent?: pc.LightComponent | null;
@@ -65,9 +68,10 @@ class SkySphere extends pc.ScriptType {
   private _tempQuat = new pc.Quat();
 
   public initialize() {
-    this.entity.tags.add("ignoreBoundingBox");
+    SkySphere._instanceCount += 1;
 
     this._skyEntity = new pc.Entity("Sky") as EntityWithModel;
+    this._skyEntity.tags.add("ignoreBoundingBox");
     this._skyEntity.addComponent("model");
     this.entity.addChild(this._skyEntity);
 
@@ -98,6 +102,23 @@ class SkySphere extends pc.ScriptType {
     this.on("attr:cloudColor", this._updateColors, this);
     this.on("attr:overallColor", this._updateColors, this);
     this.on("attr:colorsDeterminedBySunPosition", this._updateColors, this);
+
+    // Ensure that the skybox is disabled while a SkySphere instance exists in the scene
+    const layers = this.app.scene.layers;
+    const skyboxLayer = layers.getLayerById(pc.LAYERID_SKYBOX);
+
+    if (SkySphere._instanceCount === 1 && skyboxLayer) {
+      SkySphere._skyboxWasInitiallyEnabled = skyboxLayer.enabled;
+      skyboxLayer.enabled = false;
+    }
+
+    this.on("destroy", () => {
+      SkySphere._instanceCount -= 1;
+
+      if (SkySphere._instanceCount === 0 && skyboxLayer) {
+        skyboxLayer.enabled = SkySphere._skyboxWasInitiallyEnabled;
+      }
+    });
   }
 
   public postUpdate(dt: number) {
