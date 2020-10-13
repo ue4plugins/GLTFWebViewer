@@ -167,19 +167,11 @@ class SkySphere extends pc.ScriptType {
   }
 
   private _updateSkySphereSize() {
-    this._skyEntity.setLocalScale(this.scale);
+    const skyEntity = this._skyEntity;
+    skyEntity.setLocalScale(this.scale);
 
-    let objectRadius = 0;
-
-    const modelComponent = this._skyEntity.model;
-    if (modelComponent?.model) {
-      objectRadius = this._calculateModelSphereRadius(
-        modelComponent.model,
-        this.scale,
-      );
-    }
-
-    this._material.setParameter("uObjectRadius", objectRadius);
+    const radius = this._calculateModelSphereRadius(skyEntity.model?.model);
+    this._material.setParameter("uObjectRadius", radius);
   }
 
   private _updateTextures() {
@@ -306,7 +298,6 @@ class SkySphere extends pc.ScriptType {
 
   private _calculateModelSphereRadius(
     model: pc.Model | null | undefined,
-    baseScale: pc.Vec3,
   ): number {
     if (!model) {
       return 0;
@@ -330,6 +321,8 @@ class SkySphere extends pc.ScriptType {
     const tmpVec2 = new pc.Vec3();
     let radiusSquared = 0;
 
+    const worldTrans = model.graph.getWorldTransform();
+
     // Calculate the sphere radius using the distance of each vertex from the center
     meshInstances.forEach(meshInstance => {
       const vertexCount = meshInstance.mesh.getPositions(positions);
@@ -341,15 +334,14 @@ class SkySphere extends pc.ScriptType {
           positions[idx * 3 + 2],
         );
 
+        worldTrans.transformPoint(tmpVec1, tmpVec1);
+
         tmpVec2.sub2(tmpVec1, boundingBox.center);
         radiusSquared = Math.max(radiusSquared, tmpVec2.lengthSq());
       }
     });
 
-    return (
-      Math.max(baseScale.x, Math.max(baseScale.y, baseScale.z)) *
-      Math.sqrt(radiusSquared)
-    );
+    return Math.sqrt(radiusSquared);
   }
 
   private _initializeMaterial() {
