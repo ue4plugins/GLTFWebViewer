@@ -489,7 +489,7 @@ class SkySphere extends pc.ScriptType {
       void evalHorizonDistribution(vec3 cameraVector, out HorizonDistribution results)
       {
         results.cloudAlpha = saturate(dot(cameraVector, vec3(0.0, -1.0, 0.0)));
-        results.horizonAlpha = saturate(pow((1.0 - results.cloudAlpha), uHorizonFalloff));
+        results.horizonAlpha = saturate(pow((1.0 - results.cloudAlpha), uHorizonFalloff * 2.0));  // TODO: Find out we need a higher falloff in the viewer to match Unreal
       }
 
       void evalCloudTextures(in HorizonDistribution horizonDistribution, out CloudTextures results)
