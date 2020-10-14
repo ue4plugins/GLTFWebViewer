@@ -16,22 +16,22 @@ type SkySphereData = {
 
   directionalLight?: number;
 
-  sunHeight: number;
-  sunBrightness: number;
-  starsBrightness: number;
-  cloudSpeed: number;
-  cloudOpacity: number;
-  horizonFalloff: number;
+  sunHeight?: number;
+  sunBrightness?: number;
+  starsBrightness?: number;
+  cloudSpeed?: number;
+  cloudOpacity?: number;
+  horizonFalloff?: number;
 
-  sunRadius: number;
-  noisePower1: number;
-  noisePower2: number;
+  sunRadius?: number;
+  noisePower1?: number;
+  noisePower2?: number;
 
-  colorsDeterminedBySunPosition: boolean;
+  colorsDeterminedBySunPosition?: boolean;
 
-  zenithColor: [number, number, number, number];
-  horizonColor: [number, number, number, number];
-  cloudColor: [number, number, number, number];
+  zenithColor?: [number, number, number, number];
+  horizonColor?: [number, number, number, number];
+  cloudColor?: [number, number, number, number];
   overallColor?: [number, number, number, number];
 
   scale?: [number, number, number];
