@@ -74,22 +74,7 @@ export class SkySphereExtensionParser implements ExtensionParser {
     debug("Post parse sky sphere");
 
     this._nodeSkySphereDatas.forEach(data => {
-      const {
-        node,
-        sunHeight,
-        sunBrightness,
-        starsBrightness,
-        cloudSpeed,
-        cloudOpacity,
-        horizonFalloff,
-        sunRadius,
-        noisePower1,
-        noisePower2,
-        colorsDeterminedBySunPosition,
-        zenithColor,
-        horizonColor,
-        cloudColor,
-      } = data;
+      const node = data.node;
       const skySphereName = `Sky sphere '${data.name ?? node.name}'`;
 
       const skySphereModel = container.models[data.skySphereMesh];
@@ -128,37 +113,17 @@ export class SkySphereExtensionParser implements ExtensionParser {
         }
       }
 
-      const overallColor = data.overallColor ?? [1, 1, 1, 1];
-      const scale = data.scale ?? [1, 1, 1];
-
       node.addComponent("script").create(SkySphereScript, {
-        attributes: {
+        attributes: this._stripUndefinedProperties({
+          ...data,
+          name: undefined,
+          skySphereMesh: undefined,
           skySphereModel,
           skyTexture,
           cloudsTexture,
           starsTexture,
           directionalLight,
-
-          sunHeight,
-          sunBrightness,
-          starsBrightness,
-          cloudSpeed,
-          cloudOpacity,
-          horizonFalloff,
-
-          sunRadius,
-          noisePower1,
-          noisePower2,
-
-          colorsDeterminedBySunPosition,
-
-          zenithColor,
-          horizonColor,
-          cloudColor,
-          overallColor,
-
-          scale,
-        },
+        }),
       });
     });
   }
@@ -186,13 +151,15 @@ export class SkySphereExtensionParser implements ExtensionParser {
     });
   }
 
-  private _tryParseColor(data?: number[] | null): pc.Color | null {
-    if (!data || data.length < 3) {
-      return null;
-    }
+  private _stripUndefinedProperties<T extends {}>(obj: T): T {
+    const result = { ...obj };
 
-    return data.length > 3
-      ? new pc.Color(data[0], data[1], data[2], data[3])
-      : new pc.Color(data[0], data[1], data[2]);
+    Object.keys(result).forEach(<K extends keyof T>(key: K) => {
+      if (result[key] === undefined) {
+        delete result[key];
+      }
+    });
+
+    return result;
   }
 }
