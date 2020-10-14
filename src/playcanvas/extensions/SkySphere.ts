@@ -34,6 +34,10 @@ type SkySphereData = {
   cloudColor?: [number, number, number, number];
   overallColor?: [number, number, number, number];
 
+  zenithColorCurve?: number[][];
+  horizonColorCurve?: number[][];
+  cloudColorCurve?: number[][];
+
   scale?: [number, number, number];
 };
 
@@ -113,6 +117,45 @@ export class SkySphereExtensionParser implements ExtensionParser {
         }
       }
 
+      let zenithColorCurve: pc.CurveSet | undefined;
+      if (data.zenithColorCurve) {
+        if (data.zenithColorCurve.length >= 3) {
+          zenithColorCurve = new pc.CurveSet(data.zenithColorCurve);
+        } else {
+          debug(
+            `${skySphereName} has an invalid zenithColorCurve`,
+            data.zenithColorCurve,
+          );
+          return;
+        }
+      }
+
+      let horizonColorCurve: pc.CurveSet | undefined;
+      if (data.horizonColorCurve) {
+        if (data.horizonColorCurve.length >= 3) {
+          horizonColorCurve = new pc.CurveSet(data.horizonColorCurve);
+        } else {
+          debug(
+            `${skySphereName} has an invalid horizonColorCurve`,
+            data.horizonColorCurve,
+          );
+          return;
+        }
+      }
+
+      let cloudColorCurve: pc.CurveSet | undefined;
+      if (data.cloudColorCurve) {
+        if (data.cloudColorCurve.length >= 3) {
+          cloudColorCurve = new pc.CurveSet(data.cloudColorCurve);
+        } else {
+          debug(
+            `${skySphereName} has an invalid cloudColorCurve`,
+            data.cloudColorCurve,
+          );
+          return;
+        }
+      }
+
       node.addComponent("script").create(SkySphereScript, {
         attributes: this._stripUndefinedProperties({
           ...data,
@@ -123,6 +166,9 @@ export class SkySphereExtensionParser implements ExtensionParser {
           cloudsTexture,
           starsTexture,
           directionalLight,
+          zenithColorCurve,
+          horizonColorCurve,
+          cloudColorCurve,
         }),
       });
     });
