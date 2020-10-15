@@ -88,8 +88,7 @@ class HdriBackdrop extends pc.ScriptType {
 
   private _updateLightingDistanceUniform() {
     const material = this._material;
-    // TODO: Verify that the last constant isn't just a conversion to UE centimeters
-    const uLightingDistance = this.size * this.lightingDistanceFactor * 100.0;
+    const uLightingDistance = this.size * this.lightingDistanceFactor;
 
     material.setParameter("uLightingDistance", uLightingDistance);
   }
