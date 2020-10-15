@@ -263,6 +263,7 @@ class HdriBackdrop extends pc.ScriptType {
       uniform float       uIntensity;
       uniform vec3        uProjectionCenter;
       uniform float       uLightingDistance;
+      uniform vec3        view_position;
       
       varying vec3 vWorldVertexPosition;
       
@@ -299,7 +300,7 @@ class HdriBackdrop extends pc.ScriptType {
       
       void main(void)
       {
-        vec3 in_ = vec3(saturate((uLightingDistance - length(vWorldVertexPosition - uProjectionCenter)) / uLightingDistance));
+        vec3 in_ = vec3(saturate((uLightingDistance - length(vWorldVertexPosition - view_position)) / uLightingDistance));
             
         HdriAttributes hdriAttributes = createHdriAttributes(in_);
 
