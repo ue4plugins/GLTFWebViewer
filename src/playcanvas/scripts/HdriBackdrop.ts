@@ -229,12 +229,12 @@ class HdriBackdrop extends pc.ScriptType {
   private _getVertexShaderCode(): string {
     return `
       attribute vec4 aPosition;
-      
+
       uniform mat4 matrix_model;
       uniform mat4 matrix_viewProjection;
-      
+
       varying vec3 vWorldVertexPosition;
-      
+
       void main(void)
       {
         vec4 worldVertexPosition = matrix_model * aPosition;
@@ -264,21 +264,21 @@ class HdriBackdrop extends pc.ScriptType {
       uniform vec3        uProjectionCenter;
       uniform float       uLightingDistance;
       uniform vec3        view_position;
-      
+
       varying vec3 vWorldVertexPosition;
-      
+
       struct HdriAttributes
       {
         vec3 baseColor;
         float specular;
         vec3 emissiveColor;
       };
-      
+
       float saturate(float source)
       {
         return clamp(source, 0.0, 1.0);
       }
-            
+
       HdriAttributes createHdriAttributes(vec3 in_)
       {
         vec3 projectionDirection = normalize(vWorldVertexPosition - uProjectionCenter);
@@ -288,27 +288,27 @@ class HdriBackdrop extends pc.ScriptType {
 
         vec3 hdriMapRgb = textureCubeRGBM(uHdriMap, sampleDirection).xyz;
         vec3 poweredIn = pow(in_, vec3(4.0));
-            
+
         HdriAttributes result;
 
         result.baseColor = hdriMapRgb * poweredIn * saturate(uIntensity);
         result.specular = 0.0;
         result.emissiveColor = hdriMapRgb * uIntensity * (vec3(1.0) - poweredIn);
-        
+
         return result;
       }
-      
+
       void main(void)
       {
         vec3 in_ = vec3(saturate((uLightingDistance - length(vWorldVertexPosition - view_position)) / uLightingDistance));
-            
+
         HdriAttributes hdriAttributes = createHdriAttributes(in_);
 
         vec3 color = hdriAttributes.baseColor + vec3(hdriAttributes.specular) + hdriAttributes.emissiveColor;
 
         color = toneMap(color);
         color = gammaCorrectOutput(color);
-    
+
         gl_FragColor = vec4(color, 1.0);
       }
     `;
