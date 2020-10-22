@@ -1,3 +1,22 @@
+## [1.22.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.21.0...v1.22.0) (2020-10-22)
+
+
+### Features
+
+* **SkySphere:** add basic SkySphere-script ([5cabec1](http://animech[secure]/clients/epic/gltf-web-viewer/commit/5cabec191d01f0fd7d97d2734f476911dde78c55))
+* **SkySphere:** add support for parsing color curves ([aa8b301](http://animech[secure]/clients/epic/gltf-web-viewer/commit/aa8b301ec626e63ab2cbb674ad203adbcfd61838))
+* **SkySphere:** disable skybox layer while SkySphere-instances exist in the scene ([5f8dede](http://animech[secure]/clients/epic/gltf-web-viewer/commit/5f8dede3384e406893cb16367ab4dcf148750679))
+* **SkySphere:** expose color curves as attributes instead of using hardcoded values ([cfe4f14](http://animech[secure]/clients/epic/gltf-web-viewer/commit/cfe4f147ceba9cbd771f4ceb7af96377441acf78))
+* **SkySphere:** implement parsing of sky-sphere extension ([ef13d65](http://animech[secure]/clients/epic/gltf-web-viewer/commit/ef13d65a2c0205cae49125aff5e2f292446d7b5f))
+* **SkySphere:** respond to changes to color curve attributes ([7b34d99](http://animech[secure]/clients/epic/gltf-web-viewer/commit/7b34d9936ab6b23e9a763dc538270077df8475b3))
+
+
+### Bug Fixes
+
+* **SkySphere:** prevent undefined attribute-values from overwriting defaults ([2e40114](http://animech[secure]/clients/epic/gltf-web-viewer/commit/2e4011423fe4bf409c19b3829c19e619f0549310))
+* **SkySphere:** tweak falloff to better match visual appearance in Unreal ([b27c2dd](http://animech[secure]/clients/epic/gltf-web-viewer/commit/b27c2ddefb370e7d0f00ef44e671330f1b1e4088))
+* **SkySphere:** use world-positions when calculating object radius ([16863c0](http://animech[secure]/clients/epic/gltf-web-viewer/commit/16863c0ae1254e8df10f3643b98fece3b2cd32c5))
+
 ## [1.21.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.20.2...v1.21.0) (2020-10-22)
 
 
