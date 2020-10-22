@@ -14,6 +14,7 @@ import {
   AnimationPlaybackExtensionParser,
   AnimationPlayback,
   animationPlaybackDefaults,
+  SkySphereExtensionParser,
 } from "./extensions";
 import { AnimationState, Animation } from "./Animation";
 import { CameraEntity, convertToCameraEntity } from "./Camera";
@@ -234,6 +235,7 @@ export class PlayCanvasGltfLoader {
       animationPlaybackParser,
       new OrbitCameraExtensionParser(),
       new HdrEncodingExtensionParser(),
+      new SkySphereExtensionParser(),
     ];
 
     this._clearExtensions();

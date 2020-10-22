@@ -13,6 +13,8 @@ import {
   nodeLightmapScriptName,
   animationHotspotScriptName,
   AnimationHotspot,
+  SkySphere,
+  skySphereScriptName,
 } from "./scripts";
 import {
   PlayCanvasGltfLoader,
@@ -80,6 +82,7 @@ export class PlayCanvasViewer implements TestableViewer {
     pc.registerScript(AnimationHotspot, animationHotspotScriptName);
     pc.registerScript(HdriBackdropScript, hdriBackdropScriptName);
     pc.registerScript(NodeLightmap, nodeLightmapScriptName);
+    pc.registerScript(SkySphere, skySphereScriptName);
 
     this._defaultCamera = this._createDefaultCamera(this._app);
     this._activeCamera = this._defaultCamera;
