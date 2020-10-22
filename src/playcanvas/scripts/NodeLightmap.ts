@@ -45,6 +45,10 @@ class NodeLightmap extends pc.ScriptType {
   }
 
   public applyLightmapToModel(): void {
+    if (!this.entity.model.model) {
+      return;
+    }
+
     this.entity.model.meshInstances.forEach(instance => {
       instance.material = NodeLightmap._findOrCreateExtendedMaterial(
         this,
@@ -58,6 +62,10 @@ class NodeLightmap extends pc.ScriptType {
   }
 
   public removeLightmapFromModel(): void {
+    if (!this.entity.model.model) {
+      return;
+    }
+
     this.entity.model.meshInstances.forEach(instance => {
       const originalMaterial = NodeLightmap._findOriginalMaterial(
         instance.material as pc.StandardMaterial,

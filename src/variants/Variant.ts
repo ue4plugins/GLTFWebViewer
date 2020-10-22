@@ -1,6 +1,5 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
-import { deepEqual } from "../utilities";
 
 const debug = Debug("Variant");
 
@@ -14,7 +13,7 @@ export type VariantNode = {
 export type VariantNodeProperties = {
   visible?: boolean;
   materialMapping?: MaterialMapping;
-  model?: pc.Asset;
+  modelAssetID?: number | null;
 };
 
 export class Variant {
@@ -31,13 +30,14 @@ export class Variant {
 
   public get active() {
     return this._variantNodes.every(({ node, properties }) => {
-      const { visible, model, materialMapping } = properties;
+      const { visible, modelAssetID, materialMapping } = properties;
 
       const visibilityMatch = visible === undefined || visible === node.enabled;
-      const modelMatch = model === undefined || model.id === node.model?.asset;
+      const modelMatch =
+        modelAssetID === undefined || modelAssetID === node.model?.asset;
       const materialMappingMatch =
         materialMapping === undefined ||
-        deepEqual(materialMapping, node.model?.mapping);
+        this._hasMatchingMaterials(materialMapping, node.model);
 
       return visibilityMatch && modelMatch && materialMappingMatch;
     });
@@ -45,10 +45,13 @@ export class Variant {
 
   public activate(): void {
     this._variantNodes.forEach(({ node, properties }) => {
-      if (properties.model !== undefined && node.model !== undefined) {
-        debug("Set node mesh", node.name, properties.model);
+      if (properties.modelAssetID !== undefined && node.model !== undefined) {
+        debug("Set node mesh", node.name, properties.modelAssetID);
 
-        if (node.model.asset !== properties.model.id) {
+        // TODO: Improve typings for ModelComponent.asset to include null as possible value
+        const assetID = properties.modelAssetID as number;
+
+        if (node.model.asset !== assetID) {
           // HACK: prevent the anim-component from being reset when changing model by
           // temporarily removing it from the entity. When resetting the anim-component,
           // its state-graph is restored from an asset. But we've constructed the graph
@@ -56,7 +59,7 @@ export class Variant {
           const animComponent = node.anim;
           delete node.anim;
 
-          node.model.asset = properties.model;
+          node.model.asset = assetID;
           node.anim = animComponent;
         }
       }
@@ -98,6 +101,38 @@ export class Variant {
       // are completely different. We may wish to investigate this issue later if this is
       // an important use-case.
       nodeLightmap.applyLightmapToModel();
+    });
+  }
+
+  private _hasMatchingMaterials(
+    mapping: MaterialMapping,
+    model?: pc.ModelComponent,
+  ): boolean {
+    if (!model?.meshInstances) {
+      return false;
+    }
+
+    if (Object.keys(mapping).length < 1) {
+      // NOTE: Mappings without keys serve as "reset" mappings, that
+      // restores the original mappings of the source model-asset.
+      // They are not highlighted as active in Unreal when pressed, so
+      // we replicate the same behavior by returning false.
+      return false;
+    }
+
+    const app = pc.Application.getApplication();
+    const srcMapping = app?.assets.get(model.asset as number)?.data?.mapping;
+
+    return model.meshInstances.every((meshInstance, idx) => {
+      const assetID =
+        mapping[idx] !== undefined ? mapping[idx] : srcMapping[idx]?.material;
+      const asset = app?.assets.get(assetID);
+      const material = asset?.resource;
+      if (!material) {
+        return false;
+      }
+
+      return material === meshInstance.material;
     });
   }
 }

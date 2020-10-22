@@ -15,14 +15,16 @@ export const VariantSet: React.FC<VariantSetProps> = ({ id, manager }) => {
   const [variantImages, setVariantImages] = useState<(string | undefined)[]>();
   const [variants, setVariants] = useState<VariantId[]>();
   const [selectedVariants, setSelectedVariants] = useState<VariantSetState>();
-  const [userSelectedVariant, setUserSelectedVariant] = useState<number>();
 
   const onSelectedVariantsChange = useCallback(setSelectedVariants, [
     setSelectedVariants,
   ]);
-  const onUserSelectedVariantChange = useCallback(setUserSelectedVariant, [
-    setUserSelectedVariant,
-  ]);
+  const onVariantClicked = useCallback(
+    (variantID: number) => {
+      manager.activate(id, variantID);
+    },
+    [manager, id],
+  );
 
   useEffect(() => {
     setVariants(manager.getVariantIds(id));
@@ -46,12 +48,6 @@ export const VariantSet: React.FC<VariantSetProps> = ({ id, manager }) => {
     };
   }, [manager, id, onSelectedVariantsChange]);
 
-  useEffect(() => {
-    if (userSelectedVariant !== undefined) {
-      manager.activate(id, userSelectedVariant);
-    }
-  }, [manager, id, userSelectedVariant]);
-
   return (
     <FormGroup aria-label="variant-set" id={`variant-set-${id}`}>
       {variants &&
@@ -70,7 +66,7 @@ export const VariantSet: React.FC<VariantSetProps> = ({ id, manager }) => {
             value={variantId}
             label={variantLabels?.[variantId] ?? ""}
             image={variantImages?.[variantId]}
-            onChange={e => onUserSelectedVariantChange(Number(e.target.value))}
+            onClick={() => onVariantClicked(variantId)}
           />
         ))}
     </FormGroup>
