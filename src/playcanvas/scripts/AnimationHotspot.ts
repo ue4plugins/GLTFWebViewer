@@ -1,12 +1,12 @@
 import * as pc from "@animech-public/playcanvas";
 
-const interactionStates = [
+const hotspotStates = [
   "default",
   "hovered",
   "toggled",
   "toggled-hovered",
 ] as const;
-type InteractionState = typeof interactionStates[number];
+type HotspotState = typeof hotspotStates[number];
 type TextureAsset = Omit<pc.Asset, "resource"> & { resource: pc.Texture };
 type OnToggleCallback = (active: boolean) => void;
 
@@ -49,7 +49,7 @@ class AnimationHotspot extends pc.ScriptType {
   private _parentElem: HTMLElement | null = null;
   private _hotspotElem: HTMLElement;
   private _hotspotImageElems: {
-    [state in InteractionState]: HTMLImageElement;
+    [state in HotspotState]: HTMLImageElement;
   };
   private _cachedEntityPosition?: pc.Vec3;
   private _pickerEntity!: pc.Entity;
@@ -401,7 +401,7 @@ class AnimationHotspot extends pc.ScriptType {
     this._hotspotElem.style.transitionDuration = `${this.transitionDuration}ms`;
   }
 
-  private _getStateImageSource(state: InteractionState) {
+  private _getStateImageSource(state: HotspotState) {
     const texture = (() => {
       switch (state) {
         case "default":
@@ -425,13 +425,13 @@ class AnimationHotspot extends pc.ScriptType {
   private _setStateImages() {
     // By assigning all sources immediately we prevent asset load times from
     // affecting the transition between states
-    interactionStates.forEach(
+    hotspotStates.forEach(
       state =>
         (this._hotspotImageElems[state].src = this._getStateImageSource(state)),
     );
   }
 
-  private _setStateVisibility(state: InteractionState) {
+  private _setStateVisibility(state: HotspotState) {
     Object.values(this._hotspotImageElems).forEach(
       elem => (elem.style.opacity = "0"),
     );
