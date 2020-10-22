@@ -1,3 +1,12 @@
+### [1.20.2](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.20.1...v1.20.2) (2020-10-15)
+
+
+### Bug Fixes
+
+* **HdriBackdrop:** always use camera position when calculating in_ variable ([dd62592](http://animech[secure]/clients/epic/gltf-web-viewer/commit/dd625920b1c14b90d9087ea42a618b29c3d80ef8))
+* **HdriBackdrop:** fix incorrect lighting distance calculation ([882f828](http://animech[secure]/clients/epic/gltf-web-viewer/commit/882f828fa53c14f256eead3aa214dbebeb61c063))
+* restore original skybox intensity when an hdri backdrop is disabled / destroyed ([225c047](http://animech[secure]/clients/epic/gltf-web-viewer/commit/225c047f5539109c3f3b5dea42c4eb9b8bfac68b))
+
 ### [1.20.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.20.0...v1.20.1) (2020-10-10)
 
 

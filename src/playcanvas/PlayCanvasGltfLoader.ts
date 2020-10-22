@@ -196,6 +196,28 @@ export class PlayCanvasGltfLoader {
     extensions.forEach(e => e.postParse(container));
   }
 
+  private _addModelMaterialMappings(models: pc.Asset[], materials: pc.Asset[]) {
+    // Add missing material mappings to all model assets.
+    // We need them to support restoring default materials for a model via variants.
+    models.forEach(model => {
+      if (model.resource) {
+        if (!model.data) {
+          model.data = {};
+        }
+
+        if (!model.data.mapping) {
+          model.data.mapping = model.resource.meshInstances.map(
+            (meshInstance: pc.MeshInstance) => ({
+              material: materials.find(
+                material => material.resource === meshInstance.material,
+              )?.id,
+            }),
+          );
+        }
+      }
+    });
+  }
+
   public async load(url: string, fileName?: string): Promise<GltfData> {
     debug("Load glTF asset", url, fileName);
 
@@ -255,6 +277,9 @@ export class PlayCanvasGltfLoader {
         convertToCameraEntity(component.entity),
       );
       debug("Created camera entities", cameraEntities);
+
+      this._addModelMaterialMappings(container.models, container.materials);
+      debug("Added model material mappings", container.models);
 
       return {
         asset,

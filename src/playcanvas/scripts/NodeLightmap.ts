@@ -45,6 +45,10 @@ class NodeLightmap extends pc.ScriptType {
   }
 
   public applyLightmapToModel(): void {
+    if (!this.entity.model.model) {
+      return;
+    }
+
     this.entity.model.meshInstances.forEach(instance => {
       instance.material = NodeLightmap._findOrCreateExtendedMaterial(
         this,
@@ -58,6 +62,10 @@ class NodeLightmap extends pc.ScriptType {
   }
 
   public removeLightmapFromModel(): void {
+    if (!this.entity.model.model) {
+      return;
+    }
+
     this.entity.model.meshInstances.forEach(instance => {
       const originalMaterial = NodeLightmap._findOriginalMaterial(
         instance.material as pc.StandardMaterial,
@@ -135,7 +143,7 @@ class NodeLightmap extends pc.ScriptType {
       uniform vec4 lm_coordinateScaleBias;
       uniform vec4 lm_lightmapAdd;
       uniform vec4 lm_lightmapScale;
-      
+
       vec2 getLightmapUV0(vec2 uv)
       {
         return (uv * lm_coordinateScaleBias.xy + lm_coordinateScaleBias.zw) * vec2(1.0, 0.5);
@@ -166,27 +174,27 @@ class NodeLightmap extends pc.ScriptType {
 
         vec4 lightmap0 = texture2D(texture_lightMap, lightmapUv0).rgba;
         vec4 lightmap1 = texture2D(texture_lightMap, lightmapUv1).rgba;
-      
+
         float logL = lightmap0.w;
-      
+
         // Add residual
         logL += lightmap1.w * (1.0 / 255.0) - (0.5 / 255.0);
-      
+
         // Range scale logL
         logL = logL * lm_lightmapScale.w + lm_lightmapAdd.w;
-          
+
         // Range scale uvw
         vec3 uvw = lightmap0.rgb * lightmap0.rgb * lm_lightmapScale.rgb + lm_lightmapAdd.rgb;
-      
+
         // logL -> L
         const float logBlackPoint = 0.01858136;
         float l = exp2( logL ) - logBlackPoint;
-      
+
         float directionality = 0.6;
-            
+
         float luma = l * directionality;
         vec3 color = luma * uvw;
-      
+
         return color;
       }
 

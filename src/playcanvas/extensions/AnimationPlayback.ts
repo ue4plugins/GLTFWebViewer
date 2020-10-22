@@ -5,7 +5,7 @@ import { ExtensionRegistry } from "./ExtensionRegistry";
 
 const debug = Debug("AnimationPlayback");
 
-type AnimInteractionDataMap = {
+type AnimHotspotDataMap = {
   anim: pc.AnimTrack;
   data: AnimationPlayback;
 };
@@ -25,7 +25,7 @@ export const animationPlaybackDefaults = {
 };
 
 export class AnimationPlaybackExtensionParser implements ExtensionParser {
-  private _animDatas: AnimInteractionDataMap[] = [];
+  private _animDatas: AnimHotspotDataMap[] = [];
 
   public get name() {
     return "EPIC_animation_playback";

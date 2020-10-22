@@ -114,6 +114,7 @@ export type VariantProps = {
   tabIndex?: number;
   value?: string | number | string[];
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
 };
 
 export const Variant: React.FC<VariantProps> = ({
@@ -127,6 +128,7 @@ export const Variant: React.FC<VariantProps> = ({
   tabIndex,
   value,
   onChange,
+  onClick,
 }) => {
   const classes = useStyles();
   const radioGroup = useRadioGroup();
@@ -143,6 +145,12 @@ export const Variant: React.FC<VariantProps> = ({
     }
     if (radioGroup?.onChange) {
       radioGroup.onChange(e, e.target.value);
+    }
+  };
+
+  const _onClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    if (onClick) {
+      onClick(e);
     }
   };
 
@@ -175,6 +183,7 @@ export const Variant: React.FC<VariantProps> = ({
         id={id}
         name={name}
         onChange={_onChange}
+        onClick={_onClick}
         tabIndex={tabIndex}
         type="radio"
         value={value}

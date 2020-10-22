@@ -157,7 +157,12 @@ export class VariantSetExtensionParser implements ExtensionParser {
           return result;
         }
       }, {}),
-      model: mesh !== undefined ? container.models[mesh] : undefined,
+      modelAssetID:
+        mesh !== undefined && mesh !== -1
+          ? container.models[mesh]?.id
+          : mesh === -1
+          ? null
+          : undefined,
     };
   }
 }

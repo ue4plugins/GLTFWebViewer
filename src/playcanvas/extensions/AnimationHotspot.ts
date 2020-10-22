@@ -7,7 +7,7 @@ import { ExtensionRegistry } from "./ExtensionRegistry";
 
 const debug = Debug("AnimationHotspot");
 
-type InteractionData = {
+type HotspotData = {
   image: number;
   hoveredImage?: number;
   toggledImage?: number;
@@ -22,18 +22,18 @@ type NodeExtensionData = {
 type RootData = {
   extensions?: {
     EPIC_animation_hotspots?: {
-      hotspots: InteractionData[];
+      hotspots: HotspotData[];
     };
   };
 };
 
-type NodeInteractionDataMap = {
+type NodeHotspotDataMap = {
   node: pc.Entity;
-  data: InteractionData;
+  data: HotspotData;
 };
 
 export class AnimationHotspotExtensionParser implements ExtensionParser {
-  private _hotspotDatas: NodeInteractionDataMap[] = [];
+  private _hotspotDatas: NodeHotspotDataMap[] = [];
   private _hotspots?: AnimationHotspot[];
 
   public get name() {
