@@ -1,3 +1,16 @@
+## [1.21.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.20.2...v1.21.0) (2020-10-22)
+
+
+### Features
+
+* **variants:** add support for removing a mesh via a mesh variant ([2af1989](http://animech[secure]/clients/epic/gltf-web-viewer/commit/2af1989703ea694cd64022e8f2aec8d53a0a9508))
+* **variants:** add support for restoring default-materials via material variants ([969005f](http://animech[secure]/clients/epic/gltf-web-viewer/commit/969005f00fe7dff5c364b9982d8f50b2eda05cad))
+
+
+### Bug Fixes
+
+* **variants:** make variants clickable even when they are marked as active in the UI ([4a3974c](http://animech[secure]/clients/epic/gltf-web-viewer/commit/4a3974c4bf4a84ea6b6fe6b42243c39b330d1e62))
+
 ### [1.20.2](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.20.1...v1.20.2) (2020-10-15)
 
 
