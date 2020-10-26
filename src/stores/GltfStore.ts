@@ -51,7 +51,7 @@ export class GltfStore {
   }
 
   @action.bound
-  public showVariantSet(id?: number) {
+  public showLevelVariantSet(id?: number) {
     this.levelVariantSetId = id;
   }
 

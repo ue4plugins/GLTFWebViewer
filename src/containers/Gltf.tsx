@@ -41,7 +41,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
     levelVariantSetId: selectedLevelVariantSetId,
     variantSetManager,
     sceneHierarchy,
-    showVariantSet,
+    showLevelVariantSet,
     setGltf,
   } = gltfStore;
   const [view, setView] = useState<View>("gltf-list");
@@ -172,9 +172,9 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
           {sceneHierarchy ? (
             <GltfContent
               gltf={selectedGltf}
-              levelVariantSets={levelVariantSets}
               appearDirection={appearDirection}
-              onLevelVariantSetSelect={showVariantSet}
+              variantSetManager={variantSetManager}
+              onLevelVariantSetSelect={showLevelVariantSet}
             />
           ) : (
             <Loading />
@@ -188,7 +188,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
       return (
         <SidebarContainer
           title={levelVariantSet?.name}
-          onNavigateBack={() => showVariantSet(undefined)}
+          onNavigateBack={() => showLevelVariantSet(undefined)}
         >
           <LevelVariantSet
             variantSets={levelVariantSet?.variantSets ?? []}
