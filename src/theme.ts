@@ -67,11 +67,9 @@ export const theme = createMuiTheme({
     },
     primary: {
       main: primary,
-      contrastText: white,
     },
     secondary: {
       main: secondary,
-      contrastText: black,
     },
   },
   typography: {
