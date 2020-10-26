@@ -6,7 +6,6 @@ import { observer } from "mobx-react-lite";
 import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
 import { useStores } from "../stores";
 import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
-import logo from "../images/logo.svg";
 import { Viewer } from "./Viewer";
 import { Gltf } from "./Gltf";
 import { Cameras } from "./Cameras";
@@ -105,7 +104,11 @@ export const Root: React.FC = observer(() => {
       <div className={classes.root}>
         {showUI && (
           <header className={classes.topbar}>
-            <img className={classes.topbarLogo} src={logo} alt="Logo" />
+            <img
+              className={classes.topbarLogo}
+              src={"viewer/logo.svg"}
+              alt="Logo"
+            />
             <Typography className={classes.topbarTitle} variant="body2">
               Epic Games glTF Viewer
               {gltf && ` — ${gltf.name}`}
