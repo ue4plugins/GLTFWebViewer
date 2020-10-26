@@ -1,6 +1,6 @@
 module.exports = {
   defaultConfig: {
-    gltfs: [],
+    assets: [],
     topbar: true,
     sidebar: true,
     cameras: true,
