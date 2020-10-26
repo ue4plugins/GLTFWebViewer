@@ -94,7 +94,7 @@ export const Root: React.FC = observer(() => {
   useEffect(() => {
     runAsync(async () => {
       const config = await fetchConfig();
-      setGltfs(config.gltfs);
+      setGltfs(config.assets);
     });
   }, [setGltfs, runAsync]);
 

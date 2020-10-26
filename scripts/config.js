@@ -7,7 +7,7 @@ const typeRegex = new RegExp(`/glTF-([a-zA-Z0-9]+)/`);
 
 module.exports = () => ({
   ...defaultConfig,
-  gltfs: glob.sync("./public/assets/**/*.{gltf,glb}").map(fp => {
+  assets: glob.sync("./public/assets/**/*.{gltf,glb}").map(fp => {
     const typeMatch = typeRegex.exec(fp);
     const type = ((typeMatch && typeMatch[1]) || "unpacked").toLowerCase();
 

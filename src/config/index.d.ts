@@ -1,6 +1,6 @@
 declare namespace config {
   export type Config = {
-    gltfs: GltfSource[];
+    assets: GltfSource[];
     topbar: boolean;
     sidebar: boolean;
     cameras: boolean;
