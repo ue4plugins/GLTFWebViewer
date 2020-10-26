@@ -1,5 +1,12 @@
 declare namespace config {
-  export type Config = {
+  type ConfigTheme = {
+    palette: {
+      primary: string;
+      secondary: string;
+    };
+  };
+
+  type Config = {
     assets: GltfSource[];
     topbar: boolean;
     sidebar: boolean;
@@ -10,7 +17,7 @@ declare namespace config {
     theme: ConfigTheme;
   };
 
-  export const defaultConfig: Config;
+  const defaultConfig: Config;
 }
 
 export = config;
