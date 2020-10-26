@@ -18,7 +18,8 @@ declare module "@material-ui/core/styles" {
   }
 }
 
-const epicBlue = "#3393FA";
+const primary = "#3393FA";
+const secondary = "#75FABB";
 const white = "#FFFFFF";
 const grey50 = "#EFEFF0";
 const grey100 = "#EFEFF0";
@@ -65,8 +66,12 @@ export const theme = createMuiTheme({
       900: grey900,
     },
     primary: {
-      main: epicBlue,
+      main: primary,
       contrastText: white,
+    },
+    secondary: {
+      main: secondary,
+      contrastText: black,
     },
   },
   typography: {
