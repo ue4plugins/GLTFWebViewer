@@ -7,7 +7,7 @@ const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const WriteJsonPlugin = require("write-json-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
-const createConfig = require("./scripts/config");
+const createConfig = require("./scripts/createConfig");
 
 const buildSubDir = "viewer";
 
