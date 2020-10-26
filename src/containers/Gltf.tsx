@@ -8,7 +8,7 @@ import {
   VariantSet as VariantSetComponent,
   NavList,
   NavListItem,
-  ErrorMessage,
+  MessageBox,
   Appear,
 } from "../components";
 import { useStores } from "../stores";
@@ -107,9 +107,9 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
         <SidebarContainer>
           <div className={classes.content}>
             <Appear duration={theme.transitions.duration.standard}>
-              <ErrorMessage type="empty" overline="Empty" title="No options">
+              <MessageBox icon="empty" overline="Empty" title="No options">
                 This scene does not contain any configurable objects.
-              </ErrorMessage>
+              </MessageBox>
             </Appear>
           </div>
         </SidebarContainer>

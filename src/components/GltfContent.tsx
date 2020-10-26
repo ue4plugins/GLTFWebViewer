@@ -5,7 +5,7 @@ import { VariantSet } from "../variants";
 import { GltfSource } from "../types";
 import { NavList } from "./NavList";
 import { NavListItem } from "./NavListItem";
-import { ErrorMessage } from "./ErrorMessage";
+import { MessageBox } from "./MessageBox";
 import { Appear } from "./Appear";
 
 const useStyles = makeStyles(theme => ({
@@ -75,9 +75,9 @@ export const GltfContent: React.FC<GltfContentProps> = ({
           </NavList>
         ) : (
           <Appear duration={theme.transitions.duration.standard}>
-            <ErrorMessage type="empty" overline="Empty" title="No options">
+            <MessageBox icon="empty" overline="Empty" title="No options">
               This scene does not contain any configurable objects.
-            </ErrorMessage>
+            </MessageBox>
           </Appear>
         )}
       </div>

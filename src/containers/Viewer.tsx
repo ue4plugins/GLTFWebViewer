@@ -17,7 +17,7 @@ import {
   usePreventableCameraInteractions,
   useGltfDrop,
 } from "../hooks";
-import { ErrorMessage } from "../components";
+import { MessageBox } from "../components";
 
 const debug = Debug("Viewer");
 
@@ -221,21 +221,21 @@ export const Viewer: React.FC<ViewerProps> = observer(
             <CircularProgress />
           ) : hasError ? (
             <Card className={classes.error}>
-              <ErrorMessage
-                type="unexpected"
+              <MessageBox
+                icon="error"
                 overline="Oops!"
                 title="Unexpected issue"
               >
                 We tried our best but something went wrong when loading{" "}
                 {isError ? "assets" : "the asset"}. Check console for more
                 details.
-              </ErrorMessage>
+              </MessageBox>
             </Card>
           ) : isEmpty ? (
             <Card className={classes.error}>
-              <ErrorMessage title="Drop glTF file here">
+              <MessageBox icon="dragdrop" title="Drop glTF file here">
                 Drop a .gltf or .glb file with accompanying assets to view them.
-              </ErrorMessage>
+              </MessageBox>
             </Card>
           ) : null}
         </Backdrop>
