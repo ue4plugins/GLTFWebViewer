@@ -5,8 +5,6 @@ import { Hidden, makeStyles, Typography } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
 import { useStores } from "../stores";
-import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
-import { fetchConfig } from "../fetchConfig";
 import { Viewer } from "./Viewer";
 import { Gltf } from "./Gltf";
 import { Cameras } from "./Cameras";
@@ -82,21 +80,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const Root: React.FC = observer(() => {
+export type RootProps = {
+  isLoading: boolean;
+  isError: boolean;
+};
+
+export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
   const classes = useStyles();
   const { gltfStore, settingsStore } = useStores();
-  const { gltf, gltfs, setGltfs } = gltfStore;
+  const { gltf, gltfs } = gltfStore;
   const { showUI, showFpsMeter } = settingsStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
   const isEmpty = gltfs.length === 0 && !gltf;
-
-  useEffect(() => {
-    runAsync(async () => {
-      const config = await fetchConfig();
-      setGltfs(config.assets);
-    });
-  }, [setGltfs, runAsync]);
 
   useEffect(() => setIsSidebarOpen(!isEmpty), [isEmpty]);
 
