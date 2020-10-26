@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
 import { useStores } from "../stores";
 import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
+import { fetchConfig } from "../fetchConfig";
 import { Viewer } from "./Viewer";
 import { Gltf } from "./Gltf";
 import { Cameras } from "./Cameras";
@@ -84,7 +85,7 @@ const useStyles = makeStyles(theme => ({
 export const Root: React.FC = observer(() => {
   const classes = useStyles();
   const { gltfStore, settingsStore } = useStores();
-  const { gltf, gltfs, fetchGltfs } = gltfStore;
+  const { gltf, gltfs, setGltfs } = gltfStore;
   const { showUI, showFpsMeter } = settingsStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
@@ -92,9 +93,10 @@ export const Root: React.FC = observer(() => {
 
   useEffect(() => {
     runAsync(async () => {
-      await fetchGltfs();
+      const config = await fetchConfig();
+      setGltfs(config.gltfs);
     });
-  }, [fetchGltfs, runAsync]);
+  }, [setGltfs, runAsync]);
 
   useEffect(() => setIsSidebarOpen(!isEmpty), [isEmpty]);
 

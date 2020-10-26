@@ -7,7 +7,7 @@ const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const WriteJsonPlugin = require("write-json-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
-const assetIndex = require("./scripts/assetIndex");
+const createConfig = require("./scripts/config");
 
 const buildSubDir = "viewer";
 
@@ -45,12 +45,11 @@ module.exports = {
     return merge(config, {
       plugins: [
         new webpack.DefinePlugin({
-          GLTF_FILES: JSON.stringify(assetIndex),
           "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
         }),
         new DynamicCdnWebpackPlugin(),
         new WriteJsonPlugin({
-          object: assetIndex,
+          object: createConfig(),
           path: "",
           filename: "index.json",
           pretty: true,
