@@ -23,7 +23,7 @@ export class GltfStore {
   public camera?: GltfCamera;
 
   @observable
-  public variantSetId?: number;
+  public levelVariantSetId?: number;
 
   @computed
   public get variantSetManager(): VariantSetManager | undefined {
@@ -52,7 +52,7 @@ export class GltfStore {
 
   @action.bound
   public showVariantSet(id?: number) {
-    this.variantSetId = id;
+    this.levelVariantSetId = id;
   }
 
   @action.bound
@@ -82,6 +82,6 @@ export class GltfStore {
   public setSceneHierarchy(sceneHierarchy?: GltfScene) {
     this.camera = sceneHierarchy?.cameras[0];
     this.sceneHierarchy = sceneHierarchy;
-    this.variantSetId = undefined;
+    this.levelVariantSetId = undefined;
   }
 }

@@ -2,10 +2,11 @@ import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
 import { hasNoUndefinedValues } from "../../utilities";
 import {
-  VariantSet,
   Variant,
   VariantNode,
   VariantNodeProperties,
+  LevelVariantSet,
+  VariantSet,
 } from "../../variants";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
@@ -68,37 +69,36 @@ export class VariantSetExtensionParser implements ExtensionParser {
   public getVariantSetsForScene(
     scene: pc.Entity,
     container: pc.ContainerResource,
-  ): VariantSet[] {
+  ): LevelVariantSet[] {
     const { textures, nodes: nodeEntities } = container;
 
     return this._variantSets
       .filter(set => set.scene === scene)
       .reduce<LevelVariantSetData[]>((sets, set) => [...sets, ...set.data], [])
-      .reduce<VariantSetData[]>(
-        (sets, set) => [...sets, ...set.variantSets],
-        [],
-      )
-      .map<VariantSet>(set => ({
-        ...set,
-        variants: set.variants.map<Variant>(
-          ({ name, active, thumbnail, nodes }) =>
-            new Variant(
-              name,
-              thumbnail !== undefined
-                ? (textures[thumbnail]?.resource as
-                    | pc.Texture
-                    | undefined)?.getSource().src
-                : undefined,
-              active,
-              nodes.map<VariantNode>(({ node, properties }) => ({
-                node: nodeEntities[node],
-                properties: this._parseVariantNodeProperties(
-                  properties,
-                  container,
-                ),
-              })),
-            ),
-        ),
+      .map<LevelVariantSet>(({ name, variantSets: sets }) => ({
+        name,
+        variantSets: sets.map<VariantSet>(set => ({
+          ...set,
+          variants: set.variants.map<Variant>(
+            ({ name, active, thumbnail, nodes }) =>
+              new Variant(
+                name,
+                thumbnail !== undefined
+                  ? (textures[thumbnail]?.resource as
+                      | pc.Texture
+                      | undefined)?.getSource().src
+                  : undefined,
+                active,
+                nodes.map<VariantNode>(({ node, properties }) => ({
+                  node: nodeEntities[node],
+                  properties: this._parseVariantNodeProperties(
+                    properties,
+                    container,
+                  ),
+                })),
+              ),
+          ),
+        })),
       }));
   }
 

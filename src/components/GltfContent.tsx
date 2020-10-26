@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Divider, useTheme } from "@material-ui/core";
-import { VariantSet } from "../variants";
+import { LevelVariantSetWithIndices } from "../variants";
 import { GltfSource } from "../types";
 import { NavList } from "./NavList";
 import { NavListItem } from "./NavListItem";
@@ -34,16 +34,16 @@ const useStyles = makeStyles(theme => ({
 
 export type GltfContentProps = {
   gltf: GltfSource;
-  variantSets: VariantSet[];
+  levelVariantSets: LevelVariantSetWithIndices[];
   appearDirection: "left" | "right";
-  onVariantSetSelect: (id: number) => void;
+  onLevelVariantSetSelect: (id: number) => void;
 };
 
 export const GltfContent: React.FC<GltfContentProps> = ({
   gltf,
-  variantSets,
+  levelVariantSets,
   appearDirection,
-  onVariantSetSelect,
+  onLevelVariantSetSelect,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -51,25 +51,25 @@ export const GltfContent: React.FC<GltfContentProps> = ({
   return (
     <div className={classes.root}>
       <div className={classes.variantSets}>
-        {variantSets.length > 0 ? (
+        {levelVariantSets.length > 0 ? (
           <NavList>
-            {variantSets.map((variantSet, variantSetId) => (
+            {levelVariantSets.map((levelVariantSet, levelVariantSetId) => (
               <NavListItem
-                key={variantSetId}
-                onClick={() => onVariantSetSelect(variantSetId)}
+                key={levelVariantSetId}
+                onClick={() => onLevelVariantSetSelect(levelVariantSetId)}
                 appear={
                   <Appear
                     direction={appearDirection}
                     delay={
                       appearDirection === "left"
-                        ? variantSetId * theme.listAnimationDelay
-                        : (variantSets.length - 1 - variantSetId) *
+                        ? levelVariantSetId * theme.listAnimationDelay
+                        : (levelVariantSets.length - 1 - levelVariantSetId) *
                           theme.listAnimationDelay
                     }
                   />
                 }
               >
-                {variantSet.name}
+                {levelVariantSet.name}
               </NavListItem>
             ))}
           </NavList>

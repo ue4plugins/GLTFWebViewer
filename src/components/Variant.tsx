@@ -76,7 +76,9 @@ const useStyles = makeStyles(theme => {
       borderRadius: theme.shape.borderRadius,
       objectFit: "cover",
     },
-    label: {},
+    label: {
+      fontSize: theme.typography.pxToRem(14),
+    },
     checkbox: {
       position: "absolute",
       top: 0,

@@ -3,7 +3,7 @@ import Debug from "debug";
 import debounce from "lodash.debounce";
 import ResizeObserver from "resize-observer-polyfill";
 import { GltfScene } from "../types";
-import { VariantSet, VariantSetManager } from "../variants";
+import { VariantSetManager, LevelVariantSet } from "../variants";
 import {
   OrbitCamera,
   orbitCameraScriptName,
@@ -262,8 +262,8 @@ export class PlayCanvasViewer implements TestableViewer {
       this._initHotspots(gltfScene.hotspots);
     }
 
-    if (gltfScene.variantSets.length > 0) {
-      this._initVariantSets(gltfScene.variantSets);
+    if (gltfScene.levelVariantSets.length > 0) {
+      this._initVariantSets(gltfScene.levelVariantSets);
     }
 
     if (gltfScene.backdrops.length > 0) {
@@ -353,7 +353,7 @@ export class PlayCanvasViewer implements TestableViewer {
     this._hotspots = undefined;
   }
 
-  private _initVariantSets(sets: VariantSet[]) {
+  private _initVariantSets(sets: LevelVariantSet[]) {
     this._destroyVariantSets();
 
     debug("Init variant sets", sets);
