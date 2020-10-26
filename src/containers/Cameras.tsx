@@ -46,7 +46,7 @@ export const Cameras: React.FC = observer(() => {
           key={camera.id}
           value={camera.id.toString()}
           image={camera.previewSource}
-          orbit={camera.orbit}
+          type={camera.type}
           appear={
             <Appear delay={index * theme.listAnimationDelay} direction="up" />
           }

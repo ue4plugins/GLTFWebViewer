@@ -131,7 +131,7 @@ export class PlayCanvasViewer implements TestableViewer {
         return {
           id: index,
           name: camera.name,
-          orbit: isOrbitCameraEntity(camera),
+          type: isOrbitCameraEntity(camera) ? "orbit" : "static",
           previewSource: this._cameraPreviews?.[index] ?? "",
         };
       }),
