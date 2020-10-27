@@ -116,10 +116,6 @@ export class PlayCanvasViewer implements TestableViewer {
     return this._gltfLoaded;
   }
 
-  public get scenes(): pc.SceneSource[] {
-    return this._app.scenes?.list() || [];
-  }
-
   public get activeSceneHierarchy(): GltfScene | undefined {
     const scene = this._activeGltfScene;
     if (!scene) {
@@ -437,7 +433,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     const app = this._app;
 
-    return new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       let url = pc.path.join(app.assets.prefix, "config.json");
 
       url = configUrl || url; // TODO: replace hack
@@ -457,6 +453,11 @@ export class PlayCanvasViewer implements TestableViewer {
         });
       });
     });
+
+    const scene = this._app.scenes.list()[0];
+    if (scene) {
+      await this.loadScene(scene.url);
+    }
   }
 
   public async loadScene(url: string) {

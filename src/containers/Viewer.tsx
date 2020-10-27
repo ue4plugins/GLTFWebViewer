@@ -72,9 +72,8 @@ export const Viewer: React.FC<ViewerProps> = observer(
   }) => {
     const classes = useStyles();
     const theme = useTheme();
-    const { gltfStore, sceneStore, settingsStore } = useStores();
+    const { gltfStore, settingsStore } = useStores();
     const { gltf, setGltf, setSceneHierarchy, camera } = gltfStore;
-    const { scene, setScenes } = sceneStore;
     const { enableDragAndDrop, showUI } = settingsStore;
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -130,38 +129,6 @@ export const Viewer: React.FC<ViewerProps> = observer(
       };
     }, [runAsync, theme.cameraPreviewHeight, theme.cameraPreviewWidth]);
 
-    // SceneStore: Update scene list
-    useEffect(() => {
-      if (!viewer?.initiated) {
-        return;
-      }
-      debug("Set scene list", viewer.scenes);
-      setScenes(viewer.scenes);
-
-      return () => {
-        debug("Unset scene list");
-        setScenes([]);
-      };
-    }, [viewer, setScenes]);
-
-    // PlayCanvasViewer: Load scene
-    useEffect(() => {
-      if (!viewer?.initiated || !scene) {
-        return;
-      }
-
-      runAsync(async () => {
-        debug("Load scene start", scene.url);
-        await viewer.loadScene(scene.url);
-        debug("Load scene end", scene.url);
-      });
-
-      return () => {
-        debug("Destroy scene");
-        viewer.destroyScene();
-      };
-    }, [runAsync, viewer, scene]);
-
     // PlayCanvasViewer: Load glTF
     // GltfStore: Update scene hierarchy list
     useEffect(() => {
@@ -204,7 +171,7 @@ export const Viewer: React.FC<ViewerProps> = observer(
     useEffect(() => {
       debug("Reset drop error state");
       setHasDropError(false);
-    }, [gltf, scene, setHasDropError, viewer]);
+    }, [gltf, setHasDropError, viewer]);
 
     // Prevent camera interactions
     useEffect(() => {

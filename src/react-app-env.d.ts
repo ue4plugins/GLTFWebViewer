@@ -18,11 +18,6 @@ declare namespace pc {
     setSkybox(textures: (pc.Texture | null)[]): void;
   }
 
-  type SceneSource = {
-    name: string;
-    url: string;
-  };
-
   interface MeshInstance {
     setParameter: Material["setParameter"];
     setParameters: Material["setParameters"];
