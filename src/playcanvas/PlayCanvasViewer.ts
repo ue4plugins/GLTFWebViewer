@@ -454,14 +454,9 @@ export class PlayCanvasViewer implements TestableViewer {
   }
 
   private async _loadScene(url: string) {
-    // NOTE: When using backdrops, they provide their own "scene" / lighting.
-    if (this._backdrops) {
-      return Promise.resolve();
-    }
+    debug("Loading scene", url);
 
     url = sceneUrl || url; // TODO: replace hack
-
-    debug("Loading scene", url);
 
     return new Promise<void>((resolve, reject) => {
       this._app.scenes.loadScene(url, error => {
