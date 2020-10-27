@@ -5,10 +5,9 @@ const { defaultConfig } = require("../src/config");
 
 const typeRegex = new RegExp(`/glTF-([a-zA-Z0-9]+)/`);
 
-module.exports = function() {
-  if (process.env.NODE_ENV === "development") {
-    return {
-      assets: glob.sync("./public/assets/**/*.{gltf,glb}").map(fp => {
+module.exports = function(includeTestAssets) {
+  const assets = includeTestAssets
+    ? glob.sync("./public/assets/**/*.{gltf,glb}").map(fp => {
         const typeMatch = typeRegex.exec(fp);
         const type = ((typeMatch && typeMatch[1]) || "unpacked").toLowerCase();
 
@@ -27,9 +26,14 @@ module.exports = function() {
           creator: meta.creator,
           creatorUrl: meta.creatorUrl,
         };
-      }),
-    };
+      })
+    : [];
+
+  // Don't include default config in local dev builds. This makes it possible
+  // to test config options by modifying src/config/index.js without rebuilding.
+  if (process.env.NODE_ENV === "development") {
+    return { assets };
   }
 
-  return defaultConfig;
+  return { ...defaultConfig, assets };
 };
