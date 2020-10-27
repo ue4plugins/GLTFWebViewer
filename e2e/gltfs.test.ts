@@ -1,10 +1,5 @@
 import "jest";
-import {
-  waitForGltf,
-  waitForScene,
-  waitForViewer,
-  removeIllegalChars,
-} from "./utilities";
+import { waitForGltf, waitForViewer, removeIllegalChars } from "./utilities";
 import { TestGltf, gltfs } from "./__fixtures__/gltfs";
 
 type GltfTuple = [string, boolean];
@@ -25,7 +20,7 @@ describe("glTFs", () => {
       await page.goto(
         `http://localhost:3001?hideUI=true&noAnimations=true&gltf=${name}`,
       );
-      await Promise.all([waitForViewer(), waitForScene(), waitForGltf()]);
+      await Promise.all([waitForViewer(), waitForGltf()]);
       await page.waitFor(1000);
 
       const fileName = removeIllegalChars(name);

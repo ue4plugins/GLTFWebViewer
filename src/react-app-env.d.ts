@@ -18,11 +18,6 @@ declare namespace pc {
     setSkybox(textures: (pc.Texture | null)[]): void;
   }
 
-  type SceneSource = {
-    name: string;
-    url: string;
-  };
-
   interface MeshInstance {
     setParameter: Material["setParameter"];
     setParameters: Material["setParameters"];
@@ -113,10 +108,8 @@ declare namespace pc {
 
 interface TestableViewer {
   initiated: boolean;
-  sceneLoaded: boolean;
   gltfLoaded: boolean;
   loadGltf(path: string): Promise<void>;
-  loadScene(path: string): Promise<void>;
   resetCamera(yaw?: number, pitch?: number, distance?: number): void;
 }
 

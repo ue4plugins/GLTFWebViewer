@@ -6,12 +6,8 @@ import { RootStoreProvider, useStores } from "../RootStore";
 describe("RootStore", () => {
   it("should pass stores via context", async () => {
     const StoreConsumer: React.FC = () => {
-      const { gltfStore, sceneStore } = useStores();
-      return (
-        <span>
-          Scene: {sceneStore.sceneIndex}, Gltf: {String(gltfStore.gltf)}
-        </span>
-      );
+      const { gltfStore } = useStores();
+      return <span>Gltf: {String(gltfStore.gltf)}</span>;
     };
 
     const { getByText } = render(
@@ -20,6 +16,6 @@ describe("RootStore", () => {
       </RootStoreProvider>,
     );
 
-    expect(getByText(/^Scene:/).textContent).toBe("Scene: -1, Gltf: undefined");
+    expect(getByText(/^Gltf:/).textContent).toBe("Gltf: undefined");
   });
 });

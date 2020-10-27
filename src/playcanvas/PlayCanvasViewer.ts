@@ -28,7 +28,7 @@ import {
   isOrbitCameraEntity,
   convertToCameraEntity,
 } from "./Camera";
-import { configUrl, sceneUrl } from "./PlayCanvasOfflineHack"; // TODO: replace hack
+import { configUrl, sceneUrl as sceneUrlHack } from "./PlayCanvasOfflineHack"; // TODO: replace hack
 
 const debug = Debug("PlayCanvasViewer");
 
@@ -47,7 +47,6 @@ export class PlayCanvasViewer implements TestableViewer {
   private _activeCamera?: CameraEntity;
   private _defaultCamera: OrbitCameraEntity;
   private _loader: PlayCanvasGltfLoader;
-  private _scene?: pc.Scene;
   private _gltf?: GltfData;
   private _activeGltfScene?: GltfSceneData;
   private _variantSetManager?: VariantSetManager;
@@ -63,7 +62,6 @@ export class PlayCanvasViewer implements TestableViewer {
   );
   private _canvasSizeElem?: HTMLElement;
   private _initiated = false;
-  private _sceneLoaded = false;
   private _gltfLoaded = false;
   private _noAnimations: boolean;
 
@@ -108,16 +106,8 @@ export class PlayCanvasViewer implements TestableViewer {
     return !!this._app.graphicsDevice && this._initiated;
   }
 
-  public get sceneLoaded() {
-    return this._sceneLoaded;
-  }
-
   public get gltfLoaded() {
     return this._gltfLoaded;
-  }
-
-  public get scenes(): pc.SceneSource[] {
-    return this._app.scenes?.list() || [];
   }
 
   public get activeSceneHierarchy(): GltfScene | undefined {
@@ -425,7 +415,6 @@ export class PlayCanvasViewer implements TestableViewer {
 
   public destroy() {
     this.destroyGltf();
-    this.destroyScene();
     if (this._canvasSizeElem) {
       this._canvasResizeObserver.unobserve(this._canvasSizeElem);
     }
@@ -437,7 +426,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     const app = this._app;
 
-    return new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       let url = pc.path.join(app.assets.prefix, "config.json");
 
       url = configUrl || url; // TODO: replace hack
@@ -448,8 +437,6 @@ export class PlayCanvasViewer implements TestableViewer {
           return;
         }
         app.preload(() => {
-          this._initiated = true;
-
           // Override fill mode from config
           app.setCanvasFillMode(pc.FILLMODE_NONE);
 
@@ -457,46 +444,24 @@ export class PlayCanvasViewer implements TestableViewer {
         });
       });
     });
-  }
 
-  public async loadScene(url: string) {
-    // NOTE: When using backdrops, they provide their own "scene" / lighting.
-    if (this._backdrops) {
-      return Promise.resolve();
-    }
+    const scene = this._app.scenes.list()[0];
+    if (scene) {
+      const sceneUrl = sceneUrlHack || scene.url; // TODO: replace hack
+      debug("Loading scene", sceneUrl);
 
-    this.destroyScene();
-
-    url = sceneUrl || url; // TODO: replace hack
-
-    debug("Loading scene", url);
-
-    return new Promise<void>((resolve, reject) => {
-      this._app.scenes.loadScene(url, (error, scene) => {
-        this._sceneLoaded = true;
-        if (error) {
-          reject(error);
-          return;
-        }
-        this._scene = (scene as unknown) as pc.Scene;
-        resolve();
+      await new Promise<void>((resolve, reject) => {
+        this._app.scenes.loadScene(sceneUrl, error => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve();
+        });
       });
-    });
-  }
-
-  public destroyScene() {
-    debug("Destroy scene", this._scene);
-
-    this._sceneLoaded = false;
-
-    if (this._scene) {
-      if (this._scene.root) {
-        this._scene.root.destroy();
-        (this._scene.root as pc.Entity | undefined) = undefined;
-      }
-      this._scene.destroy();
-      this._scene = undefined;
     }
+
+    this._initiated = true;
   }
 
   public destroyGltf() {
