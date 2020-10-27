@@ -63,7 +63,6 @@ export class PlayCanvasViewer implements TestableViewer {
   );
   private _canvasSizeElem?: HTMLElement;
   private _initiated = false;
-  private _sceneLoaded = false;
   private _gltfLoaded = false;
   private _noAnimations: boolean;
 
@@ -106,10 +105,6 @@ export class PlayCanvasViewer implements TestableViewer {
 
   public get initiated() {
     return !!this._app.graphicsDevice && this._initiated;
-  }
-
-  public get sceneLoaded() {
-    return this._sceneLoaded;
   }
 
   public get gltfLoaded() {
@@ -421,7 +416,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
   public destroy() {
     this.destroyGltf();
-    this.destroyScene();
+    this._destroyScene();
     if (this._canvasSizeElem) {
       this._canvasResizeObserver.unobserve(this._canvasSizeElem);
     }
@@ -444,8 +439,6 @@ export class PlayCanvasViewer implements TestableViewer {
           return;
         }
         app.preload(() => {
-          this._initiated = true;
-
           // Override fill mode from config
           app.setCanvasFillMode(pc.FILLMODE_NONE);
 
@@ -456,17 +449,19 @@ export class PlayCanvasViewer implements TestableViewer {
 
     const scene = this._app.scenes.list()[0];
     if (scene) {
-      await this.loadScene(scene.url);
+      await this._loadScene(scene.url);
     }
+
+    this._initiated = true;
   }
 
-  public async loadScene(url: string) {
+  private async _loadScene(url: string) {
     // NOTE: When using backdrops, they provide their own "scene" / lighting.
     if (this._backdrops) {
       return Promise.resolve();
     }
 
-    this.destroyScene();
+    this._destroyScene();
 
     url = sceneUrl || url; // TODO: replace hack
 
@@ -474,7 +469,6 @@ export class PlayCanvasViewer implements TestableViewer {
 
     return new Promise<void>((resolve, reject) => {
       this._app.scenes.loadScene(url, (error, scene) => {
-        this._sceneLoaded = true;
         if (error) {
           reject(error);
           return;
@@ -485,10 +479,8 @@ export class PlayCanvasViewer implements TestableViewer {
     });
   }
 
-  public destroyScene() {
+  private _destroyScene() {
     debug("Destroy scene", this._scene);
-
-    this._sceneLoaded = false;
 
     if (this._scene) {
       if (this._scene.root) {

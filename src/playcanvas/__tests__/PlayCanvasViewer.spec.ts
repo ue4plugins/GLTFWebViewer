@@ -2,7 +2,6 @@
 import "jest";
 import xhrMock from "xhr-mock";
 import { MockFunction } from "xhr-mock/lib/types";
-import * as pc from "@animech-public/playcanvas";
 import { PlayCanvasViewer } from "../PlayCanvasViewer";
 import {
   configResponse,
@@ -14,7 +13,7 @@ import {
   gltfUnpackedBinResponse,
 } from "../__fixtures__";
 
-const sceneUrl = "scene.json";
+const sceneUrl = "1002267.json";
 const gltfEmbeddedUrl = "gltf-embedded.gltf";
 const gltfEmbeddedInvalidUrl = "gltf-embedded-invalid.gltf";
 const gltfEmbeddedAnimatedUrl = "gltf-embedded-anim.gltf";
@@ -26,7 +25,7 @@ const toEscapedRegExp = (pattern: string) =>
 
 const createAndConfigureViewer = async () => {
   const canvas = document.createElement("canvas");
-  const viewer = new PlayCanvasViewer(canvas);
+  const viewer = new PlayCanvasViewer(canvas, { width: 0, height: 0 });
   await viewer.configure();
   return viewer;
 };
@@ -91,44 +90,15 @@ describe("PlayCanvasViewer", () => {
       expect(configHandler).toHaveBeenCalledTimes(1);
     });
 
-    it("should have scene list after setup", async () => {
+    it("should destroy glTF and app on teardown", async () => {
       const viewer = await createAndConfigureViewer();
-      expect(viewer.scenes.length).toBeGreaterThan(0);
-    });
-
-    it("should destroy glTF, scene and app on teardown", async () => {
-      const viewer = await createAndConfigureViewer();
-      await viewer.loadScene(sceneUrl);
       await viewer.loadGltf(gltfEmbeddedUrl);
       viewer.destroy();
 
       expect(viewer.initiated).toBe(false);
-      expect(viewer.sceneLoaded).toBe(false);
       expect(viewer.gltfLoaded).toBe(false);
-      expect(viewer.scenes.length).toBe(0);
       expect(viewer.app.scene || undefined).toBeUndefined();
       expect(viewer.app.root || undefined).toBeUndefined();
-    });
-  });
-
-  describe("Scene", () => {
-    it("should be able to load scene", async () => {
-      const viewer = await createAndConfigureViewer();
-      expect(viewer.sceneLoaded).toBe(false);
-      expect(viewer.app.scene.root).toBe(null);
-
-      await viewer.loadScene(sceneUrl);
-      expect(viewer.sceneLoaded).toBe(true);
-      expect(viewer.app.scene.root).toBeInstanceOf(pc.GraphNode);
-      expect(sceneHandler).toHaveBeenCalledTimes(1);
-    });
-
-    it("should clean up when destroying scene", async () => {
-      const viewer = await createAndConfigureViewer();
-      await viewer.loadScene(sceneUrl);
-      viewer.destroyScene();
-      expect(viewer.sceneLoaded).toBe(false);
-      expect(viewer.app.scene.root).toBeUndefined();
     });
   });
 

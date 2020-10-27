@@ -108,10 +108,8 @@ declare namespace pc {
 
 interface TestableViewer {
   initiated: boolean;
-  sceneLoaded: boolean;
   gltfLoaded: boolean;
   loadGltf(path: string): Promise<void>;
-  loadScene(path: string): Promise<void>;
   resetCamera(yaw?: number, pitch?: number, distance?: number): void;
 }
 
