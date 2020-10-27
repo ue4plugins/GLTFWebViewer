@@ -49,9 +49,15 @@ module.exports = {
         }),
         new DynamicCdnWebpackPlugin(),
         new WriteJsonPlugin({
-          object: createConfig(),
+          object: createConfig(true),
           path: "",
           filename: "index.json",
+          pretty: true,
+        }),
+        new WriteJsonPlugin({
+          object: createConfig(false),
+          path: "",
+          filename: "index-release.json",
           pretty: true,
         }),
       ],
