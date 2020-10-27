@@ -94,6 +94,7 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
   const { gltfStore, settingsStore } = useStores();
   const { gltf, gltfs } = gltfStore;
   const {
+    initiated,
     showTopbar,
     showSidebar,
     showCameras,
@@ -147,7 +148,7 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
         >
           <div
             className={clsx(classes.viewport, {
-              [classes.viewportFullscreen]: !isLoading && !isSidebarOpen,
+              [classes.viewportFullscreen]: initiated && !isSidebarOpen,
             })}
           >
             <Viewer isLoading={isLoading} isError={isError} isEmpty={isEmpty} />

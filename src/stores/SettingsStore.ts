@@ -24,6 +24,9 @@ export class SettingsStore {
   }
 
   @observable
+  public initiated = false;
+
+  @observable
   public enableDragAndDrop = false;
 
   @observable
@@ -60,5 +63,6 @@ export class SettingsStore {
     this._showTopbar = config.topbar;
     this._showSidebar = config.sidebar;
     this._showCameras = config.cameras;
+    this.initiated = true;
   }
 }
