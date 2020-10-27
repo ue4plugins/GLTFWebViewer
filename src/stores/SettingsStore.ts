@@ -9,7 +9,7 @@ export class SettingsStore {
   private _showTopbar = false;
 
   @observable
-  private _showSidebar = false;
+  private _showSidebar = true;
 
   @observable
   private _showCameras = false;
@@ -19,9 +19,6 @@ export class SettingsStore {
     this.showUI = !urlParams.get("hideUI");
     this._showFpsMeter = !!urlParams.get("showFpsMeter");
   }
-
-  @observable
-  public initiated = false;
 
   @observable
   public enableDragAndDrop = false;
@@ -63,6 +60,5 @@ export class SettingsStore {
     this._showTopbar = config.topbar;
     this._showSidebar = config.sidebar;
     this._showCameras = config.cameras;
-    this.initiated = true;
   }
 }

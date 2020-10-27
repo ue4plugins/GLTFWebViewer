@@ -71,12 +71,14 @@ const useStyles = makeStyles(theme => ({
     height: "100%",
     backgroundColor: theme.palette.common.black,
     overflow: "hidden",
+  },
+  viewportWithVisibleSidebar: {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  viewportFullscreen: {
+  viewportWithHiddenSidebar: {
     marginRight: -1 * theme.sidebarWidth,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
@@ -95,7 +97,6 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
   const { gltfStore, settingsStore } = useStores();
   const { gltf, gltfs } = gltfStore;
   const {
-    initiated,
     showTopbar,
     showSidebar,
     showCameras,
@@ -110,6 +111,7 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
 
   return (
     <>
+      {/* TODO: move to bootstrapper */}
       <CssBaseline />
       <div className={classes.root}>
         {showTopbar && (
@@ -149,8 +151,10 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
         >
           <div
             className={clsx(classes.viewport, {
-              [classes.viewportFullscreen]:
-                showSidebar && initiated && !isSidebarOpen,
+              [classes.viewportWithHiddenSidebar]:
+                showSidebar && !isSidebarOpen,
+              [classes.viewportWithVisibleSidebar]:
+                showSidebar && isSidebarOpen,
             })}
           >
             <Viewer isLoading={isLoading} isError={isError} isEmpty={isEmpty} />
