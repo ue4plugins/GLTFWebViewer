@@ -28,7 +28,7 @@ import {
   isOrbitCameraEntity,
   convertToCameraEntity,
 } from "./Camera";
-import { configUrl, sceneUrl } from "./PlayCanvasOfflineHack"; // TODO: replace hack
+import { configUrl, sceneUrl as sceneUrlHack } from "./PlayCanvasOfflineHack"; // TODO: replace hack
 
 const debug = Debug("PlayCanvasViewer");
 
@@ -447,26 +447,21 @@ export class PlayCanvasViewer implements TestableViewer {
 
     const scene = this._app.scenes.list()[0];
     if (scene) {
-      await this._loadScene(scene.url);
+      const sceneUrl = sceneUrlHack || scene.url; // TODO: replace hack
+      debug("Loading scene", sceneUrl);
+
+      await new Promise<void>((resolve, reject) => {
+        this._app.scenes.loadScene(sceneUrl, error => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve();
+        });
+      });
     }
 
     this._initiated = true;
-  }
-
-  private async _loadScene(url: string) {
-    debug("Loading scene", url);
-
-    url = sceneUrl || url; // TODO: replace hack
-
-    return new Promise<void>((resolve, reject) => {
-      this._app.scenes.loadScene(url, error => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve();
-      });
-    });
   }
 
   public destroyGltf() {
