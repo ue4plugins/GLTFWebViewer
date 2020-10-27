@@ -7,7 +7,6 @@ import {
   makeStyles,
   useTheme,
   Card,
-  Typography,
 } from "@material-ui/core";
 import clsx from "clsx";
 import { PlayCanvasViewer } from "../playcanvas";
@@ -17,7 +16,7 @@ import {
   usePreventableCameraInteractions,
   useGltfDrop,
 } from "../hooks";
-import { ErrorMessage } from "../components";
+import { MessageBox } from "../components";
 
 const debug = Debug("Viewer");
 
@@ -45,13 +44,16 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "rgba(0, 0, 0, 0.9)",
     transition:
       theme.transitions.create(["opacity", "background-color"], {
-        duration: theme.transitions.duration.shorter,
+        duration: theme.transitions.duration.shortest,
       }) + " !important",
   },
   backdropTransparent: {
     backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
-  error: {
+  backdropBorder: {
+    border: `3px solid ${theme.palette.primary.main}`,
+  },
+  messageBox: {
     maxWidth: 320,
   },
 }));
@@ -209,33 +211,30 @@ export const Viewer: React.FC<ViewerProps> = observer(
         </div>
         <Backdrop
           className={clsx(classes.backdrop, {
-            [classes.backdropTransparent]: !(isDragActive || isLoading),
+            [classes.backdropTransparent]: !isLoading,
+            [classes.backdropBorder]: isDragActive,
           })}
           open={showBackdrop}
         >
-          {isDragActive ? (
-            <Typography variant="h6">
-              Drop a .gltf or .glb file with accompanying assets here
-            </Typography>
-          ) : isLoading ? (
+          {isLoading ? (
             <CircularProgress />
           ) : hasError ? (
-            <Card className={classes.error}>
-              <ErrorMessage
-                type="unexpected"
+            <Card className={classes.messageBox}>
+              <MessageBox
+                icon="error"
                 overline="Oops!"
                 title="Unexpected issue"
               >
                 We tried our best but something went wrong when loading{" "}
                 {isError ? "assets" : "the asset"}. Check console for more
                 details.
-              </ErrorMessage>
+              </MessageBox>
             </Card>
-          ) : isEmpty ? (
-            <Card className={classes.error}>
-              <ErrorMessage title="Drop glTF file here">
+          ) : isEmpty || isDragActive ? (
+            <Card className={classes.messageBox}>
+              <MessageBox icon="dragdrop" title="Drop glTF file here">
                 Drop a .gltf or .glb file with accompanying assets to view them.
-              </ErrorMessage>
+              </MessageBox>
             </Card>
           ) : null}
         </Backdrop>

@@ -5,14 +5,14 @@ import { observer } from "mobx-react-lite";
 import {
   GltfContent,
   SidebarContainer,
-  VariantSet as VariantSetComponent,
   NavList,
   NavListItem,
-  ErrorMessage,
+  MessageBox,
   Appear,
 } from "../components";
 import { useStores } from "../stores";
-import { VariantSet } from "../variants";
+import { LevelVariantSetWithIndices } from "../variants";
+import { LevelVariantSet } from "../components/LevelVariantSet";
 
 const useStyles = makeStyles(theme => ({
   loading: {
@@ -38,30 +38,32 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
   const {
     gltfs,
     gltf: selectedGltf,
-    variantSetId: selectedVariantSetId,
+    levelVariantSetId: selectedLevelVariantSetId,
     variantSetManager,
     sceneHierarchy,
-    showVariantSet,
+    showLevelVariantSet,
     setGltf,
   } = gltfStore;
   const [view, setView] = useState<View>("gltf-list");
   const previousViewRef = useRef<View | undefined>();
-  const [variantSets, setVariantSets] = useState<VariantSet[]>([]);
+  const [levelVariantSets, setLevelVariantSets] = useState<
+    LevelVariantSetWithIndices[]
+  >([]);
 
-  const variantSet =
-    selectedVariantSetId !== undefined
-      ? variantSets[selectedVariantSetId]
+  const levelVariantSet =
+    selectedLevelVariantSetId !== undefined
+      ? levelVariantSets[selectedLevelVariantSetId]
       : undefined;
 
   let appearDirection: "left" | "right" = "left";
 
   useEffect(() => {
     if (variantSetManager) {
-      setVariantSets(variantSetManager.variantSets);
+      setLevelVariantSets(variantSetManager.levelVariantSets);
     }
 
     return () => {
-      setVariantSets([]);
+      setLevelVariantSets([]);
     };
   }, [variantSetManager]);
 
@@ -72,14 +74,14 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
   useEffect(() => {
     setView(
       selectedGltf
-        ? variantSet
+        ? levelVariantSet
           ? "variant-set"
           : "gltf-content"
         : gltfs.length === 0
         ? "none"
         : "gltf-list",
     );
-  }, [selectedGltf, variantSet, gltfs]);
+  }, [selectedGltf, levelVariantSet, gltfs]);
 
   const Loading: React.FC = () => (
     <div className={classes.loading}>
@@ -107,9 +109,9 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
         <SidebarContainer>
           <div className={classes.content}>
             <Appear duration={theme.transitions.duration.standard}>
-              <ErrorMessage type="empty" overline="Empty" title="No options">
+              <MessageBox icon="empty" overline="Empty" title="No options">
                 This scene does not contain any configurable objects.
-              </ErrorMessage>
+              </MessageBox>
             </Appear>
           </div>
         </SidebarContainer>
@@ -170,9 +172,9 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
           {sceneHierarchy ? (
             <GltfContent
               gltf={selectedGltf}
-              variantSets={variantSets}
               appearDirection={appearDirection}
-              onVariantSetSelect={showVariantSet}
+              variantSetManager={variantSetManager}
+              onLevelVariantSetSelect={showLevelVariantSet}
             />
           ) : (
             <Loading />
@@ -180,20 +182,18 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
         </SidebarContainer>
       );
     case "variant-set":
-      if (selectedVariantSetId === undefined || !variantSetManager) {
+      if (selectedLevelVariantSetId === undefined || !variantSetManager) {
         return null;
       }
       return (
         <SidebarContainer
-          title={variantSet?.name}
-          onNavigateBack={() => showVariantSet(undefined)}
+          title={levelVariantSet?.name}
+          onNavigateBack={() => showLevelVariantSet(undefined)}
         >
-          <div className={classes.content}>
-            <VariantSetComponent
-              id={selectedVariantSetId}
-              manager={variantSetManager}
-            />
-          </div>
+          <LevelVariantSet
+            variantSets={levelVariantSet?.variantSets ?? []}
+            manager={variantSetManager}
+          />
         </SidebarContainer>
       );
   }

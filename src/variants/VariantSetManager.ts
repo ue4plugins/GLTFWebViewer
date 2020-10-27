@@ -1,6 +1,6 @@
 import Debug from "debug";
 import { deepEqual } from "../utilities";
-import { VariantSet } from "./VariantSet";
+import { VariantSet, LevelVariantSet } from "./VariantSet";
 
 const debug = Debug("VariantSetManager");
 
@@ -13,13 +13,37 @@ export type OnGlobalStateChangeCallback = (
   state: GlobalVariantSetState,
 ) => void;
 
+export type LevelVariantSetWithIndices = Omit<
+  LevelVariantSet,
+  "variantSets"
+> & {
+  variantSets: number[];
+};
+
 export class VariantSetManager {
   private _state: GlobalVariantSetState;
   private _stateCallbacks: OnStateChangeCallback[][];
   private _globalStateCallbacks: OnGlobalStateChangeCallback[] = [];
+  private _levelVariantSets: LevelVariantSetWithIndices[];
+  private _variantSets: VariantSet[];
 
-  public constructor(private _variantSets: VariantSet[]) {
-    this._stateCallbacks = _variantSets.map(_ => []);
+  public constructor(levelVariantSets: LevelVariantSet[]) {
+    this._levelVariantSets = [];
+    this._variantSets = [];
+
+    levelVariantSets.forEach(({ name, variantSets }) => {
+      const levelSetWithIndices: LevelVariantSetWithIndices = {
+        name,
+        variantSets: [],
+      };
+      variantSets.forEach(set => {
+        const setIndex = this._variantSets.push(set) - 1;
+        levelSetWithIndices.variantSets.push(setIndex);
+      });
+      this._levelVariantSets.push(levelSetWithIndices);
+    });
+
+    this._stateCallbacks = this._variantSets.map(_ => []);
     this._state = this._evalGlobalState();
   }
 
@@ -27,8 +51,8 @@ export class VariantSetManager {
     return this._state;
   }
 
-  public get variantSets(): VariantSet[] {
-    return this._variantSets;
+  public get levelVariantSets(): LevelVariantSetWithIndices[] {
+    return this._levelVariantSets;
   }
 
   public getName(variantSetId: number): string | undefined {

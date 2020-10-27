@@ -1,7 +1,8 @@
 import React, { cloneElement } from "react";
 import { makeStyles, useRadioGroup } from "@material-ui/core";
 import clsx from "clsx";
-import { ReactComponent as Rotate } from "../icons/Rotate.svg";
+import { ReactComponent as Orbit } from "../icons/Orbit.svg";
+import { ReactComponent as PointOfView } from "../icons/PointOfView.svg";
 import { AppearProps } from "./Appear";
 
 const useStyles = makeStyles(theme => {
@@ -40,7 +41,7 @@ const useStyles = makeStyles(theme => {
     buttonChecked: {
       boxShadow: dropShadow + `, 0 0 0 2px ${theme.palette.primary.main} inset`,
     },
-    orbitIcon: {
+    icon: {
       position: "absolute",
       bottom: theme.spacing(1),
       right: theme.spacing(1),
@@ -52,12 +53,15 @@ const useStyles = makeStyles(theme => {
       borderRadius: "50%",
       backgroundColor: theme.palette.grey[900],
     },
+    iconChecked: {
+      color: theme.palette.secondary.main,
+    },
   };
 });
 
 export type CameraProps = {
   appear?: React.ReactElement<AppearProps>;
-  orbit?: boolean;
+  type?: "static" | "orbit" | "pov";
   autoFocus?: boolean;
   checked?: boolean;
   id?: string;
@@ -70,7 +74,7 @@ export type CameraProps = {
 
 export const Camera: React.FC<CameraProps> = ({
   appear,
-  orbit,
+  type = "static",
   autoFocus,
   checked: checkedProp,
   id,
@@ -105,9 +109,20 @@ export const Camera: React.FC<CameraProps> = ({
       })}
       style={{ backgroundImage: `url(${image})` }}
     >
-      {orbit && (
-        <div className={classes.orbitIcon}>
-          <Rotate />
+      {type !== "static" && (
+        <div
+          className={clsx(classes.icon, {
+            [classes.iconChecked]: checked,
+          })}
+        >
+          {(() => {
+            switch (type) {
+              case "orbit":
+                return <Orbit />;
+              case "pov":
+                return <PointOfView />;
+            }
+          })()}
         </div>
       )}
     </div>

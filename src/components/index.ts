@@ -1,6 +1,6 @@
 export * from "./Appear";
 export * from "./Camera";
-export * from "./ErrorMessage";
+export * from "./MessageBox";
 export * from "./FpsMonitor";
 export * from "./GltfContent";
 export * from "./Hamburger";

@@ -1,6 +1,6 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
-import { VariantSet } from "../variants";
+import { LevelVariantSet } from "../variants";
 import {
   ExtensionRegistry,
   ExtensionParser,
@@ -24,7 +24,7 @@ const debug = Debug("PlayCanvasGltfLoader");
 
 export type GltfSceneData = {
   root: pc.Entity;
-  variantSets: VariantSet[];
+  levelVariantSets: LevelVariantSet[];
   hotspots: AnimationHotspot[];
   backdrops: HdriBackdrop[];
   animations: Animation[];
@@ -289,7 +289,7 @@ export class PlayCanvasGltfLoader {
           );
           return {
             root: sceneRoot,
-            variantSets: variantSetParser.getVariantSetsForScene(
+            levelVariantSets: variantSetParser.getVariantSetsForScene(
               sceneRoot,
               container,
             ),
