@@ -1,3 +1,18 @@
+## [1.24.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.23.0...v1.24.0) (2020-10-27)
+
+
+### Features
+
+* **HdriBackdrop:** add and implement angle attribute in HdriBackdrop script ([3b9c950](http://animech[secure]/clients/epic/gltf-web-viewer/commit/3b9c9503488fc1ca80a8f2b57dbf7208efdc8dc3))
+* **HdriBackdrop:** add angle property to EPIC_hdri_backdrops extension ([44b122b](http://animech[secure]/clients/epic/gltf-web-viewer/commit/44b122b1a0136f6de22ee97529c0e583430a452f))
+
+
+### Bug Fixes
+
+* fix material mapping of all model assets after loading a glTF asset ([d88b906](http://animech[secure]/clients/epic/gltf-web-viewer/commit/d88b906a5816f244344deed79c9085ba6b196fdd))
+* **HdriBackdrop:** avoid overwriting default-values for script attributes ([10801db](http://animech[secure]/clients/epic/gltf-web-viewer/commit/10801db54897b28b1e64304fb921cedf65fcba0d))
+* **variants:** avoid crashing if a model asset is missing material mapping ([0682ced](http://animech[secure]/clients/epic/gltf-web-viewer/commit/0682ced444ee0fcb3de839097563bf95fd60ef87))
+
 ## [1.23.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.22.0...v1.23.0) (2020-10-27)
 
 
