@@ -10,6 +10,7 @@ interface HdriBackdrop {
   cubemap?: CubemapAsset | null;
   model?: ModelAsset | null;
   size: number;
+  angle: number;
   intensity: number;
   projectionCenter: pc.Vec3;
   lightingDistanceFactor: number;
@@ -35,6 +36,7 @@ class HdriBackdrop extends pc.ScriptType {
     this._updateModel();
     this._updateCubemapUniform();
     this._updateIntensityUniform();
+    this._updateMapRotationUniform();
     this._updateLightingDistanceUniform();
     this._updateTransformRelatedUniforms();
 
@@ -44,6 +46,7 @@ class HdriBackdrop extends pc.ScriptType {
     this.on("attr:model", this._updateModel, this);
     this.on("attr:size", this._updateLightingDistanceUniform, this);
     this.on("attr:size", this._updateEntityScale, this);
+    this.on("attr:angle", this._updateMapRotationUniform, this);
     this.on("attr:intensity", this._updateIntensityUniform, this);
     this.on(
       "attr:lightingDistanceFactor",
@@ -104,9 +107,17 @@ class HdriBackdrop extends pc.ScriptType {
     const material = this._material;
 
     const uProjectionCenter = this._calculateProjectionCenterUniform();
-    const uMapRotationMatrix = this._calculateMapRotationMatrixUniform();
 
     material.setParameter("uProjectionCenter", uProjectionCenter);
+  }
+
+  private _updateMapRotationUniform() {
+    const material = this._material;
+    const matrix = this._mapRotationMatrix;
+
+    matrix.setFromAxisAngle(pc.Vec3.UP.clone(), -this.angle);
+    const uMapRotationMatrix = (matrix.data as unknown) as number[];
+
     material.setParameter("uMapRotationMatrix", uMapRotationMatrix);
   }
 
@@ -155,18 +166,6 @@ class HdriBackdrop extends pc.ScriptType {
       worldProjectionCenter.y,
       worldProjectionCenter.z,
     ];
-  }
-
-  private _calculateMapRotationMatrixUniform(): number[] {
-    const rotation = this.entity.getRotation();
-    const yaw = rotation.getAxisAngle(pc.Vec3.UP.clone());
-
-    // NOTE: In UE, a complete revolution of the backdrop only requires a rotation of 57.3 degrees.
-    const mapRotation = yaw * (360 / 57.3);
-
-    this._mapRotationMatrix.setFromAxisAngle(pc.Vec3.UP.clone(), mapRotation);
-
-    return (this._mapRotationMatrix.data as unknown) as number[];
   }
 
   private _initializeMaterial() {
@@ -338,6 +337,14 @@ HdriBackdrop.attributes.add("size", {
   title: "Size",
   description:
     "The size of the model used to project the HDR cubemap (Meters). The supplied model will be scaled to match the size as closely as possible.",
+});
+
+HdriBackdrop.attributes.add("angle", {
+  type: "number",
+  default: 0,
+  title: "Angle",
+  description:
+    "Absolute clockwise rotation (yaw) of the projected HDR cubemap in degrees. Note that the rotation is independent of the entity's rotation.",
 });
 
 HdriBackdrop.attributes.add("intensity", {
