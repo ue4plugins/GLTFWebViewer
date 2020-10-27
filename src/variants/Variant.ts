@@ -125,7 +125,7 @@ export class Variant {
 
     return model.meshInstances.every((meshInstance, idx) => {
       const assetID =
-        mapping[idx] !== undefined ? mapping[idx] : srcMapping[idx]?.material;
+        mapping[idx] !== undefined ? mapping[idx] : srcMapping?.[idx]?.material;
       const asset = app?.assets.get(assetID);
       const material = asset?.resource;
       if (!material) {
