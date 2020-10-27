@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { ThemeProvider } from "@material-ui/core";
+import { ThemeProvider, CssBaseline } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import { createTheme } from "../theme";
 import { useStores } from "../stores";
@@ -29,6 +29,7 @@ export const Bootstrapper: React.FC = observer(() => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <CssBaseline />
       <Root isLoading={isLoading} isError={isError} />
     </ThemeProvider>
   );

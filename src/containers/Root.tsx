@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import { Hidden, makeStyles, Typography } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
@@ -110,68 +109,62 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
   useEffect(() => setIsSidebarOpen(!isEmpty), [isEmpty]);
 
   return (
-    <>
-      {/* TODO: move to bootstrapper */}
-      <CssBaseline />
-      <div className={classes.root}>
-        {showTopbar && (
-          <header className={classes.topbar}>
-            <div className={classes.topbarLogo}>
-              {topbarLogoUrl && (
-                <img
-                  className={classes.topbarLogoImage}
-                  src={topbarLogoUrl}
-                  alt="Logo"
-                />
-              )}
-            </div>
-            <Typography className={classes.topbarTitle} variant="body2">
-              {topbarTitle !== undefined && (
-                <>
-                  {topbarTitle}
-                  {gltf && topbarTitle && " - "}
-                  {gltf && gltf.name}
-                </>
-              )}
-            </Typography>
-            <div className={classes.topbarToggle}>
-              {showSidebar && (
-                <SidebarToggle
-                  open={isSidebarOpen}
-                  toggleOpen={setIsSidebarOpen}
-                />
-              )}
-            </div>
-          </header>
-        )}
-        <main
-          className={clsx(classes.main, {
-            [classes.mainFullheight]: !showTopbar,
-          })}
-        >
-          <div
-            className={clsx(classes.viewport, {
-              [classes.viewportWithHiddenSidebar]:
-                showSidebar && !isSidebarOpen,
-              [classes.viewportWithVisibleSidebar]:
-                showSidebar && isSidebarOpen,
-            })}
-          >
-            <Viewer isLoading={isLoading} isError={isError} isEmpty={isEmpty} />
-            {showCameras && <Cameras />}
-            {showFpsMeter && (
-              <Hidden xsDown>
-                <FpsMonitor />
-              </Hidden>
+    <div className={classes.root}>
+      {showTopbar && (
+        <header className={classes.topbar}>
+          <div className={classes.topbarLogo}>
+            {topbarLogoUrl && (
+              <img
+                className={classes.topbarLogoImage}
+                src={topbarLogoUrl}
+                alt="Logo"
+              />
             )}
           </div>
-          {showSidebar && (
-            <Sidebar open={isSidebarOpen}>
-              <Gltf isLoading={isLoading} isError={isError} />
-            </Sidebar>
+          <Typography className={classes.topbarTitle} variant="body2">
+            {topbarTitle !== undefined && (
+              <>
+                {topbarTitle}
+                {gltf && topbarTitle && " - "}
+                {gltf && gltf.name}
+              </>
+            )}
+          </Typography>
+          <div className={classes.topbarToggle}>
+            {showSidebar && (
+              <SidebarToggle
+                open={isSidebarOpen}
+                toggleOpen={setIsSidebarOpen}
+              />
+            )}
+          </div>
+        </header>
+      )}
+      <main
+        className={clsx(classes.main, {
+          [classes.mainFullheight]: !showTopbar,
+        })}
+      >
+        <div
+          className={clsx(classes.viewport, {
+            [classes.viewportWithHiddenSidebar]: showSidebar && !isSidebarOpen,
+            [classes.viewportWithVisibleSidebar]: showSidebar && isSidebarOpen,
+          })}
+        >
+          <Viewer isLoading={isLoading} isError={isError} isEmpty={isEmpty} />
+          {showCameras && <Cameras />}
+          {showFpsMeter && (
+            <Hidden xsDown>
+              <FpsMonitor />
+            </Hidden>
           )}
-        </main>
-      </div>
-    </>
+        </div>
+        {showSidebar && (
+          <Sidebar open={isSidebarOpen}>
+            <Gltf isLoading={isLoading} isError={isError} />
+          </Sidebar>
+        )}
+      </main>
+    </div>
   );
 });
