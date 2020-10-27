@@ -59,17 +59,23 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export type ViewerProps = {
+  isLoading?: boolean;
   isError?: boolean;
   isEmpty?: boolean;
 };
 
 export const Viewer: React.FC<ViewerProps> = observer(
-  ({ isError = false, isEmpty = false }) => {
+  ({
+    isError = false,
+    isEmpty = false,
+    isLoading: globalIsLoading = false,
+  }) => {
     const classes = useStyles();
     const theme = useTheme();
-    const { gltfStore, sceneStore } = useStores();
+    const { gltfStore, sceneStore, settingsStore } = useStores();
     const { gltf, setGltf, setSceneHierarchy, camera } = gltfStore;
     const { scene, setScenes } = sceneStore;
+    const { enableDragAndDrop, showUI } = settingsStore;
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [viewer, setViewer] = useState<PlayCanvasViewer>();
@@ -80,16 +86,18 @@ export const Viewer: React.FC<ViewerProps> = observer(
       hasDropError,
       setHasDropError,
       getRootProps,
-    ] = useGltfDrop(onDropGltf);
+    ] = useGltfDrop(onDropGltf, enableDragAndDrop);
 
     const [
-      isLoading,
+      localIsLoading,
       hasLoadError,
       runAsync,
     ] = useAsyncWithLoadingAndErrorHandling();
 
+    const isLoading = globalIsLoading || localIsLoading;
     const hasError = hasLoadError || hasDropError || isError;
-    const showBackdrop = isLoading || isDragActive || hasError || isEmpty;
+    const showBackdrop =
+      showUI && (isLoading || isDragActive || hasError || isEmpty);
 
     const [setPreventInteraction] = usePreventableCameraInteractions(
       showBackdrop,

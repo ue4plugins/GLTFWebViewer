@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import { Hidden, makeStyles, Typography } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
 import { useStores } from "../stores";
-import { useAsyncWithLoadingAndErrorHandling } from "../hooks";
-import logo from "../images/logo.svg";
 import { Viewer } from "./Viewer";
 import { Gltf } from "./Gltf";
 import { Cameras } from "./Cameras";
@@ -42,7 +39,12 @@ const useStyles = makeStyles(theme => ({
   },
   topbarLogo: {
     flex: "0 0 40px",
+    maxWidth: 40,
     height: 24,
+    overflow: "visible",
+  },
+  topbarLogoImage: {
+    height: "100%",
     objectFit: "contain",
     objectPosition: "left 50%",
   },
@@ -68,12 +70,14 @@ const useStyles = makeStyles(theme => ({
     height: "100%",
     backgroundColor: theme.palette.common.black,
     overflow: "hidden",
+  },
+  viewportWithVisibleSidebar: {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  viewportFullscreen: {
+  viewportWithHiddenSidebar: {
     marginRight: -1 * theme.sidebarWidth,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
@@ -82,67 +86,85 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const Root: React.FC = observer(() => {
+export type RootProps = {
+  isLoading: boolean;
+  isError: boolean;
+};
+
+export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
   const classes = useStyles();
   const { gltfStore, settingsStore } = useStores();
-  const { gltf, gltfs, fetchGltfs } = gltfStore;
-  const { showUI, showFpsMeter } = settingsStore;
+  const { gltf, gltfs } = gltfStore;
+  const {
+    showTopbar,
+    showSidebar,
+    showCameras,
+    topbarTitle,
+    topbarLogoUrl,
+    showFpsMeter,
+  } = settingsStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
   const isEmpty = gltfs.length === 0 && !gltf;
-
-  useEffect(() => {
-    runAsync(async () => {
-      await fetchGltfs();
-    });
-  }, [fetchGltfs, runAsync]);
 
   useEffect(() => setIsSidebarOpen(!isEmpty), [isEmpty]);
 
   return (
-    <>
-      <CssBaseline />
-      <div className={classes.root}>
-        {showUI && (
-          <header className={classes.topbar}>
-            <img className={classes.topbarLogo} src={logo} alt="Logo" />
-            <Typography className={classes.topbarTitle} variant="body2">
-              Epic Games glTF Viewer
-              {gltf && ` — ${gltf.name}`}
-            </Typography>
-            <div className={classes.topbarToggle}>
+    <div className={classes.root}>
+      {showTopbar && (
+        <header className={classes.topbar}>
+          <div className={classes.topbarLogo}>
+            {topbarLogoUrl && (
+              <img
+                className={classes.topbarLogoImage}
+                src={topbarLogoUrl}
+                alt="Logo"
+              />
+            )}
+          </div>
+          <Typography className={classes.topbarTitle} variant="body2">
+            {topbarTitle !== undefined && (
+              <>
+                {topbarTitle}
+                {gltf && topbarTitle && " - "}
+                {gltf && gltf.name}
+              </>
+            )}
+          </Typography>
+          <div className={classes.topbarToggle}>
+            {showSidebar && (
               <SidebarToggle
                 open={isSidebarOpen}
                 toggleOpen={setIsSidebarOpen}
               />
-            </div>
-          </header>
-        )}
-        <main
-          className={clsx(classes.main, {
-            [classes.mainFullheight]: !showUI,
-          })}
-        >
-          <div
-            className={clsx(classes.viewport, {
-              [classes.viewportFullscreen]: !isSidebarOpen,
-            })}
-          >
-            <Viewer isError={isError} isEmpty={isEmpty} />
-            {showUI && <Cameras />}
-            {showUI && showFpsMeter && (
-              <Hidden xsDown>
-                <FpsMonitor />
-              </Hidden>
             )}
           </div>
-          {showUI && (
-            <Sidebar open={isSidebarOpen}>
-              <Gltf isLoading={isLoading} isError={isError} />
-            </Sidebar>
+        </header>
+      )}
+      <main
+        className={clsx(classes.main, {
+          [classes.mainFullheight]: !showTopbar,
+        })}
+      >
+        <div
+          className={clsx(classes.viewport, {
+            [classes.viewportWithHiddenSidebar]: showSidebar && !isSidebarOpen,
+            [classes.viewportWithVisibleSidebar]: showSidebar && isSidebarOpen,
+          })}
+        >
+          <Viewer isLoading={isLoading} isError={isError} isEmpty={isEmpty} />
+          {showCameras && <Cameras />}
+          {showFpsMeter && (
+            <Hidden xsDown>
+              <FpsMonitor />
+            </Hidden>
           )}
-        </main>
-      </div>
-    </>
+        </div>
+        {showSidebar && (
+          <Sidebar open={isSidebarOpen}>
+            <Gltf isLoading={isLoading} isError={isError} />
+          </Sidebar>
+        )}
+      </main>
+    </div>
   );
 });

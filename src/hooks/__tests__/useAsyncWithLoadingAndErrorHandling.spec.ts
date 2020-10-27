@@ -1,11 +1,7 @@
 import "jest";
 import { renderHook, act } from "@testing-library/react-hooks";
 import { useAsyncWithLoadingAndErrorHandling } from "../useAsyncWithLoadingAndErrorHandling";
-
-const delay = (duration: number) =>
-  new Promise<void>(resolve => {
-    setTimeout(() => resolve(), duration);
-  });
+import { waitFor } from "../../utilities";
 
 describe("useAsyncWithLoadingAndErrorHandling", () => {
   it("should not be loading initially", () => {
@@ -24,7 +20,7 @@ describe("useAsyncWithLoadingAndErrorHandling", () => {
     );
     await act(async () => {
       const [_, __, runAsync] = result.current;
-      runAsync(() => delay(100));
+      runAsync(() => waitFor(100));
       await waitForNextUpdate();
       expect(result.current[0]).toBe(true);
       await waitForNextUpdate();
@@ -48,7 +44,7 @@ describe("useAsyncWithLoadingAndErrorHandling", () => {
         // Error state should be set if error is thrown
         try {
           await runAsync(async () => {
-            await delay(100);
+            await waitFor(100);
             throw new Error("Oh noes");
           });
         } catch (e) {
@@ -59,7 +55,7 @@ describe("useAsyncWithLoadingAndErrorHandling", () => {
         expect(result.current[1]).toBe(true);
 
         // Error state should be reset if another callback is fired
-        runAsync(async () => delay(100));
+        runAsync(async () => waitFor(100));
         await waitForNextUpdate();
         expect(result.current[1]).toBe(false);
       });

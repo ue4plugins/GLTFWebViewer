@@ -96,6 +96,7 @@ release:
     - apt-get install -y zip
   script:
     - rm -rf $BUILD_DIR/assets/ $BUILD_DIR/index.json
+    - mv $BUILD_DIR/index-release.json $BUILD_DIR/index.json
     - mkdir $RELEASE_DIR
     - zip -r "$RELEASE_DIR/$BUILD_NAME-$(date +'%Y%m%d').zip" $BUILD_DIR
     - npx semantic-release
