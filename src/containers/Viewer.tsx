@@ -86,7 +86,7 @@ export const Viewer: React.FC<ViewerProps> = observer(
       hasDropError,
       setHasDropError,
       getRootProps,
-    ] = useGltfDrop(enableDragAndDrop, onDropGltf);
+    ] = useGltfDrop(onDropGltf, enableDragAndDrop);
 
     const [
       localIsLoading,

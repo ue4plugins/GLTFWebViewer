@@ -9,8 +9,8 @@ function isGltfFile(file: File) {
 }
 
 export const useGltfDrop = (
-  enabled: boolean,
   onDropGltf: (file: GltfSource) => void,
+  enabled = true,
 ): [
   boolean,
   boolean,
