@@ -1,6 +1,5 @@
 /* istanbul ignore file */
 import { createMuiTheme, Theme } from "@material-ui/core/styles";
-import { ConfigTheme, defaultConfig } from "./config";
 
 declare module "@material-ui/core/styles" {
   interface Theme {
@@ -19,6 +18,8 @@ declare module "@material-ui/core/styles" {
   }
 }
 
+const primary = "#3393FA";
+const secondary = "#75FABB";
 const white = "#FFFFFF";
 const grey50 = "#EFEFF0";
 const grey100 = "#EFEFF0";
@@ -32,7 +33,7 @@ const grey800 = "#1D2126";
 const grey900 = "#1C1E22";
 const black = "#000000";
 
-export function createTheme(config?: ConfigTheme): Theme {
+export function createTheme(): Theme {
   return createMuiTheme({
     palette: {
       type: "dark",
@@ -66,10 +67,10 @@ export function createTheme(config?: ConfigTheme): Theme {
         900: grey900,
       },
       primary: {
-        main: config?.palette.primary ?? defaultConfig.theme.palette.primary,
+        main: primary,
       },
       secondary: {
-        main: config?.palette.secondary ?? defaultConfig.theme.palette.primary,
+        main: secondary,
       },
     },
     typography: {
