@@ -75,7 +75,7 @@ export const Viewer: React.FC<ViewerProps> = observer(
     const { gltfStore, sceneStore, settingsStore } = useStores();
     const { gltf, setGltf, setSceneHierarchy, camera } = gltfStore;
     const { scene, setScenes } = sceneStore;
-    const { enableDragAndDrop } = settingsStore;
+    const { enableDragAndDrop, showUI } = settingsStore;
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [viewer, setViewer] = useState<PlayCanvasViewer>();
@@ -96,7 +96,8 @@ export const Viewer: React.FC<ViewerProps> = observer(
 
     const isLoading = globalIsLoading || localIsLoading;
     const hasError = hasLoadError || hasDropError || isError;
-    const showBackdrop = isLoading || isDragActive || hasError || isEmpty;
+    const showBackdrop =
+      showUI && (isLoading || isDragActive || hasError || isEmpty);
 
     const [setPreventInteraction] = usePreventableCameraInteractions(
       showBackdrop,

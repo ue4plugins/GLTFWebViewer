@@ -149,7 +149,8 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
         >
           <div
             className={clsx(classes.viewport, {
-              [classes.viewportFullscreen]: initiated && !isSidebarOpen,
+              [classes.viewportFullscreen]:
+                showSidebar && initiated && !isSidebarOpen,
             })}
           >
             <Viewer isLoading={isLoading} isError={isError} isEmpty={isEmpty} />

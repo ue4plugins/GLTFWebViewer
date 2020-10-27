@@ -3,9 +3,6 @@ import { Config } from "../config";
 
 export class SettingsStore {
   @observable
-  private _showUI: boolean;
-
-  @observable
   private _showFpsMeter: boolean;
 
   @observable
@@ -19,7 +16,7 @@ export class SettingsStore {
 
   public constructor() {
     const urlParams = new URLSearchParams(window.location.search);
-    this._showUI = !urlParams.get("hideUI");
+    this.showUI = !urlParams.get("hideUI");
     this._showFpsMeter = !!urlParams.get("showFpsMeter");
   }
 
@@ -35,24 +32,27 @@ export class SettingsStore {
   @observable
   public topbarLogoUrl?: string;
 
+  @observable
+  public showUI: boolean;
+
   @computed
   public get showTopbar(): boolean {
-    return this._showUI && this._showTopbar;
+    return this.showUI && this._showTopbar;
   }
 
   @computed
   public get showSidebar(): boolean {
-    return this._showUI && this._showSidebar;
+    return this.showUI && this._showSidebar;
   }
 
   @computed
   public get showCameras(): boolean {
-    return this._showUI && this._showCameras;
+    return this.showUI && this._showCameras;
   }
 
   @computed
   public get showFpsMeter(): boolean {
-    return this._showUI && this._showFpsMeter;
+    return this.showUI && this._showFpsMeter;
   }
 
   @action.bound
