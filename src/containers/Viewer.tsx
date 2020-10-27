@@ -72,9 +72,10 @@ export const Viewer: React.FC<ViewerProps> = observer(
   }) => {
     const classes = useStyles();
     const theme = useTheme();
-    const { gltfStore, sceneStore } = useStores();
+    const { gltfStore, sceneStore, settingsStore } = useStores();
     const { gltf, setGltf, setSceneHierarchy, camera } = gltfStore;
     const { scene, setScenes } = sceneStore;
+    const { enableDragAndDrop } = settingsStore;
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [viewer, setViewer] = useState<PlayCanvasViewer>();
@@ -85,7 +86,7 @@ export const Viewer: React.FC<ViewerProps> = observer(
       hasDropError,
       setHasDropError,
       getRootProps,
-    ] = useGltfDrop(onDropGltf);
+    ] = useGltfDrop(enableDragAndDrop, onDropGltf);
 
     const [
       localIsLoading,
@@ -94,7 +95,6 @@ export const Viewer: React.FC<ViewerProps> = observer(
     ] = useAsyncWithLoadingAndErrorHandling();
 
     const isLoading = globalIsLoading || localIsLoading;
-
     const hasError = hasLoadError || hasDropError || isError;
     const showBackdrop = isLoading || isDragActive || hasError || isEmpty;
 

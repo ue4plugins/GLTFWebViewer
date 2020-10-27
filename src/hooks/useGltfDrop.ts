@@ -9,6 +9,7 @@ function isGltfFile(file: File) {
 }
 
 export const useGltfDrop = (
+  enabled: boolean,
   onDropGltf: (file: GltfSource) => void,
 ): [
   boolean,
@@ -54,6 +55,10 @@ export const useGltfDrop = (
   );
 
   const { getRootProps, isDragActive } = useDropzone({ onDrop });
+
+  if (!enabled) {
+    return [false, false, setHasDropError, () => ({})];
+  }
 
   return [isDragActive, hasDropError, setHasDropError, getRootProps];
 };
