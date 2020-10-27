@@ -1,3 +1,30 @@
+## [1.23.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.22.0...v1.23.0) (2020-10-27)
+
+
+### Features
+
+* add minimum loading to to fetchConfig to prevent loading flicker ([e2ac6d5](http://animech[secure]/clients/epic/gltf-web-viewer/commit/e2ac6d51a119256a1c8fdd789e99a96d3d90f675))
+* add secondary color ([22c8907](http://animech[secure]/clients/epic/gltf-web-viewer/commit/22c8907d31ae4eee53bcdfc61687db3c103a5f1c))
+* add support for POV camera in UI ([d378570](http://animech[secure]/clients/epic/gltf-web-viewer/commit/d3785709848a378cb2fec3266255c9005e065599))
+* create theme in runtime based on config in index.json ([d82b829](http://animech[secure]/clients/epic/gltf-web-viewer/commit/d82b829f81ccbfac69c213dd7c3e927f19ccb022))
+* don't include default config in dev environment to make it easier to test new config settings ([b194934](http://animech[secure]/clients/epic/gltf-web-viewer/commit/b1949342eba9ae427dcef1d5c0ace082ff4e5e73))
+* extend index.json format with theme and application settings ([8341fd2](http://animech[secure]/clients/epic/gltf-web-viewer/commit/8341fd2e7e7618749e7227c257c7317ffacc5cb5))
+* group variant sets by variant set levels ([b108015](http://animech[secure]/clients/epic/gltf-web-viewer/commit/b10801542707f9052163632a1c94e0447a9f308c))
+* implement new dragging styles in viewport ([c11e0fb](http://animech[secure]/clients/epic/gltf-web-viewer/commit/c11e0fb891cd1bc53d7519432cc1b87a946aa51a))
+* make it possible to disable drag and drop via index.json config ([214b995](http://animech[secure]/clients/epic/gltf-web-viewer/commit/214b9951e269015b179338af8793e20c6b3a17f8))
+* refactor ErrorMessage to support non-error messages and add drag and drop icon ([3653768](http://animech[secure]/clients/epic/gltf-web-viewer/commit/3653768135699b736806411a47ef266b0d7f1dcf))
+* skip displaying level variant set list when there is only one level variant set ([e1d9a34](http://animech[secure]/clients/epic/gltf-web-viewer/commit/e1d9a349ec9af25833298bd55c929444cae0878c))
+* temporarily base camera type (orbit or pov) on focus entity ([7271a79](http://animech[secure]/clients/epic/gltf-web-viewer/commit/7271a79f9a39b84feba3321f4a627bbe6d654267))
+* use config from index.json to display content and UI sections ([c528a7f](http://animech[secure]/clients/epic/gltf-web-viewer/commit/c528a7ff1f4bebf49fabd3d1ef613fa4380e8917))
+
+
+### Bug Fixes
+
+* fix typo in default config ([1a0112d](http://animech[secure]/clients/epic/gltf-web-viewer/commit/1a0112d3776254ebb2eb37a5346669492df31e8a))
+* prevent initial sidebar resize transition when starting with no assets ([dc1f231](http://animech[secure]/clients/epic/gltf-web-viewer/commit/dc1f2311e9e6f94ee34baa7ce9e8c3f651d85302))
+* prevent message box from being shown when settingsManager.showUI is false ([e744bc8](http://animech[secure]/clients/epic/gltf-web-viewer/commit/e744bc86ce2b75eab3e4baff46d7fabb220b721d))
+* remove hardcoded contrastText since MUI will calculate this automatically ([23cea73](http://animech[secure]/clients/epic/gltf-web-viewer/commit/23cea7307d6e8b766d505708d42e3acbbb1f4a7e))
+
 ## [1.22.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.21.0...v1.22.0) (2020-10-22)
 
 
