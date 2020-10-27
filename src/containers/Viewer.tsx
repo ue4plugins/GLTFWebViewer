@@ -59,12 +59,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export type ViewerProps = {
+  isLoading?: boolean;
   isError?: boolean;
   isEmpty?: boolean;
 };
 
 export const Viewer: React.FC<ViewerProps> = observer(
-  ({ isError = false, isEmpty = false }) => {
+  ({
+    isError = false,
+    isEmpty = false,
+    isLoading: globalIsLoading = false,
+  }) => {
     const classes = useStyles();
     const theme = useTheme();
     const { gltfStore, sceneStore } = useStores();
@@ -83,10 +88,12 @@ export const Viewer: React.FC<ViewerProps> = observer(
     ] = useGltfDrop(onDropGltf);
 
     const [
-      isLoading,
+      localIsLoading,
       hasLoadError,
       runAsync,
     ] = useAsyncWithLoadingAndErrorHandling();
+
+    const isLoading = globalIsLoading || localIsLoading;
 
     const hasError = hasLoadError || hasDropError || isError;
     const showBackdrop = isLoading || isDragActive || hasError || isEmpty;

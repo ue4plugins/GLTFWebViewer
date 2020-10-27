@@ -10,17 +10,18 @@ import { Root } from "./Root";
 const defaultTheme = createTheme();
 
 export const Bootstrapper: React.FC = observer(() => {
-  const { gltfStore } = useStores();
+  const { gltfStore, settingsStore } = useStores();
   const { setGltfs } = gltfStore;
+  const { initFromConfig } = settingsStore;
   const [isLoading, isError, runAsync] = useAsyncWithLoadingAndErrorHandling();
 
   useEffect(() => {
     runAsync(async () => {
       const config = await fetchConfig();
-      // TODO: init settings in SettingsStore
+      initFromConfig(config);
       setGltfs(config.assets);
     });
-  }, [setGltfs, runAsync]);
+  }, [setGltfs, runAsync, initFromConfig]);
 
   return (
     <ThemeProvider theme={defaultTheme}>

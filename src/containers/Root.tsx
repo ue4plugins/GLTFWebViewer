@@ -41,6 +41,10 @@ const useStyles = makeStyles(theme => ({
   topbarLogo: {
     flex: "0 0 40px",
     height: 24,
+    overflow: "visible",
+  },
+  topbarLogoImage: {
+    height: "100%",
     objectFit: "contain",
     objectPosition: "left 50%",
   },
@@ -89,7 +93,14 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
   const classes = useStyles();
   const { gltfStore, settingsStore } = useStores();
   const { gltf, gltfs } = gltfStore;
-  const { showUI, showFpsMeter } = settingsStore;
+  const {
+    showTopbar,
+    showSidebar,
+    showCameras,
+    topbarTitle,
+    topbarLogoUrl,
+    showFpsMeter,
+  } = settingsStore;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const isEmpty = gltfs.length === 0 && !gltf;
 
@@ -99,44 +110,55 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
     <>
       <CssBaseline />
       <div className={classes.root}>
-        {showUI && (
+        {showTopbar && (
           <header className={classes.topbar}>
-            <img
-              className={classes.topbarLogo}
-              src={"viewer/logo.svg"}
-              alt="Logo"
-            />
+            <div className={classes.topbarLogo}>
+              {topbarLogoUrl && (
+                <img
+                  className={classes.topbarLogoImage}
+                  src={topbarLogoUrl}
+                  alt="Logo"
+                />
+              )}
+            </div>
             <Typography className={classes.topbarTitle} variant="body2">
-              Epic Games glTF Viewer
-              {gltf && ` — ${gltf.name}`}
+              {topbarTitle !== undefined && (
+                <>
+                  {topbarTitle}
+                  {gltf && topbarTitle && " - "}
+                  {gltf && gltf.name}
+                </>
+              )}
             </Typography>
             <div className={classes.topbarToggle}>
-              <SidebarToggle
-                open={isSidebarOpen}
-                toggleOpen={setIsSidebarOpen}
-              />
+              {showSidebar && (
+                <SidebarToggle
+                  open={isSidebarOpen}
+                  toggleOpen={setIsSidebarOpen}
+                />
+              )}
             </div>
           </header>
         )}
         <main
           className={clsx(classes.main, {
-            [classes.mainFullheight]: !showUI,
+            [classes.mainFullheight]: !showTopbar,
           })}
         >
           <div
             className={clsx(classes.viewport, {
-              [classes.viewportFullscreen]: !isSidebarOpen,
+              [classes.viewportFullscreen]: !isLoading && !isSidebarOpen,
             })}
           >
-            <Viewer isError={isError} isEmpty={isEmpty} />
-            {showUI && <Cameras />}
-            {showUI && showFpsMeter && (
+            <Viewer isLoading={isLoading} isError={isError} isEmpty={isEmpty} />
+            {showCameras && <Cameras />}
+            {showFpsMeter && (
               <Hidden xsDown>
                 <FpsMonitor />
               </Hidden>
             )}
           </div>
-          {showUI && (
+          {showSidebar && (
             <Sidebar open={isSidebarOpen}>
               <Gltf isLoading={isLoading} isError={isError} />
             </Sidebar>
