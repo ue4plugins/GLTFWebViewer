@@ -40,6 +40,7 @@ const useStyles = makeStyles(theme => ({
   },
   topbarLogo: {
     flex: "0 0 40px",
+    maxWidth: 40,
     height: 24,
     overflow: "visible",
   },
