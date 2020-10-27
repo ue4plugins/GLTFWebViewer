@@ -12,6 +12,7 @@ type BackdropData = {
   cubemap: number[];
   intensity: number;
   size: number;
+  angle?: number;
   projectionCenter: [number, number, number];
   lightingDistanceFactor: number;
   useCameraProjection: boolean;
@@ -97,15 +98,11 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
 
         const script = node.addComponent("script").create(HdriBackdropScript, {
           enabled: false, // Since there can be more than one backdrop, we need to enable the correct one later
-          attributes: {
+          attributes: this._stripUndefinedProperties({
+            ...data,
             model: modelAsset,
             cubemap: cubemapAsset,
-            size: data.size,
-            intensity: data.intensity,
-            projectionCenter: data.projectionCenter,
-            lightingDistanceFactor: data.lightingDistanceFactor,
-            useCameraProjection: data.useCameraProjection,
-          },
+          }),
         });
 
         // TODO: Use reflection probe to capture the environment instead of setting the skybox
@@ -169,5 +166,17 @@ export class HdriBackdropExtensionParser implements ExtensionParser {
       .filter(texture => !!texture);
 
     return textures.length === 6 ? textures : null;
+  }
+
+  private _stripUndefinedProperties<T extends {}>(obj: T): T {
+    const result = { ...obj };
+
+    Object.keys(result).forEach(<K extends keyof T>(key: K) => {
+      if (result[key] === undefined) {
+        delete result[key];
+      }
+    });
+
+    return result;
   }
 }
