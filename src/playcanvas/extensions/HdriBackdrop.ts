@@ -12,6 +12,7 @@ type BackdropData = {
   cubemap: number[];
   intensity: number;
   size: number;
+  angle?: number;
   projectionCenter: [number, number, number];
   lightingDistanceFactor: number;
   useCameraProjection: boolean;
