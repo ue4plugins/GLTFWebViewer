@@ -47,7 +47,6 @@ export class PlayCanvasViewer implements TestableViewer {
   private _activeCamera?: CameraEntity;
   private _defaultCamera: OrbitCameraEntity;
   private _loader: PlayCanvasGltfLoader;
-  private _scene?: pc.Scene;
   private _gltf?: GltfData;
   private _activeGltfScene?: GltfSceneData;
   private _variantSetManager?: VariantSetManager;
@@ -416,7 +415,6 @@ export class PlayCanvasViewer implements TestableViewer {
 
   public destroy() {
     this.destroyGltf();
-    this._destroyScene();
     if (this._canvasSizeElem) {
       this._canvasResizeObserver.unobserve(this._canvasSizeElem);
     }
@@ -461,35 +459,19 @@ export class PlayCanvasViewer implements TestableViewer {
       return Promise.resolve();
     }
 
-    this._destroyScene();
-
     url = sceneUrl || url; // TODO: replace hack
 
     debug("Loading scene", url);
 
     return new Promise<void>((resolve, reject) => {
-      this._app.scenes.loadScene(url, (error, scene) => {
+      this._app.scenes.loadScene(url, error => {
         if (error) {
           reject(error);
           return;
         }
-        this._scene = (scene as unknown) as pc.Scene;
         resolve();
       });
     });
-  }
-
-  private _destroyScene() {
-    debug("Destroy scene", this._scene);
-
-    if (this._scene) {
-      if (this._scene.root) {
-        this._scene.root.destroy();
-        (this._scene.root as pc.Entity | undefined) = undefined;
-      }
-      this._scene.destroy();
-      this._scene = undefined;
-    }
   }
 
   public destroyGltf() {
