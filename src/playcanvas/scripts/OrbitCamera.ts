@@ -54,6 +54,8 @@ export class OrbitCamera extends pc.ScriptType {
   private _distanceMax = 0;
   private _pitchAngleMax = 90;
   private _pitchAngleMin = -90;
+  private _yawAngleMax = 360;
+  private _yawAngleMin = 0;
   private _distance = 0;
   private _pitch = 0;
   private _yaw = 0;
@@ -124,6 +126,36 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   /**
+   * Max yaw angle (degrees).
+   */
+  public get yawAngleMax() {
+    return this._yawAngleMax;
+  }
+  public set yawAngleMax(value: number) {
+    this._yawAngleMax = value;
+    this._targetYaw = this._clampYawAngle(this._yaw);
+  }
+
+  /**
+   * Min yaw angle (degrees).
+   */
+  public get yawAngleMin() {
+    return this._yawAngleMin;
+  }
+  public set yawAngleMin(value: number) {
+    this._yawAngleMin = value;
+    this._targetYaw = this._clampYawAngle(this._yaw);
+  }
+
+  /**
+   * Returns true if the current limits for yaw are less than 360 degrees apart.
+   * If they are further apart, no limits will be enforced for yaw.
+   */
+  public get usesYawLimits() {
+    return this._yawAngleMax - this._yawAngleMin < 360;
+  }
+
+  /**
    * Property to get and set the distance between the pivot point and camera.
    * Clamped between this.distanceMin and this.distanceMax.
    */
@@ -159,11 +191,11 @@ export class OrbitCamera extends pc.ScriptType {
     const diff = value - this._yaw;
     const remainder = diff % 360;
     if (remainder > 180) {
-      this._targetYaw = this._yaw - (360 - remainder);
+      this._targetYaw = this._clampYawAngle(this._yaw - (360 - remainder));
     } else if (remainder < -180) {
-      this._targetYaw = this._yaw + (360 + remainder);
+      this._targetYaw = this._clampYawAngle(this._yaw + (360 + remainder));
     } else {
-      this._targetYaw = this._yaw + remainder;
+      this._targetYaw = this._clampYawAngle(this._yaw + remainder);
     }
   }
 
@@ -428,8 +460,13 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _clampPitchAngle(pitch: number) {
-    // Negative due as the pitch is inversed since the camera is orbiting the entity
-    return pc.math.clamp(pitch, -this.pitchAngleMax, -this.pitchAngleMin);
+    return pc.math.clamp(pitch, this.pitchAngleMin, this.pitchAngleMax);
+  }
+
+  private _clampYawAngle(yaw: number) {
+    return this.usesYawLimits
+      ? pc.math.clamp(yaw, this.yawAngleMin, this.yawAngleMax)
+      : yaw;
   }
 
   private _calcPitch(quat: pc.Quat, yaw: number) {
