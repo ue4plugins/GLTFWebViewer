@@ -185,6 +185,11 @@ export class OrbitCamera extends pc.ScriptType {
     return this._targetYaw;
   }
   public set yaw(value: number) {
+    // TODO: This logic isn't working as intended when yaw comes from user input,
+    // since the camera may transition the "wrong" way on large input + high inertia.
+    // Is there ever a case where we want to take the shortest route using this camera?
+    // Otherwise we may consider removing this feature.
+
     // Ensure that the yaw takes the shortest route by making sure that
     // the difference between the targetYaw and the actual is 180 degrees
     // in either direction
