@@ -4,7 +4,7 @@ export * from "./ExtensionParser";
 export * from "./HdrEncoding";
 export * from "./HdriBackdrop";
 export * from "./AnimationHotspot";
-export * from "./OrbitCamera";
+export * from "./PlayerCamera";
 export * from "./VariantSet";
 export * from "./LightMap";
 export * from "./SkySphere";
