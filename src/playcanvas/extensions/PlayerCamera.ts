@@ -72,10 +72,10 @@ export class PlayerCameraExtensionParser implements ExtensionParser {
 
     // TODO: Assign mode once modes have been added to the orbit camera script
 
-    // TODO: Assign yaw limits once they have been added to the orbit camera script
-
     orbitCameraScript.pitchAngleMax = extensionData.maxPitch;
     orbitCameraScript.pitchAngleMin = extensionData.minPitch;
+    orbitCameraScript.yawAngleMax = extensionData.maxYaw;
+    orbitCameraScript.yawAngleMin = extensionData.minYaw;
     orbitCameraScript.distanceMax = extensionData.maxDistance;
     orbitCameraScript.distanceMin = extensionData.minDistance;
     orbitCameraScript.distanceSensitivity = extensionData.dollySensitivity;
