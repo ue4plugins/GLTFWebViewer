@@ -1,15 +1,18 @@
 import * as pc from "@animech-public/playcanvas";
 import Debug from "debug";
-import { OrbitCamera } from "../scripts";
+import { OrbitCamera, OrbitCameraMode } from "../scripts";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
 const debug = Debug("PlayerCamera");
 
-const cameraModes = ["firstPerson", "thirdPerson"] as const;
+const cameraModeMap: Record<string, OrbitCameraMode | undefined> = {
+  firstPerson: OrbitCameraMode.FirstPerson,
+  thirdPerson: OrbitCameraMode.ThirdPerson,
+};
 
 type NodeExtensionData = {
-  mode: typeof cameraModes[number];
+  mode: keyof typeof cameraModeMap;
   focus: number;
   maxDistance: number;
   minDistance: number;
@@ -60,7 +63,8 @@ export class PlayerCameraExtensionParser implements ExtensionParser {
   ) {
     debug("Parse player camera", camera, extensionData);
 
-    if (!cameraModes.includes(extensionData.mode)) {
+    const cameraMode = cameraModeMap[extensionData.mode];
+    if (cameraMode === undefined) {
       debug(`Invalid camera mode '${extensionData.mode}'`);
       return;
     }
@@ -70,8 +74,7 @@ export class PlayerCameraExtensionParser implements ExtensionParser {
       enabled: false, // This is enabled later for the active camera
     });
 
-    // TODO: Assign mode once modes have been added to the orbit camera script
-
+    orbitCameraScript.mode = cameraMode;
     orbitCameraScript.pitchAngleMax = extensionData.maxPitch;
     orbitCameraScript.pitchAngleMin = extensionData.minPitch;
     orbitCameraScript.yawAngleMax = extensionData.maxYaw;
