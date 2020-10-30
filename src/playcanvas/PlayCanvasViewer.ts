@@ -6,6 +6,7 @@ import { GltfScene } from "../types";
 import { VariantSetManager, LevelVariantSet } from "../variants";
 import {
   OrbitCamera,
+  OrbitCameraMode,
   orbitCameraScriptName,
   HdriBackdrop as HdriBackdropScript,
   hdriBackdropScriptName,
@@ -122,10 +123,8 @@ export class PlayCanvasViewer implements TestableViewer {
           id: index,
           name: camera.name,
           type: isOrbitCameraEntity(camera)
-            ? // TODO: Base type on orbit camera mode when this has been implemented
-              // in the extension parser
-              camera.script[orbitCameraScriptName].focusEntity ===
-              this._app.root
+            ? camera.script[orbitCameraScriptName].mode ===
+              OrbitCameraMode.FirstPerson
               ? "pov"
               : "orbit"
             : "static",
