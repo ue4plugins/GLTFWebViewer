@@ -196,23 +196,7 @@ export class OrbitCamera extends pc.ScriptType {
     return this._targetYaw;
   }
   public set yaw(value: number) {
-    // TODO: This logic isn't working as intended when yaw comes from user input,
-    // since the camera may transition the "wrong" way on large input + high inertia.
-    // Is there ever a case where we want to take the shortest route using this camera?
-    // Otherwise we may consider removing this feature.
-
-    // Ensure that the yaw takes the shortest route by making sure that
-    // the difference between the targetYaw and the actual is 180 degrees
-    // in either direction
-    const diff = value - this._yaw;
-    const remainder = diff % 360;
-    if (remainder > 180) {
-      this._targetYaw = this._clampYawAngle(this._yaw - (360 - remainder));
-    } else if (remainder < -180) {
-      this._targetYaw = this._clampYawAngle(this._yaw + (360 + remainder));
-    } else {
-      this._targetYaw = this._clampYawAngle(this._yaw + remainder);
-    }
+    this._targetYaw = this._clampYawAngle(value);
   }
 
   /**
@@ -288,6 +272,29 @@ export class OrbitCamera extends pc.ScriptType {
     }
 
     this._updatePosition();
+  }
+
+  /**
+   * Updates yaw angle while ensuring the shortest route is taken from
+   * the current yaw angle to the requested angle.
+   *
+   * Note that the passed value may therefore not be used as-is, instead
+   * an equivalent angle that is closer to the current angle may be substituted.
+   * @param yaw Yaw angle
+   */
+  public setYawUsingShortestRoute(yaw: number) {
+    // Ensure that the yaw takes the shortest route by making sure that
+    // the difference between the targetYaw and the actual is 180 degrees
+    // in either direction
+    const diff = yaw - this._yaw;
+    const remainder = diff % 360;
+    if (remainder > 180) {
+      this.yaw = this._yaw - (360 - remainder);
+    } else if (remainder < -180) {
+      this.yaw = this._yaw + (360 + remainder);
+    } else {
+      this.yaw = this._yaw + remainder;
+    }
   }
 
   /**
