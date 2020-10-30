@@ -63,9 +63,34 @@ export class PlayerCameraExtensionParser implements ExtensionParser {
   ) {
     debug("Parse player camera", camera, extensionData);
 
+    const missingProperties = this._getMissingProperties(extensionData, [
+      "mode",
+      "maxDistance",
+      "minDistance",
+      "maxPitch",
+      "minPitch",
+      "maxYaw",
+      "minYaw",
+      "rotationSensitivity",
+      "rotationInertia",
+      "dollySensitivity",
+      "dollyDuration",
+    ]);
+
+    if (missingProperties.length > 0) {
+      missingProperties.forEach(key =>
+        debug(
+          `Property '${key}' for camera '${camera.entity.name}' is missing`,
+        ),
+      );
+      return;
+    }
+
     const cameraMode = cameraModeMap[extensionData.mode];
     if (cameraMode === undefined) {
-      debug(`Invalid camera mode '${extensionData.mode}'`);
+      debug(
+        `Camera mode '${extensionData.mode}' for camera '${camera.entity.name}' is invalid`,
+      );
       return;
     }
 
@@ -92,5 +117,12 @@ export class PlayerCameraExtensionParser implements ExtensionParser {
       script: orbitCameraScript,
       node: extensionData.focus,
     });
+  }
+
+  private _getMissingProperties<T extends {}>(
+    obj: T,
+    properties: (keyof T)[],
+  ): (keyof T)[] {
+    return properties.filter(key => obj[key] === undefined);
   }
 }
