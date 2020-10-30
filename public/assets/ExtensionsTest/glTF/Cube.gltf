@@ -9,7 +9,7 @@
     "EPIC_hdri_backdrops",
     "EPIC_reflection_probes",
     "EPIC_lightmap_textures",
-    "EPIC_cameras_orbital",
+    "EPIC_player_cameras",
     "EPIC_texture_hdr_encoding"
   ],
   "accessors": [
@@ -143,12 +143,19 @@
       },
       "type": "perspective",
       "extensions": {
-        "EPIC_cameras_orbital": {
+        "EPIC_player_cameras": {
+          "mode": "thirdPerson",
           "focus": 0,
           "maxDistance": 0,
           "minDistance": 0,
-          "maxAngle": 0,
-          "minAngle": 0
+          "maxPitch": 0,
+          "minPitch": 0,
+          "maxYaw": 360,
+          "minYaw": 0,
+          "dollySensitivity": 0.5,
+          "rotationSensitivity": 0.3,
+          "rotationInertia": 0.07,
+          "dollyDuration": 0.2
         }
       }
     }

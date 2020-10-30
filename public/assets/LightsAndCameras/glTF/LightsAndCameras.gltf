@@ -261,16 +261,19 @@
         "znear": 0.099999994
       },
       "extensions": {
-        "EPIC_orbital_cameras": {
+        "EPIC_player_cameras": {
           "name": "OrbitalPerspective1",
+          "mode": "thirdPerson",
           "focus": 8,
           "maxDistance": 8,
           "minDistance": 3,
-          "maxAngle": 45,
-          "minAngle": -45,
-          "distanceSensitivity": 0.5,
-          "orbitSensitivity": 0.3, 
-          "orbitInertia": 0.07,
+          "maxPitch": 45,
+          "minPitch": -45,
+          "maxYaw": 360,
+          "minYaw": 0,
+          "dollySensitivity": 0.5,
+          "rotationSensitivity": 0.3,
+          "rotationInertia": 0.07,
           "dollyDuration": 0.2
         }
       }
@@ -284,16 +287,45 @@
         "znear": 0
       },
       "extensions": {
-        "EPIC_orbital_cameras": {
+        "EPIC_player_cameras": {
           "name": "OrbitalPerspective1",
+          "mode": "thirdPerson",
           "focus": 8,
           "maxDistance": 5,
           "minDistance": 5,
-          "maxAngle": 45,
-          "minAngle": -45,
-          "distanceSensitivity": 0.5,
-          "orbitSensitivity": 0.3, 
-          "orbitInertia": 0.07,
+          "maxPitch": 45,
+          "minPitch": -45,
+          "maxYaw": 360,
+          "minYaw": 0,
+          "dollySensitivity": 0.5,
+          "rotationSensitivity": 0.3,
+          "rotationInertia": 0.07,
+          "dollyDuration": 0.2
+        }
+      }
+    },
+    {
+      "name": "FirstPersonPerspectiveCamera1",
+      "type": "perspective",
+      "perspective": {
+        "yfov": 1.60615218,
+        "zfar": 20971.5195,
+        "znear": 0.099999994
+      },
+      "extensions": {
+        "EPIC_player_cameras": {
+          "name": "FirstPersonPerspective1",
+          "mode": "firstPerson",
+          "focus": 8,
+          "maxDistance": 8,
+          "minDistance": 3,
+          "maxPitch": 45,
+          "minPitch": -45,
+          "maxYaw": 45,
+          "minYaw": -45,
+          "dollySensitivity": 0.5,
+          "rotationSensitivity": 0.3,
+          "rotationInertia": 0.07,
           "dollyDuration": 0.2
         }
       }
@@ -785,6 +817,11 @@
       "name": "OrbitalOrthographicCamera1",
       "rotation": [-0.353553385, 0.853553414, -0.146446615, 0.353553414],
       "camera": 7
+    },
+    {
+      "name": "FirstPersonPerspectiveCamera1",
+      "translation": [0, 1, 4],
+      "camera": 8
     }
   ],
   "samplers": [
@@ -828,7 +865,8 @@
         37,
         42,
         82,
-        83
+        83,
+        84
       ]
     }
   ],
@@ -921,5 +959,5 @@
       ]
     }
   },
-  "extensionsUsed": ["KHR_lights_punctual", "EPIC_orbital_cameras"]
+  "extensionsUsed": ["KHR_lights_punctual", "EPIC_player_cameras"]
 }
