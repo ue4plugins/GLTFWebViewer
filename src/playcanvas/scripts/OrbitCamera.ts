@@ -26,12 +26,6 @@ export const orbitCameraScriptName = "OrbitCamera";
 
 export class OrbitCamera extends pc.ScriptType {
   /**
-   * Camera mode:
-   * - FirstPerson allows the user to look around without moving the camera
-   * - ThirdPerson allows the user to orbit the focused entity and zoom / dolly
-   */
-  public mode = OrbitCameraMode.ThirdPerson;
-  /**
    * Inertia Factor. Higher value means that the camera will continue moving after the user has stopped dragging. 0 is fully responsive.
    */
   public inertiaFactor = 0.07;
@@ -60,7 +54,9 @@ export class OrbitCamera extends pc.ScriptType {
    */
   public allowPan?: boolean;
 
+  private _mode = OrbitCameraMode.ThirdPerson;
   private _cameraComponent!: pc.CameraComponent;
+  private _initialized = false;
   private _distanceMin = 0;
   private _distanceMax = 0;
   private _pitchAngleMax = 90;
@@ -90,6 +86,26 @@ export class OrbitCamera extends pc.ScriptType {
 
   public constructor(args: { app: pc.Application; entity: pc.Entity }) {
     super(args);
+  }
+
+  /**
+   * Camera mode:
+   * - FirstPerson allows the user to look around without moving the camera
+   * - ThirdPerson allows the user to orbit the focused entity and zoom / dolly
+   */
+  public get mode() {
+    return this._mode;
+  }
+
+  public set mode(value: OrbitCameraMode) {
+    if (OrbitCameraMode[value] === undefined) {
+      throw new Error(`Invalid camera mode '${value}'`);
+    }
+
+    if (this._mode !== value) {
+      this._mode = value;
+      this._setupCameraMode();
+    }
   }
 
   /**
@@ -224,32 +240,6 @@ export class OrbitCamera extends pc.ScriptType {
 
     this._cameraComponent = camera;
 
-    // TODO: Add support for changing mode after creation, taking into account that the camera may need to be repositioned
-
-    if (this.mode === OrbitCameraMode.FirstPerson) {
-      const cameraQuat = this.entity.getRotation();
-      this.yaw = this._calcYaw(cameraQuat);
-      this.pitch = this._calcPitch(cameraQuat, this.yaw);
-
-      this._lastFocusDistance = this.distance;
-      this._lastFocusPitch = this.pitch;
-      this._lastFocusYaw = this.yaw;
-      this._lastFocusOffset.copy(pc.Vec3.ZERO);
-
-      this._removeInertia();
-      this._updatePosition();
-    } else if (this.mode === OrbitCameraMode.ThirdPerson) {
-      this.focus(this._focusEntity, {
-        lookAtEntity: true,
-      });
-    } else {
-      throw new Error(
-        `Invalid camera mode '${this.mode}' (with value '${
-          OrbitCameraMode[this.mode]
-        }')`,
-      );
-    }
-
     this._setUpMouseEvents();
     this._setUpTouchEvents();
 
@@ -257,6 +247,9 @@ export class OrbitCamera extends pc.ScriptType {
       this._tearDownMouseEvents();
       this._tearDownTouchEvents();
     });
+
+    this._initialized = true;
+    this._setupCameraMode();
   }
 
   public postUpdate(dt: number) {
@@ -623,6 +616,30 @@ export class OrbitCamera extends pc.ScriptType {
     worldDiff.sub2(toWorldPoint, fromWorldPoint);
 
     this._focusOffset.add(worldDiff);
+  }
+
+  private _setupCameraMode() {
+    if (!this._initialized) {
+      return;
+    }
+
+    if (this.mode === OrbitCameraMode.FirstPerson) {
+      const cameraQuat = this.entity.getRotation();
+      this.yaw = this._calcYaw(cameraQuat);
+      this.pitch = this._calcPitch(cameraQuat, this.yaw);
+
+      this._lastFocusDistance = this.distance;
+      this._lastFocusPitch = this.pitch;
+      this._lastFocusYaw = this.yaw;
+      this._lastFocusOffset.copy(pc.Vec3.ZERO);
+
+      this._removeInertia();
+      this._updatePosition();
+    } else if (this.mode === OrbitCameraMode.ThirdPerson) {
+      this.focus(this._focusEntity, {
+        lookAtEntity: true,
+      });
+    }
   }
 
   private _onKeyDown(event: KeyDownEvent) {
