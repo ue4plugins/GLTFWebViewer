@@ -261,10 +261,10 @@
         "znear": 0.099999994
       },
       "extensions": {
-        "EPIC_player_cameras": {
+        "EPIC_camera_controls": {
           "name": "OrbitalPerspective1",
-          "mode": "thirdPerson",
-          "focus": 8,
+          "mode": "orbital",
+          "target": 8,
           "maxDistance": 8,
           "minDistance": 3,
           "maxPitch": 45,
@@ -287,10 +287,10 @@
         "znear": 0
       },
       "extensions": {
-        "EPIC_player_cameras": {
+        "EPIC_camera_controls": {
           "name": "OrbitalPerspective1",
-          "mode": "thirdPerson",
-          "focus": 8,
+          "mode": "orbital",
+          "target": 8,
           "maxDistance": 5,
           "minDistance": 5,
           "maxPitch": 45,
@@ -313,10 +313,10 @@
         "znear": 0.099999994
       },
       "extensions": {
-        "EPIC_player_cameras": {
+        "EPIC_camera_controls": {
           "name": "FirstPersonPerspective1",
-          "mode": "firstPerson",
-          "focus": 8,
+          "mode": "freeLook",
+          "target": 8,
           "maxDistance": 8,
           "minDistance": 3,
           "maxPitch": 45,
@@ -959,5 +959,5 @@
       ]
     }
   },
-  "extensionsUsed": ["KHR_lights_punctual", "EPIC_player_cameras"]
+  "extensionsUsed": ["KHR_lights_punctual", "EPIC_camera_controls"]
 }

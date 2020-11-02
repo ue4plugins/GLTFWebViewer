@@ -9,7 +9,7 @@
     "EPIC_hdri_backdrops",
     "EPIC_reflection_probes",
     "EPIC_lightmap_textures",
-    "EPIC_player_cameras",
+    "EPIC_camera_controls",
     "EPIC_texture_hdr_encoding"
   ],
   "accessors": [
@@ -143,9 +143,9 @@
       },
       "type": "perspective",
       "extensions": {
-        "EPIC_player_cameras": {
-          "mode": "thirdPerson",
-          "focus": 0,
+        "EPIC_camera_controls": {
+          "mode": "orbital",
+          "target": 0,
           "maxDistance": 0,
           "minDistance": 0,
           "maxPitch": 0,
