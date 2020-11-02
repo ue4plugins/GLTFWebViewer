@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => {
 
 export type CameraProps = {
   appear?: React.ReactElement<AppearProps>;
-  type?: "static" | "orbit" | "pov";
+  type?: "Static" | "FirstPerson" | "ThirdPerson";
   autoFocus?: boolean;
   checked?: boolean;
   id?: string;
@@ -74,7 +74,7 @@ export type CameraProps = {
 
 export const Camera: React.FC<CameraProps> = ({
   appear,
-  type = "static",
+  type = "Static",
   autoFocus,
   checked: checkedProp,
   id,
@@ -109,7 +109,7 @@ export const Camera: React.FC<CameraProps> = ({
       })}
       style={{ backgroundImage: `url(${image})` }}
     >
-      {type !== "static" && (
+      {type !== "Static" && (
         <div
           className={clsx(classes.icon, {
             [classes.iconChecked]: checked,
@@ -117,9 +117,9 @@ export const Camera: React.FC<CameraProps> = ({
         >
           {(() => {
             switch (type) {
-              case "orbit":
+              case "ThirdPerson":
                 return <Orbit />;
-              case "pov":
+              case "FirstPerson":
                 return <PointOfView />;
             }
           })()}

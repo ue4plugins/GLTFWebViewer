@@ -6,7 +6,6 @@ import { GltfScene } from "../types";
 import { VariantSetManager, LevelVariantSet } from "../variants";
 import {
   OrbitCamera,
-  OrbitCameraMode,
   orbitCameraScriptName,
   HdriBackdrop as HdriBackdropScript,
   hdriBackdropScriptName,
@@ -123,11 +122,8 @@ export class PlayCanvasViewer implements TestableViewer {
           id: index,
           name: camera.name,
           type: isOrbitCameraEntity(camera)
-            ? camera.script[orbitCameraScriptName].mode ===
-              OrbitCameraMode.FirstPerson
-              ? "pov"
-              : "orbit"
-            : "static",
+            ? camera.script[orbitCameraScriptName].modeName
+            : "Static",
           previewSource: this._cameraPreviews?.[index] ?? "",
         };
       }),

@@ -22,6 +22,8 @@ export enum OrbitCameraMode {
   ThirdPerson,
 }
 
+export type OrbitCameraModeName = keyof typeof OrbitCameraMode;
+
 export const orbitCameraScriptName = "OrbitCamera";
 
 export class OrbitCamera extends pc.ScriptType {
@@ -106,6 +108,13 @@ export class OrbitCamera extends pc.ScriptType {
       this._mode = value;
       this._setupCameraMode();
     }
+  }
+
+  /**
+   * Human readable name of the current camera mode.
+   */
+  public get modeName(): OrbitCameraModeName {
+    return OrbitCameraMode[this.mode] as OrbitCameraModeName;
   }
 
   /**
