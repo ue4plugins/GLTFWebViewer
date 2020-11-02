@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => {
 
 export type CameraProps = {
   appear?: React.ReactElement<AppearProps>;
-  type?: "Static" | "FirstPerson" | "ThirdPerson";
+  type?: "Static" | "FreeLook" | "Orbital";
   autoFocus?: boolean;
   checked?: boolean;
   id?: string;
@@ -117,9 +117,9 @@ export const Camera: React.FC<CameraProps> = ({
         >
           {(() => {
             switch (type) {
-              case "ThirdPerson":
+              case "Orbital":
                 return <Orbit />;
-              case "FirstPerson":
+              case "FreeLook":
                 return <PointOfView />;
             }
           })()}

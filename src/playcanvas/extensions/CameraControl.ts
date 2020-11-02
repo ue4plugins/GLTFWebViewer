@@ -4,16 +4,11 @@ import { OrbitCamera, OrbitCameraMode } from "../scripts";
 import { ExtensionParser } from "./ExtensionParser";
 import { ExtensionRegistry } from "./ExtensionRegistry";
 
-const debug = Debug("PlayerCamera");
-
-const cameraModeMap: Record<string, OrbitCameraMode | undefined> = {
-  firstPerson: OrbitCameraMode.FirstPerson,
-  thirdPerson: OrbitCameraMode.ThirdPerson,
-};
+const debug = Debug("CameraControl");
 
 type NodeExtensionData = {
-  mode: keyof typeof cameraModeMap;
-  focus: number;
+  mode: "freeLook" | "orbital";
+  target: number;
   maxDistance: number;
   minDistance: number;
   maxPitch: number;
@@ -31,11 +26,11 @@ type OrbitCameraScriptFocusMap = {
   node: number;
 };
 
-export class PlayerCameraExtensionParser implements ExtensionParser {
+export class CameraControlExtensionParser implements ExtensionParser {
   private _focusNodes: OrbitCameraScriptFocusMap[] = [];
 
   public get name() {
-    return "EPIC_player_cameras";
+    return "EPIC_camera_controls";
   }
 
   public register(registry: ExtensionRegistry) {
@@ -49,7 +44,7 @@ export class PlayerCameraExtensionParser implements ExtensionParser {
   }
 
   public postParse(container: pc.ContainerResource) {
-    debug("Post parse player camera");
+    debug("Post parse camera control");
 
     this._focusNodes.forEach(
       ({ script, node: nodeIndex }) =>
@@ -61,7 +56,7 @@ export class PlayerCameraExtensionParser implements ExtensionParser {
     camera: pc.CameraComponent,
     extensionData: NodeExtensionData,
   ) {
-    debug("Parse player camera", camera, extensionData);
+    debug("Parse camera control", camera, extensionData);
 
     const missingProperties = this._getMissingProperties(extensionData, [
       "mode",
@@ -80,16 +75,16 @@ export class PlayerCameraExtensionParser implements ExtensionParser {
     if (missingProperties.length > 0) {
       missingProperties.forEach(key =>
         debug(
-          `Property '${key}' for camera '${camera.entity.name}' is missing`,
+          `Property '${key}' for camera control '${camera.entity.name}' is missing`,
         ),
       );
       return;
     }
 
-    const cameraMode = cameraModeMap[extensionData.mode];
-    if (cameraMode === undefined) {
+    const cameraMode = this._parseOrbitCameraMode(extensionData.mode);
+    if (cameraMode === null) {
       debug(
-        `Camera mode '${extensionData.mode}' for camera '${camera.entity.name}' is invalid`,
+        `Camera mode '${extensionData.mode}' for camera control '${camera.entity.name}' is invalid`,
       );
       return;
     }
@@ -115,7 +110,7 @@ export class PlayerCameraExtensionParser implements ExtensionParser {
 
     this._focusNodes.push({
       script: orbitCameraScript,
-      node: extensionData.focus,
+      node: extensionData.target,
     });
   }
 
@@ -124,5 +119,20 @@ export class PlayerCameraExtensionParser implements ExtensionParser {
     properties: (keyof T)[],
   ): (keyof T)[] {
     return properties.filter(key => obj[key] === undefined);
+  }
+
+  private _parseOrbitCameraMode(
+    cameraControlMode?: string,
+  ): OrbitCameraMode | null {
+    if (!cameraControlMode || cameraControlMode.length < 2) {
+      return null;
+    }
+
+    const modeName = this._capitalizeFirstLetter(cameraControlMode);
+    return OrbitCameraMode[modeName as keyof typeof OrbitCameraMode] ?? null;
+  }
+
+  private _capitalizeFirstLetter(text: string): string {
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
 }
