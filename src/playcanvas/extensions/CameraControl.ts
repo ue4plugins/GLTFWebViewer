@@ -11,10 +11,10 @@ type NodeExtensionData = {
   target: number;
   maxDistance: number;
   minDistance: number;
-  maxPitch: number;
-  minPitch: number;
-  maxYaw: number;
-  minYaw: number;
+  maxPitch?: number;
+  minPitch?: number;
+  maxYaw?: number;
+  minYaw?: number;
   rotationSensitivity: number;
   rotationInertia: number;
   dollySensitivity: number;
@@ -54,18 +54,14 @@ export class CameraControlExtensionParser implements ExtensionParser {
 
   private _cameraPostParse(
     camera: pc.CameraComponent,
-    extensionData: NodeExtensionData,
+    data: NodeExtensionData,
   ) {
-    debug("Parse camera control", camera, extensionData);
+    debug("Parse camera control", camera, data);
 
-    const missingProperties = this._getMissingProperties(extensionData, [
+    const missingProperties = this._getMissingProperties(data, [
       "mode",
       "maxDistance",
       "minDistance",
-      "maxPitch",
-      "minPitch",
-      "maxYaw",
-      "minYaw",
       "rotationSensitivity",
       "rotationInertia",
       "dollySensitivity",
@@ -81,36 +77,37 @@ export class CameraControlExtensionParser implements ExtensionParser {
       return;
     }
 
-    const cameraMode = this._parseOrbitCameraMode(extensionData.mode);
+    const cameraMode = this._parseOrbitCameraMode(data.mode);
     if (cameraMode === null) {
       debug(
-        `Camera mode '${extensionData.mode}' for camera control '${camera.entity.name}' is invalid`,
+        `Camera mode '${data.mode}' for camera control '${camera.entity.name}' is invalid`,
       );
       return;
     }
 
-    const script = camera.entity.script ?? camera.entity.addComponent("script");
-    const orbitCameraScript = script.create(OrbitCamera, {
+    const script = (
+      camera.entity.script ?? camera.entity.addComponent("script")
+    ).create(OrbitCamera, {
       enabled: false, // This is enabled later for the active camera
     });
 
-    orbitCameraScript.mode = cameraMode;
-    orbitCameraScript.pitchAngleMax = extensionData.maxPitch;
-    orbitCameraScript.pitchAngleMin = extensionData.minPitch;
-    orbitCameraScript.yawAngleMax = extensionData.maxYaw;
-    orbitCameraScript.yawAngleMin = extensionData.minYaw;
-    orbitCameraScript.distanceMax = extensionData.maxDistance;
-    orbitCameraScript.distanceMin = extensionData.minDistance;
-    orbitCameraScript.distanceSensitivity = extensionData.dollySensitivity;
-    orbitCameraScript.orbitSensitivity = extensionData.rotationSensitivity;
-    orbitCameraScript.inertiaFactor = extensionData.rotationInertia;
-    orbitCameraScript.dollyDuration = extensionData.dollyDuration;
+    script.mode = cameraMode;
+    script.pitchAngleMax = data.maxPitch ?? script.pitchAngleMax;
+    script.pitchAngleMin = data.minPitch ?? script.pitchAngleMin;
+    script.yawAngleMax = data.maxYaw ?? script.yawAngleMax;
+    script.yawAngleMin = data.minYaw ?? script.yawAngleMin;
+    script.distanceMax = data.maxDistance;
+    script.distanceMin = data.minDistance;
+    script.distanceSensitivity = data.dollySensitivity;
+    script.orbitSensitivity = data.rotationSensitivity;
+    script.inertiaFactor = data.rotationInertia;
+    script.dollyDuration = data.dollyDuration;
 
-    debug("Added orbit camera script", camera, orbitCameraScript);
+    debug("Added orbit camera script", camera, script);
 
     this._focusNodes.push({
-      script: orbitCameraScript,
-      node: extensionData.target,
+      script: script,
+      node: data.target,
     });
   }
 
