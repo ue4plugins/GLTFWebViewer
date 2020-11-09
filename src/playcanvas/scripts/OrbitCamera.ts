@@ -17,6 +17,13 @@ type MouseMoveEvent = {
   y: number;
 };
 
+export enum OrbitCameraMode {
+  FreeLook,
+  Orbital,
+}
+
+export type OrbitCameraModeName = keyof typeof OrbitCameraMode;
+
 export const orbitCameraScriptName = "OrbitCamera";
 
 export class OrbitCamera extends pc.ScriptType {
@@ -49,11 +56,15 @@ export class OrbitCamera extends pc.ScriptType {
    */
   public allowPan?: boolean;
 
+  private _mode = OrbitCameraMode.Orbital;
   private _cameraComponent!: pc.CameraComponent;
+  private _initialized = false;
   private _distanceMin = 0;
   private _distanceMax = 0;
   private _pitchAngleMax = 90;
   private _pitchAngleMin = -90;
+  private _yawAngleMax = 360;
+  private _yawAngleMin = 0;
   private _distance = 0;
   private _pitch = 0;
   private _yaw = 0;
@@ -77,6 +88,33 @@ export class OrbitCamera extends pc.ScriptType {
 
   public constructor(args: { app: pc.Application; entity: pc.Entity }) {
     super(args);
+  }
+
+  /**
+   * Camera mode:
+   * - FreeLook allows the user to look around without moving the camera
+   * - Orbital allows the user to orbit the focused entity and zoom / dolly
+   */
+  public get mode() {
+    return this._mode;
+  }
+
+  public set mode(value: OrbitCameraMode) {
+    if (OrbitCameraMode[value] === undefined) {
+      throw new Error(`Invalid camera mode '${value}'`);
+    }
+
+    if (this._mode !== value) {
+      this._mode = value;
+      this._setupCameraMode();
+    }
+  }
+
+  /**
+   * Human readable name of the current camera mode.
+   */
+  public get modeName(): OrbitCameraModeName {
+    return OrbitCameraMode[this.mode] as OrbitCameraModeName;
   }
 
   /**
@@ -124,6 +162,36 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   /**
+   * Max yaw angle (degrees).
+   */
+  public get yawAngleMax() {
+    return this._yawAngleMax;
+  }
+  public set yawAngleMax(value: number) {
+    this._yawAngleMax = value;
+    this._targetYaw = this._clampYawAngle(this._yaw);
+  }
+
+  /**
+   * Min yaw angle (degrees).
+   */
+  public get yawAngleMin() {
+    return this._yawAngleMin;
+  }
+  public set yawAngleMin(value: number) {
+    this._yawAngleMin = value;
+    this._targetYaw = this._clampYawAngle(this._yaw);
+  }
+
+  /**
+   * Returns true if the current limits for yaw are less than 360 degrees apart.
+   * If they are further apart, no limits will be enforced for yaw.
+   */
+  public get usesYawLimits() {
+    return this._yawAngleMax - this._yawAngleMin < 360;
+  }
+
+  /**
    * Property to get and set the distance between the pivot point and camera.
    * Clamped between this.distanceMin and this.distanceMax.
    */
@@ -153,18 +221,7 @@ export class OrbitCamera extends pc.ScriptType {
     return this._targetYaw;
   }
   public set yaw(value: number) {
-    // Ensure that the yaw takes the shortest route by making sure that
-    // the difference between the targetYaw and the actual is 180 degrees
-    // in either direction
-    const diff = value - this._yaw;
-    const remainder = diff % 360;
-    if (remainder > 180) {
-      this._targetYaw = this._yaw - (360 - remainder);
-    } else if (remainder < -180) {
-      this._targetYaw = this._yaw + (360 + remainder);
-    } else {
-      this._targetYaw = this._yaw + remainder;
-    }
+    this._targetYaw = this._clampYawAngle(value);
   }
 
   /**
@@ -192,10 +249,6 @@ export class OrbitCamera extends pc.ScriptType {
 
     this._cameraComponent = camera;
 
-    this.focus(this._focusEntity, {
-      lookAtEntity: true,
-    });
-
     this._setUpMouseEvents();
     this._setUpTouchEvents();
 
@@ -203,6 +256,9 @@ export class OrbitCamera extends pc.ScriptType {
       this._tearDownMouseEvents();
       this._tearDownTouchEvents();
     });
+
+    this._initialized = true;
+    this._setupCameraMode();
   }
 
   public postUpdate(dt: number) {
@@ -213,8 +269,34 @@ export class OrbitCamera extends pc.ScriptType {
     this._yaw = pc.math.lerp(this._yaw, this._targetYaw, t);
     this._pitch = pc.math.lerp(this._pitch, this._targetPitch, t);
 
-    this._updateFocusPosition();
+    if (this.mode === OrbitCameraMode.Orbital) {
+      this._updateFocusPosition();
+    }
+
     this._updatePosition();
+  }
+
+  /**
+   * Updates yaw angle while ensuring the shortest route is taken from
+   * the current yaw angle to the requested angle.
+   *
+   * Note that the passed value may therefore not be used as-is, instead
+   * an equivalent angle that is closer to the current angle may be substituted.
+   * @param yaw Yaw angle
+   */
+  public setYawUsingShortestRoute(yaw: number) {
+    // Ensure that the yaw takes the shortest route by making sure that
+    // the difference between the targetYaw and the actual is 180 degrees
+    // in either direction
+    const diff = yaw - this._yaw;
+    const remainder = diff % 360;
+    if (remainder > 180) {
+      this.yaw = this._yaw - (360 - remainder);
+    } else if (remainder < -180) {
+      this.yaw = this._yaw + (360 + remainder);
+    } else {
+      this.yaw = this._yaw + remainder;
+    }
   }
 
   /**
@@ -230,6 +312,11 @@ export class OrbitCamera extends pc.ScriptType {
       offset?: pc.Vec3;
     } = {},
   ) {
+    if (this.mode !== OrbitCameraMode.Orbital) {
+      console.warn("focus() can only be used when the Orbital mode is active");
+      return;
+    }
+
     const { frameModels, lookAtEntity, offset } = options;
 
     if (!focusEntity) {
@@ -283,6 +370,13 @@ export class OrbitCamera extends pc.ScriptType {
    * @param lookAtPoint
    */
   public resetAndLookAtPoint(resetPoint: pc.Vec3, lookAtPoint: pc.Vec3) {
+    if (this.mode !== OrbitCameraMode.Orbital) {
+      console.warn(
+        "resetAndLookAtPoint() can only be used when the Orbital mode is active",
+      );
+      return;
+    }
+
     this.entity.setPosition(resetPoint);
 
     this.focus(null, {
@@ -298,6 +392,13 @@ export class OrbitCamera extends pc.ScriptType {
    * @param entity
    */
   public resetAndLookAtEntity(resetPoint: pc.Vec3, entity: pc.Entity) {
+    if (this.mode !== OrbitCameraMode.Orbital) {
+      console.warn(
+        "resetAndLookAtEntity() can only be used when the Orbital mode is active",
+      );
+      return;
+    }
+
     this.entity.setPosition(resetPoint);
 
     this.focus(entity, {
@@ -348,15 +449,19 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _updatePosition() {
-    // Work out the camera position based on the pivot point, pitch, yaw and distance
-    this.entity.setLocalPosition(0, 0, 0);
-    this.entity.setEulerAngles(this._pitch, this._yaw, 0);
+    if (this.mode === OrbitCameraMode.FreeLook) {
+      this.entity.setEulerAngles(this._pitch, this._yaw, 0);
+    } else if (this.mode === OrbitCameraMode.Orbital) {
+      // Work out the camera position based on the pivot point, pitch, yaw and distance
+      this.entity.setLocalPosition(0, 0, 0);
+      this.entity.setEulerAngles(this._pitch, this._yaw, 0);
 
-    const position = this.entity.getPosition();
-    position.copy(this.entity.forward);
-    position.scale(-this._distance);
-    position.add(this._focusPosition);
-    this.entity.setPosition(position);
+      const position = this.entity.getPosition();
+      position.copy(this.entity.forward);
+      position.scale(-this._distance);
+      position.add(this._focusPosition);
+      this.entity.setPosition(position);
+    }
   }
 
   private _updateFocusPosition() {
@@ -428,8 +533,13 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _clampPitchAngle(pitch: number) {
-    // Negative due as the pitch is inversed since the camera is orbiting the entity
-    return pc.math.clamp(pitch, -this.pitchAngleMax, -this.pitchAngleMin);
+    return pc.math.clamp(pitch, this.pitchAngleMin, this.pitchAngleMax);
+  }
+
+  private _clampYawAngle(yaw: number) {
+    return this.usesYawLimits
+      ? pc.math.clamp(yaw, this.yawAngleMin, this.yawAngleMax)
+      : yaw;
   }
 
   private _calcPitch(quat: pc.Quat, yaw: number) {
@@ -453,6 +563,10 @@ export class OrbitCamera extends pc.ScriptType {
     if (this._zoomAnimFrame) {
       cancelAnimationFrame(this._zoomAnimFrame);
       this._zoomAnimFrame = 0;
+    }
+
+    if (this.mode !== OrbitCameraMode.Orbital) {
+      return;
     }
 
     const curValue = this.distance;
@@ -486,6 +600,10 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _pan(x: number, y: number) {
+    if (this.mode !== OrbitCameraMode.Orbital) {
+      return;
+    }
+
     const fromWorldPoint = new pc.Vec3();
     const toWorldPoint = new pc.Vec3();
     const worldDiff = new pc.Vec3();
@@ -507,12 +625,39 @@ export class OrbitCamera extends pc.ScriptType {
     this._focusOffset.add(worldDiff);
   }
 
+  private _setupCameraMode() {
+    if (!this._initialized) {
+      return;
+    }
+
+    if (this.mode === OrbitCameraMode.FreeLook) {
+      const cameraQuat = this.entity.getRotation();
+      this.yaw = this._calcYaw(cameraQuat);
+      this.pitch = this._calcPitch(cameraQuat, this.yaw);
+
+      this._lastFocusDistance = this.distance;
+      this._lastFocusPitch = this.pitch;
+      this._lastFocusYaw = this.yaw;
+      this._lastFocusOffset.copy(pc.Vec3.ZERO);
+
+      this._removeInertia();
+      this._updatePosition();
+    } else if (this.mode === OrbitCameraMode.Orbital) {
+      this.focus(this._focusEntity, {
+        lookAtEntity: true,
+      });
+    }
+  }
+
   private _onKeyDown(event: KeyDownEvent) {
     if (event.event.prevent || !this.enabled) {
       return;
     }
 
-    if (event.key === pc.KEY_SPACE && this._focusEntity) {
+    if (
+      event.key === pc.KEY_SPACE &&
+      (this._focusEntity || this.mode === OrbitCameraMode.FreeLook)
+    ) {
       this._focusOffset.copy(this._lastFocusOffset);
       this.reset(
         this._lastFocusYaw,
@@ -616,7 +761,7 @@ export class OrbitCamera extends pc.ScriptType {
   }
 
   private _onTouchPinch(event: HammerInput) {
-    if (!this.enabled) {
+    if (!this.enabled || this.mode !== OrbitCameraMode.Orbital) {
       return;
     }
     this.distance = this._lastStartDistance / event.scale;

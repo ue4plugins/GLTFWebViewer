@@ -10,7 +10,7 @@ import {
   LightMapExtensionParser,
   HdriBackdrop,
   HdrEncodingExtensionParser,
-  OrbitCameraExtensionParser,
+  CameraControlExtensionParser,
   AnimationPlaybackExtensionParser,
   AnimationPlayback,
   animationPlaybackDefaults,
@@ -233,7 +233,7 @@ export class PlayCanvasGltfLoader {
       lightMapParser,
       backdropParser,
       animationPlaybackParser,
-      new OrbitCameraExtensionParser(),
+      new CameraControlExtensionParser(),
       new HdrEncodingExtensionParser(),
       new SkySphereExtensionParser(),
     ];

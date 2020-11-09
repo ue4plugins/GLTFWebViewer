@@ -12,7 +12,7 @@ export type GltfSource = {
 export type GltfCamera = {
   id: number;
   name: string;
-  type: "static" | "orbit" | "pov";
+  type: "Static" | "FreeLook" | "Orbital";
   previewSource: string;
 };
 

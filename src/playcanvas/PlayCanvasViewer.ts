@@ -122,13 +122,8 @@ export class PlayCanvasViewer implements TestableViewer {
           id: index,
           name: camera.name,
           type: isOrbitCameraEntity(camera)
-            ? // TODO: Base type on orbit camera mode when this has been implemented
-              // in the extension parser
-              camera.script[orbitCameraScriptName].focusEntity ===
-              this._app.root
-              ? "pov"
-              : "orbit"
-            : "static",
+            ? camera.script[orbitCameraScriptName].modeName
+            : "Static",
           previewSource: this._cameraPreviews?.[index] ?? "",
         };
       }),
