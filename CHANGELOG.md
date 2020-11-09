@@ -1,3 +1,22 @@
+## [1.25.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.24.0...v1.25.0) (2020-11-09)
+
+
+### Features
+
+* **CameraControl:** make angle limits optional when parsing EPIC_camera_controls ([4211653](http://animech[secure]/clients/epic/gltf-web-viewer/commit/42116531002b27300daa967bc1165e9a9ce5a272))
+* **OrbitCamera:** add FirstPerson mode and rename default mode to ThirdPerson ([5deeec9](http://animech[secure]/clients/epic/gltf-web-viewer/commit/5deeec98f0ce21f9af24bd4e45b4d2e058f8deba))
+* **OrbitCamera:** implement yaw limits ([fa8a46f](http://animech[secure]/clients/epic/gltf-web-viewer/commit/fa8a46f27669197d6256185d3e76316019df13cb))
+* **OrbitCamera:** setup camera mode properly when the mode is switched ([ee9d19e](http://animech[secure]/clients/epic/gltf-web-viewer/commit/ee9d19ee8e528036a52faed90940400c4e8b8e86))
+* **PlayCanvasViewer:** base camera type on orbit camera mode ([c537d96](http://animech[secure]/clients/epic/gltf-web-viewer/commit/c537d96a7890a9d6778e3cdcd05e0c0347f0d378))
+* **PlayerCamera:** assign correct mode to the orbit camera script ([b2c2d24](http://animech[secure]/clients/epic/gltf-web-viewer/commit/b2c2d2454ca55f8dbd6aa4729baab88783aa05f1))
+* **PlayerCamera:** assign yaw limits on OrbitCamera script when parsing extension ([3a92caf](http://animech[secure]/clients/epic/gltf-web-viewer/commit/3a92cafa8636ddf9f460ee7a68ffda5d63a99a29))
+* **PlayerCamera:** catch and report missing properties for the extension ([2aaea46](http://animech[secure]/clients/epic/gltf-web-viewer/commit/2aaea461ac12501306a72e307fe2fbf6ee9b1cec))
+
+
+### Bug Fixes
+
+* **OrbitCamera:** fix incorrect behavior when orbiting using a large delta for yaw ([ad78c10](http://animech[secure]/clients/epic/gltf-web-viewer/commit/ad78c10a7dfd6d580ebe2b6e4a8bd66270a3fcd8))
+
 ## [1.24.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.23.0...v1.24.0) (2020-10-27)
 
 
