@@ -497,7 +497,7 @@ export class OrbitCamera extends pc.ScriptType {
   ): pc.BoundingBox | null {
     let modelsAabb: pc.BoundingBox | null = null;
 
-    if (ignoredTagsQuery && entity.tags.has(ignoredTagsQuery)) {
+    if (ignoredTagsQuery && entity.tags.has(...ignoredTagsQuery)) {
       return modelsAabb;
     }
 
