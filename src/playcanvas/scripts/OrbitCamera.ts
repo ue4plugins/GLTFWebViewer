@@ -17,6 +17,8 @@ type MouseMoveEvent = {
   y: number;
 };
 
+type TagQuery = (string | TagQuery)[];
+
 export enum OrbitCameraMode {
   FreeLook,
   Orbital,
@@ -326,16 +328,18 @@ export class OrbitCamera extends pc.ScriptType {
     this.focusEntity = focusEntity;
     this._focusOffset.copy(offset ?? pc.Vec3.ZERO);
 
-    const aabb = frameModels ? this._buildAabb(focusEntity) : null;
-    if (aabb) {
+    const focusAabb = frameModels
+      ? this._buildAabb(focusEntity, ["ignoreBoundingBox"])
+      : null;
+    if (focusAabb) {
       // Add offset to keep center of bounding-box focused
-      this._focusOffset.add(aabb.center).sub(focusEntity.getPosition());
+      this._focusOffset.add(focusAabb.center).sub(focusEntity.getPosition());
     }
 
     this._updateFocusPosition();
 
-    this.distance = aabb
-      ? this._calcDistanceForBoundingBox(aabb)
+    this.distance = focusAabb
+      ? this._calcDistanceForBoundingBox(focusAabb)
       : this.entity.getPosition().distance(this._focusPosition);
 
     if (lookAtEntity) {
@@ -350,7 +354,14 @@ export class OrbitCamera extends pc.ScriptType {
       this._cameraComponent.nearClip = this.distance * this.nearClipFactor;
     }
     if (this.farClipFactor) {
-      this._cameraComponent.farClip = this.distance * this.farClipFactor;
+      // Include all models within the focused entity's hierarchy when
+      // calculating farClip, regardless of their tags.
+      const aabb = this._buildAabb(focusEntity);
+      const distance = aabb
+        ? this._calcDistanceForBoundingBox(aabb)
+        : this.distance;
+
+      this._cameraComponent.farClip = distance * this.farClipFactor;
     }
 
     this._lastFocusDistance = this.distance;
@@ -480,10 +491,13 @@ export class OrbitCamera extends pc.ScriptType {
     this._distance = this._targetDistance;
   }
 
-  private _buildAabb(entity: pc.Entity): pc.BoundingBox | null {
+  private _buildAabb(
+    entity: pc.Entity,
+    ignoredTagsQuery?: TagQuery,
+  ): pc.BoundingBox | null {
     let modelsAabb: pc.BoundingBox | null = null;
 
-    if (entity.tags.has("ignoreBoundingBox")) {
+    if (ignoredTagsQuery && entity.tags.has(...ignoredTagsQuery)) {
       return modelsAabb;
     }
 
@@ -499,7 +513,10 @@ export class OrbitCamera extends pc.ScriptType {
     }
 
     for (let i = 0; i < entity.children.length; i += 1) {
-      const childAabb = this._buildAabb(entity.children[i] as pc.Entity);
+      const childAabb = this._buildAabb(
+        entity.children[i] as pc.Entity,
+        ignoredTagsQuery,
+      );
       if (!childAabb) {
         continue;
       }
