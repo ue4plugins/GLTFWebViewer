@@ -1,3 +1,15 @@
+## [1.26.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.25.0...v1.26.0) (2020-11-11)
+
+
+### Features
+
+* **OrbitCamera:** improve farClip calculation to avoid clipping SkySphere- & HdriBackdrop-models ([ff307a2](http://animech[secure]/clients/epic/gltf-web-viewer/commit/ff307a24f0ef3e1a482655db3b2d10d7ace45408))
+
+
+### Bug Fixes
+
+* **OrbitCamera:** spread tags-query to allow OR-conditions ([c174f68](http://animech[secure]/clients/epic/gltf-web-viewer/commit/c174f68d36462f4cc91f80fde72a71caf036c59d))
+
 ## [1.25.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.24.0...v1.25.0) (2020-11-09)
 
 
