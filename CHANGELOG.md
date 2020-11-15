@@ -1,3 +1,10 @@
+## [1.27.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.26.0...v1.27.0) (2020-11-15)
+
+
+### Features
+
+* add support for custom extension EPIC_blend_modes ([ab04891](http://animech[secure]/clients/epic/gltf-web-viewer/commit/ab048918b5e23b52a81dd9121a4a39fe30b037c7))
+
 ## [1.26.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.25.0...v1.26.0) (2020-11-11)
 
 
