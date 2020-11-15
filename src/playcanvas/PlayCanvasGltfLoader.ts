@@ -4,6 +4,7 @@ import { LevelVariantSet } from "../variants";
 import {
   ExtensionRegistry,
   ExtensionParser,
+  BlendModeExtensionParser,
   VariantSetExtensionParser,
   AnimationHotspotExtensionParser,
   HdriBackdropExtensionParser,
@@ -236,6 +237,7 @@ export class PlayCanvasGltfLoader {
       new CameraControlExtensionParser(),
       new HdrEncodingExtensionParser(),
       new SkySphereExtensionParser(),
+      new BlendModeExtensionParser(),
     ];
 
     this._clearExtensions();

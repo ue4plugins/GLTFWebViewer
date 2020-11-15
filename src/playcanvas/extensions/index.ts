@@ -1,4 +1,5 @@
 export * from "./AnimationPlayback";
+export * from "./BlendMode";
 export * from "./ExtensionRegistry";
 export * from "./ExtensionParser";
 export * from "./HdrEncoding";
