@@ -1,4 +1,11 @@
 declare namespace config {
+  type ConfigTheme = {
+    palette: {
+      primary: string;
+      secondary: string;
+    };
+  };
+
   type Config = {
     assets: GltfSource[];
     topbar: boolean;
@@ -7,6 +14,7 @@ declare namespace config {
     dragAndDrop: boolean;
     topbarTitle: string;
     topbarLogoUrl: string;
+    theme: ConfigTheme;
   };
 
   const defaultConfig: Config;
