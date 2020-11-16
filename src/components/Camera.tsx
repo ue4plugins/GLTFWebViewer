@@ -53,9 +53,6 @@ const useStyles = makeStyles(theme => {
       borderRadius: "50%",
       backgroundColor: theme.palette.grey[900],
     },
-    iconChecked: {
-      color: theme.palette.secondary.main,
-    },
   };
 });
 
@@ -110,11 +107,7 @@ export const Camera: React.FC<CameraProps> = ({
       style={{ backgroundImage: `url(${image})` }}
     >
       {type !== "Static" && (
-        <div
-          className={clsx(classes.icon, {
-            [classes.iconChecked]: checked,
-          })}
-        >
+        <div className={classes.icon}>
           {(() => {
             switch (type) {
               case "Orbital":
