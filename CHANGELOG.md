@@ -1,3 +1,12 @@
+## [1.28.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.27.0...v1.28.0) (2020-11-16)
+
+
+### Features
+
+* add theme params (primary/secondary color) to config format ([71a1fa2](http://animech[secure]/clients/epic/gltf-web-viewer/commit/71a1fa29a4ac40841f3eabfb0a739e554f8662f1))
+* change active color of camera icon ([4bf0abb](http://animech[secure]/clients/epic/gltf-web-viewer/commit/4bf0abbb10256198387acb3e1f074e965ceada43))
+* hide sidebar by default on small (xs) screens ([11e4ec0](http://animech[secure]/clients/epic/gltf-web-viewer/commit/11e4ec04d15e37655e362665f7001f036a46a4f2))
+
 ## [1.27.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.26.0...v1.27.0) (2020-11-15)
 
 
