@@ -121,7 +121,6 @@ release+source:
     name: "$BUILD_NAME-$(date +'%Y%m%d')"
     paths:
       - build
-      - docs
       - public
       - scripts
       - src
