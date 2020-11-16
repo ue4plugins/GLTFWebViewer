@@ -28,7 +28,6 @@ import {
   isOrbitCameraEntity,
   convertToCameraEntity,
 } from "./Camera";
-import { configUrl, sceneUrl as sceneUrlHack } from "./PlayCanvasOfflineHack"; // TODO: replace hack
 
 const debug = Debug("PlayCanvasViewer");
 
@@ -422,9 +421,7 @@ export class PlayCanvasViewer implements TestableViewer {
     const app = this._app;
 
     await new Promise<void>((resolve, reject) => {
-      let url = pc.path.join(app.assets.prefix, "config.json");
-
-      url = configUrl || url; // TODO: replace hack
+      const url = pc.path.join(app.assets.prefix, "config.json");
 
       app.configure(url, error => {
         if (error) {
@@ -442,7 +439,7 @@ export class PlayCanvasViewer implements TestableViewer {
 
     const scene = this._app.scenes.list()[0];
     if (scene) {
-      const sceneUrl = sceneUrlHack || scene.url; // TODO: replace hack
+      const sceneUrl = scene.url;
       debug("Loading scene", sceneUrl);
 
       await new Promise<void>((resolve, reject) => {
