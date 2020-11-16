@@ -2,7 +2,6 @@ declare namespace config {
   type ConfigTheme = {
     palette: {
       primary: string;
-      secondary: string;
     };
   };
 

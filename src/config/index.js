@@ -10,7 +10,6 @@ module.exports = {
     theme: {
       palette: {
         primary: "#3393FA",
-        secondary: "#75FABB",
       },
     },
   },

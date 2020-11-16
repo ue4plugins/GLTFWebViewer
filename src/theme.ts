@@ -68,10 +68,6 @@ export function createTheme(config?: ConfigTheme): Theme {
       primary: {
         main: config?.palette.primary ?? defaultConfig.theme.palette.primary,
       },
-      secondary: {
-        main:
-          config?.palette.secondary ?? defaultConfig.theme.palette.secondary,
-      },
     },
     typography: {
       fontFamily: "'Open Sans', 'Helvetica', 'Arial', sans-serif",
