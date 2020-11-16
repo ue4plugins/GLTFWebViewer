@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
-import { Hidden, makeStyles, Typography } from "@material-ui/core";
+import {
+  Hidden,
+  makeStyles,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import { Sidebar, FpsMonitor, SidebarToggle } from "../components";
 import { useStores } from "../stores";
@@ -93,6 +99,8 @@ export type RootProps = {
 
 export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("xs"));
   const { gltfStore, settingsStore } = useStores();
   const { gltf, gltfs } = gltfStore;
   const {
@@ -106,7 +114,10 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const isEmpty = gltfs.length === 0 && !gltf;
 
-  useEffect(() => setIsSidebarOpen(!isEmpty), [isEmpty]);
+  useEffect(() => setIsSidebarOpen(!isEmpty && !isSmallScreen), [
+    isEmpty,
+    isSmallScreen,
+  ]);
 
   return (
     <div className={classes.root}>
