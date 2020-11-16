@@ -19,6 +19,7 @@ stages:
   - test
   - build
   - release
+  - release+source
   - deploy
 
 .npm_install: &npm_install
@@ -104,6 +105,35 @@ release:
     name: "$BUILD_NAME-$(date +'%Y%m%d')"
     paths:
       - $BUILD_DIR
+    expire_in: 1 week
+
+release+source:
+  tags:
+    - linux-docker
+  stage: release+source
+  only:
+    - master
+  dependencies:
+    - release
+  script:
+    - echo "Creating release+source..."
+  artifacts:
+    name: "$BUILD_NAME-$(date +'%Y%m%d')"
+    paths:
+      - build
+      - public
+      - scripts
+      - src
+      - .eslintignore
+      - .gitattributes
+      - .gitignore
+      - .prettierignore
+      - "*.json"
+      - "*.js"
+      - "*.md"
+    exclude:
+      - public/assets/**/*
+      - release.config.js
     expire_in: 1 week
 
 deploy_dev:
