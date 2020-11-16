@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { CircularProgress, useTheme } from "@material-ui/core";
+import { useTheme } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import {
   GltfContent,
@@ -15,10 +15,6 @@ import { LevelVariantSetWithIndices } from "../variants";
 import { LevelVariantSet } from "../components/LevelVariantSet";
 
 const useStyles = makeStyles(theme => ({
-  loading: {
-    paddingTop: theme.spacing(10),
-    textAlign: "center",
-  },
   content: {
     padding: theme.spacing(2, 3),
   },
@@ -27,11 +23,10 @@ const useStyles = makeStyles(theme => ({
 type View = "gltf-list" | "gltf-content" | "variant-set" | "none";
 
 export type GltfProps = {
-  isLoading?: boolean;
   isError?: boolean;
 };
 
-export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
+export const Gltf: React.FC<GltfProps> = observer(({ isError }) => {
   const classes = useStyles();
   const theme = useTheme();
   const { gltfStore } = useStores();
@@ -82,22 +77,6 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
         : "gltf-list",
     );
   }, [selectedGltf, levelVariantSet, gltfs]);
-
-  const Loading: React.FC = () => (
-    <div className={classes.loading}>
-      <Appear>
-        <CircularProgress />
-      </Appear>
-    </div>
-  );
-
-  if (isLoading) {
-    return (
-      <SidebarContainer>
-        <Loading />
-      </SidebarContainer>
-    );
-  }
 
   if (isError) {
     return <SidebarContainer></SidebarContainer>;
@@ -176,9 +155,7 @@ export const Gltf: React.FC<GltfProps> = observer(({ isLoading, isError }) => {
               variantSetManager={variantSetManager}
               onLevelVariantSetSelect={showLevelVariantSet}
             />
-          ) : (
-            <Loading />
-          )}
+          ) : null}
         </SidebarContainer>
       );
     case "variant-set":

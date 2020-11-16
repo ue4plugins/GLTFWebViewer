@@ -161,7 +161,7 @@ export const Root: React.FC<RootProps> = observer(({ isLoading, isError }) => {
         </div>
         {showSidebar && (
           <Sidebar open={isSidebarOpen}>
-            <Gltf isLoading={isLoading} isError={isError} />
+            <Gltf isError={isError} />
           </Sidebar>
         )}
       </main>
