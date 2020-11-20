@@ -236,12 +236,6 @@ export class PlayCanvasViewer implements TestableViewer {
       gltfScene.cameras.unshift(this._defaultCamera);
     }
 
-    // Cameras are only shown in UI if there are more than one
-    if (gltfScene.cameras.length > 1) {
-      const { width, height } = this._cameraPreviewSize;
-      await this._initCameraPreviews(gltfScene.cameras, width * 2, height * 2);
-    }
-
     if (gltfScene.hotspots.length > 0) {
       this._initHotspots(gltfScene.hotspots);
     }
@@ -496,6 +490,16 @@ export class PlayCanvasViewer implements TestableViewer {
     requestAnimationFrame(() =>
       gltfScene.animations.forEach(animation => animation.init()),
     );
+  }
+
+  public async initCameraPreviews() {
+    const cameras = this._activeGltfScene?.cameras ?? [];
+
+    // Cameras are only shown in UI if there are more than one
+    if (cameras.length > 1) {
+      const { width, height } = this._cameraPreviewSize;
+      await this._initCameraPreviews(cameras, width * 2, height * 2);
+    }
   }
 
   public setActiveAnimations(animationIds: number[]) {
