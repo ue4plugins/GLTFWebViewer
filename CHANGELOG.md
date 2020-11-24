@@ -1,3 +1,11 @@
+## [1.29.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.28.1...v1.29.0) (2020-11-24)
+
+
+### Features
+
+* add handler for processing KHR_lights_punctual extension ([8d84929](http://animech[secure]/clients/epic/gltf-web-viewer/commit/8d849290050bb2886b58bd83dd38f9d9f3eb1d86))
+* tweak intensity of imported lights to better match Unreal ([a1e9e85](http://animech[secure]/clients/epic/gltf-web-viewer/commit/a1e9e85ff595852a6e2cc6d214609d28abe7f3db))
+
 ### [1.28.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.28.0...v1.28.1) (2020-11-24)
 
 
