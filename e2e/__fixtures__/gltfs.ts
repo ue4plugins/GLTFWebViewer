@@ -32,4 +32,8 @@ export const gltfs: TestGltf[] = [
     name: "ZIS-101A Sport (1938)",
     multipleAngles: true,
   },
+  {
+    name: "Light intensity",
+    multipleAngles: true,
+  },
 ];
