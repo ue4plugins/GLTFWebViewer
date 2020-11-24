@@ -9,3 +9,4 @@ export * from "./CameraControl";
 export * from "./VariantSet";
 export * from "./LightMap";
 export * from "./SkySphere";
+export * from "./LightPunctual";
