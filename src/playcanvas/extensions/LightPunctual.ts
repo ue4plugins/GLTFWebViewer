@@ -65,7 +65,24 @@ export class LightPunctualExtensionParser implements ExtensionParser {
   }
 
   public postParse() {
-    // TODO: Implement
+    this._nodeLights.forEach(nodeLight => {
+      const { node, data } = nodeLight;
+
+      const component = node
+        .findComponents("light")
+        .find(c => c.entity.name === node.name && c.entity.parent === node); // The parser adds a child-entity that contains the component
+
+      if (component) {
+        // TODO: Correctly convert intensity to match lux (lm/m2) for directional lights,
+        // and candela (lm/sr) for point- and spot-lights.
+
+        // NOTE: For now we'll apply a "fudge factor" until we are able to corectly handle intensity
+        const intensityFactor = 1 / 5;
+        const intensity = (data.intensity ?? 1) * intensityFactor;
+
+        component.intensity = intensity;
+      }
+    });
   }
 
   private _nodePostParse(

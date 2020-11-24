@@ -60,6 +60,7 @@ declare namespace pc {
     addComponent(type: "script", data?: any): pc.ScriptComponent;
     addComponent(type: "model", data?: any): pc.ModelComponent;
     addComponent(type: "camera", data?: any): pc.CameraComponent;
+    findComponents(type: "light"): pc.LightComponent[];
     anim?: pc.AnimComponent;
   }
 
