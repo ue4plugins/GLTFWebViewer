@@ -2,7 +2,7 @@
   "private": true,
   "name": "@epic/gltf-web-viewer",
   "description": "glTF Web Viewer",
-  "version": "1.28.0",
+  "version": "1.28.1",
   "homepage": ".",
   "scripts": {
     "start": "react-app-rewired start",

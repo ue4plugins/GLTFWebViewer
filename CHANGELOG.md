@@ -1,3 +1,10 @@
+### [1.28.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.28.0...v1.28.1) (2020-11-24)
+
+
+### Bug Fixes
+
+* ensure that camera-previews are non-black and display backdrops and sky-spheres ([5953f67](http://animech[secure]/clients/epic/gltf-web-viewer/commit/5953f67810bd88ccdbe0fca70c38b58ffe0ae5ae))
+
 ## [1.28.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.27.0...v1.28.0) (2020-11-16)
 
 
