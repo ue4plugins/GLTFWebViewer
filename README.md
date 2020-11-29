@@ -1,6 +1,6 @@
-# Epic Games - glTF Web Viewer
+# GLTFWebViewer
 
-Web viewer app for the Unreal Engine glTF Exporter Plugin. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Web viewer app for the [Unreal Editor glTF Exporter Plugin](https://github.com/ue4plugins/GLTFExporterPlugin). This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Prerequisites
 
