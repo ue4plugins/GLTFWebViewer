@@ -1,6 +1,6 @@
 {
-  "short_name": "Epic glTF Viewer",
-  "name": "Epic glTF Viewer",
+  "short_name": "Unreal glTF Viewer",
+  "name": "Unreal glTF Viewer",
   "icons": [
     {
       "src": "android-chrome-192x192.png",

@@ -5,7 +5,7 @@ module.exports = {
     sidebar: true,
     cameras: true,
     dragAndDrop: true,
-    topbarTitle: "Epic Games glTF Viewer",
+    topbarTitle: "Unreal glTF Viewer",
     topbarLogoUrl: "viewer/logo.svg",
     theme: {
       palette: {
