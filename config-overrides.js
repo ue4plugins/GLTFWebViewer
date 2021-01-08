@@ -6,6 +6,7 @@ const ManifestPlugin = require("webpack-manifest-plugin");
 const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const WriteJsonPlugin = require("write-json-webpack-plugin");
+const { LicenseWebpackPlugin } = require("license-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const createConfig = require("./scripts/createConfig");
@@ -43,7 +44,7 @@ module.exports = {
           (loader.options.name = path.join(buildSubDir, loader.options.name)),
       );
 
-    // Don't extract license comments
+    // Don't extract license comments (will use separate license plugin)
     config.optimization.minimizer = [
       new TerserPlugin({
         terserOptions: {
@@ -72,6 +73,22 @@ module.exports = {
           path: "",
           filename: "index-release.json",
           pretty: true,
+        }),
+        new LicenseWebpackPlugin({
+          stats: {
+            warnings: false,
+            errors: false,
+          },
+          outputFilename: "viewer/static/js/licenses.txt",
+          additionalModules: Object.keys(
+            require("./package.json").dependencies,
+          ).map(dependency => {
+            return {
+              name: dependency,
+              directory: path.join(__dirname, "node_modules", dependency),
+            };
+          }),
+          perChunkOutput: false,
         }),
       ],
       output: {

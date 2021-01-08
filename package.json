@@ -100,6 +100,7 @@
     "jest-image-snapshot": "^3.0.1",
     "jest-puppeteer": "^4.4.0",
     "jest-webgl-canvas-mock": "^0.2.3",
+    "license-webpack-plugin": "^2.3.10",
     "lint-staged": "^10.1.1",
     "module-to-cdn": "^3.1.5",
     "prettier": "^1.19.1",
