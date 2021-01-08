@@ -42,8 +42,7 @@
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.1",
     "react-scripts": "3.4.0",
-    "resize-observer-polyfill": "^1.5.1",
-    "typescript": "^3.8.3"
+    "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",
@@ -112,6 +111,7 @@
     "react-test-renderer": "^16.13.1",
     "semantic-release": "^17.1.1",
     "ts-jest": "^24.3.0",
+    "typescript": "^3.8.3",
     "webpack": "4.41.5",
     "webpack-merge": "^4.2.2",
     "write-json-webpack-plugin": "^1.1.0",
