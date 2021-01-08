@@ -41,7 +41,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.1",
-    "react-scripts": "3.4.0",
     "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {
@@ -108,6 +107,7 @@
     "puppeteer": "^2.1.1",
     "react-app-rewired": "^2.1.5",
     "react-refresh": "^0.8.0",
+    "react-scripts": "3.4.0",
     "react-test-renderer": "^16.13.1",
     "semantic-release": "^17.1.1",
     "ts-jest": "^24.3.0",
