@@ -4,6 +4,7 @@ const { addReactRefresh } = require("customize-cra-react-refresh");
 const { GenerateSW } = require("workbox-webpack-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
 const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const WriteJsonPlugin = require("write-json-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
@@ -41,6 +42,18 @@ module.exports = {
         loader =>
           (loader.options.name = path.join(buildSubDir, loader.options.name)),
       );
+
+    // Don't extract license comments
+    config.optimization.minimizer = [
+      new TerserPlugin({
+        terserOptions: {
+          format: {
+            comments: false,
+          },
+        },
+        extractComments: false,
+      }),
+    ];
 
     return merge(config, {
       plugins: [
