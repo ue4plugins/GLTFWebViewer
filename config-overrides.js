@@ -112,6 +112,10 @@ module.exports = {
           }),
           renderLicenses: renderLicenses,
           perChunkOutput: false,
+          stats: {
+            warnings: true,
+            errors: true,
+          },
         }),
       ],
       output: {

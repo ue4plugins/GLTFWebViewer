@@ -22,6 +22,17 @@ function pad(source, length, padding) {
 module.exports = function(modules) {
   modules.sort((left, right) => (left.name < right.name ? -1 : 1));
 
+  const modulesMissingLicense = modules.filter(module => !module.licenseText);
+  if (modulesMissingLicense.length) {
+    // Necessary for the builds distributed by Epic Games, Inc.
+    // TODO: add env var to disable this strict requirement.
+    console.error(
+      "Build aborted because of missing license texts for one or more modules:",
+      modulesMissingLicense.map(module => module.name).join(", "),
+    );
+    process.exit(1);
+  }
+
   var renderedText =
     "This build incorporates components from the npm packages listed below:\n";
   renderedText =
