@@ -10,8 +10,33 @@ const { LicenseWebpackPlugin } = require("license-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const createConfig = require("./scripts/createConfig");
+const downloadLicenses = require("./scripts/downloadLicenses");
 
 const buildSubDir = "viewer";
+
+// Download license files for modules that haven't included them in their npm package
+downloadLicenses([
+  {
+    module: "draco3d",
+    url: "https://github.com/google/draco/raw/master/LICENSE",
+  },
+  {
+    module: "file-selector",
+    url: "https://github.com/react-dropzone/file-selector/raw/master/LICENSE",
+  },
+  {
+    module: "isarray",
+    url: "https://github.com/juliangruber/isarray/raw/master/LICENSE",
+  },
+  {
+    module: "is-in-browser",
+    url: "https://github.com/tuxsudo/is-in-browser/raw/master/LICENSE",
+  },
+  {
+    module: "popper.js",
+    url: "https://github.com/popperjs/popper-core/raw/master/LICENSE.md",
+  },
+]);
 
 module.exports = {
   jest: config => {
@@ -75,10 +100,6 @@ module.exports = {
           pretty: true,
         }),
         new LicenseWebpackPlugin({
-          stats: {
-            warnings: false,
-            errors: false,
-          },
           outputFilename: "viewer/static/js/licenses.txt",
           additionalModules: Object.keys(
             require("./package.json").dependencies,
