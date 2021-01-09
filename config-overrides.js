@@ -10,6 +10,7 @@ const { LicenseWebpackPlugin } = require("license-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const createConfig = require("./scripts/createConfig");
+const renderLicenses = require("./scripts/renderLicenses");
 const downloadLicenses = require("./scripts/downloadLicenses");
 
 const buildSubDir = "viewer";
@@ -109,6 +110,7 @@ module.exports = {
               directory: path.join(__dirname, "node_modules", dependency),
             };
           }),
+          renderLicenses: renderLicenses,
           perChunkOutput: false,
         }),
       ],
