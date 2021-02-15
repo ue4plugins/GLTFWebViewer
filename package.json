@@ -4,7 +4,11 @@
   "description": "glTF Web Viewer",
   "version": "1.29.0",
   "license": "MIT",
-  "homepage": ".",
+  "homepage": "https://github.com/ue4plugins/GLTFWebViewer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ue4plugins/GLTFWebViewer.git"
+  },
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
