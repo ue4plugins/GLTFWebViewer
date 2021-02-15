@@ -1,0 +1,1739 @@
+{
+	"asset": 
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 4.25 glTF Exporter 0.1"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"name": "Box_Brush_StaticMesh_Positions",
+			"bufferView": 0,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -5,
+				-1,
+				-0.299999982
+			],
+			"max": [ 5,
+				1,
+				0.199999988
+			]
+		},
+		{
+			"name": "Box_Brush_StaticMesh_Normals",
+			"bufferView": 1,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush_StaticMesh_Tangents",
+			"bufferView": 2,
+			"count": 24,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush_StaticMesh_UV0s",
+			"bufferView": 3,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush_StaticMesh_UV1s",
+			"bufferView": 4,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush_StaticMesh_Indices",
+			"bufferView": 5,
+			"count": 36,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_Positions",
+			"bufferView": 6,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -5,
+				-1,
+				-0.299999982
+			],
+			"max": [ 5,
+				1,
+				0.199999988
+			]
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_Normals",
+			"bufferView": 7,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_Tangents",
+			"bufferView": 8,
+			"count": 24,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_UV0s",
+			"bufferView": 9,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_UV1s",
+			"bufferView": 10,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_Indices",
+			"bufferView": 11,
+			"count": 36,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_Positions",
+			"bufferView": 12,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -0.200009301,
+				-1,
+				-5
+			],
+			"max": [ 0.300009221,
+				1,
+				4.00000048
+			]
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_Normals",
+			"bufferView": 13,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_Tangents",
+			"bufferView": 14,
+			"count": 24,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_UV0s",
+			"bufferView": 15,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_UV1s",
+			"bufferView": 16,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_Indices",
+			"bufferView": 17,
+			"count": 36,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_Positions",
+			"bufferView": 18,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -0.200009301,
+				-1,
+				-5
+			],
+			"max": [ 0.300009221,
+				1,
+				4.00000048
+			]
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_Normals",
+			"bufferView": 19,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_Tangents",
+			"bufferView": 20,
+			"count": 24,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_UV0s",
+			"bufferView": 21,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_UV1s",
+			"bufferView": 22,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_Indices",
+			"bufferView": 23,
+			"count": 36,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_Positions",
+			"bufferView": 24,
+			"count": 96,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -2.5999999,
+				-4,
+				-8
+			],
+			"max": [ 10.5,
+				-0.5,
+				1
+			]
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_Normals",
+			"bufferView": 25,
+			"count": 96,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_Tangents",
+			"bufferView": 26,
+			"count": 96,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_UV0s",
+			"bufferView": 27,
+			"count": 96,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_UV1s",
+			"bufferView": 28,
+			"count": 96,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_Indices",
+			"bufferView": 29,
+			"count": 162,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_Positions",
+			"bufferView": 30,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -5,
+				0.699999988,
+				-9
+			],
+			"max": [ 9,
+				1,
+				1
+			]
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_Normals",
+			"bufferView": 31,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_Tangents",
+			"bufferView": 32,
+			"count": 24,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_UV0s",
+			"bufferView": 33,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_UV1s",
+			"bufferView": 34,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_Indices",
+			"bufferView": 35,
+			"count": 36,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_Positions",
+			"bufferView": 36,
+			"count": 539,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -4.76837158e-07,
+				0,
+				0
+			],
+			"max": [ 4,
+				2,
+				3.99999928
+			]
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_Normals",
+			"bufferView": 37,
+			"count": 539,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_Tangents",
+			"bufferView": 38,
+			"count": 539,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_UV0s",
+			"bufferView": 39,
+			"count": 539,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_UV1s",
+			"bufferView": 40,
+			"count": 539,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_Indices",
+			"bufferView": 41,
+			"count": 1395,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_Positions",
+			"bufferView": 42,
+			"count": 817,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -3,
+				0,
+				-3
+			],
+			"max": [ 3,
+				3.5,
+				3
+			]
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_Normals",
+			"bufferView": 43,
+			"count": 817,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_Tangents",
+			"bufferView": 44,
+			"count": 817,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_UV0s",
+			"bufferView": 45,
+			"count": 817,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_UV1s",
+			"bufferView": 46,
+			"count": 817,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_Indices",
+			"bufferView": 47,
+			"count": 1743,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_Positions",
+			"bufferView": 48,
+			"count": 48,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -0.25000003,
+				-1,
+				-0.25000003
+			],
+			"max": [ 0.25,
+				3.5,
+				0.25
+			]
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_Normals",
+			"bufferView": 49,
+			"count": 48,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_Tangents",
+			"bufferView": 50,
+			"count": 48,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_UV0s",
+			"bufferView": 51,
+			"count": 48,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_UV1s",
+			"bufferView": 52,
+			"count": 48,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_Indices",
+			"bufferView": 53,
+			"count": 84,
+			"type": "SCALAR",
+			"componentType": 5123
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SimpleBaked.bin",
+			"byteLength": 97852
+		}
+	],
+	"bufferViews": [
+		{
+			"name": "Box_Brush_StaticMesh_Positions",
+			"buffer": 0,
+			"byteLength": 288,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush_StaticMesh_Normals",
+			"buffer": 0,
+			"byteLength": 288,
+			"byteOffset": 288,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush_StaticMesh_Tangents",
+			"buffer": 0,
+			"byteLength": 384,
+			"byteOffset": 576,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush_StaticMesh_UV0s",
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 960,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush_StaticMesh_UV1s",
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 1152,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush_StaticMesh_Indices",
+			"buffer": 0,
+			"byteLength": 72,
+			"byteOffset": 1344,
+			"target": 34963
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_Positions",
+			"buffer": 0,
+			"byteLength": 288,
+			"byteOffset": 1416,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_Normals",
+			"buffer": 0,
+			"byteLength": 288,
+			"byteOffset": 1704,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_Tangents",
+			"buffer": 0,
+			"byteLength": 384,
+			"byteOffset": 1992,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_UV0s",
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 2376,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_UV1s",
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 2568,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_Indices",
+			"buffer": 0,
+			"byteLength": 72,
+			"byteOffset": 2760,
+			"target": 34963
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_Positions",
+			"buffer": 0,
+			"byteLength": 288,
+			"byteOffset": 2832,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_Normals",
+			"buffer": 0,
+			"byteLength": 288,
+			"byteOffset": 3120,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_Tangents",
+			"buffer": 0,
+			"byteLength": 384,
+			"byteOffset": 3408,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_UV0s",
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 3792,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_UV1s",
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 3984,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_Indices",
+			"buffer": 0,
+			"byteLength": 72,
+			"byteOffset": 4176,
+			"target": 34963
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_Positions",
+			"buffer": 0,
+			"byteLength": 288,
+			"byteOffset": 4248,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_Normals",
+			"buffer": 0,
+			"byteLength": 288,
+			"byteOffset": 4536,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_Tangents",
+			"buffer": 0,
+			"byteLength": 384,
+			"byteOffset": 4824,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_UV0s",
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 5208,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_UV1s",
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 5400,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_Indices",
+			"buffer": 0,
+			"byteLength": 72,
+			"byteOffset": 5592,
+			"target": 34963
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_Positions",
+			"buffer": 0,
+			"byteLength": 1152,
+			"byteOffset": 5664,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_Normals",
+			"buffer": 0,
+			"byteLength": 1152,
+			"byteOffset": 6816,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_Tangents",
+			"buffer": 0,
+			"byteLength": 1536,
+			"byteOffset": 7968,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_UV0s",
+			"buffer": 0,
+			"byteLength": 768,
+			"byteOffset": 9504,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_UV1s",
+			"buffer": 0,
+			"byteLength": 768,
+			"byteOffset": 10272,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_Indices",
+			"buffer": 0,
+			"byteLength": 324,
+			"byteOffset": 11040,
+			"target": 34963
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_Positions",
+			"buffer": 0,
+			"byteLength": 288,
+			"byteOffset": 11364,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_Normals",
+			"buffer": 0,
+			"byteLength": 288,
+			"byteOffset": 11652,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_Tangents",
+			"buffer": 0,
+			"byteLength": 384,
+			"byteOffset": 11940,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_UV0s",
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 12324,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_UV1s",
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 12516,
+			"target": 34962
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_Indices",
+			"buffer": 0,
+			"byteLength": 72,
+			"byteOffset": 12708,
+			"target": 34963
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_Positions",
+			"buffer": 0,
+			"byteLength": 6468,
+			"byteOffset": 12780,
+			"target": 34962
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_Normals",
+			"buffer": 0,
+			"byteLength": 6468,
+			"byteOffset": 19248,
+			"target": 34962
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_Tangents",
+			"buffer": 0,
+			"byteLength": 8624,
+			"byteOffset": 25716,
+			"target": 34962
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_UV0s",
+			"buffer": 0,
+			"byteLength": 4312,
+			"byteOffset": 34340,
+			"target": 34962
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_UV1s",
+			"buffer": 0,
+			"byteLength": 4312,
+			"byteOffset": 38652,
+			"target": 34962
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_Indices",
+			"buffer": 0,
+			"byteLength": 2790,
+			"byteOffset": 42964,
+			"target": 34963
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_Positions",
+			"buffer": 0,
+			"byteLength": 9804,
+			"byteOffset": 45756,
+			"target": 34962
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_Normals",
+			"buffer": 0,
+			"byteLength": 9804,
+			"byteOffset": 55560,
+			"target": 34962
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_Tangents",
+			"buffer": 0,
+			"byteLength": 13072,
+			"byteOffset": 65364,
+			"target": 34962
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_UV0s",
+			"buffer": 0,
+			"byteLength": 6536,
+			"byteOffset": 78436,
+			"target": 34962
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_UV1s",
+			"buffer": 0,
+			"byteLength": 6536,
+			"byteOffset": 84972,
+			"target": 34962
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_Indices",
+			"buffer": 0,
+			"byteLength": 3486,
+			"byteOffset": 91508,
+			"target": 34963
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_Positions",
+			"buffer": 0,
+			"byteLength": 576,
+			"byteOffset": 94996,
+			"target": 34962
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_Normals",
+			"buffer": 0,
+			"byteLength": 576,
+			"byteOffset": 95572,
+			"target": 34962
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_Tangents",
+			"buffer": 0,
+			"byteLength": 768,
+			"byteOffset": 96148,
+			"target": 34962
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_UV0s",
+			"buffer": 0,
+			"byteLength": 384,
+			"byteOffset": 96916,
+			"target": 34962
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_UV1s",
+			"buffer": 0,
+			"byteLength": 384,
+			"byteOffset": 97300,
+			"target": 34962
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_Indices",
+			"buffer": 0,
+			"byteLength": 168,
+			"byteOffset": 97684,
+			"target": 34963
+		}
+	],
+	"images": [
+		{
+			"uri": "WorldGridMaterial_BaseColor.png"
+		},
+		{
+			"uri": "WorldGridMaterial_MetallicRoughness.png"
+		},
+		{
+			"uri": "WorldGridMaterial_Normal.png"
+		},
+		{
+			"uri": "HQ_Lightmap1_3.png"
+		},
+		{
+			"uri": "HQ_Lightmap1_2.png"
+		},
+		{
+			"uri": "HQ_Lightmap1_4.png"
+		},
+		{
+			"uri": "HQ_Lightmap0_1.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "WorldGridMaterial",
+			"pbrMetallicRoughness": 
+			{
+				"baseColorTexture": 
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture": 
+				{
+					"index": 1
+				}
+			},
+			"normalTexture": 
+			{
+				"index": 2
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "Box_Brush_StaticMesh",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 0,
+						"NORMAL": 1,
+						"TANGENT": 2,
+						"TEXCOORD_0": 3,
+						"TEXCOORD_1": 4
+					},
+					"indices": 5,
+					"material": 0
+				}
+			]
+		},
+		{
+			"name": "Box_Brush2_StaticMesh",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 6,
+						"NORMAL": 7,
+						"TANGENT": 8,
+						"TEXCOORD_0": 9,
+						"TEXCOORD_1": 10
+					},
+					"indices": 11,
+					"material": 0
+				}
+			]
+		},
+		{
+			"name": "Box_Brush3_StaticMesh",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 12,
+						"NORMAL": 13,
+						"TANGENT": 14,
+						"TEXCOORD_0": 15,
+						"TEXCOORD_1": 16
+					},
+					"indices": 17,
+					"material": 0
+				}
+			]
+		},
+		{
+			"name": "Box_Brush4_StaticMesh",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 18,
+						"NORMAL": 19,
+						"TANGENT": 20,
+						"TEXCOORD_0": 21,
+						"TEXCOORD_1": 22
+					},
+					"indices": 23,
+					"material": 0
+				}
+			]
+		},
+		{
+			"name": "Box_Brush5_StaticMesh",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 24,
+						"NORMAL": 25,
+						"TANGENT": 26,
+						"TEXCOORD_0": 27,
+						"TEXCOORD_1": 28
+					},
+					"indices": 29,
+					"material": 0
+				}
+			]
+		},
+		{
+			"name": "Box_Brush6_StaticMesh",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 30,
+						"NORMAL": 31,
+						"TANGENT": 32,
+						"TEXCOORD_0": 33,
+						"TEXCOORD_1": 34
+					},
+					"indices": 35,
+					"material": 0
+				}
+			]
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 36,
+						"NORMAL": 37,
+						"TANGENT": 38,
+						"TEXCOORD_0": 39,
+						"TEXCOORD_1": 40
+					},
+					"indices": 41,
+					"material": 0
+				}
+			]
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 42,
+						"NORMAL": 43,
+						"TANGENT": 44,
+						"TEXCOORD_0": 45,
+						"TEXCOORD_1": 46
+					},
+					"indices": 47,
+					"material": 0
+				}
+			]
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 48,
+						"NORMAL": 49,
+						"TANGENT": 50,
+						"TEXCOORD_0": 51,
+						"TEXCOORD_1": 52
+					},
+					"indices": 53,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"name": "Brush_1_BrushComponent0",
+			"translation": 
+			[ -7.79999971,
+				1.19999993,
+				3.69999981
+			]
+		},
+		{
+			"name": "LightSource_LightComponent0",
+			"translation": 
+			[ 1,
+				5.69999981,
+				-2
+			],
+			"rotation": 
+			[ -0.31963855,
+				-0.160196468,
+				-0.361482978,
+				0.861102939
+			],
+			"scale": 
+			[ 2.5,
+				2.5,
+				2.5
+			],
+			"children": [ 2, 3 ]
+		},
+		{
+			"name": "LightSource_ArrowComponent0"
+		},
+		{
+			"name": "LightSource_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PlayerStart_CollisionCapsule",
+			"translation": 
+			[ 0,
+				1.1200068,
+				0
+			],
+			"children": [ 5, 6, 7 ]
+		},
+		{
+			"name": "PlayerStart_Sprite",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PlayerStart_Sprite2"
+		},
+		{
+			"name": "PlayerStart_Arrow"
+		},
+		{
+			"name": "InstancedFoliageActor_0_RootComponent0"
+		},
+		{
+			"name": "AtmosphericFog_1_AtmosphericFogComponent0",
+			"translation": 
+			[ 0,
+				6,
+				0
+			],
+			"children": [ 10, 11 ]
+		},
+		{
+			"name": "AtmosphericFog_1_Sprite",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "AtmosphericFog_1_ArrowComponent0"
+		},
+		{
+			"name": "SkySphere_Base"
+		},
+		{
+			"name": "SkyLight_1_SkyLightComponent0",
+			"translation": 
+			[ 0.207743526,
+				5.04748201,
+				-0.309952676
+			],
+			"children": [ 14, 15 ]
+		},
+		{
+			"name": "SkyLight_1_Sprite"
+		},
+		{
+			"name": "SkyLight_1_BillboardComponent_0"
+		},
+		{
+			"name": "SphereReflectionCapture_1_NewReflectionComponent",
+			"translation": 
+			[ -0.109076537,
+				2.6686132,
+				-0.0932865888
+			],
+			"children": [ 17, 18, 19, 20 ]
+		},
+		{
+			"name": "SphereReflectionCapture_1_Sprite",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "SphereReflectionCapture_1_CaptureOffset",
+			"scale": 
+			[ 0.200000003,
+				0.200000003,
+				0.200000003
+			]
+		},
+		{
+			"name": "SphereReflectionCapture_1_DrawRadius0"
+		},
+		{
+			"name": "SphereReflectionCapture_1_DrawRadius1"
+		},
+		{
+			"name": "RectLight_1_LightComponent0",
+			"translation": 
+			[ -4.0999999,
+				0.799999952,
+				-4
+			],
+			"rotation": 
+			[ -0,
+				-0.382683963,
+				0,
+				0.923879325
+			],
+			"children": [ 22 ]
+		},
+		{
+			"name": "RectLight_1_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "Box_Brush_StaticMesh_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				1.19999993,
+				-4.69999981
+			],
+			"mesh": 0,
+			"extensions":
+			{
+				"EPIC_lightmap_textures":
+				{
+					"lightmap": 0
+				}
+			}
+		},
+		{
+			"name": "Box_Brush2_StaticMesh_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				1.19999993,
+				4.79999971
+			],
+			"mesh": 1,
+			"extensions":
+			{
+				"EPIC_lightmap_textures":
+				{
+					"lightmap": 1
+				}
+			}
+		},
+		{
+			"name": "Box_Brush3_StaticMesh_StaticMeshComponent0",
+			"translation": 
+			[ -4.79999971,
+				1.19999993,
+				0.5
+			],
+			"mesh": 2,
+			"extensions":
+			{
+				"EPIC_lightmap_textures":
+				{
+					"lightmap": 2
+				}
+			}
+		},
+		{
+			"name": "Box_Brush4_StaticMesh_StaticMeshComponent0",
+			"translation": 
+			[ 4.69999981,
+				1.19999993,
+				0.5
+			],
+			"mesh": 3,
+			"extensions":
+			{
+				"EPIC_lightmap_textures":
+				{
+					"lightmap": 3
+				}
+			}
+		},
+		{
+			"name": "Box_Brush5_StaticMesh_StaticMeshComponent0",
+			"translation": 
+			[ -6,
+				5.69999981,
+				3.5
+			],
+			"mesh": 4,
+			"extensions":
+			{
+				"EPIC_lightmap_textures":
+				{
+					"lightmap": 4
+				}
+			}
+		},
+		{
+			"name": "Box_Brush6_StaticMesh_StaticMeshComponent0",
+			"translation": 
+			[ -4,
+				-0.799999952,
+				4
+			],
+			"mesh": 5,
+			"extensions":
+			{
+				"EPIC_lightmap_textures":
+				{
+					"lightmap": 5
+				}
+			}
+		},
+		{
+			"name": "Curved_Stair_Brush_StaticMesh_StaticMeshComponent0",
+			"translation": 
+			[ -4.5,
+				0.199999988,
+				0.5
+			],
+			"mesh": 6,
+			"extensions":
+			{
+				"EPIC_lightmap_textures":
+				{
+					"lightmap": 6
+				}
+			}
+		},
+		{
+			"name": "Spiral_Stair_Brush_StaticMesh_StaticMeshComponent0",
+			"translation": 
+			[ -5,
+				1.69999993,
+				1.5
+			],
+			"mesh": 7,
+			"extensions":
+			{
+				"EPIC_lightmap_textures":
+				{
+					"lightmap": 7
+				}
+			}
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh_StaticMeshComponent0",
+			"translation": 
+			[ -8.19999981,
+				1.19999993,
+				4.0999999
+			],
+			"mesh": 8,
+			"extensions":
+			{
+				"EPIC_lightmap_textures":
+				{
+					"lightmap": 8
+				}
+			}
+		},
+		{
+			"name": "Cylinder_Brush_StaticMesh2_StaticMeshComponent0",
+			"translation": 
+			[ -8.19999981,
+				1.19999993,
+				-4.0999999
+			],
+			"mesh": 8,
+			"extensions":
+			{
+				"EPIC_lightmap_textures":
+				{
+					"lightmap": 9
+				}
+			}
+		},
+		{
+			"name": "RectLight2_LightComponent0",
+			"translation": 
+			[ 3.89999986,
+				0.799999952,
+				4
+			],
+			"rotation": 
+			[ 0,
+				0.923879087,
+				-0,
+				0.38268441
+			],
+			"children": [ 34 ]
+		},
+		{
+			"name": "RectLight2_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "DefaultPhysicsVolume_0_BrushComponent0"
+		}
+	],
+	"samplers": [
+		{
+			"name": "WorldGridMaterial_BaseColor",
+			"minFilter": 9987,
+			"magFilter": 9729
+		},
+		{
+			"name": "WorldGridMaterial_MetallicRoughness",
+			"minFilter": 9987,
+			"magFilter": 9729
+		},
+		{
+			"name": "WorldGridMaterial_Normal",
+			"minFilter": 9987,
+			"magFilter": 9729
+		},
+		{
+			"name": "HQ_Lightmap1_3",
+			"minFilter": 9987,
+			"magFilter": 9729
+		},
+		{
+			"name": "HQ_Lightmap1_2",
+			"minFilter": 9987,
+			"magFilter": 9729
+		},
+		{
+			"name": "HQ_Lightmap1_4",
+			"minFilter": 9987,
+			"magFilter": 9729
+		},
+		{
+			"name": "HQ_Lightmap0_1",
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"name": "SimpleBaked",
+			"nodes": [ 0, 1, 4, 8, 9, 12, 13, 16, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 35 ]
+		}
+	],
+	"textures": [
+		{
+			"name": "WorldGridMaterial_BaseColor",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "WorldGridMaterial_MetallicRoughness",
+			"sampler": 1,
+			"source": 1
+		},
+		{
+			"name": "WorldGridMaterial_Normal",
+			"sampler": 2,
+			"source": 2
+		},
+		{
+			"name": "HQ_Lightmap1_3",
+			"sampler": 3,
+			"source": 3
+		},
+		{
+			"name": "HQ_Lightmap1_2",
+			"sampler": 4,
+			"source": 4
+		},
+		{
+			"name": "HQ_Lightmap1_4",
+			"sampler": 5,
+			"source": 5
+		},
+		{
+			"name": "HQ_Lightmap0_1",
+			"sampler": 6,
+			"source": 6
+		}
+	],
+	"extensions":
+	{
+		"EPIC_lightmap_textures":
+		{
+			"lightmaps": [
+				{
+					"name": "Box_Brush_StaticMesh_StaticMeshComponent0",
+					"texture": 
+					{
+						"index": 3,
+						"texCoord": 1
+					},
+					"lightmapScale": 
+					[ 0.465454638,
+						0.360524952,
+						1.16352212,
+						6.25222874
+					],
+					"lightmapAdd": 
+					[ 0.511837959,
+						0.968727827,
+						0.522957325,
+						-4.60263348
+					],
+					"coordinateScaleBias": 
+					[ 0.388671875,
+						0.77734375,
+						0.391601563,
+						0.001953125
+					]
+				},
+				{
+					"name": "Box_Brush2_StaticMesh_StaticMeshComponent0",
+					"texture": 
+					{
+						"index": 4,
+						"texCoord": 1
+					},
+					"lightmapScale": 
+					[ 0.511885405,
+						0.427234292,
+						1.59652448,
+						7.73407412
+					],
+					"lightmapAdd": 
+					[ 0.464981556,
+						0.96854341,
+						0.336333692,
+						-5.46321154
+					],
+					"coordinateScaleBias": 
+					[ 0.388671875,
+						0.77734375,
+						0.489257813,
+						0.001953125
+					]
+				},
+				{
+					"name": "Box_Brush3_StaticMesh_StaticMeshComponent0",
+					"texture": 
+					{
+						"index": 5,
+						"texCoord": 1
+					},
+					"lightmapScale": 
+					[ 0.433648348,
+						0.320642948,
+						1.19935298,
+						6.56576443
+					],
+					"lightmapAdd": 
+					[ 0.554986537,
+						0.968679667,
+						0.6618523,
+						-4.27166224
+					],
+					"coordinateScaleBias": 
+					[ 0.388671875,
+						0.77734375,
+						0.0009765625,
+						0.001953125
+					]
+				},
+				{
+					"name": "Box_Brush4_StaticMesh_StaticMeshComponent0",
+					"texture": 
+					{
+						"index": 6,
+						"texCoord": 1
+					},
+					"lightmapScale": 
+					[ 0.335642338,
+						0.27788949,
+						0.992309451,
+						5.49866438
+					],
+					"lightmapAdd": 
+					[ 0.645924211,
+						0.968714416,
+						0.635994852,
+						-3.56623721
+					],
+					"coordinateScaleBias": 
+					[ 0.194335938,
+						0.388671875,
+						0.727050781,
+						0.512695313
+					]
+				},
+				{
+					"name": "Box_Brush5_StaticMesh_StaticMeshComponent0",
+					"texture": 
+					{
+						"index": 6,
+						"texCoord": 1
+					},
+					"lightmapScale": 
+					[ 0.481277049,
+						0.388394535,
+						1.2362783,
+						5.65867567
+					],
+					"lightmapAdd": 
+					[ 0.499927133,
+						0.96855092,
+						0.449309051,
+						-5.13962984
+					],
+					"coordinateScaleBias": 
+					[ 0.254882813,
+						0.509765625,
+						0.727050781,
+						0.0009765625
+					]
+				},
+				{
+					"name": "Box_Brush6_StaticMesh_StaticMeshComponent0",
+					"texture": 
+					{
+						"index": 6,
+						"texCoord": 1
+					},
+					"lightmapScale": 
+					[ 0.524916708,
+						0.40898031,
+						1.73528695,
+						9.89446449
+					],
+					"lightmapAdd": 
+					[ 0.475083262,
+						0.968550801,
+						0.374520779,
+						-5.75
+					],
+					"coordinateScaleBias": 
+					[ 0.362304688,
+						0.724609375,
+						0.00048828125,
+						0.0009765625
+					]
+				},
+				{
+					"name": "Curved_Stair_Brush_StaticMesh_StaticMeshComponent0",
+					"texture": 
+					{
+						"index": 3,
+						"texCoord": 1
+					},
+					"lightmapScale": 
+					[ 0.534519792,
+						0.425969899,
+						1.80511093,
+						5.30702353
+					],
+					"lightmapAdd": 
+					[ 0.465480238,
+						0.968836308,
+						0.340185195,
+						-5.74999237
+					],
+					"coordinateScaleBias": 
+					[ 0.388671875,
+						0.77734375,
+						0.0009765625,
+						0.001953125
+					]
+				},
+				{
+					"name": "Spiral_Stair_Brush_StaticMesh_StaticMeshComponent0",
+					"texture": 
+					{
+						"index": 6,
+						"texCoord": 1
+					},
+					"lightmapScale": 
+					[ 0.471703351,
+						0.367846191,
+						1.65979683,
+						5.90647697
+					],
+					"lightmapAdd": 
+					[ 0.521336854,
+						0.968126059,
+						0.474919021,
+						-5.19592237
+					],
+					"coordinateScaleBias": 
+					[ 0.362304688,
+						0.724609375,
+						0.363769531,
+						0.0009765625
+					]
+				},
+				{
+					"name": "Cylinder_Brush_StaticMesh_StaticMeshComponent0",
+					"texture": 
+					{
+						"index": 6,
+						"texCoord": 1
+					},
+					"lightmapScale": 
+					[ 0.296644092,
+						0.235166728,
+						0.767335832,
+						3.91609573
+					],
+					"lightmapAdd": 
+					[ 0.692013204,
+						0.967342317,
+						0.75377959,
+						-3.34104609
+					],
+					"coordinateScaleBias": 
+					[ 0.0966796875,
+						0.193359375,
+						0.00048828125,
+						0.727539063
+					]
+				},
+				{
+					"name": "Cylinder_Brush_StaticMesh2_StaticMeshComponent0",
+					"texture": 
+					{
+						"index": 6,
+						"texCoord": 1
+					},
+					"lightmapScale": 
+					[ 0.204435468,
+						0.155686915,
+						0.546531677,
+						3.97691917
+					],
+					"lightmapAdd": 
+					[ 0.77734071,
+						0.968650162,
+						0.940353394,
+						-3.37224054
+					],
+					"coordinateScaleBias": 
+					[ 0.0966796875,
+						0.193359375,
+						0.0981445313,
+						0.727539063
+					]
+				}
+			]
+		}
+	},
+	"extensionsUsed": [
+		"EPIC_lightmap_textures"
+	]
+}

@@ -1,0 +1,411 @@
+{
+  "asset": {
+    "generator": "VKTS glTF 2.0 exporter",
+    "version": "2.0"
+  },
+  "extensionsUsed": [
+    "EPIC_variant_sets",
+    "EPIC_animation_hotspots",
+    "EPIC_hdri_backdrops",
+    "EPIC_reflection_probes",
+    "EPIC_lightmap_textures",
+    "EPIC_camera_controls",
+    "EPIC_texture_hdr_encoding"
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "byteOffset": 0,
+      "componentType": 5123,
+      "count": 36,
+      "max": [
+        35
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 36,
+      "max": [
+        1.0,
+        1.0,
+        1.000001
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 36,
+      "max": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 36,
+      "max": [
+        1.0,
+        -0.0,
+        -0.0,
+        1.0
+      ],
+      "min": [
+        0.0,
+        -0.0,
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 4,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 36,
+      "max": [
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC2"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 72,
+      "byteOffset": 0,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 432,
+      "byteOffset": 72,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 432,
+      "byteOffset": 504,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 576,
+      "byteOffset": 936,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 288,
+      "byteOffset": 1512,
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 1800,
+      "uri": "Cube.bin"
+    }
+  ],
+  "cameras": [
+    {
+      "perspective": {
+        "aspectRatio": 1.5,
+        "yfov": 0.6605925559997559,
+        "zfar": 10000.0,
+        "znear": 1.0
+      },
+      "type": "perspective",
+      "extensions": {
+        "EPIC_camera_controls": {
+          "mode": "orbital",
+          "target": 0,
+          "maxDistance": 0,
+          "minDistance": 0,
+          "maxPitch": 0,
+          "minPitch": 0,
+          "maxYaw": 360,
+          "minYaw": 0,
+          "dollySensitivity": 0.5,
+          "rotationSensitivity": 0.3,
+          "rotationInertia": 0.07,
+          "dollyDuration": 0.2
+        }
+      }
+    }
+  ],
+  "images": [
+    {
+      "uri": "Cube_BaseColor.png"
+    },
+    {
+      "uri": "Cube_MetallicRoughness.png"
+    }
+  ],
+  "materials": [
+    {
+      "name": "Cube",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Cube",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 2,
+            "POSITION": 1,
+            "TANGENT": 3,
+            "TEXCOORD_0": 4
+          },
+          "indices": 0,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Root",
+      "children": [
+        1,
+        2
+      ]
+    },
+    {
+      "mesh": 0,
+      "name": "Cube",
+      "extensions": {
+        "EPIC_animation_hotspots": {
+          "hotspot": 0
+        },
+        "EPIC_hdri_backdrops": {
+          "backdrop": 0
+        },
+        "EPIC_reflection_probes": {
+          "reflection": 0
+        },
+        "EPIC_lightmap_textures": {
+          "lightmap": 0
+        }
+      }
+    },
+    {
+      "matrix": [
+        -0.7289686799049377,
+        0.0,
+        -0.6845470666885376,
+        0.0,
+        -0.4252049028873444,
+        0.7836934328079224,
+        0.4527972936630249,
+        0.0,
+        0.5364750623703003,
+        0.6211478114128113,
+        -0.571287989616394,
+        0.0,
+        400.1130065917969,
+        463.2640075683594,
+        -431.0780334472656,
+        1.0
+      ],
+      "camera": 0
+    }
+  ],
+  "samplers": [
+    {}
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ],
+      "extensions": {
+        "EPIC_variant_sets": {
+          "levelVariantSets": [
+            0
+          ]
+        }
+      }
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "extensions": {
+        "EPIC_texture_hdr_encoding": {
+          "encoding": "RGBM"
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "extensions": {
+        "EPIC_texture_hdr_encoding": {
+          "encoding": "RGBM"
+        }
+      }
+    }
+  ],
+  "extensions": {
+    "EPIC_variant_sets": {
+      "levelVariantSets": [
+        {
+          "name": "Variant sets",
+          "variantSets": [
+            {
+              "name": "Cube visibility",
+              "default": 0,
+              "variants": [
+                {
+                  "name": "Visible",
+                  "thumbnail": 0,
+                  "nodes": [
+                    {
+                      "node": 0,
+                      "properties": {
+                        "visible": true
+                      }
+                    }
+                  ]
+                },
+                {
+                  "name": "Hidden",
+                  "thumbnail": 0,
+                  "nodes": [
+                    {
+                      "node": 0,
+                      "properties": {
+                        "visible": false
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "EPIC_animation_hotspots": {
+      "hotspots": [
+        {
+          "animation": 0,
+          "image": 0
+        }
+      ]
+    },
+    "EPIC_hdri_backdrops": {
+      "backdrops": [
+        {
+          "mesh": 0,
+          "cubemap": [
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "intensity": 1.0,
+          "size": 150.0,
+          "projectionCenter": [
+            0.0,
+            0.0,
+            290.0
+          ],
+          "lightingDistanceFactor": 0.5,
+          "useCameraProjection": false
+        }
+      ]
+    },
+    "EPIC_reflection_probes": {
+      "reflections": [
+        {
+          "type": "box",
+          "cubemap": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "size": [
+            100.0,
+            100.0,
+            50.0
+          ]
+        }
+      ]
+    },
+    "EPIC_lightmap_textures": {
+      "lightmaps": [
+        {
+          "texture": {
+            "index": 3,
+            "texCoord": 1
+          },
+          "valueScale": [
+            0.465454638,
+            0.360524952,
+            1.16352212,
+            6.25222874
+          ],
+          "valueOffset": [
+            0.511837959,
+            0.968727827,
+            0.522957325,
+            -4.60263348
+          ],
+          "coordinateScale": [
+            0.388671875,
+            0.77734375
+          ],
+          "coordinateOffset": [
+            0.391601563,
+            0.001953125
+          ]
+        }
+      ]
+    }
+  }
+}

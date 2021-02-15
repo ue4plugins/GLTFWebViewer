@@ -1,0 +1,551 @@
+{
+  "accessors": [
+    {
+      "bufferView": 0,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 1122,
+      "max": [0.974881411, 1.0, 0.974881411],
+      "min": [-0.974881411, -4.72741429e-17, -0.974881411],
+      "name": "EnviroDome_Positions",
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 1122,
+      "name": "EnviroDome_Normals",
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 1122,
+      "name": "EnviroDome_Tangents",
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 1122,
+      "name": "EnviroDome_UV0s",
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 4,
+      "byteOffset": 0,
+      "componentType": 5123,
+      "count": 6480,
+      "name": "EnviroDome_Indices",
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 5,
+      "byteOffset": 0,
+      "componentType": 5123,
+      "count": 18360,
+      "max": [6509.0],
+      "min": [0.0],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 6,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 6510,
+      "max": [2.6307950019836426, 9.506563186645508, 2.852458953857422],
+      "min": [-3.324300527572632, -0.0014147758483886719, -1.7042126655578613],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 7,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 6510,
+      "max": [1.0, 1.0, 1.0],
+      "min": [-1.0, -1.0, -1.0],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 8,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 6510,
+      "max": [0.9990595579147339, 0.9990596017451026],
+      "min": [0.0009403982548974454, 0.003113090991973877],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 9,
+      "byteOffset": 0,
+      "componentType": 5123,
+      "count": 41838,
+      "max": [14667.0],
+      "min": [0.0],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 10,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 14668,
+      "max": [1.8916611671447754, 12.645012855529785, 1.2003434896469116],
+      "min": [-1.8916611671447754, 9.395228385925293, -1.200343370437622],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 11,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 14668,
+      "max": [1.0, 1.0, 1.0],
+      "min": [-1.0, -1.0, -1.0],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 12,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 14668,
+      "max": [0.9987892508506775, 0.9987891529453918],
+      "min": [0.0012108470546081662, 0.008463442325592041],
+      "type": "VEC2"
+    }
+  ],
+  "asset": {
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 13464,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 13464,
+      "byteOffset": 13464,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 17952,
+      "byteOffset": 26928,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 8976,
+      "byteOffset": 44880,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 12960,
+      "byteOffset": 53856,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 36720,
+      "byteOffset": 66816,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 78120,
+      "byteOffset": 103536,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 78120,
+      "byteOffset": 181656,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 52080,
+      "byteOffset": 259776,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 83676,
+      "byteOffset": 311856,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 176016,
+      "byteOffset": 395532,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 176016,
+      "byteOffset": 571548,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 117344,
+      "byteOffset": 747564,
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 864908,
+      "uri": "AntiqueCameraWithBackdrop.bin"
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/png",
+      "uri": "WorldGridMaterial_BaseColor.png"
+    },
+    {
+      "mimeType": "image/png",
+      "uri": "WorldGridMaterial_MetallicRoughness.png"
+    },
+    {
+      "mimeType": "image/png",
+      "uri": "WorldGridMaterial_Normal.png"
+    },
+    {
+      "mimeType": "image/png",
+      "uri": "approaching_storm_4k_PosX.png"
+    },
+    {
+      "mimeType": "image/png",
+      "uri": "approaching_storm_4k_NegX.png"
+    },
+    {
+      "mimeType": "image/png",
+      "uri": "approaching_storm_4k_PosY.png"
+    },
+    {
+      "mimeType": "image/png",
+      "uri": "approaching_storm_4k_NegY.png"
+    },
+    {
+      "mimeType": "image/png",
+      "uri": "approaching_storm_4k_PosZ.png"
+    },
+    {
+      "mimeType": "image/png",
+      "uri": "approaching_storm_4k_NegZ.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "camera_camera_Normal",
+      "uri": "AntiqueCameraWithBackdrop_image_9.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "camera_camera_BaseColor",
+      "uri": "AntiqueCameraWithBackdrop_image_10.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "camera_tripod_BaseColor",
+      "uri": "AntiqueCameraWithBackdrop_image_11.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "camera_tripod_Normal",
+      "uri": "AntiqueCameraWithBackdrop_image_12.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "camera_camera_Roughness",
+      "uri": "AntiqueCameraWithBackdrop_image_13.png"
+    },
+    {
+      "mimeType": "image/png",
+      "name": "camera_tripod_Roughness",
+      "uri": "AntiqueCameraWithBackdrop_image_14.png"
+    }
+  ],
+  "materials": [
+    {
+      "name": "WorldGridMaterial",
+      "normalTexture": {
+        "index": 2,
+        "scale": 1.0
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      }
+    },
+    {
+      "name": "camera",
+      "normalTexture": {
+        "index": 9,
+        "scale": 1.0
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 10
+        },
+        "metallicRoughnessTexture": {
+          "index": 13
+        }
+      }
+    },
+    {
+      "name": "tripod",
+      "normalTexture": {
+        "index": 12,
+        "scale": 1.0
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 11
+        },
+        "metallicRoughnessTexture": {
+          "index": 14
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "EnviroDome",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "tripod_uv",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 7,
+            "POSITION": 6,
+            "TEXCOORD_0": 8
+          },
+          "indices": 5,
+          "material": 2,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "camera_uv",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 11,
+            "POSITION": 10,
+            "TEXCOORD_0": 12
+          },
+          "indices": 9,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Root",
+      "children": [1, 2]
+    },
+    {
+      "name": "CameraRoot",
+      "scale": [0.2, 0.2, 0.2],
+      "children": [3, 4]
+    },
+    {
+      "name": "HdriBackdrop",
+      "extensions": {
+        "EPIC_hdri_backdrops": {
+          "backdrop": 0
+        }
+      }
+    },
+    {
+      "mesh": 2,
+      "name": "camera",
+      "rotation": [0.0, -0.7071068286895752, 0.0, 0.7071067690849304],
+      "scale": [0.5700311064720154, 0.5700311064720154, 0.5700311064720154]
+    },
+    {
+      "mesh": 1,
+      "name": "tripod",
+      "rotation": [0.0, -0.7071068286895752, 0.0, 0.7071067690849304],
+      "scale": [0.5700311064720154, 0.5700311064720154, 0.5700311064720154]
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "name": "WorldGridMaterial_BaseColor"
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "name": "WorldGridMaterial_MetallicRoughness"
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "name": "WorldGridMaterial_Normal"
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "name": "BackdropSample",
+      "wrapS": 33071,
+      "wrapT": 33071
+    },
+    {}
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [0]
+    }
+  ],
+  "textures": [
+    {
+      "name": "WorldGridMaterial_BaseColor",
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "name": "WorldGridMaterial_MetallicRoughness",
+      "sampler": 1,
+      "source": 1
+    },
+    {
+      "name": "WorldGridMaterial_Normal",
+      "sampler": 2,
+      "source": 2
+    },
+    {
+      "name": "PosX",
+      "sampler": 3,
+      "source": 3,
+      "extensions": {
+        "EPIC_texture_hdr_encoding": {
+          "encoding": "RGBM"
+        }
+      }
+    },
+    {
+      "name": "NegX",
+      "sampler": 3,
+      "source": 4,
+      "extensions": { 
+        "EPIC_texture_hdr_encoding": {
+          "encoding": "RGBM"
+        }
+      }
+    },
+    {
+      "name": "PosY",
+      "sampler": 3,
+      "source": 5,
+      "extensions": {
+        "EPIC_texture_hdr_encoding": {
+          "encoding": "RGBM"
+        }
+      }
+    },
+    {
+      "name": "NegY",
+      "sampler": 3,
+      "source": 6,
+      "extensions": {
+        "EPIC_texture_hdr_encoding": {
+          "encoding": "RGBM"
+        }
+      }
+    },
+    {
+      "name": "PosZ",
+      "sampler": 3,
+      "source": 7,
+      "extensions": {
+        "EPIC_texture_hdr_encoding": {
+          "encoding": "RGBM"
+        }
+      }
+    },
+    {
+      "name": "NegZ",
+      "sampler": 3,
+      "source": 8,
+      "extensions": {
+        "EPIC_texture_hdr_encoding": {
+          "encoding": "RGBM"
+        }
+      }
+    },
+    {
+      "sampler": 4,
+      "source": 9
+    },
+    {
+      "sampler": 4,
+      "source": 10
+    },
+    {
+      "sampler": 4,
+      "source": 11
+    },
+    {
+      "sampler": 4,
+      "source": 12
+    },
+    {
+      "sampler": 4,
+      "source": 13
+    },
+    {
+      "sampler": 4,
+      "source": 14
+    }
+  ],
+  "extensions": {
+    "EPIC_hdri_backdrops": {
+      "backdrops": [
+        {
+          "name": "backdrop1",
+          "mesh": 0,
+          "cubemap": [3, 4, 5, 6, 7, 8],
+          "intensity": 1.0,
+          "size": 150.0,
+          "projectionCenter": [0.0, 1.7, 0.0],
+          "lightingDistanceFactor": 0.5,
+          "useCameraProjection": false
+        }
+      ]
+    }
+  },
+  "extensionsUsed": ["EPIC_hdri_backdrops", "EPIC_texture_hdr_encoding"]
+}

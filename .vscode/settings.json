@@ -1,0 +1,12 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.enable": true,
+  "eslint.lintTask.enable": true,
+  "javascript.suggestionActions.enabled": false
+}

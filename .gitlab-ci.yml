@@ -1,0 +1,170 @@
+image: node:12.16.3
+
+cache:
+  key:
+    files:
+      - package-lock.json
+    prefix: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .npm/
+
+variables:
+  CI: "true"
+  BUILD_NAME: "$CI_PROJECT_TITLE-$CI_COMMIT_REF_SLUG"
+  BUILD_DIR: "build"
+  RELEASE_DIR: "release"
+
+stages:
+  - lint
+  - test
+  - build
+  - release
+  - release+source
+  - deploy
+
+.npm_install: &npm_install
+  - npm ci --cache .npm --prefer-offline
+
+lint:
+  tags:
+    - linux-docker
+  stage: lint
+  before_script:
+    - *npm_install
+  script:
+    - npm run lint
+
+test:
+  tags:
+    - linux-docker
+  stage: test
+  before_script:
+    - *npm_install
+  script:
+    - npm run test
+
+test_e2e:
+  tags:
+    - windows
+  stage: test
+  before_script:
+    - *npm_install
+  script:
+    - npm run test:e2e
+    - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots [skip ci]"'
+  artifacts:
+    when: on_failure
+    paths:
+      - ./e2e/__image_snapshots__/__diff_output__
+    expire_in: 30 days
+
+test_e2e_update:
+  tags:
+    - windows
+  stage: test
+  when: manual
+  before_script:
+    - *npm_install
+  script:
+    - npm run test:e2e-update
+    - './ci/gitlab-commit-push.ps1 "test(e2e): update baseline snapshots"'
+
+build:
+  tags:
+    - linux-docker
+  stage: build
+  before_script:
+    - *npm_install
+  script:
+    - npm run build
+  artifacts:
+    name: "$BUILD_NAME-$(date +'%Y%m%d')"
+    paths:
+      - $BUILD_DIR
+    expire_in: 1 week
+
+release:
+  tags:
+    - linux-docker
+  stage: release
+  only:
+    - main
+  dependencies:
+    - build
+  before_script:
+    - *npm_install
+    - apt-get update -qy
+    - apt-get install -y zip
+  script:
+    - rm -rf $BUILD_DIR/assets/ $BUILD_DIR/index.json
+    - mv $BUILD_DIR/index-release.json $BUILD_DIR/index.json
+    - mkdir $RELEASE_DIR
+    - zip -r "$RELEASE_DIR/$BUILD_NAME-$(date +'%Y%m%d').zip" $BUILD_DIR
+    - npx semantic-release
+  artifacts:
+    name: "$BUILD_NAME-$(date +'%Y%m%d')"
+    paths:
+      - $BUILD_DIR
+    expire_in: 1 week
+
+release+source:
+  tags:
+    - linux-docker
+  stage: release+source
+  only:
+    - main
+  dependencies:
+    - release
+  script:
+    - echo "Creating release+source..."
+  artifacts:
+    name: "$BUILD_NAME-$(date +'%Y%m%d')"
+    paths:
+      - build
+      - public
+      - scripts
+      - src
+      - .eslintignore
+      - .gitattributes
+      - .gitignore
+      - .prettierignore
+      - "*.json"
+      - "*.js"
+      - "*.md"
+    exclude:
+      - public/assets/**/*
+      - release.config.js
+    expire_in: 1 week
+
+deploy_dev:
+  tags:
+    - linux-docker
+  stage: deploy
+  only:
+    - main
+  dependencies:
+    - build
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y lftp
+  script:
+    - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete build/ $FTP_DEST_FOLDER_DEV/; bye"
+  environment:
+    name: dev
+
+deploy_prod:
+  tags:
+    - linux-docker
+  stage: deploy
+  when: manual
+  only:
+    - main
+  dependencies:
+    - build
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y lftp
+  script:
+    - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete build/ $FTP_DEST_FOLDER_PROD/; bye"
+  environment:
+    name: prod

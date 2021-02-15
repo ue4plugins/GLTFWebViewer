@@ -1,0 +1,19 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/react-app-rewired",
+      "args": ["test", "--env=jest-environment-jsdom-sixteen", "--runInBand"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "protocol": "inspector",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}

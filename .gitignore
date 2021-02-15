@@ -1,0 +1,28 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.npm
+
+# testing
+/coverage
+/e2e/**/__diff_output__
+
+# created by CI
+.npmrc
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log

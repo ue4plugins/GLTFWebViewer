@@ -1,0 +1,3627 @@
+{
+	"asset": 
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 4.25 glTF Exporter 0.9"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 36,
+			"type": "SCALAR",
+			"componentType": 5121
+		},
+		{
+			"bufferView": 1,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -0.5,
+				-3.0616168e-17,
+				-0.5
+			],
+			"max": [ 0.5,
+				1,
+				0.5
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 24,
+			"type": "VEC3",
+			"componentType": 5120,
+			"normalized": true
+		},
+		{
+			"bufferView": 3,
+			"count": 24,
+			"type": "VEC4",
+			"componentType": 5120,
+			"normalized": true
+		},
+		{
+			"bufferView": 4,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 24,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 6,
+			"count": 6,
+			"type": "SCALAR",
+			"componentType": 5121
+		},
+		{
+			"bufferView": 7,
+			"count": 4,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -0.5,
+				-8.04061311e-17,
+				-0.5
+			],
+			"max": [ 0.5,
+				8.04061311e-17,
+				0.5
+			]
+		},
+		{
+			"bufferView": 8,
+			"count": 4,
+			"type": "VEC3",
+			"componentType": 5120,
+			"normalized": true
+		},
+		{
+			"bufferView": 9,
+			"count": 4,
+			"type": "VEC4",
+			"componentType": 5120,
+			"normalized": true
+		},
+		{
+			"bufferView": 10,
+			"count": 4,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 11,
+			"count": 4,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "LightIntensity.bin",
+			"byteLength": 1052
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 36,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 288,
+			"byteOffset": 36,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 96,
+			"byteOffset": 324,
+			"byteStride": 4,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 96,
+			"byteOffset": 420,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 516,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 192,
+			"byteOffset": 708,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 6,
+			"byteOffset": 900,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 48,
+			"byteOffset": 908,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 16,
+			"byteOffset": 956,
+			"byteStride": 4,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 16,
+			"byteOffset": 972,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 32,
+			"byteOffset": 988,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 32,
+			"byteOffset": 1020,
+			"target": 34962
+		}
+	],
+	"cameras": [
+		{
+			"name": "CameraActor_1",
+			"type": "perspective",
+			"perspective": 
+			{
+				"aspectRatio": 1.64999998,
+				"yfov": 1.08972788,
+				"zfar": 20971.5195,
+				"znear": 0.099999994
+			}
+		}
+	],
+	"images": [
+		{
+			"uri": "WorldGridMaterial_BaseColor.png"
+		},
+		{
+			"uri": "WorldGridMaterial_MetallicRoughness.png"
+		},
+		{
+			"uri": "WorldGridMaterial_Normal.png"
+		},
+		{
+			"uri": "BlackCubemap_NegX.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "WorldGridMaterial",
+			"pbrMetallicRoughness": 
+			{
+				"baseColorTexture": 
+				{
+					"index": 6
+				},
+				"metallicRoughnessTexture": 
+				{
+					"index": 7
+				}
+			},
+			"normalTexture": 
+			{
+				"index": 8
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "EnviroBoxSharp",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0
+				}
+			]
+		},
+		{
+			"name": "Plane",
+			"primitives": [
+				{
+					"attributes": 
+					{
+						"POSITION": 7,
+						"NORMAL": 8,
+						"TANGENT": 9,
+						"TEXCOORD_0": 10,
+						"TEXCOORD_1": 11
+					},
+					"indices": 6,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"name": "Brush_1_BrushComponent0",
+			"translation": 
+			[ -0.899999976,
+				0.199999988,
+				1.10000002
+			]
+		},
+		{
+			"name": "InstancedFoliageActor_0_RootComponent0"
+		},
+		{
+			"name": "Lights_DefaultSceneRoot",
+			"translation": 
+			[ -4.5,
+				0,
+				-2.5
+			],
+			"children": [ 3, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95, 98, 101, 104, 107, 110, 113, 116, 119, 122, 125, 128, 131, 134, 137, 140, 143, 146, 149, 152, 155, 158, 161, 164, 167, 170, 173, 176, 179, 182, 185, 188 ]
+		},
+		{
+			"name": "Lights_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "CameraActor_1_SceneComponent",
+			"translation": 
+			[ 0,
+				5,
+				0
+			],
+			"rotation": 
+			[ -0.49999994,
+				0.49999997,
+				-0.49999994,
+				0.499999911
+			],
+			"children": [ 5 ]
+		},
+		{
+			"name": "CameraActor_1_CameraComponent",
+			"children": [ 6, 7, 8 ]
+		},
+		{
+			"name": "CameraActor_1",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"camera": 0
+		},
+		{
+			"name": "CameraActor_1_StaticMeshComponent_0"
+		},
+		{
+			"name": "CameraActor_1_DrawFrustumComponent_0"
+		},
+		{
+			"name": "HDRIBackdrop_2_SceneComponent",
+			"translation": 
+			[ -0.25999999,
+				-0.129999995,
+				1.9799999
+			],
+			"extensions":
+			{
+				"EPIC_hdri_backdrops":
+				{
+					"backdrop": 0
+				}
+			}
+		},
+		{
+			"name": "DefaultPhysicsVolume_0_BrushComponent0"
+		},
+		{
+			"name": "PointLight1_LightComponent0",
+			"translation": 
+			[ 0,
+				0.25,
+				0
+			],
+			"children": [ 12, 13, 191 ]
+		},
+		{
+			"name": "PointLight1",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 0
+				}
+			}
+		},
+		{
+			"name": "PointLight1_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight2_LightComponent0",
+			"translation": 
+			[ 1,
+				0.25,
+				0
+			],
+			"children": [ 15, 16, 192 ]
+		},
+		{
+			"name": "PointLight2",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 1
+				}
+			}
+		},
+		{
+			"name": "PointLight2_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight3_LightComponent0",
+			"translation": 
+			[ 2,
+				0.25,
+				0
+			],
+			"children": [ 18, 19, 193 ]
+		},
+		{
+			"name": "PointLight3",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 2
+				}
+			}
+		},
+		{
+			"name": "PointLight3_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight4_LightComponent0",
+			"translation": 
+			[ 3,
+				0.25,
+				0
+			],
+			"children": [ 21, 22, 194 ]
+		},
+		{
+			"name": "PointLight4",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 3
+				}
+			}
+		},
+		{
+			"name": "PointLight4_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight5_LightComponent0",
+			"translation": 
+			[ 4,
+				0.25,
+				0
+			],
+			"children": [ 24, 25, 195 ]
+		},
+		{
+			"name": "PointLight5",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 4
+				}
+			}
+		},
+		{
+			"name": "PointLight5_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight6_LightComponent0",
+			"translation": 
+			[ 5,
+				0.25,
+				0
+			],
+			"children": [ 27, 28, 196 ]
+		},
+		{
+			"name": "PointLight6",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 5
+				}
+			}
+		},
+		{
+			"name": "PointLight6_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight7_LightComponent0",
+			"translation": 
+			[ 6,
+				0.25,
+				0
+			],
+			"children": [ 30, 31, 197 ]
+		},
+		{
+			"name": "PointLight7",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 6
+				}
+			}
+		},
+		{
+			"name": "PointLight7_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight8_LightComponent0",
+			"translation": 
+			[ 7,
+				0.25,
+				0
+			],
+			"children": [ 33, 34, 198 ]
+		},
+		{
+			"name": "PointLight8",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 7
+				}
+			}
+		},
+		{
+			"name": "PointLight8_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight9_LightComponent0",
+			"translation": 
+			[ 8,
+				0.25,
+				0
+			],
+			"children": [ 36, 37, 199 ]
+		},
+		{
+			"name": "PointLight9",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 8
+				}
+			}
+		},
+		{
+			"name": "PointLight9_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight10_LightComponent0",
+			"translation": 
+			[ 9,
+				0.25,
+				0
+			],
+			"children": [ 39, 40, 200 ]
+		},
+		{
+			"name": "PointLight10",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 9
+				}
+			}
+		},
+		{
+			"name": "PointLight10_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight11_LightComponent0",
+			"translation": 
+			[ 0,
+				0.25,
+				1
+			],
+			"children": [ 42, 43, 201 ]
+		},
+		{
+			"name": "PointLight11",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 10
+				}
+			}
+		},
+		{
+			"name": "PointLight11_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight12_LightComponent0",
+			"translation": 
+			[ 1,
+				0.25,
+				1
+			],
+			"children": [ 45, 46, 202 ]
+		},
+		{
+			"name": "PointLight12",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 11
+				}
+			}
+		},
+		{
+			"name": "PointLight12_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight13_LightComponent0",
+			"translation": 
+			[ 2,
+				0.25,
+				1
+			],
+			"children": [ 48, 49, 203 ]
+		},
+		{
+			"name": "PointLight13",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 12
+				}
+			}
+		},
+		{
+			"name": "PointLight13_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight14_LightComponent0",
+			"translation": 
+			[ 3,
+				0.25,
+				1
+			],
+			"children": [ 51, 52, 204 ]
+		},
+		{
+			"name": "PointLight14",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 13
+				}
+			}
+		},
+		{
+			"name": "PointLight14_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight15_LightComponent0",
+			"translation": 
+			[ 4,
+				0.25,
+				1
+			],
+			"children": [ 54, 55, 205 ]
+		},
+		{
+			"name": "PointLight15",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 14
+				}
+			}
+		},
+		{
+			"name": "PointLight15_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight16_LightComponent0",
+			"translation": 
+			[ 5,
+				0.25,
+				1
+			],
+			"children": [ 57, 58, 206 ]
+		},
+		{
+			"name": "PointLight16",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 15
+				}
+			}
+		},
+		{
+			"name": "PointLight16_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight17_LightComponent0",
+			"translation": 
+			[ 6,
+				0.25,
+				1
+			],
+			"children": [ 60, 61, 207 ]
+		},
+		{
+			"name": "PointLight17",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 16
+				}
+			}
+		},
+		{
+			"name": "PointLight17_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight18_LightComponent0",
+			"translation": 
+			[ 7,
+				0.25,
+				1
+			],
+			"children": [ 63, 64, 208 ]
+		},
+		{
+			"name": "PointLight18",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 17
+				}
+			}
+		},
+		{
+			"name": "PointLight18_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight19_LightComponent0",
+			"translation": 
+			[ 8,
+				0.25,
+				1
+			],
+			"children": [ 66, 67, 209 ]
+		},
+		{
+			"name": "PointLight19",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 18
+				}
+			}
+		},
+		{
+			"name": "PointLight19_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight20_LightComponent0",
+			"translation": 
+			[ 9,
+				0.25,
+				1
+			],
+			"children": [ 69, 70, 210 ]
+		},
+		{
+			"name": "PointLight20",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 19
+				}
+			}
+		},
+		{
+			"name": "PointLight20_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight21_LightComponent0",
+			"translation": 
+			[ 0,
+				0.25,
+				2
+			],
+			"children": [ 72, 73, 211 ]
+		},
+		{
+			"name": "PointLight21",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 20
+				}
+			}
+		},
+		{
+			"name": "PointLight21_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight22_LightComponent0",
+			"translation": 
+			[ 1,
+				0.25,
+				2
+			],
+			"children": [ 75, 76, 212 ]
+		},
+		{
+			"name": "PointLight22",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 21
+				}
+			}
+		},
+		{
+			"name": "PointLight22_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight23_LightComponent0",
+			"translation": 
+			[ 2,
+				0.25,
+				2
+			],
+			"children": [ 78, 79, 213 ]
+		},
+		{
+			"name": "PointLight23",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 22
+				}
+			}
+		},
+		{
+			"name": "PointLight23_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight24_LightComponent0",
+			"translation": 
+			[ 3,
+				0.25,
+				2
+			],
+			"children": [ 81, 82, 214 ]
+		},
+		{
+			"name": "PointLight24",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 23
+				}
+			}
+		},
+		{
+			"name": "PointLight24_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight25_LightComponent0",
+			"translation": 
+			[ 4,
+				0.25,
+				2
+			],
+			"children": [ 84, 85, 215 ]
+		},
+		{
+			"name": "PointLight25",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 24
+				}
+			}
+		},
+		{
+			"name": "PointLight25_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight26_LightComponent0",
+			"translation": 
+			[ 5,
+				0.25,
+				2
+			],
+			"children": [ 87, 88, 216 ]
+		},
+		{
+			"name": "PointLight26",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 25
+				}
+			}
+		},
+		{
+			"name": "PointLight26_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight27_LightComponent0",
+			"translation": 
+			[ 6,
+				0.25,
+				2
+			],
+			"children": [ 90, 91, 217 ]
+		},
+		{
+			"name": "PointLight27",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 26
+				}
+			}
+		},
+		{
+			"name": "PointLight27_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight28_LightComponent0",
+			"translation": 
+			[ 7,
+				0.25,
+				2
+			],
+			"children": [ 93, 94, 218 ]
+		},
+		{
+			"name": "PointLight28",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 27
+				}
+			}
+		},
+		{
+			"name": "PointLight28_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight29_LightComponent0",
+			"translation": 
+			[ 7.98999977,
+				0.25,
+				2
+			],
+			"children": [ 96, 97, 219 ]
+		},
+		{
+			"name": "PointLight29",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 28
+				}
+			}
+		},
+		{
+			"name": "PointLight29_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight30_LightComponent0",
+			"translation": 
+			[ 8.98999977,
+				0.25,
+				2
+			],
+			"children": [ 99, 100, 220 ]
+		},
+		{
+			"name": "PointLight30",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 29
+				}
+			}
+		},
+		{
+			"name": "PointLight30_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight31_LightComponent0",
+			"translation": 
+			[ 0,
+				0.25,
+				3
+			],
+			"children": [ 102, 103, 221 ]
+		},
+		{
+			"name": "PointLight31",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 30
+				}
+			}
+		},
+		{
+			"name": "PointLight31_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight32_LightComponent0",
+			"translation": 
+			[ 1,
+				0.25,
+				3
+			],
+			"children": [ 105, 106, 222 ]
+		},
+		{
+			"name": "PointLight32",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 31
+				}
+			}
+		},
+		{
+			"name": "PointLight32_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight33_LightComponent0",
+			"translation": 
+			[ 2,
+				0.25,
+				3
+			],
+			"children": [ 108, 109, 223 ]
+		},
+		{
+			"name": "PointLight33",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 32
+				}
+			}
+		},
+		{
+			"name": "PointLight33_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight34_LightComponent0",
+			"translation": 
+			[ 3,
+				0.25,
+				3
+			],
+			"children": [ 111, 112, 224 ]
+		},
+		{
+			"name": "PointLight34",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 33
+				}
+			}
+		},
+		{
+			"name": "PointLight34_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight35_LightComponent0",
+			"translation": 
+			[ 4,
+				0.25,
+				3
+			],
+			"children": [ 114, 115, 225 ]
+		},
+		{
+			"name": "PointLight35",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 34
+				}
+			}
+		},
+		{
+			"name": "PointLight35_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight36_LightComponent0",
+			"translation": 
+			[ 5,
+				0.25,
+				3
+			],
+			"children": [ 117, 118, 226 ]
+		},
+		{
+			"name": "PointLight36",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 35
+				}
+			}
+		},
+		{
+			"name": "PointLight36_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight37_LightComponent0",
+			"translation": 
+			[ 6,
+				0.25,
+				3
+			],
+			"children": [ 120, 121, 227 ]
+		},
+		{
+			"name": "PointLight37",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 36
+				}
+			}
+		},
+		{
+			"name": "PointLight37_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight38_LightComponent0",
+			"translation": 
+			[ 7,
+				0.25,
+				3
+			],
+			"children": [ 123, 124, 228 ]
+		},
+		{
+			"name": "PointLight38",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 37
+				}
+			}
+		},
+		{
+			"name": "PointLight38_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight39_LightComponent0",
+			"translation": 
+			[ 8,
+				0.25,
+				3
+			],
+			"children": [ 126, 127, 229 ]
+		},
+		{
+			"name": "PointLight39",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 38
+				}
+			}
+		},
+		{
+			"name": "PointLight39_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight40_LightComponent0",
+			"translation": 
+			[ 9,
+				0.25,
+				3
+			],
+			"children": [ 129, 130, 230 ]
+		},
+		{
+			"name": "PointLight40",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 39
+				}
+			}
+		},
+		{
+			"name": "PointLight40_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight41_LightComponent0",
+			"translation": 
+			[ 0,
+				0.25,
+				4
+			],
+			"children": [ 132, 133, 231 ]
+		},
+		{
+			"name": "PointLight41",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 40
+				}
+			}
+		},
+		{
+			"name": "PointLight41_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight42_LightComponent0",
+			"translation": 
+			[ 1,
+				0.25,
+				4
+			],
+			"children": [ 135, 136, 232 ]
+		},
+		{
+			"name": "PointLight42",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 41
+				}
+			}
+		},
+		{
+			"name": "PointLight42_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight43_LightComponent0",
+			"translation": 
+			[ 2,
+				0.25,
+				4
+			],
+			"children": [ 138, 139, 233 ]
+		},
+		{
+			"name": "PointLight43",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 42
+				}
+			}
+		},
+		{
+			"name": "PointLight43_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight44_LightComponent0",
+			"translation": 
+			[ 3,
+				0.25,
+				4
+			],
+			"children": [ 141, 142, 234 ]
+		},
+		{
+			"name": "PointLight44",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 43
+				}
+			}
+		},
+		{
+			"name": "PointLight44_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight45_LightComponent0",
+			"translation": 
+			[ 4,
+				0.25,
+				4
+			],
+			"children": [ 144, 145, 235 ]
+		},
+		{
+			"name": "PointLight45",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 44
+				}
+			}
+		},
+		{
+			"name": "PointLight45_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight46_LightComponent0",
+			"translation": 
+			[ 5,
+				0.25,
+				4
+			],
+			"children": [ 147, 148, 236 ]
+		},
+		{
+			"name": "PointLight46",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 45
+				}
+			}
+		},
+		{
+			"name": "PointLight46_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight47_LightComponent0",
+			"translation": 
+			[ 6,
+				0.25,
+				4
+			],
+			"children": [ 150, 151, 237 ]
+		},
+		{
+			"name": "PointLight47",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 46
+				}
+			}
+		},
+		{
+			"name": "PointLight47_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight48_LightComponent0",
+			"translation": 
+			[ 7,
+				0.25,
+				4
+			],
+			"children": [ 153, 154, 238 ]
+		},
+		{
+			"name": "PointLight48",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 47
+				}
+			}
+		},
+		{
+			"name": "PointLight48_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight49_LightComponent0",
+			"translation": 
+			[ 8,
+				0.25,
+				4
+			],
+			"children": [ 156, 157, 239 ]
+		},
+		{
+			"name": "PointLight49",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 48
+				}
+			}
+		},
+		{
+			"name": "PointLight49_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight50_LightComponent0",
+			"translation": 
+			[ 9,
+				0.25,
+				4
+			],
+			"children": [ 159, 160, 240 ]
+		},
+		{
+			"name": "PointLight50",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 49
+				}
+			}
+		},
+		{
+			"name": "PointLight50_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight51_LightComponent0",
+			"translation": 
+			[ 0,
+				0.25,
+				5
+			],
+			"children": [ 162, 163, 241 ]
+		},
+		{
+			"name": "PointLight51",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 50
+				}
+			}
+		},
+		{
+			"name": "PointLight51_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight52_LightComponent0",
+			"translation": 
+			[ 1,
+				0.25,
+				5
+			],
+			"children": [ 165, 166, 242 ]
+		},
+		{
+			"name": "PointLight52",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 51
+				}
+			}
+		},
+		{
+			"name": "PointLight52_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight53_LightComponent0",
+			"translation": 
+			[ 2,
+				0.25,
+				5
+			],
+			"children": [ 168, 169, 243 ]
+		},
+		{
+			"name": "PointLight53",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 52
+				}
+			}
+		},
+		{
+			"name": "PointLight53_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight54_LightComponent0",
+			"translation": 
+			[ 3,
+				0.25,
+				5
+			],
+			"children": [ 171, 172, 244 ]
+		},
+		{
+			"name": "PointLight54",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 53
+				}
+			}
+		},
+		{
+			"name": "PointLight54_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight55_LightComponent0",
+			"translation": 
+			[ 4,
+				0.25,
+				5
+			],
+			"children": [ 174, 175, 245 ]
+		},
+		{
+			"name": "PointLight55",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 54
+				}
+			}
+		},
+		{
+			"name": "PointLight55_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight56_LightComponent0",
+			"translation": 
+			[ 5,
+				0.25,
+				5
+			],
+			"children": [ 177, 178, 246 ]
+		},
+		{
+			"name": "PointLight56",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 55
+				}
+			}
+		},
+		{
+			"name": "PointLight56_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight57_LightComponent0",
+			"translation": 
+			[ 6,
+				0.25,
+				5
+			],
+			"children": [ 180, 181, 247 ]
+		},
+		{
+			"name": "PointLight57",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 56
+				}
+			}
+		},
+		{
+			"name": "PointLight57_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight58_LightComponent0",
+			"translation": 
+			[ 7,
+				0.25,
+				5
+			],
+			"children": [ 183, 184, 248 ]
+		},
+		{
+			"name": "PointLight58",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 57
+				}
+			}
+		},
+		{
+			"name": "PointLight58_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight59_LightComponent0",
+			"translation": 
+			[ 8,
+				0.25,
+				5
+			],
+			"children": [ 186, 187, 249 ]
+		},
+		{
+			"name": "PointLight59",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 58
+				}
+			}
+		},
+		{
+			"name": "PointLight59_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "PointLight60_LightComponent0",
+			"translation": 
+			[ 9,
+				0.25,
+				5
+			],
+			"children": [ 189, 190, 250 ]
+		},
+		{
+			"name": "PointLight60",
+			"rotation": 
+			[ -0,
+				-0.707106769,
+				0,
+				0.707106709
+			],
+			"extensions":
+			{
+				"KHR_lights_punctual":
+				{
+					"light": 59
+				}
+			}
+		},
+		{
+			"name": "PointLight60_BillboardComponent_0",
+			"scale": 
+			[ 0.5,
+				0.5,
+				0.5
+			]
+		},
+		{
+			"name": "Plane1_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane2_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane3_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane4_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane5_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane6_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane7_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane8_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane9_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane10_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane11_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane12_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane13_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane14_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane15_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane16_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane17_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane18_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane19_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane20_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane21_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane22_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane23_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane24_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane25_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane26_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane27_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane28_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane29_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane30_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane31_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane32_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane33_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane34_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane35_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane36_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane37_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane38_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane39_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane40_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane41_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane42_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane43_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane44_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane45_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane46_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane47_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane48_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane49_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane50_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane51_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane52_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane53_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane54_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane55_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane56_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane57_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane58_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane59_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		},
+		{
+			"name": "Plane60_StaticMeshComponent0",
+			"translation": 
+			[ 0,
+				-0.25,
+				0
+			],
+			"mesh": 1
+		}
+	],
+	"samplers": [
+		{
+			"name": "WorldGridMaterial_BaseColor",
+			"minFilter": 9987,
+			"magFilter": 9729
+		},
+		{
+			"name": "WorldGridMaterial_MetallicRoughness",
+			"minFilter": 9987,
+			"magFilter": 9729
+		},
+		{
+			"name": "WorldGridMaterial_Normal",
+			"minFilter": 9987,
+			"magFilter": 9729
+		},
+		{
+			"name": "BlackCubemap",
+			"minFilter": 9987,
+			"magFilter": 9729,
+			"wrapS": 33071,
+			"wrapT": 33071
+		}
+	],
+	"scenes": [
+		{
+			"name": "LightIntensity",
+			"nodes": [ 0, 1, 2, 4, 9, 10 ]
+		}
+	],
+	"textures": [
+		{
+			"name": "BlackCubemap_NegX",
+			"sampler": 3,
+			"source": 3,
+			"extensions":
+			{
+				"EPIC_texture_hdr_encoding":
+				{
+					"encoding": "RGBM"
+				}
+			}
+		},
+		{
+			"name": "BlackCubemap_PosX",
+			"sampler": 3,
+			"source": 3,
+			"extensions":
+			{
+				"EPIC_texture_hdr_encoding":
+				{
+					"encoding": "RGBM"
+				}
+			}
+		},
+		{
+			"name": "BlackCubemap_PosZ",
+			"sampler": 3,
+			"source": 3,
+			"extensions":
+			{
+				"EPIC_texture_hdr_encoding":
+				{
+					"encoding": "RGBM"
+				}
+			}
+		},
+		{
+			"name": "BlackCubemap_NegZ",
+			"sampler": 3,
+			"source": 3,
+			"extensions":
+			{
+				"EPIC_texture_hdr_encoding":
+				{
+					"encoding": "RGBM"
+				}
+			}
+		},
+		{
+			"name": "BlackCubemap_PosY",
+			"sampler": 3,
+			"source": 3,
+			"extensions":
+			{
+				"EPIC_texture_hdr_encoding":
+				{
+					"encoding": "RGBM"
+				}
+			}
+		},
+		{
+			"name": "BlackCubemap_NegY",
+			"sampler": 3,
+			"source": 3,
+			"extensions":
+			{
+				"EPIC_texture_hdr_encoding":
+				{
+					"encoding": "RGBM"
+				}
+			}
+		},
+		{
+			"name": "WorldGridMaterial_BaseColor",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "WorldGridMaterial_MetallicRoughness",
+			"sampler": 1,
+			"source": 1
+		},
+		{
+			"name": "WorldGridMaterial_Normal",
+			"sampler": 2,
+			"source": 2
+		}
+	],
+	"extensions":
+	{
+		"EPIC_hdri_backdrops":
+		{
+			"backdrops": [
+				{
+					"name": "HDRIBackdrop_2",
+					"mesh": 0,
+					"cubemap": [ 1, 0, 4, 5, 2, 3 ],
+					"intensity": 1,
+					"size": 150,
+					"projectionCenter": 
+					[ 0,
+						1.69999993,
+						0
+					],
+					"lightingDistanceFactor": 0.5,
+					"useCameraProjection": false
+				}
+			]
+		},
+		"KHR_lights_punctual":
+		{
+			"lights": [
+				{
+					"name": "PointLight1",
+					"type": "point",
+					"color": 
+					[ 1,
+						0,
+						0
+					],
+					"intensity": 0.200000003,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight2",
+					"type": "point",
+					"color": 
+					[ 1,
+						0,
+						0
+					],
+					"intensity": 0.400000006,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight3",
+					"type": "point",
+					"color": 
+					[ 1,
+						0,
+						0
+					],
+					"intensity": 0.600000024,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight4",
+					"type": "point",
+					"color": 
+					[ 1,
+						0,
+						0
+					],
+					"intensity": 0.800000012,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight5",
+					"type": "point",
+					"color": 
+					[ 1,
+						0,
+						0
+					],
+					"range": 0.5
+				},
+				{
+					"name": "PointLight6",
+					"type": "point",
+					"color": 
+					[ 1,
+						0,
+						0
+					],
+					"intensity": 1.20000005,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight7",
+					"type": "point",
+					"color": 
+					[ 1,
+						0,
+						0
+					],
+					"intensity": 1.39999998,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight8",
+					"type": "point",
+					"color": 
+					[ 1,
+						0,
+						0
+					],
+					"intensity": 1.60000002,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight9",
+					"type": "point",
+					"color": 
+					[ 1,
+						0,
+						0
+					],
+					"intensity": 1.79999995,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight10",
+					"type": "point",
+					"color": 
+					[ 1,
+						0,
+						0
+					],
+					"intensity": 2,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight11",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.0331047662,
+						0.0331047662
+					],
+					"intensity": 0.200000003,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight12",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.0331047662,
+						0.0331047662
+					],
+					"intensity": 0.400000006,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight13",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.0331047662,
+						0.0331047662
+					],
+					"intensity": 0.600000024,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight14",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.0331047662,
+						0.0331047662
+					],
+					"intensity": 0.800000012,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight15",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.0331047662,
+						0.0331047662
+					],
+					"range": 0.5
+				},
+				{
+					"name": "PointLight16",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.0331047662,
+						0.0331047662
+					],
+					"intensity": 1.20000005,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight17",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.0331047662,
+						0.0331047662
+					],
+					"intensity": 1.39999998,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight18",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.0331047662,
+						0.0331047662
+					],
+					"intensity": 1.60000002,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight19",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.0331047662,
+						0.0331047662
+					],
+					"intensity": 1.79999995,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight20",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.0331047662,
+						0.0331047662
+					],
+					"intensity": 2,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight21",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.13286832,
+						0.13286832
+					],
+					"intensity": 0.200000003,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight22",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.13286832,
+						0.13286832
+					],
+					"intensity": 0.400000006,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight23",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.13286832,
+						0.13286832
+					],
+					"intensity": 0.600000024,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight24",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.13286832,
+						0.13286832
+					],
+					"intensity": 0.800000012,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight25",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.13286832,
+						0.13286832
+					],
+					"range": 0.5
+				},
+				{
+					"name": "PointLight26",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.13286832,
+						0.13286832
+					],
+					"intensity": 1.20000005,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight27",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.13286832,
+						0.13286832
+					],
+					"intensity": 1.39999998,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight28",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.13286832,
+						0.13286832
+					],
+					"intensity": 1.60000002,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight29",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.13286832,
+						0.13286832
+					],
+					"intensity": 1.79999995,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight30",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.13286832,
+						0.13286832
+					],
+					"intensity": 2,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight31",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.318546772,
+						0.318546772
+					],
+					"intensity": 0.200000003,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight32",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.318546772,
+						0.318546772
+					],
+					"intensity": 0.400000006,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight33",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.318546772,
+						0.318546772
+					],
+					"intensity": 0.600000024,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight34",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.318546772,
+						0.318546772
+					],
+					"intensity": 0.800000012,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight35",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.318546772,
+						0.318546772
+					],
+					"range": 0.5
+				},
+				{
+					"name": "PointLight36",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.318546772,
+						0.318546772
+					],
+					"intensity": 1.20000005,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight37",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.318546772,
+						0.318546772
+					],
+					"intensity": 1.39999998,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight38",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.318546772,
+						0.318546772
+					],
+					"intensity": 1.60000002,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight39",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.318546772,
+						0.318546772
+					],
+					"intensity": 1.79999995,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight40",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.318546772,
+						0.318546772
+					],
+					"intensity": 2,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight41",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.603827357,
+						0.603827357
+					],
+					"intensity": 0.200000003,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight42",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.603827357,
+						0.603827357
+					],
+					"intensity": 0.400000006,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight43",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.603827357,
+						0.603827357
+					],
+					"intensity": 0.600000024,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight44",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.603827357,
+						0.603827357
+					],
+					"intensity": 0.800000012,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight45",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.603827357,
+						0.603827357
+					],
+					"range": 0.5
+				},
+				{
+					"name": "PointLight46",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.603827357,
+						0.603827357
+					],
+					"intensity": 1.20000005,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight47",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.603827357,
+						0.603827357
+					],
+					"intensity": 1.39999998,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight48",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.603827357,
+						0.603827357
+					],
+					"intensity": 1.60000002,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight49",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.603827357,
+						0.603827357
+					],
+					"intensity": 1.79999995,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight50",
+					"type": "point",
+					"color": 
+					[ 1,
+						0.603827357,
+						0.603827357
+					],
+					"intensity": 2,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight51",
+					"type": "point",
+					"intensity": 0.200000003,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight52",
+					"type": "point",
+					"intensity": 0.400000006,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight53",
+					"type": "point",
+					"intensity": 0.600000024,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight54",
+					"type": "point",
+					"intensity": 0.800000012,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight55",
+					"type": "point",
+					"range": 0.5
+				},
+				{
+					"name": "PointLight56",
+					"type": "point",
+					"intensity": 1.20000005,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight57",
+					"type": "point",
+					"intensity": 1.39999998,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight58",
+					"type": "point",
+					"intensity": 1.60000002,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight59",
+					"type": "point",
+					"intensity": 1.79999995,
+					"range": 0.5
+				},
+				{
+					"name": "PointLight60",
+					"type": "point",
+					"intensity": 2,
+					"range": 0.5
+				}
+			]
+		}
+	},
+	"extensionsUsed": [
+		"KHR_mesh_quantization",
+		"EPIC_hdri_backdrops",
+		"KHR_lights_punctual",
+		"EPIC_texture_hdr_encoding"
+	],
+	"extensionsRequired": [
+		"KHR_mesh_quantization"
+	]
+}
