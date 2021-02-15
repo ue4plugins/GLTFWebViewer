@@ -19,23 +19,28 @@ const buildSubDir = "viewer";
 downloadLicenses([
   {
     module: "draco3d",
-    url: "https://github.com/google/draco/raw/master/LICENSE",
+    url:
+      "https://raw.githubusercontent.com/google/draco/8a979f79a5f139880f17f296ace90bcfff025c4b/LICENSE",
   },
   {
     module: "file-selector",
-    url: "https://github.com/react-dropzone/file-selector/raw/master/LICENSE",
+    url:
+      "https://raw.githubusercontent.com/react-dropzone/file-selector/d2b44e213c0ca5cedbe01b1aabc06814e4bb91dc/LICENSE",
   },
   {
     module: "isarray",
-    url: "https://github.com/juliangruber/isarray/raw/master/LICENSE",
+    url:
+      "https://raw.githubusercontent.com/juliangruber/isarray/29a4977d09cfab83886cbb97d1710a01d0358e52/LICENSE",
   },
   {
     module: "is-in-browser",
-    url: "https://github.com/tuxsudo/is-in-browser/raw/master/LICENSE",
+    url:
+      "https://raw.githubusercontent.com/tuxsudo/is-in-browser/56378377a3767c5822313a6aac846e9b10abb6ed/LICENSE",
   },
   {
     module: "popper.js",
-    url: "https://github.com/popperjs/popper-core/raw/master/LICENSE.md",
+    url:
+      "https://raw.githubusercontent.com/popperjs/popper-core/70edad694ed244851a515ca2cfd8397c4ddb867f/LICENSE.md",
   },
 ]);
 
