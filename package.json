@@ -3,6 +3,7 @@
   "name": "@epic/gltf-web-viewer",
   "description": "glTF Web Viewer",
   "version": "1.29.0",
+  "license": "MIT",
   "homepage": ".",
   "scripts": {
     "start": "react-app-rewired start",
