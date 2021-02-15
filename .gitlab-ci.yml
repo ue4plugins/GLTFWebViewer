@@ -88,7 +88,7 @@ release:
     - linux-docker
   stage: release
   only:
-    - master
+    - main
   dependencies:
     - build
   before_script:
@@ -112,7 +112,7 @@ release+source:
     - linux-docker
   stage: release+source
   only:
-    - master
+    - main
   dependencies:
     - release
   script:
@@ -141,7 +141,7 @@ deploy_dev:
     - linux-docker
   stage: deploy
   only:
-    - master
+    - main
   dependencies:
     - build
   before_script:
@@ -158,7 +158,7 @@ deploy_prod:
   stage: deploy
   when: manual
   only:
-    - master
+    - main
   dependencies:
     - build
   before_script:
