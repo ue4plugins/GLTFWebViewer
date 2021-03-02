@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     overflow: "hidden",
   },
   variantSets: {
-    overflow: "auto",
+    overflowX: "hidden",
   },
   levelVariantSets: {
     flex: "1 1 auto",
