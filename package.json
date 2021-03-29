@@ -4,7 +4,7 @@
   "description": "glTF Web Viewer",
   "version": "1.29.0",
   "license": "MIT",
-  "homepage": "https://github.com/ue4plugins/GLTFWebViewer",
+  "homepage": ".",
   "repository": {
     "type": "git",
     "url": "https://github.com/ue4plugins/GLTFWebViewer.git"
@@ -95,6 +95,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^1.7.0",
+    "event-hooks-webpack-plugin": "^2.2.0",
     "expect-puppeteer": "^4.4.0",
     "fs-extra": "^8.1.0",
     "get-installed-path": "^4.0.8",

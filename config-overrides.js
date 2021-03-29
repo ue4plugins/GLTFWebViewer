@@ -7,11 +7,13 @@ const DynamicCdnWebpackPlugin = require("dynamic-cdn-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const WriteJsonPlugin = require("write-json-webpack-plugin");
 const { LicenseWebpackPlugin } = require("license-webpack-plugin");
+const EventHooksPlugin = require("event-hooks-webpack-plugin");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const createConfig = require("./scripts/createConfig");
 const renderLicenses = require("./scripts/renderLicenses");
 const downloadLicenses = require("./scripts/downloadLicenses");
+const fixUrlPathEncoding = require("./scripts/fixUrlPathEncoding");
 
 const buildSubDir = "viewer";
 
@@ -53,6 +55,23 @@ module.exports = {
   webpack: override(config => {
     config = addReactRefresh({ disableRefreshCheck: true })(config);
 
+    /*
+    config.plugins = config.plugins.filter(
+      plugin => plugin.name != "InlineChunkHtmlPlugin",
+    );*/
+    //config.plugins.splice(1, 1);
+
+    /*
+    config.plugins.forEach((plugin, index) =>
+      console.log(
+        index,
+        typeof plugin,
+        plugin.constructor.name,
+      ),
+    );
+    */
+    //console.log("config.plugins", config.plugins);
+
     // Disable some default plugins
     config.plugins = config.plugins.filter(
       plugin =>
@@ -89,6 +108,10 @@ module.exports = {
 
     return merge(config, {
       plugins: [
+        new EventHooksPlugin({
+          done: () =>
+            fixUrlPathEncoding(path.join(config.output.path, "index.html")),
+        }),
         new webpack.DefinePlugin({
           "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
         }),
