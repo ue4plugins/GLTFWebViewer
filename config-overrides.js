@@ -55,23 +55,6 @@ module.exports = {
   webpack: override(config => {
     config = addReactRefresh({ disableRefreshCheck: true })(config);
 
-    /*
-    config.plugins = config.plugins.filter(
-      plugin => plugin.name != "InlineChunkHtmlPlugin",
-    );*/
-    //config.plugins.splice(1, 1);
-
-    /*
-    config.plugins.forEach((plugin, index) =>
-      console.log(
-        index,
-        typeof plugin,
-        plugin.constructor.name,
-      ),
-    );
-    */
-    //console.log("config.plugins", config.plugins);
-
     // Disable some default plugins
     config.plugins = config.plugins.filter(
       plugin =>
@@ -106,46 +89,53 @@ module.exports = {
       }),
     ];
 
-    return merge(config, {
-      plugins: [
+    const plugins = [
+      new webpack.DefinePlugin({
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      }),
+      new DynamicCdnWebpackPlugin(),
+      new WriteJsonPlugin({
+        object: createConfig(true),
+        path: "",
+        filename: "index.json",
+        pretty: true,
+      }),
+      new WriteJsonPlugin({
+        object: createConfig(false),
+        path: "",
+        filename: "index-release.json",
+        pretty: true,
+      }),
+      new LicenseWebpackPlugin({
+        outputFilename: "viewer/static/js/licenses.txt",
+        additionalModules: Object.keys(
+          require("./package.json").dependencies,
+        ).map(dependency => {
+          return {
+            name: dependency,
+            directory: path.join(__dirname, "node_modules", dependency),
+          };
+        }),
+        renderLicenses: renderLicenses,
+        perChunkOutput: false,
+        stats: {
+          warnings: true,
+          errors: true,
+        },
+      }),
+    ];
+
+    if (config.mode === "production") {
+      plugins.push(
         new EventHooksPlugin({
           done: () =>
             fixUrlPathEncoding(path.join(config.output.path, "index.html")),
         }),
-        new webpack.DefinePlugin({
-          "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-        }),
-        new DynamicCdnWebpackPlugin(),
-        new WriteJsonPlugin({
-          object: createConfig(true),
-          path: "",
-          filename: "index.json",
-          pretty: true,
-        }),
-        new WriteJsonPlugin({
-          object: createConfig(false),
-          path: "",
-          filename: "index-release.json",
-          pretty: true,
-        }),
-        new LicenseWebpackPlugin({
-          outputFilename: "viewer/static/js/licenses.txt",
-          additionalModules: Object.keys(
-            require("./package.json").dependencies,
-          ).map(dependency => {
-            return {
-              name: dependency,
-              directory: path.join(__dirname, "node_modules", dependency),
-            };
-          }),
-          renderLicenses: renderLicenses,
-          perChunkOutput: false,
-          stats: {
-            warnings: true,
-            errors: true,
-          },
-        }),
-      ],
+      );
+    }
+
+    return merge(config, {
+      plugins: plugins,
       output: {
         // Place js output in sub dir
         filename: path.join(buildSubDir, config.output.filename),
