@@ -1,6 +1,7 @@
 const breakingKeywords = ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"];
 
 module.exports = {
+  branches: ["main"],
   plugins: [
     [
       "@semantic-release/commit-analyzer",
