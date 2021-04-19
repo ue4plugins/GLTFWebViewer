@@ -1,3 +1,12 @@
+### [1.29.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.0...v1.29.1) (2021-04-19)
+
+
+### Bug Fixes
+
+* don't replace problematic url path in index.html if development mode to avoid "npm start" getting stuck ([2d04e8a](http://animech[secure]/clients/epic/gltf-web-viewer/commit/2d04e8a25a68e101d46680b825d228debf6dc064))
+* hide horizontal scrollbar for variant sets ([2fcc62d](http://animech[secure]/clients/epic/gltf-web-viewer/commit/2fcc62d043cd566327f2c9c6992c8f97c5165f40))
+* replace incorrectly url-encoded path separator %5C with / in index.html output ([1411e34](http://animech[secure]/clients/epic/gltf-web-viewer/commit/1411e347fd719951f59e0f8da4a356594e787d51))
+
 ## [1.29.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.28.1...v1.29.0) (2020-11-24)
 
 
