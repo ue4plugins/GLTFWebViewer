@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 const useStyles = makeStyles(theme => {
   const layerWidth = 18;
@@ -8,7 +9,7 @@ const useStyles = makeStyles(theme => {
   const layerSpacing = 4;
   const borderRadius = 1;
 
-  const layerStyles: React.CSSProperties = {
+  const layerStyles: CSSProperties = {
     display: "block",
     position: "absolute",
     width: layerWidth,
