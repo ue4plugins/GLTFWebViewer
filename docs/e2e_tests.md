@@ -15,13 +15,13 @@ Currently the project is set up to work with GitLab CI using a Windows runner.
 E2E tests will automatically run on GitLab CI. If they fail, the snapshot diff output will be saved as an artifact and
 can be viewed/downloaded via the GitLab CI web GUI.
 
-![E2E fail artifacts](docs/e2e_test_artifacts.png "E2E fail artifacts")
+![E2E fail artifacts](e2e_test_artifacts.png "E2E fail artifacts")
 
 If the tests fail due to an expected or intentional diff, the baseline snapshot should be updated by manually triggering
 job `test_e2e_update` in the GitLab CI web GUI. This will run the tests again with the `--updateSnapshot` argument and
 automatically commit the updated snapshots to the same branch.
 
-![E2E update job](docs/e2e_test_update.png "E2E update job")
+![E2E update job](e2e_test_update.png "E2E update job")
 
 #### Run on local machine
 
