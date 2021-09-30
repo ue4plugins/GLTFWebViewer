@@ -1,3 +1,10 @@
+### [1.29.3](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.2...v1.29.3) (2021-09-30)
+
+
+### Bug Fixes
+
+* don't show horizontal scrollbar in sidebar during startup animation ([f5fcddc](http://animech[secure]/clients/epic/gltf-web-viewer/commit/f5fcddc798856b08401f33970c4556f84b58109d))
+
 ### [1.29.2](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.1...v1.29.2) (2021-09-30)
 
 
