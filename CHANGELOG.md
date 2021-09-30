@@ -1,3 +1,10 @@
+### [1.29.2](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.1...v1.29.2) (2021-09-30)
+
+
+### Bug Fixes
+
+* partial update package-lock.json to fix build errors in node 12.17.0+ without breaking anything else ([ea292c8](http://animech[secure]/clients/epic/gltf-web-viewer/commit/ea292c865bb3e82dd394d25d126c9b68bf21aadd))
+
 ### [1.29.1](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.0...v1.29.1) (2021-04-19)
 
 
