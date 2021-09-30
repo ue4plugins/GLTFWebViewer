@@ -165,6 +165,8 @@ deploy_prod:
     - apt-get update -qy
     - apt-get install -y lftp
   script:
+    - rm -rf $BUILD_DIR/assets/ $BUILD_DIR/index.json
+    - mv $BUILD_DIR/index-release.json $BUILD_DIR/index.json
     - lftp -e "open $FTP_HOSTNAME; user $FTP_USERNAME $FTP_PASSWORD; mirror -X .* -X .*/ --reverse --verbose --delete build/ $FTP_DEST_FOLDER_PROD/; bye"
   environment:
     name: prod
