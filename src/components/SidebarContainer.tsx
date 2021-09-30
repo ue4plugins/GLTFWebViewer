@@ -36,7 +36,8 @@ const useStyles = makeStyles(theme => ({
   body: {
     flex: "1 1 auto",
     height: "100%",
-    overflow: "auto",
+    "overflow-x": "hidden",
+    "overflow-y": "auto",
   },
 }));
 
