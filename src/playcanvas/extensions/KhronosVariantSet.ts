@@ -47,6 +47,8 @@ type Mapping = {
   variants: number[];
 };
 
+type VariantNodesMap = Record<number, VariantNode[]>;
+
 export class KhronosVariantSetExtensionParser implements ExtensionParser {
   private _variants: VariantData[] = [];
   private _rootData: RootData | null = null;
@@ -63,48 +65,16 @@ export class KhronosVariantSetExtensionParser implements ExtensionParser {
       return [];
     }
 
-    const variantVariantNodes: Record<number, VariantNode[]> = {};
+    const variantNodesMap: VariantNodesMap = {};
 
     for (let nodeIndex = 0; nodeIndex < nodes.length; nodeIndex += 1) {
-      const node = nodes[nodeIndex];
-      const entity = container.nodes[nodeIndex];
-
-      if (node.mesh === undefined) {
-        continue;
-      }
-
-      const mesh = meshes[node.mesh];
-
-      for (
-        let primitiveIndex = 0;
-        primitiveIndex < mesh.primitives.length;
-        primitiveIndex += 1
-      ) {
-        const primitive = mesh.primitives[primitiveIndex];
-        const mappings = primitive.extensions?.KHR_materials_variants?.mappings;
-
-        if (!mappings) {
-          continue;
-        }
-
-        for (const mapping of mappings) {
-          for (const variantIndex of mapping.variants) {
-            variantVariantNodes[variantIndex] = [
-              ...(variantVariantNodes[variantIndex] ?? []),
-              {
-                node: entity,
-                properties: {
-                  visible: true,
-                  modelAssetID: container.models[node.mesh].id,
-                  materialMapping: {
-                    [primitiveIndex]: container.materials[mapping.material].id,
-                  },
-                },
-              },
-            ];
-          }
-        }
-      }
+      this._parseNode(
+        nodes[nodeIndex],
+        meshes,
+        container.nodes[nodeIndex],
+        container,
+        variantNodesMap,
+      );
     }
 
     return [
@@ -113,14 +83,14 @@ export class KhronosVariantSetExtensionParser implements ExtensionParser {
         variantSets: [
           {
             name: "Variants",
-            variants: Object.keys(variantVariantNodes).map(variantIndex => {
+            variants: Object.keys(variantNodesMap).map(variantIndex => {
               const numericVariantIndex = parseInt(variantIndex);
 
               return new Variant(
                 this._variants[numericVariantIndex].name,
                 undefined,
                 numericVariantIndex === 0,
-                variantVariantNodes[numericVariantIndex],
+                variantNodesMap[numericVariantIndex],
               );
             }),
           },
@@ -152,5 +122,86 @@ export class KhronosVariantSetExtensionParser implements ExtensionParser {
 
     this._variants = extensionData.variants;
     this._rootData = rootData;
+  }
+
+  private _parseNode(
+    node: NodeData,
+    meshes: MeshData[],
+    entity: pc.Entity,
+    container: pc.ContainerResource,
+    variantNodesMap: VariantNodesMap,
+  ) {
+    if (node.mesh === undefined) {
+      return;
+    }
+
+    const mesh = meshes[node.mesh];
+
+    for (
+      let primitiveIndex = 0;
+      primitiveIndex < mesh.primitives.length;
+      primitiveIndex += 1
+    ) {
+      this._parsePrimitive(
+        primitiveIndex,
+        mesh,
+        container.models[node.mesh],
+        entity,
+        container,
+        variantNodesMap,
+      );
+    }
+  }
+
+  private _parsePrimitive(
+    primitiveIndex: number,
+    mesh: MeshData,
+    model: pc.Asset,
+    entity: pc.Entity,
+    container: pc.ContainerResource,
+    variantNodesMap: VariantNodesMap,
+  ) {
+    const primitive = mesh.primitives[primitiveIndex];
+    const mappings = primitive.extensions?.KHR_materials_variants?.mappings;
+
+    if (!mappings) {
+      return;
+    }
+
+    for (const mapping of mappings) {
+      this._parseMapping(
+        mapping,
+        primitiveIndex,
+        container.materials[mapping.material],
+        model,
+        entity,
+        variantNodesMap,
+      );
+    }
+  }
+
+  private _parseMapping(
+    mapping: Mapping,
+    primitiveIndex: number,
+    material: pc.Asset,
+    model: pc.Asset,
+    entity: pc.Entity,
+    variantNodesMap: VariantNodesMap,
+  ) {
+    for (const variantIndex of mapping.variants) {
+      variantNodesMap[variantIndex] = [
+        ...(variantNodesMap[variantIndex] ?? []),
+        {
+          node: entity,
+          properties: {
+            visible: true,
+            modelAssetID: model.id,
+            materialMapping: {
+              [primitiveIndex]: material.id,
+            },
+          },
+        },
+      ];
+    }
   }
 }
