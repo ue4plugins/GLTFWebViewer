@@ -121,18 +121,14 @@ export class Variant {
     }
 
     const app = pc.Application.getApplication();
-    const srcMapping = app?.assets.get(model.asset as number)?.data?.mapping;
 
     return model.meshInstances.every((meshInstance, idx) => {
-      const assetID =
-        mapping[idx] !== undefined ? mapping[idx] : srcMapping?.[idx]?.material;
-      const asset = app?.assets.get(assetID);
-      const material = asset?.resource;
-      if (!material) {
-        return false;
+      const assetID = mapping[idx];
+      if (assetID === undefined) {
+        return true;
       }
-
-      return material === meshInstance.material;
+      const material = app?.assets.get(assetID)?.resource;
+      return !!material && material === meshInstance.material;
     });
   }
 }
