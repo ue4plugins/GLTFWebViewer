@@ -82,7 +82,17 @@ export class Variant {
         // In our case, since materials are applied after all other variants, and every time
         // something changes, meshes that are switched via mesh variants will always get
         // the overridden materials. Do we want to change this to match UE?
-        node.model.mapping = properties.materialMapping;
+
+        if (Object.keys(properties.materialMapping).length < 1) {
+          // NOTE: Mappings without keys serve as "reset" mappings, that
+          // restores the original mappings of the source model-asset.
+          node.model.mapping = properties.materialMapping;
+        } else {
+          node.model.mapping = {
+            ...node.model.mapping,
+            ...properties.materialMapping,
+          };
+        }
       }
     });
 
@@ -121,18 +131,14 @@ export class Variant {
     }
 
     const app = pc.Application.getApplication();
-    const srcMapping = app?.assets.get(model.asset as number)?.data?.mapping;
 
     return model.meshInstances.every((meshInstance, idx) => {
-      const assetID =
-        mapping[idx] !== undefined ? mapping[idx] : srcMapping?.[idx]?.material;
-      const asset = app?.assets.get(assetID);
-      const material = asset?.resource;
-      if (!material) {
-        return false;
+      const assetID = mapping[idx];
+      if (assetID === undefined) {
+        return true;
       }
-
-      return material === meshInstance.material;
+      const material = app?.assets.get(assetID)?.resource;
+      return !!material && material === meshInstance.material;
     });
   }
 }
