@@ -1,3 +1,11 @@
+### [1.29.4](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.3...v1.29.4) (2021-11-30)
+
+
+### Bug Fixes
+
+* allow multiple material variants to be applied for the same model ([139ac5f](http://animech[secure]/clients/epic/gltf-web-viewer/commit/139ac5f3d0d5711feeaf555b20069879bf152bd5))
+* correctly handle partial mappings when matching material variants ([61c42a0](http://animech[secure]/clients/epic/gltf-web-viewer/commit/61c42a01bd047ccb67ba0c357f14b03f04ff6fc7))
+
 ### [1.29.3](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.2...v1.29.3) (2021-09-30)
 
 
