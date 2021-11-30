@@ -1,3 +1,10 @@
+### [1.29.5](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.4...v1.29.5) (2021-11-30)
+
+
+### Bug Fixes
+
+* update react to address the SharedArrayBuffer cross-origin isolation warning ([688d61c](http://animech[secure]/clients/epic/gltf-web-viewer/commit/688d61c87969f115398727a6ca48fd39f527b9a6))
+
 ### [1.29.4](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.3...v1.29.4) (2021-11-30)
 
 
