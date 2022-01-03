@@ -1,3 +1,11 @@
+## [1.30.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.5...v1.30.0) (2022-01-03)
+
+
+### Features
+
+* **variants:** add global extension parser to registry ([c9a10e5](http://animech[secure]/clients/epic/gltf-web-viewer/commit/c9a10e54bb7a62af904e358015409c0ef046c0f6))
+* **variants:** implement parser for khronos variant extension ([810eefa](http://animech[secure]/clients/epic/gltf-web-viewer/commit/810eefa93edc4ec2468148313352c2be4aa4577a))
+
 ### [1.29.5](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.4...v1.29.5) (2021-11-30)
 
 
