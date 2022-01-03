@@ -1,3 +1,5 @@
+import * as pc from "@animech-public/playcanvas";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type ExtensionData = any;
 type ExtensionDataByName = { [extension: string]: ExtensionData };
@@ -60,7 +62,6 @@ export class ExtensionParserCallbackRegistry<TObject> {
     this.removeAll = this.removeAll.bind(this);
     this.find = this.find.bind(this);
     this.index = this.index.bind(this);
-    this.postParse = this.postParse.bind(this);
     this.postParse = this.postParse.bind(this);
   }
 
@@ -154,6 +155,7 @@ export class ExtensionRegistry {
   private _texture = new ExtensionParserCallbackRegistry<pc.Texture>();
   private _material = new ExtensionParserCallbackRegistry<pc.Material>();
   private _animation = new ExtensionParserCallbackRegistry<pc.AnimTrack>();
+  private _global = new ExtensionParserCallbackRegistry<pc.ContainerResource>();
 
   public constructor() {
     this.removeAll = this.removeAll.bind(this);
@@ -202,6 +204,13 @@ export class ExtensionRegistry {
   }
 
   /**
+   * Registry for handling global extension parsers.
+   */
+  public get global() {
+    return this._global;
+  }
+
+  /**
    * Options object that can be passed to pc.Asset of type "container" in order to bind
    * the glTF parser callbacks to the parsers in this registry,
    */
@@ -229,7 +238,31 @@ export class ExtensionRegistry {
     }
 
     return {
-      global: { preprocess: (gltf: GltfData) => (gltfData = gltf) },
+      global: {
+        preprocess: (gltf: GltfData) => {
+          gltfData = gltf;
+        },
+        // TODO: Try to refactor this into createPostProcessHandler
+        postprocess: (gltfData: GltfData, containerData: unknown) => {
+          if (!gltfData.extensions) {
+            return;
+          }
+
+          if (!gltfData) {
+            console.error(
+              "Gltf data was not loaded before postParse, skipping postParse extensions for",
+              containerData,
+            );
+            return;
+          }
+
+          this.global.postParse(
+            new pc.ContainerResource(containerData),
+            gltfData.extensions,
+            gltfData,
+          );
+        },
+      },
       node: { postprocess: createPostProcessHandler(this.node) },
       scene: { postprocess: createPostProcessHandler(this.scene) },
       camera: { postprocess: createPostProcessHandler(this.camera) },

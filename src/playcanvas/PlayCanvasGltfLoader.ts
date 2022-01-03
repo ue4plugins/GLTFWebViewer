@@ -6,6 +6,7 @@ import {
   ExtensionParser,
   BlendModeExtensionParser,
   VariantSetExtensionParser,
+  KhronosVariantSetExtensionParser,
   AnimationHotspotExtensionParser,
   HdriBackdropExtensionParser,
   LightMapExtensionParser,
@@ -224,6 +225,7 @@ export class PlayCanvasGltfLoader {
     debug("Load glTF asset", url, fileName);
 
     const variantSetParser = new VariantSetExtensionParser();
+    const khronosVariantSetParser = new KhronosVariantSetExtensionParser();
     const hotspotParser = new AnimationHotspotExtensionParser();
     const lightMapParser = new LightMapExtensionParser();
     const backdropParser = new HdriBackdropExtensionParser();
@@ -231,6 +233,7 @@ export class PlayCanvasGltfLoader {
 
     const extensions: ExtensionParser[] = [
       variantSetParser,
+      khronosVariantSetParser,
       hotspotParser,
       lightMapParser,
       backdropParser,
@@ -293,10 +296,10 @@ export class PlayCanvasGltfLoader {
           );
           return {
             root: sceneRoot,
-            levelVariantSets: variantSetParser.getVariantSetsForScene(
-              sceneRoot,
-              container,
-            ),
+            levelVariantSets: [
+              ...variantSetParser.getVariantSetsForScene(sceneRoot, container),
+              ...khronosVariantSetParser.getVariantSets(container),
+            ],
             hotspots: hotspotParser.getHotspotsForScene(
               sceneRoot,
               sceneAnimations,

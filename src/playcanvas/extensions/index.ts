@@ -7,6 +7,7 @@ export * from "./HdriBackdrop";
 export * from "./AnimationHotspot";
 export * from "./CameraControl";
 export * from "./VariantSet";
+export * from "./KhronosVariantSet";
 export * from "./LightMap";
 export * from "./SkySphere";
 export * from "./LightPunctual";
