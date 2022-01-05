@@ -18,7 +18,7 @@ module.exports = {
         parserOpts: {
           noteKeywords: breakingKeywords,
         },
-        host: "http://animechgitlab",
+        host: "https://gitlab.animech.com",
         preset: "conventionalcommits",
         presetConfig: {
           types: [
@@ -59,7 +59,7 @@ module.exports = {
     [
       "@semantic-release/gitlab",
       {
-        gitlabUrl: "http://animechgitlab",
+        gitlabUrl: "https://gitlab.animech.com",
         assets: [process.env.RELEASE_DIR],
       },
     ],
