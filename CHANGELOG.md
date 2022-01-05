@@ -1,3 +1,10 @@
+### [1.30.1](https://[secure].animech.com/clients/epic/gltf-web-viewer/compare/v1.30.0...v1.30.1) (2022-01-05)
+
+
+### Bug Fixes
+
+* update semantic-release module and use the new [secure] url ([05d594b](https://[secure].animech.com/clients/epic/gltf-web-viewer/commit/05d594bc6f2b084adda7c62d5b704db6de5a3a96))
+
 ## [1.30.0](http://animech[secure]/clients/epic/gltf-web-viewer/compare/v1.29.5...v1.30.0) (2022-01-03)
 
 
