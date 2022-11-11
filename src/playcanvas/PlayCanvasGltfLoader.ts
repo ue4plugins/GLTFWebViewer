@@ -288,6 +288,11 @@ export class PlayCanvasGltfLoader {
       this._addModelMaterialMappings(container);
       debug("Added model material mappings");
 
+      container.textures.forEach(
+        tex =>
+          ((tex.resource as pc.Texture).anisotropy = this._app.graphicsDevice.maxAnisotropy),
+      );
+
       return {
         asset,
         scenes: container.scenes.map<GltfSceneData>(sceneRoot => {
